@@ -7902,7 +7902,7 @@ function gmProgress(){
   Object.keys(m).forEach(k=>{ const o=m[k]; if(!gmWorkday(k)) return; if(o.meet>best.meet){ best.meet=o.meet; best.mDay=k; } if(o.calls>best.calls){ best.calls=o.calls; best.cDay=k; } if(k>=g.since) life+=o.calls; });
   const nextAt=Math.ceil(C*(t.meet+1)), toNext=Math.max(0, nextAt-t.calls);
   const warm=+g.warm[date]||0;
-  return { g, m, date, t, M, C, T, vpc, calls:t.calls, meet:t.meet, done:t.meet>=M, work:gmWorkday(date), streak:gmStreak(m,g), best, life, toNext, warm, potential:t.meet*(g.close/100)*g.value };
+  return { g, m, date, t, M, C, T, vpc, calls:t.calls, meet:t.meet, done:t.meet>=M, work:gmWorkday(date), streak:gmStreak(m,g), best, life, toNext, warm, potential:t.meet*(g.close/100)*g.value, potentialAll:t.meet*g.value };
 }
 function gmLevel(life){ let i=0; GM_LEVELS.forEach((L,k)=>{ if(life>=L[0]) i=k; }); const cur=GM_LEVELS[i], nx=GM_LEVELS[i+1]; return {n:i+1, name:cur[1], from:cur[0], to:nx?nx[0]:null, nextName:nx?nx[1]:null}; }
 function gmSlots(p, small){
@@ -7985,6 +7985,7 @@ function renderGoalCard(p){
   const c2=`<div class="gm-col c2">
       <div class="gm-k">${GM_TROPHY.replace('<svg','<svg width="13" height="13"')} Score</div>
       <div class="gm-stat"><div class="l">Potential from today's meetings<small>${p.meet} booked → ≈ ${String(+(p.meet*g.close/100).toFixed(1))} clients × ${fmtMoney(g.value)} · you win it at the meeting</small></div><div class="v g">${fmtMoney(Math.round(p.potential))}</div></div>
+      <div class="gm-stat"><div class="l">If you close every meeting<small>${p.meet} booked × ${fmtMoney(g.value)} · 100% instead of ${g.close}%</small></div><div class="v b">${fmtMoney(Math.round(p.potentialAll))}</div></div>
       <div class="gm-stat"><div class="l">A full day is worth<small>${p.M} meetings → ≈ ${String(+clientsDay.toFixed(1))} clients × ${fmtMoney(g.value)}</small></div><div class="v b">${fmtMoney(Math.round(clientsDay*g.value))}</div></div>
       <div class="gm-stat"><div class="l">Streak<small>days in a row with ${g.streakMin}+ calls</small></div><div class="v o">${p.streak} day${p.streak===1?'':'s'}</div></div>
       <div class="gm-stat"><div class="l">Personal best<small>${p.best.meet? 'meetings in one day · '+fmtDay(p.best.mDay) : 'your first booked day sets it'}</small></div><div class="v">${p.best.meet}</div></div>
@@ -8079,7 +8080,7 @@ function gmCallStrip(){
   const txt= p.done? `<b>Mission complete</b> · ${p.meet} meetings · ${p.calls} calls — bonus round`
     : p.warm && p.calls<p.warm ? `<b>Warm-up</b> · call ${p.calls+1} of ${p.warm} — just these, then decide`
     : `<b>Call ${p.calls+1}</b> · going for meeting <b>${p.meet+1} of ${p.M}</b> · ${over? 'a yes is due any call now' : p.toNext>Math.round(p.C)? 'ahead of pace — ≈ '+p.toNext+' to the next yes' : '≈ '+Math.max(1,p.toNext)+' more to the next yes'}`;
-  return `<div class="gm-cs${p.done?' done':''}">${gmSlots(p)}<div class="gm-cs-t">${txt}</div><div class="gm-seg" title="Calls toward the next meeting">${bars}</div><span class="val">${p.meet?fmtMoney(Math.round(p.potential))+' potential':''}</span></div>`;
+  return `<div class="gm-cs${p.done?' done':''}">${gmSlots(p)}<div class="gm-cs-t">${txt}</div><div class="gm-seg" title="Calls toward the next meeting">${bars}</div><span class="val">${p.meet?fmtMoney(Math.round(p.potential))+' potential · '+fmtMoney(Math.round(p.potentialAll))+' if all close':''}</span></div>`;
 }
 /* ---- the «Today» window line ---- */
 function gmDayBlock(){
@@ -8114,7 +8115,7 @@ function gmWin(p, reduce){
   const cl=p.M*p.g.close/100;
   const w=document.createElement('div'); w.className='gm-win'; w.setAttribute('role','dialog'); w.setAttribute('aria-label','Mission complete');
   w.innerHTML=`<div class="gm-win-card"><div class="tro">${GM_TROPHY}</div><h2>Mission complete!</h2>
-    <p><b>${p.meet} meetings</b> from <b>${p.calls} calls</b> today. That is about <b>${String(+cl.toFixed(1))} new clients</b> ≈ <b>${fmtMoney(Math.round(cl*p.g.value))}</b> of work — booked by picking up the phone.</p>
+    <p><b>${p.meet} meetings</b> from <b>${p.calls} calls</b> today. That is about <b>${String(+cl.toFixed(1))} new clients</b> ≈ <b>${fmtMoney(Math.round(cl*p.g.value))}</b> of work — and <b>${fmtMoney(Math.round(p.meet*p.g.value))}</b> if you close every meeting. Booked by picking up the phone.</p>
     <div class="row"><button class="a" data-gm="win-more">Bonus round</button><button class="b" data-gm="win-close">Done for today</button></div></div>`;
   w.addEventListener('click',e=>{ if(e.target===w) w.remove(); });
   document.body.appendChild(w); if(!reduce) gmConfetti(220);
