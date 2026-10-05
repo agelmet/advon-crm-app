@@ -7128,7 +7128,7 @@ function ensureLeads(){
   if(!state.meta.ld.trash || typeof state.meta.ld.trash!=='object') state.meta.ld.trash={};
   if(!Array.isArray(state.meta.ld.trashed)) state.meta.ld.trashed=[];
   if(!state.meta.ld.lists || typeof state.meta.ld.lists!=='object') state.meta.ld.lists={};
-  state.leads.forEach(l=>{ if(!l.status) l.status='new'; if(!Array.isArray(l.tries)) l.tries=[]; if(!l.id) l.id=uid(); if(!l.list) l.list='new'; if(l.phone==null) l.phone='';
+  state.leads.forEach(l=>{ if(!l.status) l.status='new'; if(!Array.isArray(l.tries)) l.tries=[]; else if(l.tries.length>1 && new Set(l.tries).size<l.tries.length) l.tries=[...new Set(l.tries)]; if(!l.id) l.id=uid(); if(!l.list) l.list='new'; if(l.phone==null) l.phone='';
     /* every harvest lead belongs to the batch of the day it was scraped */
     if(l.list==='new' && !l.batch) l.batch=String(l.added||'').slice(0,10)||todayIso(); });
   return state.meta.ld;
@@ -7270,7 +7270,7 @@ function ldOutcome(l, type){
   const date=todayIso();
   if(type!=='g'){ delete l.cb; if(ldCbFor===l.id) ldCbFor=null; }
   if(type==='n'){
-    l.tries.push(date); l.status='na'; l.updated=Date.now();
+    if(ldLastTry(l)!==date) l.tries.push(date); l.status='na'; l.updated=Date.now();   /* one try per day, however many taps */
     save(); ldAfter(l); toast(l.name+' → no answer · parked for another day ('+l.tries.length+(l.tries.length===1?' try)':' tries)')); return;
   }
   if(type==='x'){ l.status='x'; l.doneAt=Date.now(); save(); ldAfter(l); toast(l.name+' dropped'); return; }
@@ -7471,7 +7471,10 @@ function ldPhoneInput(l, cls){
   setTimeout(()=>inp.focus(),0);
   return box;
 }
-function ldAfter(l){ ensureLeads(); delete state.meta.ld.skip[l.id]; renderAll(); }
+function ldAfter(l){ ensureLeads(); delete state.meta.ld.skip[l.id];
+  /* call mode: after any outcome the card moves to the next lead in line */
+  if(state.meta.ld.focus===l.id){ const nx=ldQueue().find(x=>x.id!==l.id); if(nx) state.meta.ld.focus=nx.id; else delete state.meta.ld.focus; }
+  renderAll(); }
 /* ---- rendering ---- */
 function ldBookEl(l){
   const box=document.createElement('div'); box.className='ld-book on';
@@ -7572,7 +7575,8 @@ function renderLdFocus(){
   el.classList.toggle('on', ldCallMode); document.body.classList.toggle('ld-call', ldCallMode); $('#ldCallMode').classList.toggle('on', ldCallMode); $('#ldCallMode').textContent= ldCallMode? 'Exit call mode':'Call mode';
   if(!ldCallMode){ el.innerHTML=''; return; }
   const q=ldQueue(); const ld=state.meta.ld||{};
-  let l = ld.focus? (q.find(x=>x.id===ld.focus) || state.leads.find(x=>x.id===ld.focus && ldOpen(x))) : null; if(!l) l=q[0];
+  /* a lead opened from «Call-backs today» stays on the card even before its time; anything else moves on to the next */
+  let l = ld.focus? (q.find(x=>x.id===ld.focus) || state.leads.find(x=>x.id===ld.focus && ldOpen(x) && x.cb)) : null; if(!l) l=q[0];
   if(!l){ el.innerHTML=`<div class="empty-note" style="padding:30px 10px;">Nobody left to call in this filter. Pull new leads, widen the filter, or take the day off — you earned it.</div>`; return; }
   ensureLeads(); state.meta.ld.focus=l.id;
   const idx=q.indexOf(l);
@@ -7706,7 +7710,7 @@ $('#ldImportFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(
 document.addEventListener('keydown',e=>{
   if(curView!=='leads' || !ldCallMode || !state) return;
   const tag=(e.target.tagName||'').toLowerCase(); if(tag==='input'||tag==='textarea'||tag==='select'||e.metaKey||e.ctrlKey||e.altKey) return;
-  const q=ldQueue(); const fid=(state.meta.ld||{}).focus; const l=q.find(x=>x.id===fid)||state.leads.find(x=>x.id===fid && ldOpen(x))||q[0]; if(!l) return;
+  const q=ldQueue(); const fid=(state.meta.ld||{}).focus; const l=q.find(x=>x.id===fid)||state.leads.find(x=>x.id===fid && ldOpen(x) && x.cb)||q[0]; if(!l) return;
   const map={'1':'g','2':'y','3':'r','4':'n'};
   if(map[e.key]){ e.preventDefault(); ldOutcome(l,map[e.key]); }
   else if(e.key==='s'||e.key==='S'){ e.preventDefault(); ldSkip(l); }
