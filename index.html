@@ -7293,7 +7293,8 @@ function ldBookConfirm(l){
   if(c && c.fromBooking) toast(l.name+' → Booked · already on the Board from the online booking'+(c.day?' ('+fmtDay(c.day)+(c.time?' '+c.time:'')+')':'')+' — no second card');
   else toast(l.name+' → Booked'+((day||time)?' · meeting '+(day?fmtDay(day):'today')+(time?' '+time:'')+' on the Calendar':' · on the Board'));
 }
-function ldOpenBooking(l){ ldBookingFor=l.id; ldBookPick={day:'',time:'',value:''}; renderLeads(); const el=document.querySelector('.ld-book.on input'); if(el) el.focus(); }
+function ldOpenBooking(l){ ldCbFor=null; ldMemoFor=null; ldBookingFor=l.id; ldBookPick={day:'',time:'',value:''}; renderLeads();
+  const box=document.querySelector('.ld-book.on'); if(box){ try{ box.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(e){} const el=box.querySelector('input[data-val]'); if(el) el.focus({preventScroll:true}); } }
 function ldUndo(l){
   if(l.logId){ const log=state.logs.find(x=>x.id===l.logId); if(log && log.type==='g' && log.clientId){ const ci=state.clients.findIndex(c=>c.id===log.clientId && c.stage==='booked'); if(ci>=0) state.clients.splice(ci,1); } state.logs=state.logs.filter(x=>x.id!==l.logId); }
   l.status= l.tries.length? 'na':'new'; delete l.logId; delete l.clientId; delete l.doneAt; l.updated=Date.now();
@@ -7538,8 +7539,10 @@ function ldItemEl(l, drag){
   if(l.cb && ldOpen(l)) row.querySelector('.w-main').appendChild(ldCbBox(l));
   const ap=row.querySelector('[data-addphone]'); if(ap) ap.addEventListener('click',()=>{ ap.replaceWith(ldPhoneInput(l,'w-nophone')); });
   row.appendChild(ldActs(l));
-  if(ldBookingFor===l.id && !ldCallMode){ const wrap=document.createElement('div'); wrap.style.flexBasis='100%'; wrap.appendChild(ldBookEl(l)); row.appendChild(wrap); }
   const focusId=ldCallMode && state.meta.ld ? state.meta.ld.focus : null;
+  /* 5 Oct 2026: in call mode, «Booked» on a row that is NOT the lead on the big card opens the day/time picker right in that row
+     (before, it opened only on the big card, so on a «No answer» row nothing seemed to happen) */
+  if(ldBookingFor===l.id && focusId!==l.id){ const wrap=document.createElement('div'); wrap.style.flexBasis='100%'; wrap.appendChild(ldBookEl(l)); row.appendChild(wrap); }
   if(ldCbFor===l.id && focusId!==l.id){ row.style.flexWrap='wrap'; row.appendChild(ldCbEl(l)); }
   if(ldMemoFor===l.id && focusId!==l.id){ row.style.flexWrap='wrap'; row.appendChild(ldMemoEl(l)); }
   return row;
