@@ -8791,6 +8791,7 @@ async function tryLogin(){
     $('#loginPass').value='';
     btn.textContent='Getting your latest data…';
     await Sync.pullOnLoad();          /* always the freshest copy before anything shows */
+    if(freshNoData()){ btn.textContent='Unlock →'; loggingIn=false; showNoData(); return; }
     unlockUI(); boot(); wireSyncEvents(); toast('Welcome back');
   }catch(e){
     failCount++;
@@ -8801,6 +8802,10 @@ async function tryLogin(){
   btn.textContent='Unlock →';
   loggingIn=false;
 }
+/* 5 Oct 2026 — a device (or a new address) that has never held the CRM data must not open on an empty CRM
+   when the server cannot be reached: it waits until the real data has been downloaded once. */
+function freshNoData(){ return !LOCAL_UPDATED_AT && !(syncMeta().sha) && Sync.state!=='ok'; }
+function showNoData(){ const e=$('#loginErr'); e.textContent='Signed in, but your data could not be downloaded yet ('+(Sync.lastError||'no connection')+'). Nothing was changed — check the internet and press Unlock again.'; e.style.display='block'; }
 $('#loginBtn').addEventListener('click',tryLogin);
 ['loginUser','loginPass'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();}));
 $('#logoutBtn').addEventListener('click',()=>{ clearKey(); state=null; lockUI(); toast('Locked — data stays encrypted'); });
@@ -8851,6 +8856,7 @@ $('#logoutBtn').addEventListener('click',()=>{ clearKey(); state=null; lockUI();
     try{
       await loadDecrypted();
       await Sync.pullOnLoad();       /* freshest remote copy before first paint */
+      if(freshNoData()){ lockUI(); showNoData(); return; }
       touchActivity();
       unlockUI(); boot();
       wireSyncEvents();
