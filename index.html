@@ -3820,8 +3820,13 @@ const Sync={
     if(remoteAt && (!localAt || remoteAt>localAt) && !this.pendingFlag()){
       try{
         const plain=await aesDec(CUR_KEY, payload.data.iv, payload.data.ct);
+        const mineLeads=(state&&Array.isArray(state.leads))? state.leads : [];
         state=JSON.parse(plain);
+        /* 5 Oct 2026: the server copy leaves out the leads nobody has touched yet (they come from /api/pool) —
+           keep this device's copy of them, and pull the pool again, so the Leads tab never empties */
+        try{ ldRehydrate(state, mineLeads); }catch(e){}
         normalizeState();
+        try{ setTimeout(()=>{ try{ Leads.pull(false); }catch(e){} }, 400); }catch(e){}
         await saveNow({stamp:remoteAt, noPush:true});
         setSyncMeta({sha:payload.sha, updatedAt:remoteAt, lastSyncAt:new Date().toISOString()});
         this.setPending(false);
@@ -3918,8 +3923,13 @@ const Sync={
     if(keep==='remote'){
       try{
         const plain=await aesDec(CUR_KEY, remote.data.iv, remote.data.ct);
+        const mineLeads=(state&&Array.isArray(state.leads))? state.leads : [];
         state=JSON.parse(plain);
+        /* 5 Oct 2026: the server copy leaves out the leads nobody has touched yet (they come from /api/pool) —
+           keep this device's copy of them, and pull the pool again, so the Leads tab never empties */
+        try{ ldRehydrate(state, mineLeads); }catch(e){}
         normalizeState();
+        try{ setTimeout(()=>{ try{ Leads.pull(false); }catch(e){} }, 400); }catch(e){}
         await saveNow({stamp:remote.updatedAt, noPush:true});
         setSyncMeta({sha:remote.sha, updatedAt:remote.updatedAt, lastSyncAt:new Date().toISOString()});
         this.setPending(false);
