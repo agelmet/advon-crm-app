@@ -103,6 +103,13 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 .export-menu{min-width:318px; max-width:340px; max-height:calc(100dvh - 90px); overflow-y:auto;}
 .export-menu .xm-main{font-weight:800; background:var(--blue-soft); color:var(--brand);}
 .export-menu .xm-main:hover{background:var(--blue-soft); filter:brightness(.97);}
+.apps-menu{min-width:300px;}
+.apps-menu a{display:flex; gap:11px; align-items:center; padding:9px 10px; border-radius:10px; color:var(--ink); text-decoration:none;}
+.apps-menu a:hover{background:var(--bg);}
+.apps-menu .ai{width:32px; height:32px; border-radius:9px; display:grid; place-items:center; flex-shrink:0; font:800 13px/1 'Sora',sans-serif; color:#fff;}
+.apps-menu .at{min-width:0; flex:1;} .apps-menu .at b{display:block; font-size:13.5px; font-weight:700;} .apps-menu .at small{display:block; font-size:11.5px; color:var(--muted); font-weight:500; line-height:1.35;}
+.apps-menu .ax{color:var(--muted); font-size:13px;}
+#appsBtn{gap:6px;} @media(max-width:640px){ #appsBtn .lbl-t{display:none;} #appsBtn{padding-left:10px; padding-right:10px;} .apps-menu{min-width:0; width:calc(100vw - 24px); max-width:340px;} }
 .export-menu .xm-hint{font-size:11.5px; line-height:1.45; color:var(--muted); padding:4px 12px 8px; font-weight:500;}
 .export-menu .xm-last{font-weight:700; padding-top:0;}
 .export-menu .xm-last.stale{color:#C4243A;}
@@ -2644,6 +2651,10 @@ body.ld-call .gm-bar{display:none;}
           </details>
           <input type="file" id="restoreAnyFile" accept=".zip,.json,.advoncrm,application/zip,application/json" style="display:none">
         </div>
+      </div>
+      <div class="export-wrap apps-wrap">
+        <button class="btn btn-ghost" id="appsBtn" title="My other apps and pages" aria-label="My other apps and pages" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="export-menu apps-menu" id="appsMenu" role="menu"></div>
       </div>
     </div>
   </div>
@@ -8219,6 +8230,35 @@ function renderAll(){
      3. Complete report (PDF)  everything, to read: the year, every month with its clients, renewals with exact dates…
    Extra safety net: a copy e-mailed by the server every Monday by itself (netlify/functions/weekly-backup.mjs → /api/backup),
    plus «E-mail me a safety copy now». Sync setup and the call-statistics tools sit under «More». */
+/* ---------- My apps — the other things Angelo uses, one tap away (6 Oct 2026) ---------- */
+const MY_APPS=[
+  ['Clients & sales',[
+    ['Μηνύματα πελατών','E-mails A–L + cold-call scripts — type the name, copy, send','https://claude.ai/artifact/5hhVh65Xi2Xt2qAJqwXE39','#2F7FE0','✉'],
+    ['Cold-calling planner','Who to call and when','https://drafts.advonmedia.com/CALLS/','#0EC673','☎'],
+    ['Ad Kit','The video ads, their scripts and the 9:16 / 4:5 files','https://claude.ai/artifact/J8pJJEZEcR5tuYJjH4NeZW','#7C5CFC','▶'],
+    ['TikTok · today\'s post','The phone page with every day\'s TikTok','https://drafts.advonmedia.com/tiktok/','#111827','♪'],
+  ]],
+  ['Learning & personal',[
+    ['BOOKS','Your library — key ideas, lessons and tests','https://drafts.advonmedia.com/BOOKS/','#B85F00','B'],
+    ['Polymath Program','Daily lessons — history, money, law, great minds','https://claude.ai/artifact/Bm8DNtJ59JQNzivt5rifhj','#0E7490','P'],
+    ['Journey','Your road so far','https://drafts.advonmedia.com/journey/','#9333EA','J'],
+    ['Panta','Tasks, schedule, habits, money','https://drafts.advonmedia.com/panta-app/','#16A34A','✓'],
+  ]],
+  ['Advon',[
+    ['advonmedia.com','Your website','https://advonmedia.com/','#13263A','A'],
+    ['Demo CRM','The public demo on your website','https://advonmedia.com/crm-demo/','#687182','D'],
+    ['Mastermind Blueprint','The business plan','https://claude.ai/artifact/6LV7AxF7TanzRtNdH5cs9L','#C2410C','M'],
+  ]],
+];
+(function(){
+  const btn=$('#appsBtn'), menu=$('#appsMenu'); if(!btn||!menu) return;
+  btn.innerHTML='<svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg><span class="lbl-t">Apps</span>';
+  menu.innerHTML=MY_APPS.map(([g,items],i)=>(i?'<div class="sep"></div>':'')+`<div class="lbl">${esc(g)}</div>`+items.map(([t,sub,url,col,ch])=>`<a href="${esc(url)}" target="_blank" rel="noopener" role="menuitem"><span class="ai" style="background:${col}">${esc(ch)}</span><span class="at"><b>${esc(t)}</b><small>${esc(sub)}</small></span><span class="ax">↗</span></a>`).join('')).join('')+'<div class="xm-hint" style="padding-top:8px">Want something added here? Just tell Claude.</div>';
+  btn.addEventListener('click',e=>{ e.stopPropagation(); try{ $('#exportMenu').classList.remove('open'); }catch(_){} const o=menu.classList.toggle('open'); btn.setAttribute('aria-expanded',o); });
+  document.addEventListener('click',e=>{ if(!e.target.closest || !e.target.closest('#appsMenu')){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); } });
+  menu.addEventListener('click',e=>{ if(e.target.closest('a')) setTimeout(()=>menu.classList.remove('open'),50); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ menu.classList.remove('open'); } });
+})();
 $('#exportBtn').addEventListener('click',e=>{ e.stopPropagation(); renderBackupHint(); $('#exportMenu').classList.toggle('open'); });
 document.addEventListener('click',e=>{ if(e.target.closest && e.target.closest('#exportMenu details')) return; $('#exportMenu').classList.remove('open'); });
 $('#exportMenu').addEventListener('click',e=>{
