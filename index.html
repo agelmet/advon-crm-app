@@ -2441,6 +2441,8 @@ body[data-view=home] .gm-bar{display:none;}
 .gm-lv .bar{height:6px; border-radius:99px; background:var(--line); overflow:hidden; margin-top:auto;}
 .gm-lv .bar i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#2F7FE0,#35C7E9); transition:width .5s cubic-bezier(.2,.8,.2,1);}
 .gm-lv .cc{font-size:10.5px; color:var(--muted); font-weight:600;}
+.gm-mvday{position:absolute; top:8px; right:8px; border:1px solid var(--line); background:var(--card); color:var(--muted); font:700 10.5px/1 'Inter',sans-serif; padding:5px 7px; border-radius:99px; cursor:pointer;}
+.gm-mvday:hover{color:var(--brand); border-color:var(--brand);}
 .gm-lv.next{border:1.5px solid var(--brand); background:var(--blue-soft); box-shadow:0 6px 18px rgba(47,127,224,.14);}
 .gm-lv.next .ic{border:1.5px solid var(--brand); color:var(--brand);}
 .gm-lv.won{border:1.5px solid var(--green); background:var(--green-soft);}
@@ -7902,9 +7904,9 @@ function gmPerCall(g){ return (g.close/100)*g.value/Math.max(1,g.cpm); }
 /* date → what happened that day */
 function gmDayMap(){
   const g=gmCfg(), m={};
-  const d=k=>m[k]||(m[k]={calls:0, meet:0, sms:0, no:0, na:0, extra:0, names:[]});
+  const d=k=>m[k]||(m[k]={calls:0, meet:0, sms:0, no:0, na:0, extra:0, names:[], ids:[]});
   (state.logs||[]).forEach(l=>{ if(!l || !/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')) return; const o=d(l.date);
-    if(l.type==='g'){ o.meet++; o.names.push(l.name||''); }
+    if(l.type==='g'){ o.meet++; o.names.push(l.name||''); o.ids.push(l.id||''); }
     if((l.source||'cold')==='cold'){ o.calls++; if(l.type==='y') o.sms++; else if(l.type==='r') o.no++; } });
   if(g.na){
     (state.leads||[]).forEach(l=>(Array.isArray(l.tries)?l.tries:[]).forEach(t=>{ const o=d(t); o.calls++; o.na++; }));
@@ -7919,9 +7921,17 @@ function gmStreak(m, g){
   for(let i=0;i<400;i++){ d.setDate(d.getDate()-1); if(!g.days.includes(d.getDay())) continue; const o=m[isoDate(d)]; if(o && o.calls>=g.streakMin) s++; else break; }
   return s;
 }
+/* the calling day before iso (skips rest days) */
+function gmPrevDay(iso){ const d=new Date(iso+'T12:00'); for(let i=0;i<14;i++){ d.setDate(d.getDate()-1); if(gmWorkday(isoDate(d))) return isoDate(d); } d.setTime(new Date(iso+'T12:00').getTime()-864e5); return isoDate(d); }
+function gmPrevLabel(iso){ const k=gmPrevDay(iso); return DOW[(new Date(k+'T12:00').getDay()+6)%7]+' '+new Date(k+'T12:00').getDate(); }
+function gmMovePrev(id){
+  const l=(state.logs||[]).find(x=>x && x.id===id); if(!l) return;
+  const from=l.date, to=gmPrevDay(from); l.date=to; l.updated=Date.now(); save(); renderAll();
+  toastUndo((l.name||'Meeting')+' moved to '+gmPrevLabel(from), ()=>{ const x=(state.logs||[]).find(y=>y && y.id===id); if(!x) return; x.date=from; x.updated=Date.now(); save(); renderAll(); });
+}
 function gmProgress(){
   const g=gmCfg(), m=gmDayMap(), date=todayIso();
-  const Z={calls:0, meet:0, sms:0, no:0, na:0, extra:0, names:[]};
+  const Z={calls:0, meet:0, sms:0, no:0, na:0, extra:0, names:[], ids:[]};
   const t=gmWorkday(date)? (m[date]||Z) : Z;   /* weekends / rest days never count */
   const M=Math.max(1,g.meet|0), C=Math.max(1,+g.cpm||10), T=gmCallsTarget(g), vpc=gmPerCall(g);
   let best={meet:0, calls:0, mDay:'', cDay:''}, life=0;
@@ -8049,6 +8059,7 @@ function renderGoalCard(p){
       <div class="t"><span class="ic">${won?GM_CHECK:(i+1)}</span>${bonus?'Bonus':'Meeting'}</div>
       <div class="nm">${won? esc(p.t.names[i]||'Booked') : next? (due?'a yes is due':'next up') : ''}</div>
       <div class="bar"><i style="width:${(f*100).toFixed(0)}%"></i></div>
+      ${won && p.t.ids[i] ? `<button type="button" class="gm-mvday" data-gm="mvprev" data-id="${esc(p.t.ids[i])}" title="Booked on an earlier day? Move it to ${gmPrevLabel(p.date)}">↩ ${gmPrevLabel(p.date)}</button>` : ''}
       <div class="cc">${won?'booked ✓': next? (due? seg+' calls · any call now' : seg+' / '+Ci+' calls') : '~'+Ci+' calls'}</div></div>`;
   }
   const t=p.t, line=GM_LINES[(Math.floor(Date.now()/864e5))%GM_LINES.length];
@@ -8153,6 +8164,7 @@ document.addEventListener('click',e=>{
   else if(a==='home'){ switchView('home'); const c=$('#gmCard'); if(c) setTimeout(()=>c.scrollIntoView({block:'nearest', behavior:'smooth'}),50); }
   else if(a==='edit') gmOpenEdit();
   else if(a==='day') gmOpenDay(b.dataset.k);
+  else if(a==='mvprev') gmMovePrev(b.dataset.id);
   else if(a==='wk-prev'){ gmWeekOff--; renderGoal(); }
   else if(a==='wk-next'){ if(gmWeekOff<0){ gmWeekOff++; renderGoal(); } }
   else if(a==='wk-now'){ gmWeekOff=0; renderGoal(); }
