@@ -8113,7 +8113,6 @@ function renderGoalCard(p){
       <div class="t"><span class="ic">${won?GM_CHECK:(i+1)}</span>${bonus?'Bonus':'Meeting'}</div>
       <div class="nm">${won? esc(p.t.names[i]||'Booked') : next? (due?'a yes is due':'next up') : ''}</div>
       <div class="bar"><i style="width:${(f*100).toFixed(0)}%"></i></div>
-      ${won && p.t.ids[i] ? `<button type="button" class="gm-mvday" data-gm="mvprev" data-id="${esc(p.t.ids[i])}" title="Booked on an earlier day? Move it to ${gmPrevLabel(p.date)}">↩ ${gmPrevLabel(p.date)}</button>` : ''}
       <div class="cc">${won?'booked ✓': next? (due? seg+' calls · any call now' : seg+' / '+Ci+' calls') : '~'+Ci+' calls'}</div></div>`;
   }
   const t=p.t, line=GM_LINES[(Math.floor(Date.now()/864e5))%GM_LINES.length];
@@ -8292,8 +8291,20 @@ function renderGoal(){
   gmFx(p);
 }
 
+/* 7 Oct 2026: Τράκη Μαριζίν was booked on Wed 7 Oct and moved to Tue 6 by a slip of the «↩» button — put her back. Only touches that one entry. */
+function fixTraki20261007(){
+  let ch=false;
+  (state.logs||[]).forEach(l=>{ if(!l || l.type!=='g' || l.date!=='2026-10-06') return;
+    const nm=String(l.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    if(!nm.includes('τρακη') || !nm.includes('μαριζ')) return;
+    const made=l.created? isoDate(new Date(l.created)) : '';
+    if(made && made!=='2026-10-07') return;
+    l.date='2026-10-07'; l.updated=Date.now(); ch=true; });
+  return ch;
+}
 function renderAll(){
   if(!state) return;
+  try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
 }
 
