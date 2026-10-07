@@ -1610,6 +1610,19 @@ body.dark .day-row button{background:var(--surface);}
 .ld-focus .f-acts .r{background:linear-gradient(120deg,var(--red),#E7364A);}
 .ld-focus .f-acts .n{background:linear-gradient(120deg,#5B6B84,#3C4A60);}
 .ld-focus .f-foot{display:flex; gap:10px; align-items:center; margin-top:12px; font-size:12px; color:var(--muted);}
+.ld-next{margin-top:18px; border-top:1px solid var(--line); padding-top:14px;}
+.ld-next-h{font:800 11px/1 'Inter',sans-serif; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; display:flex; gap:8px; align-items:center;}
+.ld-next-h span{font-weight:600; letter-spacing:0; text-transform:none;}
+.ld-next-r{display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:12px; background:var(--bg); margin-top:6px;}
+.ld-next-r.hot{background:var(--green-soft,#E6F8EF); box-shadow:inset 3px 0 0 var(--green);}
+.ld-next-r .no{width:24px; height:24px; flex:none; border-radius:50%; background:#fff; border:1px solid var(--line); display:grid; place-items:center; font:800 11.5px/1 'Inter',sans-serif; color:var(--muted);}
+.ld-next-r .nm{flex:1; min-width:0; text-align:left; background:none; padding:0; cursor:pointer;}
+.ld-next-r .nm b{display:block; font-size:14.5px; font-weight:800; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.ld-next-r .nm small{display:block; font-size:12px; color:var(--muted); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.ld-next-r .nm:hover b{color:var(--brand);}
+.ld-next-r .ph{flex:none; font-size:19px; font-weight:800; letter-spacing:.02em; color:var(--brand); text-decoration:none; font-variant-numeric:tabular-nums;}
+.ld-next-r .ph.none{font-size:12.5px; color:#B8860B;}
+@media (max-width:600px){ .ld-next-r{flex-wrap:wrap; gap:4px 10px;} .ld-next-r .nm{flex:1 1 calc(100% - 40px);} .ld-next-r .ph{margin-left:34px; font-size:18px;} }
 .ld-focus .f-foot button{font-weight:700; color:var(--brand); background:var(--blue-soft); border-radius:8px; padding:5px 10px;}
 .ld-focus .f-foot .keys{margin-left:auto;}
 .ld-focus .f-foot kbd{font-family:inherit; font-size:10.5px; font-weight:800; border:1px solid var(--line); border-radius:5px; padding:1px 5px; background:#fff; margin:0 1px;}
@@ -7598,6 +7611,15 @@ function renderLdBanner(){
     <div class="cell na"><div class="k">${IC.hourglass} No answer</div><div class="big">${n.na}</div><div class="sub">${n.cbDue?`<b style="color:var(--red)">${n.cbDue} call-back${n.cbDue===1?'':'s'} due now</b>`:(n.cb?n.cb+' call-back'+(n.cb===1?'':'s')+' set':'call another day')}</div></div>
     <div class="cell"><div class="k">${IC.fire} Today</div><div class="big">${n.today}</div><div class="sub">${n.total} leads${n.np?' · '+n.np+' no phone':''} · harvest ${pulled}</div></div>`;
 }
+/* call mode: the next 5 people coming up, phone numbers big and clear (7 Oct 2026) */
+function ldUpNextHtml(q, cur, idx){
+  const rest=(idx>=0? q.slice(idx+1) : q.filter(x=>x.id!==cur.id)).slice(0,5);
+  if(!rest.length) return '';
+  return `<div class="ld-next"><div class="ld-next-h">Coming up next <span>${rest.length} of ${Math.max(0,(idx>=0?q.length-idx-1:q.length-1))}</span></div>`+
+    rest.map((x,i)=>`<div class="ld-next-r${x.hot?' hot':''}"><span class="no">${i+1}</span>
+      <button type="button" class="nm" data-ldjump="${esc(x.id)}" title="Call this one now"><b>${esc(x.name)}</b><small>${esc([ldSpecShort(x), x.city].filter(Boolean).join(' · '))}${x.status==='na'&&x.tries&&x.tries.length?' · no answer before':''}${x.cb?' · call-back':''}</small></button>
+      ${x.phone?`<a class="ph" href="tel:+30${esc(x.phone)}">${esc(ldFmtPhone(x.phone))}</a>`:'<span class="ph none">no phone yet</span>'}</div>`).join('')+`</div>`;
+}
 function renderLdFocus(){
   const el=$('#ldFocus'); if(!el) return;
   el.classList.toggle('on', ldCallMode); document.body.classList.toggle('ld-call', ldCallMode); $('#ldCallMode').classList.toggle('on', ldCallMode); $('#ldCallMode').textContent= ldCallMode? 'Exit call mode':'Call mode';
@@ -7620,7 +7642,8 @@ function renderLdFocus(){
     <div class="f-script">${script}</div>
     <div class="f-acts"><button class="g">${IC.check} Booked<small>1 · meeting set</small></button><button class="y">${IC.message} SMS sent<small>2 · wants info</small></button><button class="r">${IC.x} No<small>3 · not interested</small></button><button class="n">${IC.hourglass} No answer<small>4 · try another day</small></button></div>
     <div class="ld-book" id="ldFocusBook"></div><div id="ldFocusEdit"></div>
-    <div class="f-foot"><button data-skip>Skip for now</button><button class="cbk" data-cbk title="She/he said: call me back at… (key C)">${IC.clock} Call back at…</button><button class="hotb${l.hot?' on':''}" data-hot title="Almost booked — green card, top of «No answer» (key H)">${IC.fire} Almost booked</button><button class="memob" data-memob title="Write a note (key N)">${IC.edit} Note</button><button class="np" data-np title="No personal number — move to the «No phone found» list at the bottom">${IC.phoneOff} No phone found</button><button class="t" data-trash title="Has a website / not a lead — remove for good">${IC.trash} Trash</button>${l.url?`<a href="${esc(l.url)}" target="_blank" rel="noopener" style="font-weight:700;color:var(--brand);">Open profile</a>`:''}<span class="keys">keys <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> · <kbd>S</kbd> skip · <kbd>C</kbd> call back · <kbd>N</kbd> note · <kbd>P</kbd> no phone · <kbd>T</kbd> trash</span></div>`;
+    <div class="f-foot"><button data-skip>Skip for now</button><button class="cbk" data-cbk title="She/he said: call me back at… (key C)">${IC.clock} Call back at…</button><button class="hotb${l.hot?' on':''}" data-hot title="Almost booked — green card, top of «No answer» (key H)">${IC.fire} Almost booked</button><button class="memob" data-memob title="Write a note (key N)">${IC.edit} Note</button><button class="np" data-np title="No personal number — move to the «No phone found» list at the bottom">${IC.phoneOff} No phone found</button><button class="t" data-trash title="Has a website / not a lead — remove for good">${IC.trash} Trash</button>${l.url?`<a href="${esc(l.url)}" target="_blank" rel="noopener" style="font-weight:700;color:var(--brand);">Open profile</a>`:''}<span class="keys">keys <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> · <kbd>S</kbd> skip · <kbd>C</kbd> call back · <kbd>N</kbd> note · <kbd>P</kbd> no phone · <kbd>T</kbd> trash</span></div>`+ldUpNextHtml(q, l, idx);
+  el.querySelectorAll('[data-ldjump]').forEach(b=>b.addEventListener('click',()=>{ ensureLeads(); state.meta.ld.focus=b.dataset.ldjump; ldBookingFor=null; save(); renderLdFocus(); const f=$('#ldFocus'); if(f) f.scrollIntoView({block:'start', behavior:'smooth'}); }));
   el.querySelector('.f-acts .g').addEventListener('click',()=>ldOutcome(l,'g'));
   el.querySelector('.f-acts .y').addEventListener('click',()=>ldOutcome(l,'y'));
   el.querySelector('.f-acts .r').addEventListener('click',()=>ldOutcome(l,'r'));
