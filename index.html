@@ -2488,6 +2488,8 @@ body.dark .gm-day.hit .m{color:var(--green);}
 .gd-chips .c{background:var(--blue-soft); color:var(--brand);} .gd-chips .g{background:var(--green-soft); color:var(--deep);} .gd-chips .y{background:var(--yellow-soft); color:#8A6400;} .gd-chips .r{background:var(--red-soft); color:#C21F33;}
 .gd-money{display:flex; gap:8px; margin:6px 0 2px;} .gd-money div{flex:1; background:var(--bg); border-radius:12px; padding:9px 12px; font-size:11.5px; font-weight:700; color:var(--muted);} .gd-money b{display:block; font:800 18px/1.1 'Sora',sans-serif; color:var(--deep); margin-top:2px;} .gd-money div+div b{color:var(--brand);}
 .gd-nav{display:flex; gap:6px; margin-left:auto; margin-right:8px;} .gd-nav button{height:32px; padding:0 10px; border-radius:10px; border:1px solid var(--line); background:#fff; font-weight:800; font-size:12px; color:var(--ink);} .gd-nav button:disabled{opacity:.35;}
+.gd-mv{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--muted); white-space:nowrap;}
+.gd-mv input{border:1px solid var(--line); border-radius:8px; padding:4px 6px; font:inherit; font-size:12px; font-weight:700; background:#fff; color:var(--ink);}
 .day-row .tag{font-size:10.5px; font-weight:800; border-radius:99px; padding:2px 8px; background:#fff; white-space:nowrap;}
 .gm-weektot{display:flex; justify-content:space-between; align-items:baseline; margin-top:10px; font-size:12.5px; color:var(--muted); font-weight:600;}
 .gm-weektot b{font:800 16px/1 'Sora',sans-serif; color:var(--ink);}
@@ -7964,20 +7966,28 @@ function gmOpenDay(k){
   const nx=walk(1);
   prev.onclick=()=>gmOpenDay(walk(-1)); next.disabled=nx>t; next.onclick=()=>{ if(nx<=t) gmOpenDay(nx); };
   const row=(name, sub, right)=>`<div class="day-row"><div class="tx"><b>${esc(name||'—')}</b>${sub?`<small>${sub}</small>`:''}</div>${right||''}</div>`;
+  const mv=l=>`<label class="gd-mv" title="Logged on the wrong day? Pick the right one">Day <input type="date" data-gdmove="${esc(l.id)}" value="${esc(l.date)}" max="${t}"></label>`;
   let h=`<div class="gd-chips"><span class="c">${o.calls} calls</span><span class="g">${D.booked.length} booked</span><span class="y">${D.sms.length} SMS / e-mail</span><span class="r">${D.no.length} no</span><span>${D.na.length} no answer</span>${D.extra?`<span>${D.extra} by hand</span>`:''}</div>`;
   if(D.booked.length) h+=`<div class="gd-money"><div>Realistic potential (${g.close}%)<b>${fmtMoney(Math.round(D.booked.length*g.close/100*g.value))}</b></div><div>If every meeting closes<b>${fmtMoney(Math.round(D.booked.length*g.value))}</b></div></div>`;
   h+=`<div class="day-h meet">Booked · ${D.booked.length}</div>`;
   h+= D.booked.length? D.booked.map(l=>{ const c=l.clientId? state.clients.find(x=>x.id===l.clientId) : null;
       const when=c&&c.day? 'meeting '+DOW[(new Date(c.day+'T12:00').getDay()+6)%7]+' '+fmtDay(c.day)+(c.time?' · '+esc(c.time):'') : 'no meeting day set';
       const st=c? ((typeof STAGES!=='undefined' && (STAGES.find(s=>s.id===c.stage)||{}).name) || c.stage) : '';
-      return row(l.name, [when, esc(l.note||''), st?('now: '+esc(st)):''].filter(Boolean).join(' · '), c?`<button class="go" data-gdopen="${esc(c.id)}">Open</button>`:''); }).join('')
+      return row(l.name, [when, esc(l.note||''), st?('now: '+esc(st)):''].filter(Boolean).join(' · '), mv(l)+(c?`<button class="go" data-gdopen="${esc(c.id)}">Open</button>`:'')); }).join('')
     : `<div class="home-empty" style="padding:6px 2px">No meetings booked that day.</div>`;
-  if(D.sms.length) h+=`<div class="day-h">SMS / e-mail sent · ${D.sms.length}</div>`+D.sms.map(l=>row(l.name, esc(l.note||''))).join('');
-  if(D.no.length) h+=`<div class="day-h">Said no · ${D.no.length}</div>`+D.no.map(l=>row(l.name, esc(l.note||''))).join('');
+  if(D.sms.length) h+=`<div class="day-h">SMS / e-mail sent · ${D.sms.length}</div>`+D.sms.map(l=>row(l.name, esc(l.note||''), mv(l))).join('');
+  if(D.no.length) h+=`<div class="day-h">Said no · ${D.no.length}</div>`+D.no.map(l=>row(l.name, esc(l.note||''), mv(l))).join('');
   if(D.na.length) h+=`<div class="day-h">No answer · ${D.na.length}</div>`+D.na.map(x=>row(x.name, esc(x.sub||''), x.now?`<span class="tag">${esc(x.now)}</span>`:'')).join('');
   if(!o.calls && !D.booked.length) h+=`<div class="home-empty" style="padding:10px 2px">No calls logged on this day.</div>`;
   const body=$('#gmDayBody'); body.innerHTML=h;
   body.querySelectorAll('[data-gdopen]').forEach(b=>b.addEventListener('click',()=>{ ov.classList.remove('open'); openModal(b.dataset.gdopen); }));
+  body.querySelectorAll('[data-gdmove]').forEach(inp=>inp.addEventListener('change',()=>{
+    const l=(state.logs||[]).find(x=>x.id===inp.dataset.gdmove), to=inp.value; if(!l || !/^\d{4}-\d{2}-\d{2}$/.test(to) || to===l.date) return;
+    if(to>t){ toast('That day has not happened yet'); inp.value=l.date; return; }
+    const from=l.date; l.date=to; l.updated=Date.now(); save(); renderAll();
+    toast(l.name+' moved to '+DOW[(new Date(to+'T12:00').getDay()+6)%7]+' '+fmtDay(to));
+    gmOpenDay(from);
+  }));
   ov.classList.add('open');
 }
 function gmLevel(life){ let i=0; GM_LEVELS.forEach((L,k)=>{ if(life>=L[0]) i=k; }); const cur=GM_LEVELS[i], nx=GM_LEVELS[i+1]; return {n:i+1, name:cur[1], from:cur[0], to:nx?nx[0]:null, nextName:nx?nx[1]:null}; }
