@@ -1863,6 +1863,8 @@ body.dark .tab.tab-meta:not(.active){color:#ff7ab8;}
 .mt-edit input{border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:var(--bg);}
 .mt-edit .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
 .mt-edit label{font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
+.mt-postedtg{grid-column:1/-1; justify-self:center; margin:6px auto 0; padding:9px 18px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); font:inherit; font-size:13px; cursor:pointer;}
+.mt-postedtg:hover{color:var(--deep); border-color:var(--deep);}
 .mt-empty{padding:40px; text-align:center; color:var(--muted); background:var(--surface); border:1px dashed var(--line); border-radius:18px;}
 .mt-auto{display:inline-flex; align-items:center; gap:9px; padding:7px 13px 7px 8px; border-radius:999px; border:1px solid var(--line); background:var(--surface); font-weight:700; font-size:12.5px; color:var(--muted);}
 .mt-auto i{position:relative; width:34px; height:20px; border-radius:999px; background:var(--line); transition:background .15s;}
@@ -10034,7 +10036,7 @@ function renderHomeChats(){
    approved posts at their time (every 30 min check), «Post now» at once.
    26 Sept 2026: Auto-post (default on) — every post counts as approved unless held/skipped; month filter; tab after Year. ---------- */
 const SOCIAL_URL=API_BASE+'/api/social';
-const Meta={ posts:[], all:[], auto:true, mf:null, meta:{connected:false}, base:'', month:'', lastAt:0, busy:false, open:{}, edit:null, confirm:null, slide:{}, timer:null,
+const Meta={ posts:[], all:[], auto:true, showPosted:false, mf:null, meta:{connected:false}, base:'', month:'', lastAt:0, busy:false, open:{}, edit:null, confirm:null, slide:{}, timer:null,
   async pull(force){
     if(!SYNC_TOKEN) return;
     if(this.busy && !force) return; this.busy=true;
@@ -10111,7 +10113,7 @@ const Meta={ posts:[], all:[], auto:true, mf:null, meta:{connected:false}, base:
     const now=new Date().toISOString().slice(0,7);
     if(!this.mf || (this.mf!=='all' && this.mf!=='sales' && !months.includes(this.mf))) this.mf=months.find(m=>m>=now)||months[months.length-1]||'all';
     $('#mtMonth').textContent=months.length>1?(MN(months[0])+' – '+MN(months[months.length-1])+' '+months[months.length-1].slice(0,4)):(this.month||'');
-    $('#mtMonths').innerHTML=(months.length>1||this.sales.length)?[...months.map(m=>[m,MN(m),ALL.filter(p=>(p.month||String(p.date).slice(0,7))===m).length]),['all','All',ALL.length],...(this.sales.length?[['sales','SALES',this.sales.length]]:[])].map(([k,l,c])=>`${k==='sales'?'<span class="mt-msep" aria-hidden="true"></span>':''}<button data-mf="${k}" class="${this.mf===k?'on':''}${k==='sales'?' sales':''}">${esc(l)}<small>${c}</small></button>`).join(''):'';
+    $('#mtMonths').innerHTML=(months.length>1||this.sales.length)?[...months.map(m=>[m,MN(m),ALL.filter(p=>(p.month||String(p.date).slice(0,7))===m&&p.status!=='posted').length]),['all','All',ALL.filter(p=>p.status!=='posted').length],...(this.sales.length?[['sales','SALES',this.sales.length]]:[])].map(([k,l,c])=>`${k==='sales'?'<span class="mt-msep" aria-hidden="true"></span>':''}<button data-mf="${k}" class="${this.mf===k?'on':''}${k==='sales'?' sales':''}">${esc(l)}<small>${c}</small></button>`).join(''):'';
     const P=this.posts=this.mf==='all'?ALL:ALL.filter(p=>(p.month||String(p.date).slice(0,7))===this.mf), n=k=>P.filter(p=>p.status===k).length;
     const au=$('#mtAuto'); au.classList.toggle('on',this.auto); au.setAttribute('aria-checked',String(this.auto)); au.querySelector('span').textContent='Auto-post '+(this.auto?'on':'off');
     if(this.mf==='sales'){ this.posts=this.sales; $('#mtApproveAll').style.display='none'; this.renderSales(); return; }
@@ -10123,7 +10125,10 @@ const Meta={ posts:[], all:[], auto:true, mf:null, meta:{connected:false}, base:
       +(nx?` <span class="mt-next">Next: ${esc(this.when(nx))} — ${esc(nx.title||'')}</span>`:'');
     $('#mtStats').innerHTML=[['Planned',P.length],[this.auto?'Scheduled':'Approved',n('approved')],[this.auto?'On hold':'Drafts',n('draft')],['Posted',n('posted')],['Skipped',n('skipped')],['Need a look',n('failed')+n('partial')]].map(([k,v])=>`<div class="mt-stat"><b>${v}</b><span>${k}</span></div>`).join('');
     $('#mtApproveAll').style.display=this.auto?'none':''; $('#mtApproveAll').disabled=!n('draft');
-    $('#mtGrid').innerHTML=P.length?P.map(p=>this.card(p)).join(''):'<div class="mt-empty">No posts prepared yet.</div>';
+    /* 7 Oct 2026 (Angelo: «remove the posted ones») — posted posts leave the list; one small link brings them back to look at */
+    const V=this.showPosted?P:P.filter(p=>p.status!=='posted'), np=n('posted');
+    const tg=np?`<button class="mt-postedtg" data-showposted="${this.showPosted?0:1}">${this.showPosted?'Hide the posted ones':'Show the '+np+' posted '+(np===1?'one':'ones')}</button>`:'';
+    $('#mtGrid').innerHTML=(V.length?V.map(p=>this.card(p)).join(''):`<div class="mt-empty">${P.length?'Everything here is posted ✓':'No posts prepared yet.'}</div>`)+tg;
   },
   async share(p){
     const u=this.url(p.media[0]);
@@ -10178,7 +10183,9 @@ const Meta={ posts:[], all:[], auto:true, mf:null, meta:{connected:false}, base:
     const S=this.sales, n=k=>S.filter(p=>p.status===k).length;
     $('#mtStats').innerHTML=[['Sales videos',S.length],['On Instagram + Facebook',n('posted')],['On TikTok',S.filter(p=>p.tiktokDone).length]].map(([k,v])=>`<div class="mt-stat"><b>${v}</b><span>${k}</span></div>`).join('');
     $('#mtHelp').innerHTML='<b>SALES</b> — your selling videos, ready whenever you want them. Nothing here goes out by itself. <b>Post on Instagram + Facebook</b> publishes at once. For TikTok: <b>Post on TikTok</b> copies the description and, on your phone, opens the share menu — pick TikTok, add a trending sound, paste the description. On the computer it downloads the video and opens TikTok Studio.';
-    $('#mtGrid').innerHTML=(S.length?this.salesGrouped(S):'<div class="mt-empty">No sales videos yet.</div>')+this.scriptPanel();
+    const dn=p=>p.status==='posted'&&p.tiktokDone, nd=S.filter(dn).length, SV=this.showPosted?S:S.filter(p=>!dn(p));
+    const tg=nd?`<button class="mt-postedtg" data-showposted="${this.showPosted?0:1}">${this.showPosted?'Hide the posted ones':'Show the '+nd+' posted '+(nd===1?'one':'ones')}</button>`:'';
+    $('#mtGrid').innerHTML=(SV.length?this.salesGrouped(SV):`<div class="mt-empty">${S.length?'Everything here is posted ✓':'No sales videos yet.'}</div>`)+tg+this.scriptPanel();
     this.wireScript();
   },
   wireScript(){
@@ -10225,6 +10232,7 @@ const Meta={ posts:[], all:[], auto:true, mf:null, meta:{connected:false}, base:
     const t=e.target.closest('button'); if(!t) return;
     const d=t.dataset, P=id=>Meta.posts.find(p=>p.id===id);
     if(d.mv){ const tr=grid.querySelector(`[data-track="${CSS.escape(d.id)}"]`); if(tr) tr.scrollBy({left:tr.clientWidth*Number(d.mv),behavior:'smooth'}); return; }
+    if(d.showposted){ Meta.showPosted=d.showposted==='1'; Meta.render(); return; }
     if(d.more){ Meta.open[d.more]=!Meta.open[d.more]; Meta.render(); return; }
     if(d.approve){ await Meta.act('approve',{id:d.approve,on:d.on==='1'},d.on==='1'?(Meta.auto?'Scheduled again':'Approved — it goes out on its day'):(Meta.auto?'On hold — it won\'t go out':'Approval taken back')); return; }
     if(d.skip){ await Meta.act('skip',{id:d.skip,on:d.on==='1'},d.on==='1'?'Skipped':'Back in the plan'); return; }
