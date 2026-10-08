@@ -1645,6 +1645,12 @@ body.dark .day-row button{background:var(--surface);}
 .ld-next-r .nm:hover b{color:var(--brand);}
 .ld-next-r .ph{flex:none; font-size:19px; font-weight:800; letter-spacing:.02em; color:var(--brand); text-decoration:none; font-variant-numeric:tabular-nums;}
 .ld-next-r .ph.none{font-size:12.5px; color:#B8860B;}
+.ld-next-r .lk{flex:none; display:flex; gap:6px;}
+.ld-next-r .lk a{display:inline-flex; align-items:center; gap:5px; height:32px; padding:0 11px; border-radius:9px; border:1px solid var(--line); background:var(--surface,#fff); color:var(--ink); font:700 12.5px/1 'Inter',sans-serif; text-decoration:none; white-space:nowrap;}
+.ld-next-r .lk a .ic{width:14px; height:14px; color:var(--brand);}
+.ld-next-r .lk a i{font-style:normal;}
+@media (hover:hover){ .ld-next-r .lk a:hover{border-color:var(--brand); color:var(--brand);} }
+@media (max-width:640px){ .ld-next-r{flex-wrap:wrap;} .ld-next-r .nm{flex:1 1 calc(100% - 40px);} .ld-next-r .lk{margin-left:36px;} .ld-next-r .lk a{padding:0 10px;} .ld-next-r .lk a i{display:none;} .ld-next-r .lk a .ic{width:16px; height:16px;} .ld-next-r .ph{margin-left:auto; font-size:17px;} }
 @media (max-width:600px){ .ld-next-r{flex-wrap:wrap; gap:4px 10px;} .ld-next-r .nm{flex:1 1 calc(100% - 40px);} .ld-next-r .ph{margin-left:34px; font-size:18px;} }
 .ld-focus .f-foot button{font-weight:700; color:var(--brand); background:var(--blue-soft); border-radius:8px; padding:5px 10px;}
 .ld-focus .f-foot .keys{margin-left:auto;}
@@ -8219,6 +8225,7 @@ function ldUpNextHtml(q, cur, idx){
   return `<div class="ld-next"><div class="ld-next-h">Coming up next <span>${rest.length} of ${Math.max(0,(idx>=0?q.length-idx-1:q.length-1))}</span></div>`+
     rest.map((x,i)=>`<div class="ld-next-r${x.hot?' hot':''}"><span class="no">${i+1}</span>
       <button type="button" class="nm" data-ldjump="${esc(x.id)}" title="Call this one now"><b>${esc(x.name)}</b><small>${esc([ldSpecShort(x), x.city].filter(Boolean).join(' · '))}${x.status==='na'&&x.tries&&x.tries.length?' · no answer before':''}${x.cb?' · call-back':''}</small></button>
+      <span class="lk"><a href="${esc(ldLookup(x))}" target="_blank" rel="noopener" title="Google ${esc(x.name)} — website, reviews, photos">${IC.search}<i>Google</i></a><a href="${esc(ldMaps(x))}" target="_blank" rel="noopener" title="Google Maps — ${esc(x.name)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg><i>Maps</i></a></span>
       ${x.phone?`<a class="ph" href="tel:+30${esc(x.phone)}">${esc(ldFmtPhone(x.phone))}</a>`:'<span class="ph none">no phone yet</span>'}</div>`).join('')+`</div>`;
 }
 function renderLdFocus(){
