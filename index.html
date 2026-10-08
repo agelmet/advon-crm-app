@@ -2376,10 +2376,10 @@ body.dark .rm-new input{background:var(--surface);}
 .chip.chat{background:var(--blue-soft); color:var(--brand); font-weight:700; cursor:pointer;}
 .chip.chat.wait{background:var(--red-soft); color:var(--red);}
 /* draft button on the Board card (8 Oct 2026) — big and coloured so the draft opens in one tap */
-.card .c-draft{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;margin-top:8px;padding:8px 10px;border-radius:10px;background:linear-gradient(135deg,#0EA5E9,#2563EB);color:#fff;font-weight:800;font-size:13px;line-height:1.2;text-decoration:none;letter-spacing:.01em;box-shadow:0 6px 14px -6px rgba(37,99,235,.65);transition:transform .15s,filter .15s}
-.card .c-draft span{font-size:10.5px;font-weight:600;opacity:.85;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .c-draft{display:inline-flex;align-items:center;gap:5px;max-width:100%;margin-top:7px;padding:4px 9px;border-radius:8px;background:linear-gradient(135deg,#0EA5E9,#2563EB);color:#fff;font-weight:800;font-size:11px;line-height:1.3;text-decoration:none;letter-spacing:.01em;box-shadow:0 3px 8px -4px rgba(37,99,235,.6);transition:transform .15s,filter .15s}
+.card .c-draft span{font-size:10px;font-weight:600;opacity:.85;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card .c-draft:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.card .c-draft.live{background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 6px 14px -6px rgba(5,150,105,.6)}
+.card .c-draft.live{background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 3px 8px -4px rgba(5,150,105,.6)}
 
 /* header: from laptop widths down, the tabs get their own full-width row (they used to push the search onto a lonely second line) */
 @media(min-width:901px) and (max-width:1780px){
@@ -4575,7 +4575,7 @@ function cardEl(c,st){
       ${c.email?`<a class="chip contact" href="mailto:${esc(c.email)}" title="${esc(c.email)}" onclick="event.stopPropagation()">${IC.mail}</a>`:''}
       ${(()=>{ const th=chThreadFor(c); if(!th) return ''; const w=th.lastFrom==='client'; return `<span class="chip chat${w?' wait':''}" data-chat="${esc(th.slug)}" title="${w?'The client wrote and is waiting for an answer':'Open the chat with this client'}">${IC.message} ${w?'waiting':'chat'}</span>`; })()}
     </div>
-    ${(()=>{ const u=cDraftUrl(c); if(!u) return ''; const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Open draft':'▶ Open website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })()}
+    ${(()=>{ const u=cDraftUrl(c); if(!u) return ''; const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Draft':'▶ Website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })()}
     ${c.notes?`<div class="c-notes">${esc(c.notes)}</div>`:''}
     ${isLost&&c.lostReason?`<div class="c-reason" title="Reason">${IC.ban} ${esc(c.lostReason)}</div>`:''}
     ${!isLost?`<button class="c-lost" title="Didn't convert — move to Lost">${IC.ban}</button>`:''}
