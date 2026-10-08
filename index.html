@@ -4576,7 +4576,7 @@ function cardEl(c,st){
       ${(()=>{ const th=chThreadFor(c); if(!th) return ''; const w=th.lastFrom==='client'; return `<span class="chip chat${w?' wait':''}" data-chat="${esc(th.slug)}" title="${w?'The client wrote and is waiting for an answer':'Open the chat with this client'}">${IC.message} ${w?'waiting':'chat'}</span>`; })()}
     </div>
     ${(()=>{ const u=cDraftUrl(c); if(!u) return ''; const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Open draft':'▶ Open website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })()}
-    ${(()=>{ const n=cNotesPreview(c.notes); return n?`<div class="c-notes">${esc(n)}</div>`:''; })()}
+    
     ${isLost&&c.lostReason?`<div class="c-reason" title="Reason">${IC.ban} ${esc(c.lostReason)}</div>`:''}
     ${!isLost?`<button class="c-lost" title="Didn't convert — move to Lost">${IC.ban}</button>`:''}
     ${nextName?`<button class="c-next" title="Move to ${nextName}">${IC.arrowRight}</button>`:''}`;
@@ -9837,6 +9837,7 @@ const Chats={ list:[], head:null, cur:null, msgs:[], thread:null, thead:null, ca
         if(fresh.length){ toast('💬 '+fresh.map(t=>t.name).join(', ')+' wrote to you', true); if(this.cur && fresh.some(t=>t.slug===this.cur)) this.pullThread(true); }
         this.prefetch();
         try{ chSyncBoard(); }catch(e){}
+        try{ renderBoard(); }catch(e){}   /* the «▶ Open draft» buttons and chat chips come from the chats — redraw the Board once they arrive */
       } else { this.state='ok'; this.lastAt=Date.now(); }
     }catch(e){ this.state='error'; this.err=String((e&&e.message)||e); }
     this.busy=false; if(manual && this.state==='ok') toast('Checked for new messages');
@@ -10011,9 +10012,7 @@ function chClientFor(t){
   return m.length===1 ? m[0] : null;
 }
 /* the client's draft / website link for the Board card button: the card's own «Draft link» field, else the chat's «draft» (set by Claude with chat.py meta <slug> draft=…, never shown to the client), else the website on its chat, else a drafts.advonmedia.com link in the notes */
-/* Board card preview (Angelo, 8 Oct 2026): the booking line («Κράτηση: … · #AD-00015 · https://meet.google.com/…») stays out of
-   the card preview — it is still in the notes, seen when the card is opened */
-function cNotesPreview(n){ try{ return String(n||'').split(/\n/).map(l=>l.trim()).filter(t=>t && !/^Κράτηση:/i.test(t) && !/^(https?:\/\/)?(meet\.google\.com|[\w.-]*zoom\.us)\/\S*$/i.test(t) && !/^#[A-Z]{2,4}-\d+$/.test(t)).join('\n'); }catch(e){ return String(n||''); } }
+/* Board cards show NO notes under the name (Angelo, 8 Oct 2026) — booking lines, meeting logs and links are read inside the card */
 function cDraftUrl(c){ try{ if(!c) return ''; const ok=u=>{ u=String(u||'').trim(); return !u?'':(/^https?:\/\//i.test(u)?u:'https://'+u); }; if(c.draft) return ok(c.draft); const th=chThreadFor(c); if(th&&th.draft) return ok(th.draft); if(th&&th.site) return ok(th.site); const m=String(c.notes||'').match(/https?:\/\/drafts\.advonmedia\.com\/[^\s)]+/i); return m?m[0]:''; }catch(e){ return ''; } }
 function chThreadFor(c){ try{ return c&&c.chat ? (Chats.list.find(t=>t.slug===c.chat && !t.archived)||null) : null; }catch(e){ return null; } }   /* a function (hoisted) + try: the Board renders before this part of the file has run */
 const chMailDone=new Set();
