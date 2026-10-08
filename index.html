@@ -2705,6 +2705,13 @@ body.locked .mq-pill{display:none;}
 .fu-h.ext{color:#7C5CFC;}
 .fu-row.ext:not(.over):not(.now){background:var(--violet-soft,#F0ECFF);}
 .fu-tx i.xt{background:#7C5CFC1f; color:#6A4AE8;}
+.mq-sal{display:flex; align-items:center; gap:8px; margin:6px 0 10px;}
+.mq-sal>span{font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-right:2px;}
+.mq-sal .mq-chip{padding:7px 14px;}
+.mq-saln{flex:1; min-width:0; padding:9px 12px; font-size:14px;}
+.mq-msg{width:100%; min-height:330px; resize:vertical; padding:14px 16px; border-radius:14px; border:1.5px solid var(--line); background:var(--bg); color:var(--ink); font:14px/1.55 inherit; font-family:inherit; outline:none; white-space:pre-wrap;}
+.mq-msg:focus{border-color:var(--brand); background:var(--surface);}
+@media (max-width:640px){ .mq-msg{min-height:300px; font-size:14px;} }
 .calpop .b-log{color:var(--brand); font-weight:800;}
 @media (max-width:640px){
   .mq-outs{grid-template-columns:1fr 1fr;}
@@ -4763,6 +4770,7 @@ function mqSetOut(o, quiet){
 }
 function mqRender(){
   const body=$('#mqBody'), foot=$('#mqFoot'); if(!mq) return;
+  if(mq.msg){ mqRenderMsg(body, foot); return; }
   if(mq.pickList){ mqRenderPick(body, foot); return; }
   const c=state.clients.find(x=>x.id===mq.id); if(!c){ mqClose(); return; }
   const st=c.day ? (c.day===todayIso()?'today':fmtDay(c.day))+(c.time?' · '+c.time:'') : 'no date';
@@ -4871,7 +4879,7 @@ function mqSave(){
   const what=mqWhat(o, mq.next, tags, note);
   if(rd) c.fu={day:rd, what, st:c.stage, out:o, at:Date.now()}; else delete c.fu;
   if(ext.length) c.ups=(c.ups||[]).concat({id:uid(), what:ext, day:extDay, at:Date.now(), note}).slice(-20);
-  c.mlog=(c.mlog||[]).concat({at:Date.now(), slot:mqSlot(c), out:o, tags, note, day:rd||'', ext}).slice(-20);
+  c.mlog=(c.mlog||[]).concat({at:Date.now(), slot:mqSlot(c), out:o, tags, note, day:rd||'', ext, extDay:ext.length?extDay:'', next:o==='yes'?mq.next:''}).slice(-20);
   const line=fmtDay(todayIso())+' · '+MQ_OUT[o].short.toUpperCase()+(o==='yes'?(mq.next==='building'?' (has everything)':' (waiting material)'):'')+(tags.length?': '+tags.join(', '):'')+(note?' — «'+note+'»':'')+(rd?' · remind '+mqDateLbl(rd):'')+(ext.length?' · ALSO WANTS: '+ext.join(', ')+' (bring up '+mqDateLbl(extDay)+')':'');
   c.notes=(line+(c.notes?'\n'+c.notes:'')).slice(0,4000);
   c.updated=Date.now();
@@ -4882,10 +4890,143 @@ function mqSave(){
     keys.forEach(k=>{ if(before[k]===undefined) delete c[k]; else c[k]=before[k]; });
     save(); renderAll(); toast('Undone — '+name+' is back as it was');
   }, 8);
+  /* the ready message to send (Yes / Thinking / No show) — then «Done» moves on to the next meeting */
+  if(o!=='no'){ mqOpenMsg(c.id); return; }
   $('#mqOverlay').classList.remove('open'); mq=null;
   /* more meetings waiting? open the next one straight away */
   const next=mqPending()[0];
   if(next) setTimeout(()=>mqOpen(next.id),450); else mqTick(true);
+}
+/* ---------- the ready message after the meeting (8 Oct 2026) ----------
+   Right after «Save» the same window shows the message to send, in Angelo's own words (his two templates:
+   «Yes» = start building, send us photos + logo to advonmd@gmail.com · «Thinking» = we can start the skeleton,
+   waiting for your OK), filled in with what was tapped: what they send, the day he will call back, the extras
+   («Google Ads — I'll let you know in November»). Greeting by name with κα / κ. (vocative guessed, editable,
+   remembered on the card as c.salut). One tap copies it. Also from Home → After meetings → «Message». */
+const MQ_SIGN='Άγγελος Μετρίδης - 6934088046\nAdvon Media\nadvonmedia.com';
+const GR_DAYS_ACC=['την Κυριακή','τη Δευτέρα','την Τρίτη','την Τετάρτη','την Πέμπτη','την Παρασκευή','το Σάββατο'];
+const GR_MONTHS_ACC=['Ιανουάριο','Φεβρουάριο','Μάρτιο','Απρίλιο','Μάιο','Ιούνιο','Ιούλιο','Αύγουστο','Σεπτέμβριο','Οκτώβριο','Νοέμβριο','Δεκέμβριο'];
+const MQ_EXTRA_GR={'Google Ads':'τις διαφημίσεις στο Google (Google Ads)','Google Business Profile':'το προφίλ σας στο Google (Google Business Profile)',
+  'Contact form':'τη φόρμα επικοινωνίας','Articles':'την ενότητα άρθρων','Admin panel':'τον πίνακα διαχείρισης, για να αλλάζετε μόνοι σας κείμενα και φωτογραφίες',
+  'Logo design':'το λογότυπο','Eshop':'το e-shop','Social media':'τα social media'};
+function grList(a){ return a.length<2 ? (a[0]||'') : a.slice(0,-1).join(', ')+' και '+a[a.length-1]; }
+function grWhen(iso){
+  if(!iso) return '';
+  const d=new Date(iso+'T12:00'), t=new Date(); t.setHours(12,0,0,0);
+  const days=Math.round((d-t)/864e5);
+  if(days<=0) return 'σήμερα'; if(days===1) return 'αύριο';
+  if(days<7) return GR_DAYS_ACC[d.getDay()];
+  if(days<14) return 'την επόμενη εβδομάδα';
+  if(d.getMonth()!==t.getMonth() && d.getDate()<=7) return 'στις αρχές '+(['Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου'][d.getMonth()]);
+  return 'στις '+d.getDate()+'/'+(d.getMonth()+1);
+}
+function grMonthWhen(iso){
+  if(!iso) return '';
+  const d=new Date(iso+'T12:00'), t=new Date();
+  if(d.getMonth()!==t.getMonth() || d.getFullYear()!==t.getFullYear()) return 'μέσα στον '+GR_MONTHS_ACC[d.getMonth()];
+  return grWhen(iso);
+}
+/* «κα Τράκη» / «κ. Ρασκάτε» — male surnames (ending in ς) go to the vocative */
+function mqGuessSal(c){
+  if(c.salut && c.salut.n) return {t:c.salut.t||'κα', n:c.salut.n};
+  const w=String(c.name||'').trim().split(/\s+/).filter(Boolean);
+  let n=w.length ? w[w.length-1] : '';
+  const greek=/[\u0370-\u03FF\u1F00-\u1FFF]/.test(n);
+  if(greek){
+    if(/[σς]$/i.test(n)){
+      n=n.replace(/ος$/,'ε').replace(/ός$/,'έ').replace(/ους$/,'ου').replace(/ης$/,'η').replace(/ής$/,'ή').replace(/ας$/,'α').replace(/άς$/,'ά');
+      return {t:'κ.', n};
+    }
+    return {t:'κα', n};
+  }
+  return {t:/s$/i.test(n)?'κ.':'κα', n};
+}
+function mqMsgText(c, e, sal){
+  const hi=(new Date().getHours()<12?'Καλημέρα':'Καλησπέρα');
+  const who=(sal.t+' '+sal.n).trim();
+  const tags=e.tags||[], ext=e.ext||[];
+  const extLine= ext.length ? 'Για '+grList(ext.map(x=>MQ_EXTRA_GR[x]||x))+' που συζητήσαμε, θα σας ενημερώσω '+grMonthWhen(e.extDay)+'.' : '';
+  const L=[];
+  if(e.out==='yes' && e.next==='building'){
+    L.push(hi+' σας και πάλι '+who+', σας στέλνω σε συνέχεια της επικοινωνίας μας.');
+    L.push('Ξεκινάμε ήδη από σήμερα-αύριο να κατασκευάζουμε την ιστοσελίδα σας. Όπως συζητήσαμε και στη συνάντησή μας, από εσάς τα έχουμε όλα όσα χρειαζόμαστε.');
+    L.push('Γράφουμε τα κείμενα και στήνουμε όλη τη σελίδα σας, σας στέλνουμε μια ολοκληρωμένη, καλή πρώτη εικόνα σε 5-10 ημέρες και μας λέτε ό,τι αλλαγές θα θέλατε να κάνουμε, ώστε να γίνει ακριβώς όπως την έχετε στο μυαλό σας!');
+    L.push('Αν θέλετε, μπορείτε να μας στείλετε και κάποια κατεύθυνση που θα θέλατε να ακολουθήσουμε, αλλιώς μπορείτε να το αφήσετε πάνω μας!');
+    if(extLine) L.push(extLine);
+    L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
+    L.push('Ευχαριστώ πολύ και χάρηκα!');
+  } else if(e.out==='yes'){
+    const want=[];
+    if(!tags.length || tags.includes('Photos')) want.push('φωτογραφίες σας');
+    if(!tags.length || tags.includes('Logo')) want.push('λογότυπο ή κάρτα αν έχετε');
+    if(tags.includes('Texts / info')) want.push('όποια κείμενα ή πληροφορίες θέλετε να υπάρχουν');
+    if(tags.includes('Directions / ideas')) want.push('όποιες οδηγίες ή ιδέες έχετε για το πώς τη φαντάζεστε');
+    if(tags.includes('Own domain')) want.push('το όνομα (domain) που ήδη έχετε');
+    L.push(hi+' σας και πάλι '+who+', σας στέλνω σε συνέχεια της επικοινωνίας μας.');
+    L.push('Ξεκινάμε ήδη από σήμερα-αύριο να κατασκευάζουμε την ιστοσελίδα σας σαν δομή κώδικα.');
+    if(tags.includes('doctoranytime profile')) L.push('Τα στοιχεία σας από το doctoranytime τα έχουμε ήδη, οπότε όπως είπαμε και στη συνάντησή μας, από εσάς χρειαζόμαστε μόνο '+grList(want.length?want:['φωτογραφίες σας'])+', αν μπορείτε στο email παρακάτω, για να έχουν καλή ανάλυση:');
+    else L.push('Όπως είπαμε και στη συνάντησή μας, από εσάς χρειαζόμαστε μόνο '+grList(want)+', αν μπορείτε στο email παρακάτω, για να έχουν καλή ανάλυση:');
+    L.push('advonmd@gmail.com');
+    L.push('Ό,τι άλλο θέλετε, εννοείται ότι μπορείτε να μας το στείλετε, από οδηγίες κ.λπ., και να επικοινωνήσουμε ξανά αν θέλετε.');
+    if(extLine) L.push(extLine);
+    L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
+    L.push('Ευχαριστώ πολύ και χάρηκα!');
+  } else if(e.out==='think'){
+    L.push(hi+' και πάλι '+who+',');
+    L.push('μπορούμε να ξεκινήσουμε να κατασκευάζουμε την ιστοσελίδα σας σαν δομή-σκελετό, χρώματα και κάποια βασικά κείμενα, αλλά περιμένουμε επιβεβαίωση από εσάς!');
+    L.push('Όπως συζητήσαμε και στη συνάντησή μας, από εσάς τα έχουμε όλα όσα χρειαζόμαστε.');
+    L.push('Αν θέλετε, μπορείτε να μας στείλετε κάποια κατεύθυνση που θα θέλατε να ακολουθήσουμε, αλλιώς μπορείτε να το αφήσετε πάνω μας!');
+    L.push('Γράφουμε τα κείμενα και στήνουμε όλη τη σελίδα σας, σας στέλνουμε μια ολοκληρωμένη, καλή πρώτη εικόνα σε 5-10 ημέρες και μας λέτε ό,τι αλλαγές θα θέλατε να κάνουμε, ώστε να γίνει ακριβώς όπως την έχετε στο μυαλό σας!');
+    if(e.day) L.push('Όπως είπαμε, θα επικοινωνήσω μαζί σας '+grWhen(e.day)+' για να δούμε πώς θέλετε να προχωρήσουμε.');
+    if(extLine) L.push(extLine);
+    L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
+    L.push('Ευχαριστούμε!');
+  } else if(e.out==='noshow'){
+    L.push(hi+' σας '+who+',');
+    L.push('σας περιμέναμε σήμερα για τη σύντομη διαδικτυακή μας συνάντηση για την ιστοσελίδα σας, αλλά μάλλον κάτι προέκυψε, κανένα πρόβλημα!');
+    L.push('Θέλετε να κλείσουμε μια νέα ώρα που σας βολεύει; Διαρκεί μόνο 15 λεπτά.');
+    L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
+    L.push('Ευχαριστούμε!');
+  } else return '';
+  return L.join('\n\n')+'\n\n'+MQ_SIGN;
+}
+function mqLastEntry(c){ const l=(c.mlog||[]); return l.length ? l[l.length-1] : null; }
+function mqOpenMsg(id){
+  const c=state.clients.find(x=>x.id===id); if(!c) return;
+  const e=mqLastEntry(c);
+  if(!e || !['yes','think','noshow'].includes(e.out)){ toast('No message for this one — log the meeting first'); mqOpen(id); return; }
+  document.querySelectorAll('.overlay.open').forEach(o=>{ if(o.id!=='mqOverlay' && o.id!=='loginScreen') o.classList.remove('open'); });
+  const sal=mqGuessSal(c);
+  mq={id, msg:true, sal, text:mqMsgText(c,e,sal), edited:false};
+  const pl=$('#mqPill'); if(pl) pl.hidden=true;
+  mqRender(); $('#mqOverlay').classList.add('open');
+}
+function mqRenderMsg(body, foot){
+  const c=state.clients.find(x=>x.id===mq.id); if(!c){ mqClose(); return; }
+  const e=mqLastEntry(c)||{};
+  $('#mqTitle').textContent='Message for '+c.name;
+  $('#mqSub').innerHTML=`${esc((MQ_OUT[e.out]||{}).short||'')} · ready to send — tap <b>Copy</b>, paste in Viber or e-mail`;
+  body.innerHTML=`<div class="mq-sal"><span>Greeting</span>
+      <button type="button" class="mq-chip${mq.sal.t==='κα'?' on':''}" data-salt="κα">κα</button>
+      <button type="button" class="mq-chip${mq.sal.t==='κ.'?' on':''}" data-salt="κ.">κ.</button>
+      <input id="mqSalN" class="mq-note mq-saln" value="${esc(mq.sal.n)}" placeholder="Surname" autocomplete="off"></div>
+    <textarea id="mqMsg" class="mq-msg" spellcheck="false">${esc(mq.text)}</textarea>`;
+  const phone=String(c.viber||c.phone||'').replace(/[^\d+]/g,'');
+  const vib=phone ? (phone.startsWith('+')?phone:(phone.startsWith('30')?'+'+phone:'+30'+phone)) : '';
+  foot.innerHTML=`<div class="mq-foot-l"><button type="button" class="mq-link" id="mqMsgDone">Done</button>${c.email?`<button type="button" class="mq-link" id="mqMsgMail">E-mail it</button>`:''}${vib?`<button type="button" class="mq-link" id="mqMsgViber">Copy + open Viber</button>`:''}</div>
+    <button type="button" class="btn btn-brand mq-save" id="mqMsgCopy">Copy message</button>`;
+  const regen=()=>{ const ee=mqLastEntry(c)||{}; if(!mq.edited){ mq.text=mqMsgText(c,ee,mq.sal); $('#mqMsg').value=mq.text; } else { const old=$('#mqMsg').value; $('#mqMsg').value=old.replace(/^(Καλημέρα|Καλησπέρα)( σας)?( και πάλι)? [^,\n]*,/, (m0,a,b,cc)=>a+(b||'')+(cc||'')+' '+(mq.sal.t+' '+mq.sal.n).trim()+','); mq.text=$('#mqMsg').value; } };
+  const keepSal=()=>{ c.salut={t:mq.sal.t, n:mq.sal.n}; c.updated=Date.now(); save(); };
+  body.querySelectorAll('[data-salt]').forEach(b=>b.addEventListener('click',()=>{ mq.sal.t=b.dataset.salt; body.querySelectorAll('[data-salt]').forEach(x=>x.classList.toggle('on',x===b)); regen(); keepSal(); }));
+  const sn=$('#mqSalN'); sn.addEventListener('input',()=>{ mq.sal.n=sn.value.trim(); regen(); }); sn.addEventListener('change',keepSal);
+  const ta=$('#mqMsg'); ta.addEventListener('input',()=>{ mq.text=ta.value; mq.edited=true; });
+  const copy=()=>{ const t=$('#mqMsg').value; const ok=()=>toast('Copied — paste it to '+c.name);
+    if(navigator.clipboard && window.isSecureContext!==false) return navigator.clipboard.writeText(t).then(ok).catch(()=>{ ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){} });
+    ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){} return Promise.resolve(); };
+  $('#mqMsgCopy').addEventListener('click',()=>{ copy(); const b=$('#mqMsgCopy'); b.textContent='Copied ✓'; setTimeout(()=>{ if(b.isConnected) b.textContent='Copy message'; },1600); });
+  const v=$('#mqMsgViber'); if(v) v.addEventListener('click',()=>{ copy(); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(vib); },250); });
+  const m=$('#mqMsgMail'); if(m) m.addEventListener('click',()=>{ location.href='mailto:'+encodeURIComponent(c.email)+'?subject='+encodeURIComponent('Η ιστοσελίδα σας — Advon Media')+'&body='+encodeURIComponent($('#mqMsg').value); });
+  $('#mqMsgDone').addEventListener('click',()=>{ $('#mqOverlay').classList.remove('open'); mq=null; const next=mqPending()[0]; if(next) setTimeout(()=>mqOpen(next.id),350); else mqTick(true); });
 }
 function fuDone(id){
   const c=state.clients.find(x=>x.id===id); if(!c||!c.fu) return;
@@ -4926,7 +5067,7 @@ function mqTick(quiet){
     if(!$('#mqOverlay').classList.contains('open') || !mq) return;
     if(e.key==='Escape'){ mqClose(); return; }
     const inField=/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||'');
-    if(inField || mq.pickList) return;
+    if(inField || mq.pickList || mq.msg) return;
     const hit=Object.entries(MQ_OUT).find(([,v])=>v.key===e.key);
     if(hit){ e.preventDefault(); mqSetOut(hit[0]); }
     else if(e.key==='Enter' && mq.out){ e.preventDefault(); mqSave(); }
@@ -4957,6 +5098,7 @@ function renderAfterMeet(){
       <div class="fu-tx" data-open="${c.id}"><b>${esc(c.name)}</b><i style="background:${s.hex}1f;color:${s.hex}">${esc(s.name)}</i>
         <small>${esc(c.fu.what)}${c.day?' · met '+esc(fmtDay(c.day)):''}</small></div>
       <div class="fu-act">${c.phone?`<a href="tel:${esc(c.phone)}" title="Call ${esc(c.phone)}">${IC.phone}</a>`:''}
+        ${mqLastEntry(c)&&['yes','think','noshow'].includes(mqLastEntry(c).out)?`<button type="button" data-fumsg="${c.id}" title="The ready message to send them — one tap to copy">Message</button>`:''}
         <button type="button" data-fuup="${c.id}" title="Log what happened now + the next reminder">Update</button>
         <button type="button" class="ok" data-fudone="${c.id}" title="Done — no more reminders">✓</button></div>
     </div>`;
@@ -4974,6 +5116,7 @@ function renderAfterMeet(){
   el.innerHTML=h;
   el.querySelectorAll('[data-fuup]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); mqOpen(b.dataset.fuup); }));
   el.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); fuDone(b.dataset.fudone); }));
+  el.querySelectorAll('[data-fumsg]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); mqOpenMsg(b.dataset.fumsg); }));
   el.querySelectorAll('[data-updone]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); const [cid,id]=b.dataset.updone.split('|'); upDone(cid,id); }));
 }
 
