@@ -4914,7 +4914,7 @@ function mqSave(){
    Right after «Save» the same window shows the message to send, in Angelo's own words (his two templates:
    «Yes» = start building, send us photos + logo to advonmd@gmail.com · «Thinking» = we can start the skeleton,
    waiting for your OK), filled in with what was tapped: what they send, the day he will call back, the extras
-   («Google Ads — I'll let you know in November»). Greeting by name with κα / κ. (vocative guessed, editable,
+   («Google Ads — I'll let you know in November»). Greeting by SURNAME with κα / κ. (first names skipped, vocative guessed, editable,
    remembered on the card as c.salut). One tap copies it. Also from Home → After meetings → «Message». */
 const MQ_SIGN='Άγγελος Μετρίδης - 6934088046\nAdvon Media\nadvonmedia.com';
 const GR_DAYS_ACC=['την Κυριακή','τη Δευτέρα','την Τρίτη','την Τετάρτη','την Πέμπτη','την Παρασκευή','το Σάββατο'];
@@ -4939,20 +4939,47 @@ function grMonthWhen(iso){
   if(d.getMonth()!==t.getMonth() || d.getFullYear()!==t.getFullYear()) return 'μέσα στον '+GR_MONTHS_ACC[d.getMonth()];
   return grWhen(iso);
 }
-/* «κα Τράκη» / «κ. Ρασκάτε» — male surnames (ending in ς) go to the vocative */
+/* «κα Μωρογιάννη» / «κ. Ρασκάτε» — ALWAYS the SURNAME, never the first name (Angelo, 8 Oct 2026).
+   The card name can be «Ελένη Μωρογιάννη» or «Μωρογιάννη Ελένη» (or carry Dr / a profession / «- Ψυχολόγος»):
+   every word that is a known first name is set aside, the surname is what is left. The first name also tells
+   κα / κ.; male surnames (…ος, …ης, …ας) go to the vocative (Παπαδόπουλε, Ρασκάτε → as is, Δημητρίου → as is). */
+const MQ_FN_F='ελενη ελενα λενα μαρια μαρω μαιρη μαριαννα μαριανθη μαριαση αικατερινη κατερινα κατια γεωργια γωγω βασιλικη βασω βικυ σοφια αννα αννουλα ιωαννα γιαννα δημητρα μιμη ευαγγελια βαγγελιω βαγγελια λιλια χριστινα χρυσα χρυσουλα χρυσανθη παναγιωτα γιωτα αγγελικη αγγελα ειρηνη ρενα ευτυχια κωνσταντινα ντινα κωνσταντια αθηνα αθηνα αλεξανδρα αλεξια αναστασια τασια σταυρουλα βουλα νικολετα νικη θεοδωρα δωρα δεσποινα ζωη ζωιτσα μαργαριτα ευγενια φωτεινη φωτω παρασκευη βιβη βουλα ολγα αφροδιτη μυρτω ξενια νεφελη δαναη φαιη φαιδρα ελπιδα ελπινικη κυριακη κική κικη ευδοκια πολυξενη ευα στελλα στυλιανη ηλιανα ιφιγενεια ιουλια ιουλιανα μελινα μαρινα ναταλια πεννυ πηνελοπη ροζα σταματια ματινα θωμαη αρετη αντωνια χαρα χαρικλεια χαραλαμπια λαμπρινη ευανθια ανθη ανθουλα κλεοπατρα πολυμνια μαρκελλα μαρθα βαρβαρα ευτερπη αγλαια αργυρω ασπασια γαρυφαλλια γλυκερια διονυσια ελευθερια ευσταθια ευθυμια θεανω καλλιοπη πωπη λουκια μαγδαληνη μελπομενη ουρανια σεβαστη σμαραγδα σουλτανα τριανταφυλλια φανη φανια χριστιανα ευριδικη δωροθεα ραλλου τζενη τζενια μαριλενα μαριλου ραφαελα ισμηνη ισαβελλα ζαχαρουλα κλεονικη μυρτω ροδουλα ροδη αλικη αμαλια ανδρονικη ανδριανη αντιγονη αριαδνη αρτεμις αρτεμιδα αφρουλα βασιλεια βερα γεωργουλα δαφνη δεσπω εβελινα ευφροσυνη εφη ζαφειρω ζηνοβια θαλεια θεοπιστη θεονη θεοφανω ιλιαννα ιωαννα ιριδα ιρις καλλια καλλιρροη κλειω κορινα λαμπρινη λητω λυδια μαγδα μαριαμ μαρινελλα μελετια μυρσινη ναντια ναυσικα νατασα νεκταρια νιοβη ντορα ξανθη οδυσσεια ολυμπια παυλινα πετρουλα πολυτιμη ραχηλ ρεβεκκα ρουλα σαββινα σεμελη σιλια σταυρουλα σταυριανη στεφανια στεργιανη σωτηρια ταμαρα τατιανα φιλιππα φλωρα φρειδερικη χαιδω χαριτινη χαρουλα χρυσοβαλαντου μαριζιν maria marina eleni elena katerina aikaterini georgia sofia sophia anna ioanna dimitra christina chrysa angeliki eirini irene konstantina athina alexandra anastasia nikoleta theodora despina zoi margarita evgenia foteini paraskevi olga afroditi myrto xenia nefeli danai elpida kyriaki eva stella styliani iliana ifigeneia ioulia melina natalia penny penelope vasiliki vaso evangelia vicky kiki lena rena marianna chara lamprini anthi barbara aspasia dafni evelina effie efi lydia nadia natasa olympia rania tatiana stefania sotiria'.split(' ');
+const MQ_FN_M='γιωργος γεωργιος ιωαννης γιαννης κωνσταντινος κωστας κωστης ντινος δημητρης δημητριος μιμης νικος νικολαος παναγιωτης πανος τακης βασιλης βασιλειος χρηστος χρηστακης αθανασιος θανασης θανος μιχαλης μιχαηλ ευαγγελος βαγγελης σπυρος σπυριδων αντωνης αντωνιος αγγελος ανδρεας αλεξανδρος αλεξης στεφανος ηλιας εμμανουηλ μανωλης μανος θεοδωρος θοδωρης θοδωρος σταυρος παυλος πετρος χαραλαμπος μπαμπης λαμπρος στελιος στυλιανος φωτης φωτιος θωμας μαριος μαρκος λευτερης ελευθεριος τασος αναστασιος αριστειδης αποστολος τολης γρηγορης γρηγοριος διονυσης διονυσιος ευθυμιος θυμιος ζαχαριας ιασονας κυριακος λεωνιδας μιλτιαδης μιλτος νεκταριος νικητας οδυσσεας ορεστης πραξιτελης ραφαηλ σαββας σωτηρης σωτηριος ταξιαρχης τριανταφυλλος φιλιππος χαρης χρυσοστομος ευστρατιος στρατος αχιλλεας ηρακλης θεμης θεμιστοκλης ιορδανης καρολος κλεαρχος κοσμας μενελαος μηνας παρις περικλης προκοπης ρωμανος σολων φραγκισκος φανης ευριπιδης εκτορας αριστοτελης πλατων σωκρατης αρης ορφεας αλκης πολυχρονης στεργιος ζησης ζαφειρης κλεων ακης αγαπιος αλκιβιαδης αμβροσιος ανεστης ανεστις αρσενιος αυγουστινος βαρθολομαιος βενιαμιν βησσαριων γαβριηλ γερασιμος δαμιανος δανιηλ ελισσαιος ερμης ευαγορας ευγενιος ευρυπιδης ζηνων ηλιοδωρος θεοχαρης θεοφανης θεοφιλος ιακωβος ιγνατιος ισιδωρος καλλισθενης κλεομενης κυπριανος λαζαρος λουκας μαξιμος ματθαιος μελετιος ναπολεων νεοκλης νεστορας ξενοφων ορεστις παντελης παντελεημων πασχαλης πολυδωρος πυρρος ραλλης σεραφειμ σιμος σπηλιος σταματης σταματιος συμεων ταξης τιμολεων τιμοθεος τζανης φανουρης φιλημων φοιβος χαριλαος χαριτων χριστοφορος ψαρρος giorgos george georgios ioannis giannis john yiannis konstantinos kostas dimitris dimitrios nikos nikolaos panagiotis panos vasilis vasileios christos thanasis athanasios michalis michael vangelis evangelos spyros spiros antonis antonios angelos andreas alexandros alexis stefanos ilias manolis emmanouil theodoros thodoris stavros pavlos petros babis lambros stelios stylianos fotis thomas marios markos lefteris tasos anastasios apostolos grigoris dionysis kyriakos leonidas nektarios nikitas odysseas orestis savvas sotiris filippos charis chris haris achilleas iraklis themis lazaros loukas matthaios pantelis stamatis aris'.split(' ');
+const mqNorm=w=>String(w||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/ς/g,'σ').replace(/[^a-zα-ω]/g,'');
+const MQ_FN={}; MQ_FN_F.forEach(n=>{ if(n) MQ_FN[mqNorm(n)]='f'; }); MQ_FN_M.forEach(n=>{ if(n) MQ_FN[mqNorm(n)]='m'; });
+const MQ_NOT_NAME=/^(dr|δρ|dra|κ|κα|κος|κυρια|κυριος|ιατρ|ιατρος|ιατρειο|γιατρος|ψυχολογ|ψυχοθεραπ|ψυχιατρ|οδοντ|ορθοδοντ|παιδιατρ|παθολογ|καρδιολογ|γυναικολογ|δερματολογ|οφθαλμιατρ|ωρλ|ενδοκρινολογ|ουρολογ|ορθοπαιδ|χειρουργ|νευρολογ|πνευμονολογ|διαιτολογ|διατροφολογ|φυσικοθεραπ|λογοθεραπ|εργοθεραπ|μαια|δικηγορ|συμβολαιογραφ|λογιστ|μηχανικ|αρχιτεκτ|κλινικ|κεντρο|γραφειο|εταιρ|ike|ee|oe|ae|dentist|dental|psycholog|doctor|clinic|md|phd|msc)$/;
+function mqCase(w){ // ΜΩΡΟΓΙΑΝΝΗ → Μωρογιαννη, μωρογιάννη → Μωρογιάννη
+  if(!w) return w;
+  const up=w===w.toUpperCase() && w!==w.toLowerCase() && w.length>1;
+  let r=up ? w.charAt(0)+w.slice(1).toLowerCase() : w.charAt(0).toUpperCase()+w.slice(1);
+  return r.replace(/σ(?=$|[^\p{L}])/gu,'ς');
+}
+function mqVocM(n){ // male surname → vocative
+  if(!/[Ͱ-Ͽἀ-῿]/.test(n)) return n;
+  if(/[άέήίόύώ][^αεηιουωάέήίόύώϊϋΐΰ]*ος$/.test(n)) return n.replace(/ος$/,'ο'); // Μπάνος → Μπάνο, Κουράκος → Κουράκο (Παπαδόπουλος → Παπαδόπουλε below)
+  return n.replace(/ος$/,'ε').replace(/ός$/,'έ').replace(/ους$/,'ου').replace(/ούς$/,'ού').replace(/ης$/,'η').replace(/ής$/,'ή').replace(/ας$/,'α').replace(/άς$/,'ά').replace(/ΟΣ$/,'Ε').replace(/ΗΣ$/,'Η').replace(/ΑΣ$/,'Α');
+}
+function mqSurname(name){
+  let s=String(name||'').replace(/\([^)]*\)/g,' ').replace(/\s[-–—|/·,]\s.*$/,'').replace(/[,;:].*$/,'').trim();
+  const w=s.split(/\s+/).filter(x=>x && !MQ_NOT_NAME.test(mqNorm(x)) && /\p{L}/u.test(x)).map(x=>x.replace(/^[^\p{L}]+|[^\p{L}-]+$/gu,''));
+  if(!w.length) return {n:'', g:''};
+  const fn=w.map(x=>MQ_FN[mqNorm(x)]||'');
+  let g=''; fn.forEach(x=>{ if(x && !g) g=x; });
+  const rest=w.filter((x,i)=>!fn[i]);
+  let n;
+  if(rest.length) n=rest[rest.length-1];                       // the word that is not a first name
+  else if(w.length>1) n=(fn[w.length-1] && !fn[0]) ? w[0] : w[w.length-1]; // all look like first names (e.g. «Θωμά Άνθη»)
+  else n=w[0];
+  return {n:mqCase(n), g};
+}
 function mqGuessSal(c){
-  if(c.salut && c.salut.n) return {t:c.salut.t||'κα', n:c.salut.n};
-  const w=String(c.name||'').trim().split(/\s+/).filter(Boolean);
-  let n=w.length ? w[w.length-1] : '';
-  const greek=/[\u0370-\u03FF\u1F00-\u1FFF]/.test(n);
-  if(greek){
-    if(/[σς]$/i.test(n)){
-      n=n.replace(/ος$/,'ε').replace(/ός$/,'έ').replace(/ους$/,'ου').replace(/ης$/,'η').replace(/ής$/,'ή').replace(/ας$/,'α').replace(/άς$/,'ά');
-      return {t:'κ.', n};
-    }
-    return {t:'κα', n};
-  }
-  return {t:/s$/i.test(n)?'κ.':'κα', n};
+  if(c.salut && c.salut.n && !MQ_FN[mqNorm(c.salut.n)]) return {t:c.salut.t||'κα', n:c.salut.n}; // a saved first name is ignored
+  const r=mqSurname(c.name);
+  let n=r.n;
+  const greek=/[Ͱ-Ͽἀ-῿]/.test(n);
+  const male = r.g ? r.g==='m' : (greek ? /[σςΣ]$/.test(n) : /s$/i.test(n));
+  if(male) return {t:'κ.', n:mqVocM(n)};
+  return {t:'κα', n};
 }
 function mqMsgText(c, e, sal){
   const hi=(new Date().getHours()<12?'Καλημέρα':'Καλησπέρα');
