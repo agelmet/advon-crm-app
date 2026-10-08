@@ -3625,7 +3625,7 @@ const REM_FLAGS = {
   red:   {name:'About to trash',    c:'var(--red)',    soft:'var(--red-soft)',    hex:'#FF4D5E', ink:'#C4243A'},
 };
 /* an unpaid client = in the pipeline (any stage before Paid), not lost, not trashed */
-const isUnpaid = c => notLost(c) && c.stage!=='paid';
+const isUnpaid = c => notLost(c) && c.stage!=='paid' && c.stage!=='booked';   /* Booked = only a meeting so far: its €130 is potential, never «still owed» (8 Oct 2026) */
 const PAYING_STAGES = ['pay','paid'];   /* "reached a paying stage" for conversion stats */
 const OLD_STAGE_MAP = {remind:'needinfo', draft:'review', review1:'review', review2:'changes'};
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -4225,7 +4225,7 @@ const XTRA_PRESETS=['NFC review stand','Google Business Profile','Λογότυπ
 /* "Collected" = paid-stage client revenue + collected monthly-subscription income
    for the period — matches the Year tab's "Money made" figure. */
 function newPaidForMonth(key){ return state.clients.filter(c=>c.month===key).reduce((a,c)=>a+cpaid(c),0); }   /* Paid cards in full + every deposit */
-function newBookedForMonth(key){ return state.clients.filter(c=>c.month===key && notLost(c)).reduce((a,c)=>a+cval(c),0) + lostPaidForMonth(key); }
+function newBookedForMonth(key){ return state.clients.filter(c=>c.month===key && notLost(c) && c.stage!=='booked').reduce((a,c)=>a+cval(c),0) + lostPaidForMonth(key); }
 function subsPaidForMonth(key){ return state.subs.reduce((a,s)=>a+((s.paid && s.paid[key])?(+s.value||0):0),0); }
 /* The three pots of money actually EARNED in a month — new websites (paid stage), renewals
    (pressed «Renewed») and monthly subscriptions (month box ticked) — and their total.
@@ -4351,7 +4351,7 @@ function monthMoney(key){
   pot.n=live.filter(isPot).length+all.filter(c=>c.trashed).length;
   return { earned, collect, collectN:working.filter(c=>c.stage!=='paid').length, pot,
            generated:earned.total+collect, withPotential:earned.total+collect+pot.total,
-           riskN:all.filter(c=>c.trashed).length, n:live.filter(c=>cval(c)>=SITE_MIN).length };
+           riskN:all.filter(c=>c.trashed).length, n:live.filter(c=>c.stage!=='booked' && cval(c)>=SITE_MIN).length };
 }
 function renderStats(){
   $('#monthLabel').textContent=fmtMonth(curMonth);
@@ -5062,7 +5062,7 @@ function renderCalendar(){
       (agenda.length? agenda.map(a=>`<div class="mag-day${a.iso===todayIso()?' today':''}"><div class="mag-dh"><b>${DOW[(a.d.getDay()+6)%7]} ${a.d.getDate()}</b><span>${a.items.length} meeting${a.items.length===1?'':'s'}</span></div>${a.items.map(meetHtml).join('')}</div>`).join('') : '<div class="empty-note">No meetings this month yet.</div>')+'</div>';
     body.innerHTML=html;
   }
-  body.querySelectorAll('.meet').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(c) openCalPop(c, el); }));
+  body.querySelectorAll('.meet').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(c) mqOpen(c.id); }));
   body.querySelectorAll('.day-add').forEach(el=>el.addEventListener('click',()=>openModal(null, el.dataset.day)));
   body.querySelectorAll('.mcell').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.meet')) return; openModal(null, el.dataset.day); }));
 }
@@ -5297,7 +5297,7 @@ function monthLogStats(key){
   const workingDays= ov!=null? ov : daysWith;
   const meetClients=state.clients.filter(c=>c.month===key && statClient(c) && cval(c)>=SITE_MIN);  /* every client had a booked meeting (under €120 = another service) */
   const converted=meetClients.filter(c=>PAYING_STAGES.includes(c.stage)).length;  /* lost ⇒ not counted */
-  const revenue=meetClients.filter(notLost).reduce((a,c)=>a+(+c.value||0),0);  /* clients counted since the restart, lost excluded */
+  const revenue=meetClients.filter(c=>notLost(c) && c.stage!=='booked').reduce((a,c)=>a+(+c.value||0),0);  /* clients counted since the restart, lost excluded */
   return { calls:cold.length, booked:logs.filter(l=>l.type==='g').length, sms:logs.filter(l=>l.type==='y').length, nos:logs.filter(l=>l.type==='r').length,
     coldBooked, callConv: cold.length? coldBooked/cold.length : 0,
     daysWith, workingDays, avgCalls: workingDays? cold.length/workingDays : 0,
@@ -8731,8 +8731,16 @@ function fixTraki20261007(){
     l.date='2026-10-07'; l.updated=Date.now(); ch=true; });
   return ch;
 }
+/* every Booked card carries €130 that he can edit; it only counts as money once the card leaves Booked (8 Oct 2026) */
+const BOOKED_VALUE=130;
+function applyBookedDefault(){
+  let ch=false;
+  (state.clients||[]).forEach(c=>{ if(c.stage==='booked' && !c.v130 && !isTrashed(c)){ c.v130=1; if(!(+c.value>0) && !cxTotal(c)){ c.value=BOOKED_VALUE; } ch=true; } });
+  return ch;
+}
 function renderAll(){
   if(!state) return;
+  try{ if(applyBookedDefault()) setTimeout(save,0); }catch(e){}
   try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
 }
