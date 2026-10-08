@@ -9983,8 +9983,8 @@ function chClientFor(t){
   const m=live.filter(c=>!c.chat && chSameName(c.name,t.name));
   return m.length===1 ? m[0] : null;
 }
-/* the client's draft / website link for the Board card button: the card's own «Draft link» field, else the website on its chat, else a drafts.advonmedia.com link in the notes */
-function cDraftUrl(c){ try{ if(!c) return ''; const ok=u=>{ u=String(u||'').trim(); return !u?'':(/^https?:\/\//i.test(u)?u:'https://'+u); }; if(c.draft) return ok(c.draft); const th=chThreadFor(c); if(th&&th.site) return ok(th.site); const m=String(c.notes||'').match(/https?:\/\/drafts\.advonmedia\.com\/[^\s)]+/i); return m?m[0]:''; }catch(e){ return ''; } }
+/* the client's draft / website link for the Board card button: the card's own «Draft link» field, else the chat's «draft» (set by Claude with chat.py meta <slug> draft=…, never shown to the client), else the website on its chat, else a drafts.advonmedia.com link in the notes */
+function cDraftUrl(c){ try{ if(!c) return ''; const ok=u=>{ u=String(u||'').trim(); return !u?'':(/^https?:\/\//i.test(u)?u:'https://'+u); }; if(c.draft) return ok(c.draft); const th=chThreadFor(c); if(th&&th.draft) return ok(th.draft); if(th&&th.site) return ok(th.site); const m=String(c.notes||'').match(/https?:\/\/drafts\.advonmedia\.com\/[^\s)]+/i); return m?m[0]:''; }catch(e){ return ''; } }
 function chThreadFor(c){ try{ return c&&c.chat ? (Chats.list.find(t=>t.slug===c.chat && !t.archived)||null) : null; }catch(e){ return null; } }   /* a function (hoisted) + try: the Board renders before this part of the file has run */
 const chMailDone=new Set();
 const chMailOk=e=>/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(String(e||''));
