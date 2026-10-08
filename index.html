@@ -2700,6 +2700,11 @@ body.locked .mq-pill{display:none;}
 .fu-act button{font-size:11.5px; font-weight:800; padding:6px 10px; border-radius:9px; border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer; white-space:nowrap;}
 .fu-act button.ok{color:var(--deep);}
 .fu-act button.go{background:var(--brand); color:#fff; border-color:transparent;}
+.mq-sub{margin:10px 2px 6px; font-size:11.5px; font-weight:700; color:var(--muted);}
+.mq-ext .mq-chip.on{background:var(--violet,#7C5CFC); border-color:var(--violet,#7C5CFC);}
+.fu-h.ext{color:#7C5CFC;}
+.fu-row.ext:not(.over):not(.now){background:var(--violet-soft,#F0ECFF);}
+.fu-tx i.xt{background:#7C5CFC1f; color:#6A4AE8;}
 .calpop .b-log{color:var(--brand); font-weight:800;}
 @media (max-width:640px){
   .mq-outs{grid-template-columns:1fr 1fr;}
@@ -4665,7 +4670,7 @@ function openCalPop(c, anchor){
    The reminders show on Home → «After meetings», in the once-a-day «Today» window and in the morning brief. */
 const MQ_LEN=15;                                   /* minutes — the Google Meet call */
 const MQ_OUT={
-  yes:   {name:'Yes', short:'Yes',      sub:'go ahead · wants the site',         c:'var(--deep)',  soft:'var(--green-soft)',  meet:'won',    key:'1'},
+  yes:   {name:'Yes', short:'Yes',      sub:'€130 · card → Need info',         c:'var(--deep)',  soft:'var(--green-soft)',  meet:'won',    key:'1'},
   think: {name:'Thinking',       short:'Thinking', sub:'will decide later',         c:'#B8860B',      soft:'var(--yellow-soft)', meet:'think',  key:'2'},
   noshow:{name:'No show',        short:'No show',  sub:'didn’t join · rebook',  c:'var(--red)',   soft:'var(--red-soft)',    meet:'noshow', key:'3'},
   no:    {name:'No',             short:'No',       sub:'not interested',            c:'var(--muted)', soft:'var(--bg)',          meet:'lost',   key:'4'},
@@ -4677,6 +4682,24 @@ const MQ_TAGS={
   no:    ['Has a website','Too expensive','Not now','Not interested','Does it himself'],
 };
 const MQ_DEFAULT_REM={yes:'d3', think:'w1', noshow:'tom', no:''};
+const MQ_YES_VALUE=130;                            /* a «Yes» puts the yearly hosting on the card when it has no price yet */
+const MQ_EXTRAS=['Google Ads','Google Business Profile','Contact form','Articles','Admin panel','Logo design','Eshop','Social media'];
+function mqNextMonth(){ const d=new Date(); d.setHours(12,0,0,0); d.setMonth(d.getMonth()+1,1); return mqWeekday(isoDate(d)); }
+function mqExtOpts(){ return [
+    {k:'nm', t:'Next month', d:mqNextMonth()},
+    {k:'w2', t:'In 2 weeks', d:mqWeekday(mqIso(14))},
+    {k:'m1', t:'In 1 month', d:mqWeekday(mqIso(30))},
+    {k:'m2', t:'In 2 months',d:mqWeekday(mqIso(61))},
+    {k:'m3', t:'In 3 months',d:mqWeekday(mqIso(91))},
+  ]; }
+function mqExtDay(){ if(!mq||!mq.ext||!mq.ext.size) return ''; if(mq.extRem==='pick') return mq.extPick||''; const o=mqExtOpts().find(x=>x.k===mq.extRem); return o?o.d:''; }
+const upsOpen=c=> (c && !isTrashed(c) && Array.isArray(c.ups)) ? c.ups.filter(u=>!u.done && u.day) : [];
+function upsList(){ const out=[]; if(state) state.clients.forEach(c=>upsOpen(c).forEach(u=>out.push({c,u}))); return out.sort((a,b)=>a.u.day.localeCompare(b.u.day)); }
+function upDone(cid, id){
+  const c=state.clients.find(x=>x.id===cid); if(!c||!c.ups) return; const u=c.ups.find(x=>x.id===id); if(!u) return;
+  u.done=Date.now(); c.updated=Date.now(); save(); renderAll();
+  toastUndo(c.name+' · '+u.what.join(', ')+' — done', ()=>{ delete u.done; save(); renderAll(); });
+}
 let mq=null;                                       /* the open window: {id, out, next, tags:Set, rem, pick, note, slot, pickList} */
 const mqSnooze={};                                 /* «Later» — this device only */
 let mqAsked={}; try{ mqAsked=JSON.parse(localStorage.getItem('advon_mq_asked')||'{}')||{}; }catch(e){ mqAsked={}; }
@@ -4725,7 +4748,7 @@ function mqOpen(id, opts){
   if(id && !c) return;
   document.querySelectorAll('.overlay.open').forEach(o=>{ if(o.id!=='mqOverlay' && o.id!=='loginScreen') o.classList.remove('open'); });
   try{ closeCalPop(); }catch(e){}
-  mq = c ? {id:c.id, out:'', next:'needinfo', tags:new Set(), rem:'', pick:'', note:'', slot:mqSlot(c)} : {id:'', pickList:true, q:''};
+  mq = c ? {id:c.id, out:'', next:'needinfo', tags:new Set(), rem:'', pick:'', note:'', slot:mqSlot(c), ext:new Set(), extRem:'nm', extPick:''} : {id:'', pickList:true, q:''};
   if(c && opts && opts.out) mqSetOut(opts.out, true);
   if(c) mqMark(c.id+'|'+mqSlot(c));
   const pl=$('#mqPill'); if(pl) pl.hidden=true;
@@ -4754,6 +4777,13 @@ function mqRender(){
         <button type="button" data-next="building" class="${mq.next==='building'?'on':''}">Has everything — I build<small>card → Building</small></button></div>`;
     h+=`<div class="mq-h">${o==='yes'?'They will send / we use':o==='think'?'Why they wait':o==='noshow'?'What now':'Why not'} <span>tap all that apply</span></div>
       <div class="mq-chips">${MQ_TAGS[o].map(t=>`<button type="button" class="mq-chip${mq.tags.has(t)?' on':''}" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+    if(o==='yes'||o==='think'){
+      h+=`<div class="mq-h">Also interested in <span>extras to bring up later · tap any</span></div>
+        <div class="mq-chips mq-ext">${MQ_EXTRAS.map(t=>`<button type="button" class="mq-chip${mq.ext.has(t)?' on':''}" data-ext="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+      if(mq.ext.size) h+=`<div class="mq-sub">Remind me about ${esc([...mq.ext].join(', '))}</div><div class="mq-chips mq-rem">
+        ${mqExtOpts().map(x=>`<button type="button" class="mq-chip${mq.extRem===x.k?' on':''}" data-extrem="${x.k}">${x.t}<small>${mqDateLbl(x.d)}</small></button>`).join('')}
+        <label class="mq-chip mq-pickday${mq.extRem==='pick'?' on':''}">Pick a day<input type="date" id="mqExtPick" value="${esc(mq.extPick||'')}" min="${todayIso()}"></label></div>`;
+    }
     const opts=mqRemOpts();
     h+=`<div class="mq-h">Remind me</div><div class="mq-chips mq-rem">
         ${opts.map(x=>`<button type="button" class="mq-chip${mq.rem===x.k?' on':''}" data-rem="${x.k}">${x.t}<small>${mqDateLbl(x.d)}</small></button>`).join('')}
@@ -4774,7 +4804,7 @@ function mqRender(){
       <button type="button" class="mq-link" id="mqCard">Open the card</button>
       ${('Notification' in window && Notification.permission==='default')?'<button type="button" class="mq-link mq-bell" id="mqBell" title="So the CRM can ping you when a meeting ends, even if this tab is in the background">🔔 Ping me after meetings</button>':''}
     </div>
-    <button type="button" class="btn btn-brand mq-save" id="mqSave" ${o?'':'disabled'}>${o?('Save'+(rd?' · remind '+mqDayLbl(rd):'')):'Pick how it went'}${more&&o?` <small>then ${more} more</small>`:''}</button>`;
+    <button type="button" class="btn btn-brand mq-save" id="mqSave" ${o?'':'disabled'}>${o?('Save'+(o==='yes'?' · €'+((+c.value>0)?c.value:MQ_YES_VALUE):'')+(rd?' · remind '+mqDayLbl(rd):'')):'Pick how it went'}${more&&o?` <small>then ${more} more</small>`:''}</button>`;
   mqWire();
 }
 function mqRenderPick(body, foot){
@@ -4797,6 +4827,9 @@ function mqWire(){
   body.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{ mq.next=b.dataset.next; if(mq.next==='building' && mq.rem==='d3') mq.rem=''; else if(mq.next==='needinfo' && !mq.rem) mq.rem='d3'; mqRender(); }));
   body.querySelectorAll('[data-tag]').forEach(b=>b.addEventListener('click',()=>{ const t=b.dataset.tag; mq.tags.has(t)?mq.tags.delete(t):mq.tags.add(t); b.classList.toggle('on'); }));
   body.querySelectorAll('[data-rem]').forEach(b=>b.addEventListener('click',()=>{ mq.rem=b.dataset.rem; mqRender(); }));
+  body.querySelectorAll('[data-ext]').forEach(b=>b.addEventListener('click',()=>{ const t=b.dataset.ext; mq.ext.has(t)?mq.ext.delete(t):mq.ext.add(t); mqRender(); }));
+  body.querySelectorAll('[data-extrem]').forEach(b=>b.addEventListener('click',()=>{ mq.extRem=b.dataset.extrem; mqRender(); }));
+  const ep=$('#mqExtPick'); if(ep){ ep.addEventListener('change',()=>{ mq.extPick=ep.value; if(ep.value) mq.extRem='pick'; mqRender(); }); ep.addEventListener('click',()=>{ try{ ep.showPicker(); }catch(e){} }); }
   const pk=$('#mqPick'); if(pk){ pk.addEventListener('change',()=>{ mq.pick=pk.value; mq.rem=pk.value?'pick':mq.rem; mqRender(); }); pk.addEventListener('click',()=>{ try{ pk.showPicker(); }catch(e){} }); }
   const nt=$('#mqNote'); if(nt){ nt.addEventListener('input',()=>{ mq.note=nt.value; }); nt.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); mqSave(); } }); }
   const on=(id,f)=>{ const b=$(id); if(b) b.addEventListener('click',f); };
@@ -4819,11 +4852,15 @@ function mqSave(){
   const c=state.clients.find(x=>x.id===mq.id); if(!c) return;
   const o=mq.out, rd=mqRemDay(), tags=[...mq.tags], note=String(($('#mqNote')||{}).value||mq.note||'').trim();
   if(mq.rem==='pick' && !rd){ toast('Pick the day first'); return; }
-  const keys=['stage','meetOutcome','fu','notes','mlog','mqDone','thinkAt','thinkAck','lostAt','lostReason','stageAt','updated','prio'];
+  const keys=['stage','meetOutcome','fu','notes','mlog','mqDone','thinkAt','thinkAck','lostAt','lostReason','stageAt','updated','prio','value','month','ups'];
+  const ext=(o==='yes'||o==='think')?[...mq.ext]:[], extDay=mqExtDay();
+  if(ext.length && !extDay){ toast('Pick the day for the extras first'); return; }
   const before={}; keys.forEach(k=>{ before[k]= c[k]===undefined ? undefined : JSON.parse(JSON.stringify(c[k])); });
   const stWas=c.stage;
   /* the board */
-  if(o==='yes'){ if(['booked','thinking','lost','needinfo','building'].includes(c.stage)) c.stage=mq.next; delete c.lostReason; c.lostAt=null; }
+  if(o==='yes'){ if(['booked','thinking','lost','needinfo','building'].includes(c.stage)) c.stage=mq.next; delete c.lostReason; c.lostAt=null;
+    if(!(+c.value>0)) c.value=MQ_YES_VALUE;
+    if(!c.month) c.month=(c.day||todayIso()).slice(0,7); }
   else if(o==='think'){ if(['booked','lost','thinking'].includes(c.stage)) c.stage='thinking'; c.thinkAt=Date.now(); delete c.thinkAck; }
   else if(o==='no'){ c.stage='lost'; c.lostAt=Date.now(); if(tags.length) c.lostReason=tags.join(', '); }
   /* noshow: the card stays Booked so it can be rebooked */
@@ -4833,14 +4870,15 @@ function mqSave(){
   c.mqDone=mqSlot(c)||c.mqDone||'';
   const what=mqWhat(o, mq.next, tags, note);
   if(rd) c.fu={day:rd, what, st:c.stage, out:o, at:Date.now()}; else delete c.fu;
-  c.mlog=(c.mlog||[]).concat({at:Date.now(), slot:mqSlot(c), out:o, tags, note, day:rd||''}).slice(-20);
-  const line=fmtDay(todayIso())+' · '+MQ_OUT[o].short.toUpperCase()+(o==='yes'?(mq.next==='building'?' (has everything)':' (waiting material)'):'')+(tags.length?': '+tags.join(', '):'')+(note?' — «'+note+'»':'')+(rd?' · remind '+mqDayLbl(rd)+' '+fmtDay(rd):'');
+  if(ext.length) c.ups=(c.ups||[]).concat({id:uid(), what:ext, day:extDay, at:Date.now(), note}).slice(-20);
+  c.mlog=(c.mlog||[]).concat({at:Date.now(), slot:mqSlot(c), out:o, tags, note, day:rd||'', ext}).slice(-20);
+  const line=fmtDay(todayIso())+' · '+MQ_OUT[o].short.toUpperCase()+(o==='yes'?(mq.next==='building'?' (has everything)':' (waiting material)'):'')+(tags.length?': '+tags.join(', '):'')+(note?' — «'+note+'»':'')+(rd?' · remind '+mqDateLbl(rd):'')+(ext.length?' · ALSO WANTS: '+ext.join(', ')+' (bring up '+mqDateLbl(extDay)+')':'');
   c.notes=(line+(c.notes?'\n'+c.notes:'')).slice(0,4000);
   c.updated=Date.now();
   save(); renderAll();
   try{ chSyncBoard(); renderChats(); }catch(e){}
   const name=c.name;
-  toastUndo(name+' → '+MQ_OUT[o].short+(rd?' · reminder '+mqDayLbl(rd):''), ()=>{
+  toastUndo(name+' → '+MQ_OUT[o].short+(o==='yes'?' · '+fmtMoney(cval(c)):'')+(rd?' · reminder '+mqDayLbl(rd):'')+(ext.length?' · '+ext.join(', ')+' '+fmtDay(extDay):''), ()=>{
     keys.forEach(k=>{ if(before[k]===undefined) delete c[k]; else c[k]=before[k]; });
     save(); renderAll(); toast('Undone — '+name+' is back as it was');
   }, 8);
@@ -4910,7 +4948,7 @@ function renderAfterMeet(){
   const thinking=state.clients.filter(c=>isThinking(c) && !isTrashed(c) && !fuIds.has(c.id)).sort((a,b)=>thinkDays(b)-thinkDays(a));
   const pend=mqPending();
   const due=fus.filter(c=>c.fu.day<=t), later=fus.filter(c=>c.fu.day>t);
-  const hint=$('#homeThinkHint'); if(hint) hint.textContent = (due.length?due.length+' to follow up now · ':'')+(later.length?later.length+' coming up':'')+(!due.length&&!later.length?'nothing waiting':'');
+  const hint=$('#homeThinkHint'); if(hint) hint.textContent = (due.length?due.length+' to follow up now · ':'')+(later.length?later.length+' coming up':'')+(upsList().length?' · '+upsList().length+' extras':'')+(!due.length&&!later.length&&!upsList().length?'nothing waiting':'');
   const lastSaid=c=>{ const l=(c.mlog||[])[ (c.mlog||[]).length-1 ]; return l&&l.note ? '«'+l.note+'»' : ''; };
   const row=c=>{
     const s=stageById(c.stage), o=MQ_OUT[c.fu.out]||{}, over=c.fu.day<t, now=c.fu.day===t;
@@ -4927,12 +4965,16 @@ function renderAfterMeet(){
   if(pend.length) h+=`<div class="fu-h log">Not logged yet · ${pend.length}</div>`+pend.map(c=>`<div class="fu-row pend"><span class="fu-day">${esc(c.day===t?'today':fmtDay(c.day))} ${esc(c.time||'')}</span><div class="fu-tx"><b>${esc(c.name)}</b><small>meeting ended — how did it go?</small></div><div class="fu-act"><button type="button" class="go" data-fuup="${c.id}">Log it</button></div></div>`).join('');
   if(due.length) h+=`<div class="fu-h due">Follow up now · ${due.length}</div>`+due.map(row).join('');
   if(later.length) h+=`<div class="fu-h">Coming up · ${later.length}</div>`+later.map(row).join('');
+  const ups=upsList();
+  if(ups.length) h+=`<div class="fu-h ext">Extras they want · ${ups.length}</div>`+ups.map(({c,u})=>{ const over=u.day<t, now=u.day===t;
+      return `<div class="fu-row ext${over?' over':now?' now':''}"><span class="fu-day">${over?'late · ':''}${esc(mqDayLbl(u.day))}</span><div class="fu-tx" data-open="${c.id}"><b>${esc(c.name)}</b><i class="xt">${esc(u.what.join(' · '))}</i><small>bring it up${u.note?' · «'+esc(u.note)+'»':''}${c.day?' · met '+esc(fmtDay(c.day)):''}</small></div><div class="fu-act">${c.phone?`<a href="tel:${esc(c.phone)}" title="Call ${esc(c.phone)}">${IC.phone}</a>`:''}<button type="button" class="ok" data-updone="${c.id}|${u.id}" title="Done — offered / sold">✓</button></div></div>`; }).join('');
   if(thinking.length) h+=`<div class="fu-h">Thinking — no reminder set · ${thinking.length}</div>`+thinking.map(c=>{ const d=thinkDays(c), over=d>=THINK_DAYS;
       return `<div class="fu-row${over?' over':''}"><span class="fu-day">${d===0?'today':d+'d'}</span><div class="fu-tx" data-open="${c.id}"><b>${esc(c.name)}</b><small>${c.day?'met '+esc(fmtDay(c.day)):''}${lastSaid(c)?' · '+esc(lastSaid(c)):''}</small></div><div class="fu-act">${c.phone?`<a href="tel:${esc(c.phone)}">${IC.phone}</a>`:''}<button type="button" data-fuup="${c.id}">Update</button></div></div>`; }).join('');
   if(!h) h='<div class="home-empty">Nobody waiting after a meeting. When a call ends, the CRM asks «How did it go?» by itself.</div>';
   el.innerHTML=h;
   el.querySelectorAll('[data-fuup]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); mqOpen(b.dataset.fuup); }));
   el.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); fuDone(b.dataset.fudone); }));
+  el.querySelectorAll('[data-updone]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); const [cid,id]=b.dataset.updone.split('|'); upDone(cid,id); }));
 }
 
 /* the month's meetings, their outcomes and what they turned into */
@@ -8256,7 +8298,8 @@ const Brief={ lastAt:0, lastHash:'', busy:false,
     const earned=earnedForMonth(curMonth); const target=monthTarget(curMonth).value;
     const toCollect=cl.filter(c=>isUnpaid(c) && c.stage!=='thinking' && !(c.remFlag==='orange'||c.remFlag==='red')).reduce((a,c)=>a+cowed(c),0);
     const followups=state.clients.filter(c=>fuOpen(c) && c.fu.day<=t).map(c=>({name:c.name, phone:c.phone||'', day:c.fu.day, what:c.fu.what, stage:stName(c.stage), overdue:c.fu.day<t}));
-    const asap=followups.map(f=>({text:'Follow up '+f.name+' — '+f.what+(f.phone?' · '+f.phone:''), hot:f.overdue})).concat((state.asap||[]).filter(a=>!a.done).sort((a,b)=>(a.sort||0)-(b.sort||0)).map(a=>({text:a.text, hot:!!a.hot})));
+    const extras=upsList().filter(x=>x.u.day<=t).map(({c,u})=>({name:c.name, phone:c.phone||'', day:u.day, what:u.what.join(', '), note:u.note||'', overdue:u.day<t}));
+    const asap=followups.map(f=>({text:'Follow up '+f.name+' — '+f.what+(f.phone?' · '+f.phone:''), hot:f.overdue})).concat(extras.map(x=>({text:'Offer '+x.name+': '+x.what+(x.note?' — «'+x.note+'»':'')+(x.phone?' · '+x.phone:''), hot:x.overdue}))).concat((state.asap||[]).filter(a=>!a.done).sort((a,b)=>(a.sort||0)-(b.sort||0)).map(a=>({text:a.text, hot:!!a.hot})));
     const todosHigh=(state.todos||[]).filter(x=>!x.done && x.prio==='high').map(x=>x.text).slice(0,12);
     const fc=cashForecast();
     return { updated:new Date().toISOString(), today:t, month:curMonth,
@@ -8266,7 +8309,7 @@ const Brief={ lastAt:0, lastHash:'', busy:false,
       callbacks:{ leftNow:n.now, warm, scheduledDue:schedDue },
       leads:{ fresh:lc.new, retry:naRetry, noAnswerParked:lc.na, booked:lc.g, sms:lc.y, no:lc.r, total:lc.total, yesterday:ydLeads },
       calls:{ yesterday:{date:yd, calls:ydStats.calls, booked:ydStats.booked, sms:ydStats.sms, no:ydStats.nos}, month:{calls:mStats.calls||0, booked:mStats.booked||0, rate:mStats.callConv||0, workingDays:mStats.workingDays||0} },
-      asap, todosHigh, followups };
+      asap, todosHigh, followups, extras };
   },
   async send(force){
     if(!SYNC_TOKEN || !state || this.busy) return;
@@ -10251,16 +10294,17 @@ function dayItems(){
   const meet=(state&&state.clients||[]).filter(c=>c.day===today && !isTrashed(c) && c.stage!=='lost').sort((a,b)=>String(a.time||'').localeCompare(String(b.time||'')));
   ensureAsap(); const asap=state.asap.filter(t=>!t.done).sort((a,b)=>(b.hot-a.hot)||((a.sort||0)-(b.sort||0)));
   let cbs=[]; try{ cbs=(state.leads||[]).filter(l=>l.cb && l.cb.day && l.cb.day<=today && ldOpen(l)).sort((a,b)=>ldCbAt(a).localeCompare(ldCbAt(b))); }catch(e){}
-  let fus=[]; try{ fus=fuList().filter(c=>c.fu.day<=today); }catch(e){}
-  return {rem, meet, asap, cbs, fus, n:rem.length+meet.length+asap.length+cbs.length+fus.length};
+  let fus=[], ups=[]; try{ fus=fuList().filter(c=>c.fu.day<=today); ups=upsList().filter(x=>x.u.day<=today); }catch(e){}
+  return {rem, meet, asap, cbs, fus, ups, n:rem.length+meet.length+asap.length+cbs.length+fus.length+ups.length};
 }
 function openDay(){
-  if(!state) return; const {rem, meet, asap, cbs, fus, n}=dayItems(); const today=todayIso();
+  if(!state) return; const {rem, meet, asap, cbs, fus, ups, n}=dayItems(); const today=todayIso();
   const d=new Date(); $('#dayTitle').textContent=(d.getHours()<12?'Good morning':d.getHours()<18?'Good afternoon':'Good evening')+' — here is today';
   $('#daySub').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})+' · '+(n?n+' thing'+(n===1?'':'s'):'nothing waiting');
   let h='';
   if(rem.length) h+=`<div class="day-h rem">⏰ Remind today · ${rem.length}</div>`+rem.map(r=>`<div class="day-row${r.day<today?' over':''}" data-r="${esc(r.uid)}"><div class="tx"><b>${esc(r.client)}</b>${r.what?' — '+esc(r.what):''}${r.day<today?`<small>still open since ${esc(remDayLabel(r.day))}</small>`:''}</div><button data-rcopy="${esc(r.uid)}">Copy Viber text</button><button class="go" data-rdone="${esc(r.uid)}">✓ Done</button></div>`).join('');
   if(fus.length) h+=`<div class="day-h rem">🤝 Follow up after the meeting · ${fus.length}</div>`+fus.map(c=>`<div class="day-row${c.fu.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(c.fu.what)}${c.fu.day<today?`<small>was due ${esc(mqDayLbl(c.fu.day))}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button data-fuup="${c.id}">Update</button><button class="go" data-fudone="${c.id}">✓ Done</button></div>`).join('');
+  if(ups.length) h+=`<div class="day-h rem">➕ Extras to bring up · ${ups.length}</div>`+ups.map(({c,u})=>`<div class="day-row${u.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(u.what.join(', '))}${u.note?`<small>«${esc(u.note)}»</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button class="go" data-updone="${c.id}|${u.id}">✓ Done</button></div>`).join('');
   if(meet.length) h+=`<div class="day-h meet">📅 Meetings today · ${meet.length}</div>`+meet.map(c=>`<div class="day-row"><span class="tm">${esc(c.time||'—')}</span><div class="tx"><b>${esc(c.name)}</b>${c.phone?`<small>${esc(c.phone)}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(String(c.phone).replace(/\s+/g,''))}'">Call</button>`:''}<button data-open="${esc(c.id)}">Open</button></div>`).join('');
   if(cbs.length) h+=`<div class="day-h meet">📞 Call back today · ${cbs.length}</div>`+cbs.map(l=>`<div class="day-row"><span class="tm${l.cb.day<today?' due':''}">${esc(l.cb.day<today?fmtDay(l.cb.day):(l.cb.time||'—'))}</span><div class="tx"><b>${esc(l.name)}</b>${l.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${l.memo?`<small>${esc(l.memo)}</small>`:''}</div>${l.phone?`<button onclick="location.href='tel:+30${esc(l.phone)}'">Call</button>`:''}<button class="go" data-lcb="${esc(l.id)}">Open</button></div>`).join('');
   if(asap.length) h+=`<div class="day-h asap">🚩 Do ASAP · ${asap.length}</div>`+asap.map((t,i)=>`<div class="day-row${t.hot?' hot':''}" data-a="${esc(t.id)}"><div class="tx">${t.hot?'🔥 ':''}${esc(t.text)}</div><button class="go" data-adone="${esc(t.id)}">✓ Done</button></div>`).join('');
@@ -10272,6 +10316,7 @@ function openDay(){
   body.querySelectorAll('[data-adone]').forEach(b=>b.addEventListener('click',()=>{ const t=state.asap.find(x=>x.id===b.dataset.adone); if(!t) return; t.done=true; save(); try{ renderAsap(); }catch(e){} b.closest('.day-row').classList.add('done'); b.remove(); toastUndo('Done: '+t.text.slice(0,40), ()=>{ t.done=false; save(); try{ renderAsap(); }catch(e){} openDay(); }); }));
   body.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); openModal(b.dataset.open); }));
   body.querySelectorAll('[data-fuup]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); mqOpen(b.dataset.fuup); }));
+  body.querySelectorAll('[data-updone]').forEach(b=>b.addEventListener('click',()=>{ const [cid,id]=b.dataset.updone.split('|'); upDone(cid,id); b.closest('.day-row').classList.add('done'); b.remove(); }));
   body.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',()=>{ fuDone(b.dataset.fudone); b.closest('.day-row').classList.add('done'); b.remove(); }));
   body.querySelectorAll('[data-lcb]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); ensureLeads(); state.meta.ld.focus=b.dataset.lcb; ldFilter.list=''; ldCallMode=true; switchView('leads'); renderLeads(); window.scrollTo({top:0}); }));
   $('#dayOverlay').classList.add('open'); setTimeout(()=>{ const ok=$('#dayOk'); if(ok) ok.focus(); },60);
