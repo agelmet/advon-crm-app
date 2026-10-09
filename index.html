@@ -1013,12 +1013,117 @@ body.dark .prio-pick.on{border-color:var(--surface);}
 .task-item.client .cli-adv.money{opacity:1;}   /* «Paid» on the Pay-now rows is always visible — it is the whole point of the lane */
 body.dark .cli-avatar{background:rgba(255,255,255,.09);}
 
-/* ---------- Ideas board ---------- */
-.ideas-lanes{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; align-items:start;}
-@media(max-width:1100px){.ideas-lanes{grid-template-columns:repeat(2,1fr);}}
+/* ---------- Ideas board v2 (9 Oct 2026) — every idea as a small one-page brief ---------- */
+#view-ideas{--ib:#2F7FE0;}
+.id-top{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+.id-top .thb-txt p b{color:var(--ink); font-weight:700;}
+.id-search{position:relative; flex:0 1 280px; min-width:180px;}
+.id-search input{width:100%; height:40px; border:1px solid var(--line); border-radius:12px; padding:0 12px 0 36px; background:var(--surface); font-size:13.5px;}
+.id-search svg{position:absolute; left:12px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--muted); pointer-events:none;}
+.id-new{height:40px; padding:0 16px; border-radius:12px; background:var(--grad); color:#fff; font-weight:700; font-size:13.5px; display:inline-flex; align-items:center; gap:6px; box-shadow:0 6px 18px rgba(47,127,224,.28);}
+.id-new:active{transform:scale(.97);}
+.id-filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:18px;}
+.id-chip{height:32px; padding:0 13px; border-radius:99px; border:1px solid var(--line); background:var(--surface); font-size:12.5px; font-weight:600; color:var(--muted); display:inline-flex; align-items:center; gap:7px;}
+.id-chip i{width:8px; height:8px; border-radius:99px; background:var(--tc,#9AA3B2); display:inline-block;}
+.id-chip em{font-style:normal; font-size:11px; font-weight:700; background:var(--bg); border-radius:99px; padding:1px 7px; color:var(--muted);}
+.id-chip.on{background:var(--ink); border-color:var(--ink); color:var(--surface);}
+.id-chip.on em{background:rgba(255,255,255,.18); color:inherit;}
+.id-filters .id-hint{margin-left:auto; font-size:11.5px; color:var(--muted); font-weight:500;}
+@media(max-width:720px){.id-filters{flex-wrap:nowrap; overflow-x:auto; margin:0 0 16px; padding:0 0 2px; scrollbar-width:none;} .id-filters::-webkit-scrollbar{display:none;} .id-chip{flex-shrink:0;} .id-filters .id-hint{display:none;} .id-search{flex:1 1 100%;} .id-top .id-new{flex:1; justify-content:center;}}
+
+/* spotlight — the newest ideas from our chats */
+.id-spot-h{display:flex; align-items:baseline; gap:4px 10px; margin:2px 0 10px; flex-wrap:wrap;}
+.id-spot-h h4{font-family:'Sora'; font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--ink);}
+.id-spot-h span{font-size:12px; color:var(--muted); font-weight:500;}
+.id-spot{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:26px;}
+@media(max-width:1100px){.id-spot{grid-template-columns:1fr;}}
+.id-big{position:relative; display:flex; flex-direction:column; border-radius:20px; background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow); overflow:hidden; cursor:pointer; transition:transform .18s ease, box-shadow .18s ease;}
+@media(hover:hover){.id-big:hover{transform:translateY(-3px); box-shadow:var(--shadow-lg);}}
+.id-big-band{padding:16px 18px 14px; background:linear-gradient(135deg, color-mix(in srgb,var(--tc) 16%, var(--surface)), color-mix(in srgb,var(--tc) 5%, var(--surface))); border-bottom:1px solid color-mix(in srgb,var(--tc) 18%, var(--line));}
+.id-big-meta{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:10px;}
+.id-big h5{font-family:'Sora','Inter',sans-serif; font-size:19px; font-weight:800; letter-spacing:-.015em; line-height:1.2; color:var(--ink);}
+.id-big .id-pitch{margin-top:7px; font-size:13.5px; line-height:1.5; color:var(--ink); opacity:.86;}
+.id-big-body{padding:14px 18px 4px; display:grid; gap:12px; flex:1; align-content:start;}
+.id-sec b{display:block; font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:3px;}
+.id-sec p{font-size:12.8px; line-height:1.5; color:var(--ink); opacity:.88;}
+.id-nums{display:flex; flex-wrap:wrap; gap:6px;}
+.id-nums span{font-size:11.5px; font-weight:700; padding:4px 9px; border-radius:8px; background:color-mix(in srgb,var(--tc) 10%, var(--surface)); color:color-mix(in srgb,var(--tc) 70%, var(--ink)); border:1px solid color-mix(in srgb,var(--tc) 20%, transparent);}
+.id-next{display:flex; gap:9px; align-items:flex-start; padding:10px 12px; border-radius:12px; background:var(--bg); border:1px dashed color-mix(in srgb,var(--tc) 45%, var(--line));}
+.id-next .ar{flex-shrink:0; width:22px; height:22px; border-radius:7px; display:grid; place-items:center; background:var(--tc); color:#fff; font-weight:800; font-size:12px; margin-top:1px;}
+.id-next div{font-size:12.8px; line-height:1.45; color:var(--ink);}
+.id-next div small{display:block; font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:1px;}
+.id-big-foot{display:flex; align-items:center; gap:8px; padding:12px 18px 16px; flex-wrap:wrap;}
+
+/* shared bits */
+.id-type{display:inline-flex; align-items:center; gap:5px; height:22px; padding:0 9px; border-radius:99px; font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; background:color-mix(in srgb,var(--tc) 14%, var(--surface)); color:color-mix(in srgb,var(--tc) 78%, var(--ink));}
+.id-stage{display:inline-flex; align-items:center; height:22px; padding:0 9px; border-radius:99px; font-size:10.5px; font-weight:700; background:var(--surface); color:var(--muted); border:1px solid var(--line);}
+.id-date{font-size:11px; color:var(--muted); font-weight:600; margin-left:auto; white-space:nowrap;}
+.id-new-badge{display:inline-flex; align-items:center; height:22px; padding:0 8px; border-radius:99px; font-size:10.5px; font-weight:800; background:var(--red); color:#fff; letter-spacing:.04em;}
+.id-link{display:inline-flex; align-items:center; gap:5px; height:28px; padding:0 10px; border-radius:9px; font-size:12px; font-weight:700; color:var(--brand); background:var(--blue-soft); text-decoration:none; white-space:nowrap; max-width:100%; overflow:hidden; text-overflow:ellipsis;}
+.id-link:hover{filter:brightness(.97);}
+.id-pr{display:inline-flex; gap:4px; align-items:center;}
+.id-ctl{display:inline-flex; align-items:center; gap:6px; margin-left:auto;}
+.id-pr button{width:18px; height:18px; border-radius:99px; display:grid; place-items:center; padding:0;}
+.id-pr button i{width:9px; height:9px; border-radius:99px; background:var(--pc); opacity:.28; transition:opacity .12s, transform .12s;}
+.id-pr button:hover i{opacity:.7;}
+.id-pr button.on i{opacity:1; transform:scale(1.25); box-shadow:0 0 0 3px color-mix(in srgb,var(--pc) 25%, transparent);}
+.id-pin{width:28px; height:28px; border-radius:9px; display:grid; place-items:center; color:var(--muted);}
+.id-pin svg{width:15px; height:15px;}
+.id-pin.on{color:#E7A400;}
+.id-pin:hover{background:var(--bg);}
+
+/* lanes */
+.id-lanes-h{display:flex; align-items:baseline; gap:4px 10px; margin:0 0 10px; flex-wrap:wrap;}
+.id-lanes-h h4{font-family:'Sora'; font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;}
+.id-lanes-h span{font-size:12px; color:var(--muted); font-weight:500;}
+.ideas-lanes{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; align-items:start;}
+@media(max-width:1100px){.ideas-lanes{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:720px){.ideas-lanes{grid-template-columns:1fr;}}
-.idea-item .task-body{flex-direction:column; align-items:stretch; gap:2px;}
-.idea-detail{font-size:11.5px; color:var(--muted); font-weight:500; word-break:break-word; line-height:1.45; width:100%;}
+.ideas-lanes .todo-lane-head .tl-sub{font-size:11px; font-weight:600; opacity:.85; margin-left:2px;}
+.id-card{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 13px 10px 15px; cursor:pointer; transition:box-shadow .15s, transform .15s, border-color .15s; overflow:hidden;}
+.id-card::before{content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--tc);}
+@media(hover:hover){.id-card:hover{box-shadow:0 6px 20px rgba(24,49,92,.12); transform:translateY(-1px); border-color:color-mix(in srgb,var(--tc) 35%, var(--line));}}
+.id-card.dragging{opacity:.45;}
+.id-card-top{display:flex; align-items:center; gap:6px; margin-bottom:6px; flex-wrap:wrap;}
+.id-card h6{font-size:14px; font-weight:700; line-height:1.3; color:var(--ink); word-break:break-word;}
+.id-card .id-pitch{margin-top:4px; font-size:12.3px; line-height:1.45; color:var(--muted); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+.id-card .id-mini-next{margin-top:8px; font-size:11.8px; line-height:1.4; color:var(--ink); display:flex; gap:6px;}
+.id-card .id-mini-next b{color:var(--tc); flex-shrink:0;}
+.id-card .id-mini-next span{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+.id-card-foot{display:flex; align-items:center; gap:6px; margin-top:9px; padding-top:8px; border-top:1px solid var(--line);}
+.id-card-foot .id-date{margin-left:0;}
+.id-card.p-high{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--red) 30%, transparent);}
+.id-done-toggle{width:100%; padding:10px; font-size:12px; font-weight:700; color:var(--muted); border-radius:10px; background:var(--bg);}
+.ideas-lanes .lane-done .id-card{opacity:.72;}
+.ideas-lanes .lane-done .id-card h6{text-decoration:line-through; text-decoration-color:color-mix(in srgb,var(--muted) 60%, transparent);}
+.id-empty{grid-column:1/-1; text-align:center; padding:28px 12px; color:var(--muted); font-size:13px; background:var(--surface); border:1px dashed var(--line); border-radius:16px; margin-bottom:20px;}
+
+/* the idea window */
+#ideaOverlay .modal{max-width:680px;}
+.id-m-head{padding:18px 22px 14px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--line); background:linear-gradient(135deg, color-mix(in srgb,var(--tc) 14%, var(--surface)), var(--surface));}
+.id-m-head textarea{flex:1; min-width:0; font-family:'Sora','Inter',sans-serif; font-size:18px; line-height:1.3; font-weight:800; border:none; background:transparent; padding:4px 0; color:var(--ink); resize:none; overflow:hidden; min-height:0 !important;}
+.id-m-head textarea:focus{outline:none; box-shadow:0 2px 0 var(--tc);}
+@media(max-width:560px){#ideaOverlay .field textarea,#ideaOverlay .field input,#ideaOverlay .field select{font-size:16px;} .id-m-head textarea{font-size:17px;}}
+.id-m-body{padding:16px 22px 6px; display:grid; gap:12px; overflow-y:auto;}
+.id-m-row{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+@media(max-width:560px){.id-m-row{grid-template-columns:1fr 1fr;} .id-m-row .field:last-child{grid-column:1/-1;}}
+#ideaOverlay .field textarea{min-height:46px; line-height:1.45; font-size:13.5px;}
+#ideaOverlay .field textarea.tall{min-height:72px;}
+.id-m-links{display:grid; grid-template-columns:1fr 2fr; gap:8px;}
+.id-m-foot{display:flex; align-items:center; gap:10px; padding:14px 22px 18px; border-top:1px solid var(--line);}
+.id-m-foot .del{color:var(--red); font-weight:700; font-size:13px; padding:8px 4px;}
+.id-m-foot .sp{flex:1;}
+.id-m-foot .btn{height:40px; justify-content:center;}
+.id-m-foot .save{background:var(--grad); color:#fff; font-weight:700; padding:0 22px;}
+.id-m-foot .cancel{background:var(--bg); color:var(--ink);}
+.id-m-pr{display:flex; gap:6px;}
+.id-m-pr button{flex:1; height:38px; border-radius:11px; border:1px solid var(--line); background:var(--bg); font-size:12.5px; font-weight:700; color:var(--muted); display:inline-flex; align-items:center; justify-content:center; gap:6px;}
+.id-m-pr button i{width:8px; height:8px; border-radius:99px; background:var(--pc);}
+.id-m-pr button.on{background:color-mix(in srgb,var(--pc) 14%, var(--surface)); border-color:var(--pc); color:var(--ink);}
+.id-m-pin{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink);}
+.id-m-pin input{width:16px; height:16px; accent-color:var(--brand);}
+@media(max-width:720px){.id-big .id-sec p{display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;} .id-big h5{font-size:18px;}}
+@media(prefers-reduced-motion:reduce){.id-big,.id-card{transition:none;}}
 
 /* ---------- Expenses ---------- */
 .exp-row{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; margin-bottom:6px; background:var(--bg); border:1px solid var(--line);}
@@ -3120,18 +3225,41 @@ body.locked .mq-pill{display:none;}
 
 <!-- IDEAS -->
 <main class="view" id="view-ideas">
-  <div class="todo-head-bar">
+  <div class="id-top">
     <div class="thb-ico" style="background:var(--violet-soft);color:var(--violet)" data-ic="bulb"></div>
-    <div class="thb-txt"><h3>Ideas</h3><p>Things you want to work on — drag across the lanes as they move</p></div>
+    <div class="thb-txt"><h3>Ideas</h3><p id="ideaSum">Every idea in one place — what it is, why it could work, and the next step</p></div>
+    <label class="id-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="ideaSearch" type="search" placeholder="Search ideas…" autocomplete="off"></label>
+    <button class="id-new" id="ideaNewBtn">+ New idea</button>
   </div>
-  <div class="todo-legend">
-    <span class="tl-item"><i style="background:var(--red)"></i> High</span>
-    <span class="tl-item"><i style="background:var(--yellow)"></i> Medium</span>
-    <span class="tl-item"><i style="background:var(--green)"></i> Low</span>
-    <span class="tl-hint">Tap a dot on any row to set the priority · tap the same dot again to clear it</span>
-  </div>
+  <div class="id-filters" id="ideaFilters"></div>
+  <div id="ideaSpot"></div>
+  <div class="id-lanes-h"><h4>All ideas</h4><span>Drag a card to another lane as it moves · tap a card to open it</span></div>
   <div class="ideas-lanes" id="ideaLanes"></div>
 </main>
+<div class="overlay" id="ideaOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Idea">
+    <div class="id-m-head"><textarea id="imTitle" rows="1" maxlength="120" placeholder="Name of the idea"></textarea><button class="modal-close" id="imClose" title="Close">✕</button></div>
+    <div class="id-m-body">
+      <div class="id-m-row">
+        <div class="field"><label>Type</label><select id="imType"></select></div>
+        <div class="field"><label>Lane</label><select id="imStatus"></select></div>
+        <div class="field"><label>Priority</label><div class="id-m-pr" id="imPrio"></div></div>
+      </div>
+      <div class="field"><label>The idea in one line</label><textarea id="imPitch" placeholder="What it is, in one or two sentences"></textarea></div>
+      <div class="field"><label>Why it can work</label><textarea id="imWhy" class="tall" placeholder="The market, the money, why people would pay"></textarea></div>
+      <div class="field"><label>Numbers &amp; price <span style="text-transform:none;letter-spacing:0;font-weight:500">· one per line</span></label><textarea id="imNums" placeholder="€24.90/month&#10;~100,000 students a year"></textarea></div>
+      <div class="field"><label>Watch out</label><textarea id="imRisks" placeholder="Risks, things to be careful with"></textarea></div>
+      <div class="field"><label>Next step</label><textarea id="imNext" placeholder="The one thing to do next"></textarea></div>
+      <div class="field"><label>Notes</label><textarea id="imDetail" placeholder="Anything else"></textarea></div>
+      <div class="field"><label>Links</label>
+        <div class="id-m-links"><input id="imL1t" placeholder="Label (e.g. Chat)"><input id="imL1u" placeholder="https://…"></div>
+        <div class="id-m-links" style="margin-top:8px"><input id="imL2t" placeholder="Label"><input id="imL2u" placeholder="https://…"></div>
+      </div>
+      <label class="id-m-pin"><input type="checkbox" id="imPin"> Show it on top (spotlight)</label>
+    </div>
+    <div class="id-m-foot"><button class="del" id="imDel">Delete</button><span class="sp"></span><button class="btn cancel" id="imCancel">Cancel</button><button class="btn save" id="imSave">Save</button></div>
+  </div>
+</div>
 
 <!-- CALLBACKS -->
 <main class="view" id="view-callbacks">
@@ -3902,6 +4030,8 @@ const Sync={
 
   setState(s, msg){
     this.state=s; this.lastError=msg||null;
+    /* the ideas from our chats are added the first time this device is in step with the server */
+    if(s==='ok'||s==='off'){ try{ if(state && (!state.meta || state.meta.ideasSeed!==IDEA_SEED_VER)) setTimeout(()=>{ try{ renderIdeas(); }catch(e){} },0); }catch(e){} }
     const pill=$('#syncPill'), label=$('#syncLabel'), banner=$('#syncBanner'), bt=$('#syncBannerText');
     if(!pill) return;
     pill.dataset.state=s;
@@ -6712,15 +6842,124 @@ $('#catAdd').addEventListener('click',()=>{
   state.noteCats.push(name); save(); renderTodo();
 });
 
-/* ---------- ideas board ---------- */
+/* ---------- ideas board v2 (9 Oct 2026) ----------
+   Every idea is a small one-page brief: type, lane, priority, the idea in one line, why it can work,
+   numbers, watch-outs, the next step, notes and links. Old ideas (title + detail only) keep working:
+   the new fields are optional. Pinned ideas show on top in the spotlight. */
 const IDEA_LANES=[
-  {status:'someday', name:'Someday',  pal:'violet'},
-  {status:'next',    name:'Next up',  pal:'blue'},
-  {status:'doing',   name:'Doing',    pal:'orange'},
-  {status:'done',    name:'Done',     pal:'green'},
+  {status:'someday', name:'Someday',  pal:'violet', sub:'parked for later'},
+  {status:'next',    name:'Next up',  pal:'blue',   sub:'start soon'},
+  {status:'doing',   name:'Doing',    pal:'orange', sub:'in progress'},
+  {status:'done',    name:'Done',     pal:'green',  sub:'launched or dropped'},
 ];
 const IDEA_STATUSES=IDEA_LANES.map(l=>l.status);
-let dragIdeaId=null, pendingFocusIdea=null;
+const IDEA_TYPES=[
+  {k:'business', t:'Business line', c:'#2F7FE0'},
+  {k:'offer',    t:'Offer',         c:'#0B9E5C'},
+  {k:'product',  t:'Product / app', c:'#7C5CFC'},
+  {k:'personal', t:'Personal',      c:'#E67700'},
+  {k:'other',    t:'Other',         c:'#1FAFD0'},
+];
+const IDEA_TYPE=k=>IDEA_TYPES.find(x=>x.k===k)||IDEA_TYPES[4];
+const IDEA_PRIO=[{k:'high',t:'High',c:'#FF4D5E'},{k:'medium',t:'Medium',c:'#FFC400'},{k:'low',t:'Low',c:'#0EC673'}];
+let dragIdeaId=null, pendingFocusIdea=null, ideaFilter='all', ideaQuery='', ideaShowDone=false, ideaEditing=null;
+try{ ideaFilter=localStorage.getItem('advon_idea_filter')||'all'; }catch(e){}
+
+/* The ideas from our chats — added once (state.meta.ideasSeed). An idea already on the board
+   (same name/keywords) is never duplicated: only its EMPTY new fields are filled in. */
+const IDEA_SEED_VER='v1-2026-10-09';
+const IDEA_SEED=[
+  {id:'seed-ai-education', keys:['ai-education','ai education','ai - education','exam machine','πανελλην'],
+   title:'AI-EDUCATION — exam machine for Πανελλήνιες', type:'product', status:'next', prio:'medium', pin:true, at:'2026-10-09T11:41',
+   pitch:'Not «an AI helper»: the student sits a real past paper by hand with a timer, photographs it, gets graded like a βαθμολογητής against the official marking scheme, and the parents get a report every Sunday.',
+   why:'About 100,000 Πανελλήνιες candidates every year, and parents already pay €200–500/month for φροντιστήρια. What ChatGPT will never do: real exam conditions, grading against the official solutions, a weak-spot map, and the parent report — the parent is the buyer. Γυμνάσιο: not now. IB / IAL: later, with the same engine.',
+   nums:'€24.90/month or €199 for the season (Sept–June)\nφροντιστήρια: €149–299/month for up to 50 students\n~100,000 candidates a year\nMVP by mid-December, panic season Jan–May',
+   risks:'Grading must be right every time — grade only against official solutions and show them side by side. Students leave every year (sell to φροντιστήρια so it renews). Start with Θετικές: Μαθηματικά, Φυσική, Χημεία.',
+   next:'Call 15 φροντιστήρια (start with the vresfrontistirio sign-ups): «Θα το δίνατε στους μαθητές σας για Χ€/μήνα;» — if 3–4 say yes, build the MVP and pilot it free in January.',
+   links:[{t:'Chat · AI-EDUCATION',u:'https://claude.ai/chat/570f3a4f-bc22-4d31-ba6e-8738b5b30dc4'}]},
+  {id:'seed-ai-automation', keys:['ai automation','automation business','αυτοματοποι','automation for business'],
+   title:'AI AUTOMATION BUSINESS — automate Greek companies', type:'business', status:'next', prio:'medium', pin:true, at:'2026-10-09T11:21',
+   pitch:'Sell what we built for Advon (CRM, synced calendar, chats, backups, morning brief) to Greek companies: «Show me the job that eats hours every week — I automate it in 2 weeks at no charge; if it doesn\'t save the hours we agreed, you pay nothing.»',
+   why:'Every Greek company runs on Excel and WhatsApp and nobody cleans it up for them in plain Greek. High ticket: 5–15 clients that each pay what 10–15 website clients pay. They buy you running Claude, not Claude itself — that is the moat. Best niche: wholesale / distribution with an ERP (SoftOne, Entersoft, Pylon), then accounting offices, clinics, hotels.',
+   nums:'First automation: no charge, 2 weeks\nthen €500–2,000/month, no contract\n«less than half a salary, works 24/7»\n5–15 clients is enough',
+   risks:'Custom work per company — don\'t let it eat the website business or the Google Ads launch. Start with ONE pilot and a measured case study. With bigger companies say «δοκιμή χωρίς χρέωση», not «δωρεάν».',
+   next:'Call the Nef Nef owner: offer the free first automation with the hours guarantee, measure the hours before/after, and turn it into the case study.',
+   links:[{t:'Chat · AI AUTOMATION',u:'https://claude.ai/chat/c45a29fe-bb79-4aef-86ed-0a904796f0c4'}]},
+  {id:'seed-google-ads', keys:['google ads','google-ads','διαφημίσεις google','διαφημισεις google'],
+   title:'Google Ads Offer — for our website clients', type:'offer', status:'doing', prio:'high', pin:true, at:'2026-10-09T11:00',
+   pitch:'Google Ads for our 200+ website clients, Advon-style: 0€ to start (setup normally 250€ + the first month free), then 59€/month founding price (79€ normal). The client pays Google directly with their own card, from 5€/day.',
+   why:'Monthly money from people who already trust us, and we built their sites, so we know exactly where to send the visitors. 40 clients ≈ €2,400/month before ΦΠΑ. Clients are already asking for it (the «Also interested in» chip tracks them).',
+   nums:'0€ start · 59€/month founding (first 20) · 79€ normal\nad budget from 5€/day, paid by the client to Google\n60-day guarantee: 10 calls/requests or no fee\none professional per specialty per area · August pause',
+   risks:'Doctors (and lawyers) can\'t advertise personally (Ν.3418/2005, άρθρο 17) — start with psychologists, physiotherapists, dietitians, speech therapists. Start with 5 clients, not 50. Call tracking on a live site = one Netlify deploy per client (15 credits).',
+   next:'Decide: 59€/79€, the free Google Maps bonus, add the 210 number? Then approve the offer page and offer it to the first 5 clients (one already heard «from November»).',
+   links:[{t:'Offer page',u:'https://drafts.advonmedia.com/google-ads/'},{t:'Chat · Google Ads',u:'https://claude.ai/chat/7d71e31a-2d1f-4da7-bf2c-d30ff9339b74'}]},
+  {id:'seed-villa-video', keys:['villa','βιλα','βίλα','property video','higgsfield','listing film'],
+   title:'Villa & hotel AI tour videos', type:'business', status:'someday', prio:'none', at:'2026-09-08T12:00',
+   pitch:'Realistic walkthrough videos of villas, hotels and rentals made from their own photos with Higgsfield AI — the whole listing, plus a per-room package.',
+   why:'The Greek tourism market is huge and owners compete on Airbnb/Booking with the same still photos. Best first buyers: property management companies and boutique hotels.',
+   nums:'~€249 per listing film\nhotel & volume packages\nfirst video free on a cold call',
+   risks:'Must stay true to the real place (trust). Higgsfield credits needed before production.',
+   next:'Make one sample film from a real villa\'s photos, then cold call 20 property managers with the free first video.',
+   links:[{t:'Chat · property videos',u:'https://claude.ai/chat/c0414ea2-f346-4a45-bf06-567271067130'}]},
+  {id:'seed-vresfrontistirio', keys:['vresfrontistirio','vres-frontistirio','vres frontistirio','βρες φροντιστ'],
+   title:'vresfrontistirio.gr — find a φροντιστήριο', type:'product', status:'someday', prio:'none', at:'2026-09-09T12:00',
+   pitch:'A directory where parents find φροντιστήρια near them — factual profiles only, no reviews. The coming-soon page and the free «δήλωσε ενδιαφέρον» form are live.',
+   why:'Schools pay to be found; the sign-ups are also a warm list for AI-EDUCATION.',
+   nums:'~€150/year per school',
+   risks:'Needs enough schools listed before parents find it useful.',
+   next:'Use the sign-ups as the first call list for AI-EDUCATION.',
+   links:[{t:'Coming-soon page',u:'https://vres-frontistirio.netlify.app'}]},
+  {id:'seed-advon-pay', keys:['advon pay','automatic renewal','auto renewal','auto-renew','card on file'],
+   title:'Advon Pay — renewals that charge by themselves', type:'product', status:'someday', prio:'none', at:'2026-09-29T08:00',
+   pitch:'Clients save a card once in a small portal and their hosting renews by itself every year (Stripe or Viva) — no more chasing renewals by hand.',
+   why:'Turns 200+ one-off yearly payments into automatic ones, cuts the chasing, and gives a place to offer extras.',
+   nums:'200+ clients × €130/year',
+   risks:'Clients must agree to save a card; needs a clear Greek message.',
+   next:'Decide Stripe or Viva, then send the onboarding message to the clients renewing next.',
+   links:[{t:'Chat · app idea',u:'https://claude.ai/chat/1d143f36-4356-415e-903a-8bc74f1856da'}]},
+  {id:'seed-eshops', keys:['shopify','eshop','e-shop','ηλεκτρονικό κατάστημα'],
+   title:'Eshops on Shopify — a new Advon service', type:'business', status:'doing', prio:'none', at:'2026-09-18T12:00',
+   pitch:'Build eshops on Shopify for clients, starting with the candle shop; a demo store shows what we can do.',
+   why:'Clients are already asking, and one eshop pays several times a website.',
+   nums:'€580 + ΦΠΑ, one build package\nmonthly support not included',
+   risks:'Payments, courier and myDATA connections are new — go click by click the first time.',
+   next:'Finish the candle client\'s store, then show the demo store in meetings.',
+   links:[]},
+  {id:'seed-panta', keys:['panta'],
+   title:'Panta — productivity app', type:'product', status:'someday', prio:'none', at:'2026-08-24T12:00',
+   pitch:'A productivity app for Greek students and adults: tasks, habits, expenses and several profiles in one place, on a subscription.',
+   why:'Built through many versions (v1–v17) with the money side already worked out.',
+   nums:'subscription',
+   risks:'Crowded app market — needs a clear Greek angle.',
+   next:'Parked — revisit once AI-EDUCATION is tested (same students).',
+   links:[]},
+];
+const ideaNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+function seedIdeas(){
+  state.meta||={};
+  if(state.meta.ideasSeed===IDEA_SEED_VER) return false;
+  /* only when this device is in step with the server (or has no sync), so a fresh login never
+     seeds a stale copy and causes a conflict — it runs on the next render after the sync */
+  try{ if(typeof Sync!=='undefined' && !['ok','off'].includes(Sync.state)) return false; }catch(e){}
+  const orig=state.ideas.slice();
+  IDEA_SEED.forEach(s=>{
+    let hit=state.ideas.find(i=>i.id===s.id);
+    if(!hit) hit=orig.find(i=>{ const txt=ideaNorm(i.title+' '+(i.detail||'')); return s.keys.some(k=>txt.includes(ideaNorm(k))); });
+    const at=Date.parse(s.at)||Date.now();
+    if(hit){
+      ['type','pitch','why','nums','risks','next'].forEach(f=>{ if(!hit[f]) hit[f]=s[f]; });
+      if(!hit.links||!hit.links.length) hit.links=s.links.map(l=>({...l}));
+      if(s.pin && hit.pin===undefined) hit.pin=true;
+      if(s.pin) hit.src='chat';
+      hit.updated=Date.now();
+    } else {
+      state.ideas.push({id:s.id, title:s.title, detail:'', status:s.status, prio:s.prio, type:s.type, pitch:s.pitch, why:s.why, nums:s.nums,
+        risks:s.risks, next:s.next, links:s.links.map(l=>({...l})), pin:!!s.pin, src:s.pin?'chat':'', created:at, updated:at});
+    }
+  });
+  state.meta.ideasSeed=IDEA_SEED_VER;
+  return true;
+}
 function ensureIdeas(){
   if(!Array.isArray(state.ideas)) state.ideas=[];
   state.ideas.forEach(i=>{
@@ -6729,32 +6968,86 @@ function ensureIdeas(){
     if(!i.created) i.created=Date.now();
     if(!i.updated) i.updated=i.created;
   });
+  if(seedIdeas()) save();
 }
+const ideaDate=t=>{ try{ return new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }catch(e){ return ''; } };
+const ideaIsNew=i=> i.src==='chat' && (Date.now()-(i.created||0)) < 14*864e5;
+function ideaMatches(i){
+  if(ideaFilter==='spot' && !i.pin) return false;
+  if(ideaFilter!=='all' && ideaFilter!=='spot' && (i.type||'other')!==ideaFilter) return false;
+  if(ideaQuery){ const q=ideaNorm(ideaQuery); return ideaNorm([i.title,i.pitch,i.why,i.nums,i.next,i.detail,i.risks].join(' ')).includes(q); }
+  return true;
+}
+function ideaPrHtml(p){
+  return `<span class="id-pr" title="Priority — tap again to clear">`+IDEA_PRIO.map(x=>`<button data-p="${x.k}" class="${p===x.k?'on':''}" style="--pc:${x.c}" title="${x.t}"><i></i></button>`).join('')+`</span>`;
+}
+function wireIdeaPr(el,i){
+  el.querySelectorAll('.id-pr button').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation(); const k=b.dataset.p;
+    i.prio=(i.prio===k)?'none':k; i.updated=Date.now(); save(); renderIdeas();
+  }));
+}
+function ideaLinksHtml(i,max){
+  return (i.links||[]).filter(l=>l&&l.u).slice(0,max||2).map(l=>`<a class="id-link" href="${esc(l.u)}" target="_blank" rel="noopener">${esc(l.t||'Open')} ↗</a>`).join('');
+}
+const IDEA_PIN_SVG='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13l-5.62 2.96 1.07-6.27L2.9 9.4l6.3-.9z"/></svg>';
+const IDEA_PIN_SVG0='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13l-5.62 2.96 1.07-6.27L2.9 9.4l6.3-.9z"/></svg>';
 function renderIdeas(){
   ensureIdeas();
   const wrap=$('#ideaLanes'); if(!wrap) return; wrap.innerHTML='';
+  ideaInitOnce();
+  const all=state.ideas;
+  const live=all.filter(i=>i.status!=='done');
+  /* header summary */
+  const sum=$('#ideaSum');
+  if(sum){
+    const nNew=all.filter(ideaIsNew).length, nDoing=all.filter(i=>i.status==='doing').length;
+    sum.innerHTML=`<b>${live.length}</b> open idea${live.length===1?'':'s'}`+(nDoing?` · <b>${nDoing}</b> in progress`:'')+(nNew?` · <b>${nNew}</b> new from our chats`:'')+` — what each one is, why it could work, and the next step`;
+  }
+  /* filter chips */
+  const fw=$('#ideaFilters');
+  if(fw){
+    const cnt=k=> k==='all'?all.length : k==='spot'?all.filter(i=>i.pin).length : all.filter(i=>(i.type||'other')===k).length;
+    const chips=[{k:'all',t:'All'},{k:'spot',t:'★ Spotlight'}].concat(IDEA_TYPES.map(x=>({k:x.k,t:x.t,c:x.c})));
+    fw.innerHTML=chips.filter(c=>c.k==='all'||cnt(c.k)).map(c=>`<button class="id-chip ${ideaFilter===c.k?'on':''}" data-k="${c.k}" ${c.c?`style="--tc:${c.c}"`:''}>${c.c?'<i></i>':''}${c.t} <em>${cnt(c.k)}</em></button>`).join('')+
+      `<span class="id-hint">Dots on a card = priority (red high · yellow medium · green low)</span>`;
+    fw.querySelectorAll('.id-chip').forEach(b=>b.addEventListener('click',()=>{ ideaFilter=b.dataset.k; try{localStorage.setItem('advon_idea_filter',ideaFilter);}catch(e){} renderIdeas(); }));
+  }
+  /* spotlight — pinned ideas, newest first, at most 3 */
+  const sp=$('#ideaSpot');
+  if(sp){
+    const pins=all.filter(i=>i.pin && i.status!=='done' && ideaMatches(i)).sort((a,b)=>(b.created||0)-(a.created||0));
+    sp.innerHTML='';
+    if(pins.length){
+      sp.innerHTML=`<div class="id-spot-h"><h4>Spotlight</h4><span>The ideas you starred — newest first. Tap the ★ on any card to add or remove one.</span></div><div class="id-spot"></div>`;
+      const g=sp.querySelector('.id-spot');
+      pins.forEach(i=>g.appendChild(ideaBig(i)));
+    }
+  }
+  const shown=all.filter(ideaMatches);
   IDEA_LANES.forEach(laneDef=>{
     const pal=TODO_PAL[laneDef.pal];
-    const items=state.ideas.filter(i=>i.status===laneDef.status)
-      .sort((a,b)=>(PRIO_RANK[a.prio||'none']-PRIO_RANK[b.prio||'none']) || (b.created-a.created));
+    const items=shown.filter(i=>i.status===laneDef.status)
+      .sort((a,b)=>(PRIO_RANK[a.prio||'none']-PRIO_RANK[b.prio||'none']) || ((b.created||0)-(a.created||0)));
 
-    const lane=document.createElement('div'); lane.className='todo-lane';
+    const lane=document.createElement('div'); lane.className='todo-lane lane-'+laneDef.status;
     lane.style.setProperty('--dropc', pal.hex);
 
     const head=document.createElement('div');
     head.className='todo-lane-head'+(pal.dark?' dark':'');
     head.style.background=pal.grad;
-    head.innerHTML=`<span class="tl-title" style="cursor:default;">${laneDef.name}</span><span class="tl-count">${items.length}</span>`;
+    head.innerHTML=`<span class="tl-title" style="cursor:default;">${laneDef.name}</span><span class="tl-sub">${laneDef.sub}</span><span class="tl-count">${items.length}</span>`;
     lane.appendChild(head);
 
     const addWrap=document.createElement('div'); addWrap.className='todo-lane-add';
-    addWrap.innerHTML=`<input placeholder="+ Add idea…" maxlength="200">`;
+    addWrap.innerHTML=`<input placeholder="+ Quick add — type and press Enter" maxlength="120">`;
     const inp=addWrap.querySelector('input'); inp.dataset.status=laneDef.status;
     inp.addEventListener('keydown',e=>{
       if(e.key!=='Enter') return;
       const t=inp.value.trim(); if(!t) return;
       const now=Date.now();
-      state.ideas.push({id:uid(), title:t, detail:'', status:laneDef.status, prio:'none', created:now, updated:now});
+      const tf=(ideaFilter!=='all'&&ideaFilter!=='spot')?ideaFilter:'other';
+      state.ideas.push({id:uid(), title:t, detail:'', status:laneDef.status, prio:'none', type:tf, created:now, updated:now});
       pendingFocusIdea=laneDef.status; save(); renderIdeas();
     });
     lane.appendChild(addWrap);
@@ -6770,10 +7063,15 @@ function renderIdeas(){
       handleIdeaDrop(laneDef.status);
     });
     if(!items.length){
-      const em=document.createElement('div'); em.className='todo-lane-empty'; em.textContent='Nothing here yet';
+      const em=document.createElement('div'); em.className='todo-lane-empty'; em.textContent=(ideaQuery||ideaFilter!=='all')?'Nothing matches here':'Nothing here yet';
       body.appendChild(em);
     }
-    items.forEach(i=>body.appendChild(ideaRow(i)));
+    const collapse=laneDef.status==='done' && !ideaShowDone && !ideaQuery && items.length>0;
+    if(collapse){
+      const t=document.createElement('button'); t.className='id-done-toggle'; t.textContent='Show '+items.length+' done idea'+(items.length===1?'':'s');
+      t.addEventListener('click',()=>{ ideaShowDone=true; renderIdeas(); });
+      body.appendChild(t);
+    } else items.forEach(i=>body.appendChild(ideaRow(i)));
     lane.appendChild(body);
     wrap.appendChild(lane);
   });
@@ -6783,26 +7081,43 @@ function renderIdeas(){
     pendingFocusIdea=null;
   }
 }
+function ideaBig(i){
+  const ty=IDEA_TYPE(i.type), lane=IDEA_LANES.find(l=>l.status===i.status);
+  const el=document.createElement('article'); el.className='id-big'; el.style.setProperty('--tc',ty.c);
+  const nums=String(i.nums||'').split('\n').map(s=>s.trim()).filter(Boolean).slice(0,4);
+  el.innerHTML=
+    `<div class="id-big-band"><div class="id-big-meta"><span class="id-type">${esc(ty.t)}</span><span class="id-stage">${esc(lane?lane.name:'')}</span>${ideaIsNew(i)?'<span class="id-new-badge">NEW</span>':''}<span class="id-date">${ideaDate(i.created)}</span></div>`+
+    `<h5>${esc(i.title)}</h5>${i.pitch||i.detail?`<p class="id-pitch">${esc(i.pitch||i.detail)}</p>`:''}</div>`+
+    `<div class="id-big-body">`+
+      (i.why?`<div class="id-sec"><b>Why it can work</b><p>${esc(i.why)}</p></div>`:'')+
+      (nums.length?`<div class="id-nums">${nums.map(n=>`<span>${esc(n)}</span>`).join('')}</div>`:'')+
+      (i.next?`<div class="id-next"><span class="ar">→</span><div><small>Next step</small>${esc(i.next)}</div></div>`:'')+
+    `</div>`+
+    `<div class="id-big-foot">${ideaLinksHtml(i,2)}<span class="id-ctl">${ideaPrHtml(i.prio)}<button class="id-pin on" title="Remove from the spotlight">${IDEA_PIN_SVG}</button></span></div>`;
+  wireIdeaPr(el,i);
+  el.querySelectorAll('.id-link').forEach(a=>a.addEventListener('click',e=>e.stopPropagation()));
+  el.querySelector('.id-pin').addEventListener('click',e=>{ e.stopPropagation(); i.pin=false; i.updated=Date.now(); save(); renderIdeas(); });
+  el.addEventListener('click',()=>openIdea(i.id));
+  return el;
+}
 function ideaRow(i){
-  const p=i.prio||'none';
-  const row=document.createElement('div'); row.className='task-item idea-item p-'+p;
+  const p=i.prio||'none', ty=IDEA_TYPE(i.type);
+  const row=document.createElement('div'); row.className='id-card p-'+p; row.style.setProperty('--tc',ty.c);
   row.draggable=true; row.dataset.id=i.id;
   row.addEventListener('dragstart',e=>{ dragIdeaId=i.id; row.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',i.id); });
   row.addEventListener('dragend',()=>{ dragIdeaId=null; row.classList.remove('dragging'); document.querySelectorAll('.todo-lane-body.dragover').forEach(b=>b.classList.remove('dragover')); });
-  const dot = prioDotsHtml(p);
-  row.innerHTML=dot+
-    `<div class="task-body"><span class="task-text">${esc(i.title)}</span>${i.detail?`<span class="idea-detail">${esc(i.detail)}</span>`:''}</div>`+
-    prioFlagHtml(p)+
-    `<button class="task-edit" title="Add detail">${IC.edit}</button>`+
-    `<button class="item-x" title="Remove">${IC.x}</button>`;
-  wirePrioDots(row, i, renderIdeas);
-  row.querySelector('.task-edit').addEventListener('click',()=>{
-    const v=prompt('Detail for "'+i.title+'":', i.detail||''); if(v===null) return;
-    i.detail=v.trim(); i.updated=Date.now(); save(); renderIdeas();
-  });
-  row.querySelector('.item-x').addEventListener('click',()=>{
-    if(confirm('Delete idea "'+i.title+'"?')){ state.ideas=state.ideas.filter(x=>x.id!==i.id); save(); renderIdeas(); }
-  });
+  const line=i.pitch||i.detail||'';
+  row.innerHTML=
+    `<div class="id-card-top"><span class="id-type">${esc(ty.t)}</span>${ideaIsNew(i)?'<span class="id-new-badge">NEW</span>':''}</div>`+
+    `<h6>${esc(i.title)}</h6>`+
+    (line?`<p class="id-pitch">${esc(line)}</p>`:'')+
+    (i.next && i.status!=='done'?`<div class="id-mini-next"><b>→</b><span>${esc(i.next)}</span></div>`:'')+
+    `<div class="id-card-foot"><span class="id-date">${ideaDate(i.created)}</span>${(i.links||[]).some(l=>l&&l.u)?`<a class="id-link" style="height:24px;padding:0 8px;font-size:11px" href="${esc(i.links.find(l=>l&&l.u).u)}" target="_blank" rel="noopener">${esc(i.links.find(l=>l&&l.u).t||'Open')} ↗</a>`:''}`+
+    `<span class="id-ctl">${ideaPrHtml(p)}<button class="id-pin ${i.pin?'on':''}" title="${i.pin?'Remove from the spotlight':'Show it on top (spotlight)'}">${i.pin?IDEA_PIN_SVG:IDEA_PIN_SVG0}</button></span></div>`;
+  wireIdeaPr(row,i);
+  row.querySelectorAll('.id-link').forEach(a=>a.addEventListener('click',e=>e.stopPropagation()));
+  row.querySelector('.id-pin').addEventListener('click',e=>{ e.stopPropagation(); i.pin=!i.pin; i.updated=Date.now(); save(); renderIdeas(); toast(i.pin?'Added to the spotlight':'Removed from the spotlight'); });
+  row.addEventListener('click',()=>openIdea(i.id));
   return row;
 }
 function handleIdeaDrop(status){
@@ -6810,6 +7125,71 @@ function handleIdeaDrop(status){
   const i=state.ideas.find(x=>x.id===id); if(!i){ renderIdeas(); return; }
   if(i.status!==status){ i.status=status; i.updated=Date.now(); save(); renderIdeas(); }
   else renderIdeas();
+}
+/* the idea window — open, edit, save, delete */
+let ideaInited=false, imPrio='none';
+function ideaInitOnce(){
+  if(ideaInited) return; ideaInited=true;
+  const ov=$('#ideaOverlay'); if(!ov) return;
+  if(ov.parentNode!==document.body) document.body.appendChild(ov);
+  $('#imType').innerHTML=IDEA_TYPES.map(x=>`<option value="${x.k}">${x.t}</option>`).join('');
+  $('#imStatus').innerHTML=IDEA_LANES.map(x=>`<option value="${x.status}">${x.name}</option>`).join('');
+  $('#imType').addEventListener('change',()=>ov.querySelector('.modal').style.setProperty('--tc',IDEA_TYPE($('#imType').value).c));
+  const close=()=>{ ov.classList.remove('open'); ideaEditing=null; };
+  $('#imClose').addEventListener('click',close); $('#imCancel').addEventListener('click',close);
+  ov.addEventListener('mousedown',e=>{ if(e.target===ov) close(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && ov.classList.contains('open')) close(); });
+  $('#imSave').addEventListener('click',saveIdeaForm);
+  $('#imTitle').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); saveIdeaForm(); } });
+  $('#imDel').addEventListener('click',()=>{
+    const i=state.ideas.find(x=>x.id===ideaEditing); if(!i){ close(); return; }
+    if(!confirm('Delete idea "'+i.title+'"?')) return;
+    state.ideas=state.ideas.filter(x=>x.id!==i.id); save(); close(); renderIdeas(); toast('Idea deleted');
+  });
+  ov.querySelectorAll('textarea').forEach(t=>t.addEventListener('input',()=>ideaGrow(t)));
+  const si=$('#ideaSearch'); if(si) si.addEventListener('input',()=>{ ideaQuery=si.value.trim(); renderIdeas(); });
+  const nb=$('#ideaNewBtn'); if(nb) nb.addEventListener('click',()=>openIdea(null));
+}
+function ideaGrow(t){ t.style.height='auto'; t.style.height=Math.min(Math.max(t.scrollHeight+2,t.id==='imTitle'?24:46),320)+'px'; }
+function ideaPrPick(){
+  const w=$('#imPrio');
+  w.innerHTML=IDEA_PRIO.map(x=>`<button type="button" data-p="${x.k}" class="${imPrio===x.k?'on':''}" style="--pc:${x.c}"><i></i>${x.t}</button>`).join('');
+  w.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ imPrio=(imPrio===b.dataset.p)?'none':b.dataset.p; ideaPrPick(); }));
+}
+function openIdea(id){
+  ideaInitOnce();
+  const i=id?state.ideas.find(x=>x.id===id):null;
+  ideaEditing=i?i.id:null;
+  const v=(k,d='')=> i&&i[k]!=null?i[k]:d;
+  const ty=(i&&i.type)||((ideaFilter!=='all'&&ideaFilter!=='spot')?ideaFilter:'business');
+  $('#imTitle').value=v('title'); $('#imType').value=ty; $('#imStatus').value=v('status','someday');
+  $('#imPitch').value=v('pitch'); $('#imWhy').value=v('why'); $('#imNums').value=v('nums'); $('#imRisks').value=v('risks');
+  $('#imNext').value=v('next'); $('#imDetail').value=v('detail');
+  const L=(i&&i.links)||[];
+  $('#imL1t').value=(L[0]&&L[0].t)||''; $('#imL1u').value=(L[0]&&L[0].u)||'';
+  $('#imL2t').value=(L[1]&&L[1].t)||''; $('#imL2u').value=(L[1]&&L[1].u)||'';
+  $('#imPin').checked=!!(i&&i.pin);
+  imPrio=v('prio','none'); ideaPrPick();
+  $('#imDel').style.visibility=i?'visible':'hidden';
+  const ov=$('#ideaOverlay'); ov.querySelector('.modal').style.setProperty('--tc',IDEA_TYPE(ty).c);
+  ov.classList.add('open');
+  ov.querySelectorAll('textarea').forEach(ideaGrow);
+  ov.querySelector('.id-m-body').scrollTop=0;
+  if(!i) setTimeout(()=>$('#imTitle').focus(),40);
+}
+function saveIdeaForm(){
+  const title=$('#imTitle').value.trim();
+  if(!title){ toast('Give the idea a name first'); $('#imTitle').focus(); return; }
+  const now=Date.now();
+  let i=ideaEditing?state.ideas.find(x=>x.id===ideaEditing):null;
+  if(!i){ i={id:uid(), created:now}; state.ideas.push(i); }
+  const fixUrl=u=>{ u=u.trim(); if(u && !/^https?:\/\//i.test(u)) u='https://'+u; return u; };
+  const links=[[$('#imL1t').value,$('#imL1u').value],[$('#imL2t').value,$('#imL2u').value]]
+    .map(([t,u])=>({t:t.trim(),u:fixUrl(u)})).filter(l=>l.u);
+  Object.assign(i,{title, type:$('#imType').value, status:$('#imStatus').value, prio:imPrio,
+    pitch:$('#imPitch').value.trim(), why:$('#imWhy').value.trim(), nums:$('#imNums').value.trim(), risks:$('#imRisks').value.trim(),
+    next:$('#imNext').value.trim(), detail:$('#imDetail').value.trim(), links, pin:$('#imPin').checked, updated:now});
+  save(); $('#ideaOverlay').classList.remove('open'); ideaEditing=null; renderIdeas(); toast('Idea saved');
 }
 
 /* ---------- monthly subscriptions ---------- */
@@ -9346,7 +9726,7 @@ function exportYearReport(){
     h+='</div>';
   }
   const ideas=(state.ideas||[]).filter(i=>i.status!=='done');
-  if(ideas.length){ h+='<div class="rp-card" style="margin-top:4mm"><h4>Ideas <span style="color:#687182;font-weight:600">· '+ideas.length+'</span></h4>'; ideas.forEach(i=>{ h+=`<div class="rp-li prio-${esc(i.prio||'none')}"><span class="d"></span><span class="t">${esc(i.title||'')}${i.detail?`<div class="s">${esc(i.detail)}</div>`:''}</span></div>`; }); h+='</div>'; }
+  if(ideas.length){ h+='<div class="rp-card" style="margin-top:4mm"><h4>Ideas <span style="color:#687182;font-weight:600">· '+ideas.length+'</span></h4>'; ideas.forEach(i=>{ h+=`<div class="rp-li prio-${esc(i.prio||'none')}"><span class="d"></span><span class="t">${esc(i.title||'')}${(i.pitch||i.detail)?`<div class="s">${esc(i.pitch||i.detail)}</div>`:''}${i.next?`<div class="s">Next: ${esc(i.next)}</div>`:''}</span></div>`; }); h+='</div>'; }
   if(!asapOpen.length && !todos.length && !ideas.length) h+='<div class="rp-empty">Nothing outstanding.</div>';
   h+='</section>';
 
