@@ -2794,7 +2794,7 @@ body.ld-call .gm-bar{display:none;}
 @keyframes mqPulse{0%{box-shadow:0 0 0 0 rgba(255,210,77,.6);} 70%{box-shadow:0 0 0 9px rgba(255,210,77,0);} 100%{box-shadow:0 0 0 0 rgba(255,210,77,0);}}
 body.locked .mq-pill{display:none;}
 /* ===== Meeting now (9 Oct 2026) — the client's e-mail + Meet link one tap away during the call ===== */
-.mn-bar{display:flex; flex-direction:column; gap:8px; max-width:1240px; margin:0 auto; padding:2px 24px 12px;}
+.mn-bar{display:flex; flex-direction:column; gap:8px; margin:0 0 14px;}
 .mn-bar[hidden]{display:none;}
 .mn-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:var(--blue-soft); border:1px solid rgba(47,127,224,.25); border-radius:16px; padding:8px 10px 8px 14px;}
 .mn-when{display:flex; align-items:center; gap:7px; font-size:12px; font-weight:800; letter-spacing:.02em; text-transform:uppercase; color:var(--brand); white-space:nowrap;}
@@ -2814,7 +2814,6 @@ body.dark .mn-mail b{color:#10141F;}
 .mn-x{border:0; background:none; color:var(--muted); font-size:20px; line-height:1; padding:2px 6px; cursor:pointer;}
 @media (hover:hover){.mn-btn:hover,.mn-mail:hover{transform:translateY(-1px);}}
 @media (max-width:640px){
-  .mn-bar{padding:2px 12px 10px;}
   .mn-row{padding:10px 12px; gap:8px; position:relative;}
   .mn-name{flex:1 1 auto; text-align:left;}
   .mn-x{position:absolute; top:6px; right:6px;}
@@ -2956,7 +2955,6 @@ body.dark .mn-mail b{color:#10141F;}
       </div>
     </div>
   </div>
-  <div class="mn-bar" id="mnBar" hidden aria-live="polite"></div>
 </header>
 <div class="gm-bar" id="gmBar" aria-label="Today's mission"></div>
 
@@ -3145,6 +3143,7 @@ body.dark .mn-mail b{color:#10141F;}
 
 <!-- CALENDAR -->
 <main class="view" id="view-calendar">
+  <div class="mn-bar" id="mnBar" hidden aria-live="polite"></div>
   <div class="cal-head">
     <div class="seg">
       <button data-cal="week">Week</button>
@@ -5243,9 +5242,9 @@ function fuDone(id){
 /* ---- Meeting now (Angelo, 9 Oct 2026) ----
    During a Google Meet call he needs the client's e-mail (to add them in Meet or send the
    link again) and had to dig it out of Zoho. The booking already brought the e-mail and the
-   Meet link onto the card, so from 20 min before until 20 min after each meeting a strip under
-   the top bar shows: name · e-mail [Copy] · Open Meet · Send the link again (Gmail, filled in) · Call. */
-const MN_BEFORE=20, MN_AFTER=20;            /* minutes */
+   Meet link onto the card, so
+   the top of the Calendar tab shows (10 min before → 10 min after the start): name · e-mail [Copy] · Open Meet · Send the link again (Gmail, filled in) · Call. */
+const MN_BEFORE=10, MN_AFTER=10;            /* minutes — only around the start time (Angelo, 9 Oct: «only for a few minutes», Calendar tab only, not sticky) */
 let mnHidden={};
 function mnBk(c){ return (c && c.fromBooking && BK_LIST.find(x=>x.uid===c.fromBooking)) || null; }
 function mnEmail(c){ const b=mnBk(c); return String((c&&c.email) || (b&&b.email) || '').trim(); }
@@ -5256,7 +5255,7 @@ function mnList(){
   if(!state) return [];
   const now=Date.now(), t=todayIso();
   return state.clients.filter(c=>c.day===t && c.time && !isTrashed(c) && c.stage!=='lost' && !mnHidden[c.id+'|'+c.time])
-    .filter(c=>{ const s0=mnStart(c); return s0 && now>=s0-MN_BEFORE*60000 && now<=s0+(MQ_LEN+MN_AFTER)*60000; })
+    .filter(c=>{ const s0=mnStart(c); return s0 && now>=s0-MN_BEFORE*60000 && now<=s0+MN_AFTER*60000; })
     .sort((a,b)=>Math.abs(mnStart(a)-now)-Math.abs(mnStart(b)-now)).slice(0,2);
 }
 function mnGmail(c){
