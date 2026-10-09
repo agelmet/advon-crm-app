@@ -2993,6 +2993,16 @@ body.dark .cw-card.pr-high .cw-nt,body.dark .cw-card.pr-med .cw-nt,body.dark .cw
 .cw-ph{font-size:12px; font-weight:700; color:var(--ink); margin-top:3px; opacity:.85; font-variant-numeric:tabular-nums;}
 .cw-tr{display:inline-flex; align-items:center; gap:2px; font-size:10.5px; font-weight:800; padding:1px 6px 1px 4px; border-radius:99px; background:rgba(0,0,0,.07); color:#8A6400;} .cw-tr .ic{width:11px; height:11px;}
 .cw-trays.below{margin:14px 0 0;}
+/* «Old — not answering» (9 Oct 2026): quiet grey, closed by default */
+.cw-oldw{display:block;}
+.cw-oldw>summary{list-style:none; cursor:pointer; margin:0;} .cw-oldw>summary::-webkit-details-marker{display:none;}
+.cw-tray.old{background:var(--bg); border-style:dashed; box-shadow:none;}
+.cw-oldw>summary.cw-tray.old .cw-th{margin:0; color:var(--muted);}
+.cw-oldw[open]>summary.cw-tray.old{border-bottom-left-radius:0; border-bottom-right-radius:0; border-bottom:none;}
+.cw-tray.old.in{border-top:none; border-top-left-radius:0; border-top-right-radius:0;}
+.cw-tray.old .cw-card{opacity:.85;}
+.cw-oldbar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:12.5px; color:var(--muted); margin-bottom:10px;}
+.cw-oldall{margin-left:auto; font-size:12px; font-weight:800; padding:7px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
 .cw-guess{display:inline-flex; align-items:center; gap:5px; margin-top:7px; font-size:12px; font-weight:800; padding:5px 10px; border-radius:9px; border:1.5px dashed #E08A00; background:#FFF6E6; color:#B45D00;}
 .cw-guess .ic{width:13px; height:13px;}
 .cw-acts{display:flex; gap:4px; margin-top:8px;}
@@ -6200,6 +6210,7 @@ const CA_LISTS=['prio','warm','sched'];
 const CA_BOOK_LINK='https://advonmedia.com/dorean';
 let caOpen={id:'', kind:''};             /* which row has its small panel open: move | msg | edit */
 let caDoneOpen=false;
+let caOldOpen=false;                     /* the «Old — not answering» list starts closed */
 let caQ={how:'call', day:'', time:'', pr:'', howAuto:false, dayAuto:false, timeAuto:false, lead:''};
 const caAddDays=(iso,n)=>{ const d=new Date(iso+'T12:00'); d.setDate(d.getDate()+n); return isoDate(d); };
 const caDowIdx=iso=>(new Date(iso+'T12:00').getDay()+6)%7;   /* 0 = Monday */
@@ -6251,15 +6262,24 @@ function caEntries(withDone){
       how:CA_HOW[l.cb.how]?l.cb.how:'call', pr:l.cb.pr||'', hot:!!l.hot, tries:l.tries||[], sub:[ldSpecShort(l), l.city].filter(Boolean).join(' · '), created:l.created||0}); }); }catch(e){}
   return out;
 }
-const caDue=e=>!e.done && ((e.day && e.day<=todayIso()) || (!e.day && e.month && e.month<todayIso().slice(0,7)));
+/* Angelo, 9 Oct 2026: callbacks more than 14 days late (or only «July», «end of July»…) are OLD — people who stopped answering.
+   They leave Leads' «Call-backs today», the Today window, the tab badge, Home, the pings and the brief,
+   and wait in a closed «Old — not answering» list at the bottom of Callbacks (Try today · Close · Close all). */
+const CA_STALE_DAYS=14;
+function caStale(e){ if(!e || e.done) return false; const lim=caAddDays(todayIso(),-CA_STALE_DAYS);
+  if(e.day) return e.day<lim;
+  if(e.month && /^\d{4}-\d{2}$/.test(e.month)){ const last=e.month+'-'+pad(new Date(+e.month.slice(0,4), +e.month.slice(5,7), 0).getDate()); return last<lim; }
+  return false; }
+const caDue=e=>!e.done && !caStale(e) && ((e.day && e.day<=todayIso()) || (!e.day && e.month && e.month<todayIso().slice(0,7)));
 const caIsNow=e=>e.day===todayIso() && e.time && e.time<=caNowHM();
 const caPrRank=e=>({high:0, medium:1, low:3}[e.pr] ?? 2);
 const caCmpDay=(a,b)=>((a.time?0:1)-(b.time?0:1)) || String(a.time).localeCompare(String(b.time)) || (caPrRank(a)-caPrRank(b)) || ((a.tries.includes(todayIso())?1:0)-(b.tries.includes(todayIso())?1:0)) || (a.created-b.created);
 function caGroups(){
   const t=todayIso(), cm=t.slice(0,7), end=caAddDays(t,13);
   const all=caEntries(true); const open=all.filter(e=>!e.done);
-  const g={over:[], today:[], days:{}, later:{}, nod:[], done:all.filter(e=>e.done).sort((a,b)=>b.doneAt-a.doneAt)};
+  const g={over:[], old:[], today:[], days:{}, later:{}, nod:[], done:all.filter(e=>e.done).sort((a,b)=>b.doneAt-a.doneAt)};
   open.forEach(e=>{
+    if(caStale(e)){ g.old.push(e); return; }
     if(e.day){ if(e.day<t) g.over.push(e); else if(e.day===t) g.today.push(e); else if(e.day<=end) (g.days[e.day] ||= []).push(e); else (g.later[e.day.slice(0,7)] ||= []).push(e); }
     else if(e.month && e.month<cm) g.over.push(e);
     else if(e.month && e.month>cm) (g.later[e.month] ||= []).push(e);
@@ -6278,7 +6298,7 @@ function cbCounts(){
   const later=Object.values(g.days).reduce((a,x)=>a+x.length,0)+Object.values(g.later).reduce((a,x)=>a+x.length,0);
   const warm=state.warm||[], sched=state.sched||[], prio=state.prio||[];
   const doneWeek=g.done.length;
-  return { over:g.over.length, today:g.today.length, tomorrow, week, later, nod:g.nod.length, doneWeek,
+  return { over:g.over.length, old:g.old.length, today:g.today.length, tomorrow, week, later, nod:g.nod.length, doneWeek,
     due:g.over.length+g.today.length, now:g.over.length+g.today.length+g.nod.length,
     warmLeft:warm.filter(w=>!w.done).length, warmDone:warm.filter(w=>w.done).length,
     cur:sched.filter(s=>!s.done && (s.day?s.day.slice(0,7)===cm:s.month===cm)).length, schedDone:sched.filter(s=>s.done).length,
@@ -6363,7 +6383,7 @@ function caGcalHref(e){
    High priority = the whole card red, Medium = yellow, «almost booked» lead = green. Drag a card onto another day to move it. */
 let caWeekOff=0, caMobDay='';
 const caMonday=off=>caAddDays(todayIso(), 7*off);   /* the board always starts TODAY (no empty past days), then the next 6 days; ‹ › move 7 days */
-const caLate=e=>!e.done && ((e.day && e.day<todayIso()) || (!e.day && e.month && e.month<todayIso().slice(0,7)));
+const caLate=e=>!e.done && !caStale(e) && ((e.day && e.day<todayIso()) || (!e.day && e.month && e.month<todayIso().slice(0,7)));
 const caGuessOf=e=>(!e.day && !e.done && e.src==='cb')? caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))) : {};
 function renderCaTop(){
   const el=$('#caTop'); if(!el) return; const n=cbCounts(); const t=todayIso();
@@ -6389,7 +6409,8 @@ function caCardHtml(e, ctx){
   const tried=e.day===t && e.tries.includes(t);
   const cls=['cw-card', e.hot?'hot':(e.pr==='high'?'pr-high':e.pr==='medium'?'pr-med':''), now?'now':'', tried?'tried':'', e.done?'done':''].filter(Boolean).join(' ');
   let when;
-  if(ctx==='late') when=`<span class="cw-t late">${e.day?esc(caShort(e.day)):esc(fmtMonth(e.month))} · ${e.day?Math.round((Date.parse(t)-Date.parse(e.day))/864e5)+'d late':'late'}</span>`;
+  if(ctx==='old') when=`<span class="cw-t muted">${e.day?esc(caShort(e.day))+' · '+Math.round((Date.parse(t)-Date.parse(e.day))/864e5)+'d ago':'said: '+esc(fmtMonth(e.month))}</span>`;
+  else if(ctx==='late') when=`<span class="cw-t late">${e.day?esc(caShort(e.day)):esc(fmtMonth(e.month))} · ${e.day?Math.round((Date.parse(t)-Date.parse(e.day))/864e5)+'d late':'late'}</span>`;
   else if(ctx==='nod') when=`<span class="cw-t muted">${e.month?'said: '+esc(MONTHS[+e.month.slice(5,7)-1]):'no day'}</span>`;
   else when=`<span class="cw-t${now?' now':''}">${e.time?esc(e.time):'any time'}</span>`;
   const g=ctx==='nod'?caGuessOf(e):{};
@@ -6398,6 +6419,7 @@ function caCardHtml(e, ctx){
       ? (tel?`<a class="cw-go call" href="tel:${esc(tel)}" data-a="dial" title="Call ${esc(e.phone)}">${IC.phone}Call</a>`:`<button type="button" class="cw-go call" data-a="open" title="No phone yet — open the card to add it">+ phone</button>`)
       : `<button type="button" class="cw-go ${e.how}" data-a="msg">${IC[H[1]]}${H[0]}</button>`;
   const outs = e.done ? `<button type="button" class="cw-ib" data-a="undone" title="Put it back">${IC.undo}</button>`
+      : ctx==='old' ? `<button type="button" class="cw-ib ok wide" data-a="revive" title="Try once more — puts it on today">${IC.undo}Today</button><button type="button" class="cw-ib no" data-a="done" title="Close it — stop calling">${IC.x}</button>`
       : e.how==='call'
         ? `<button type="button" class="cw-ib ok" data-a="book" title="Booked — they said yes">${IC.check}</button><button type="button" class="cw-ib no" data-a="no" title="No — not interested">${IC.x}</button><button type="button" class="cw-ib na" data-a="na" title="No answer — moves to the next working day">${IC.hourglass}</button>`
         : `<button type="button" class="cw-ib ok wide" data-a="sent" title="Sent — tick it off">${IC.check}Sent</button>`;
@@ -6414,7 +6436,7 @@ function renderCaAgenda(){
   const t=todayIso(); const all=caEntries(true); const open=all.filter(e=>!e.done);
   const mon=caMonday(caWeekOff); const days=[0,1,2,3,4,5,6].map(i=>caAddDays(mon,i));
   const late=open.filter(caLate).sort((a,b)=>String(a.day||a.month).localeCompare(String(b.day||b.month))||caCmpDay(a,b));
-  const nod=open.filter(e=>!e.day && !caLate(e) && !(e.month && e.month>t.slice(0,7))).sort((a,b)=>caPrRank(a)-caPrRank(b)||a.created-b.created);
+  const nod=open.filter(e=>!e.day && !caLate(e) && !caStale(e) && !(e.month && e.month>t.slice(0,7))).sort((a,b)=>caPrRank(a)-caPrRank(b)||a.created-b.created);
   const doneByDay={}; all.filter(e=>e.done && e.doneAt).forEach(e=>{ (doneByDay[isoDate(new Date(e.doneAt))] ||= []).push(e); });
   const after=open.filter(e=>(e.day && e.day>days[6]) || (!e.day && e.month && e.month>t.slice(0,7))).length;
   const guessN=nod.filter(e=>caGuessOf(e).day).length;
@@ -6426,6 +6448,8 @@ function renderCaAgenda(){
     lateHtml+=`<section class="cw-tray over"><div class="cw-th">${IC.flag} Overdue <span class="n">${late.length}</span><small>call, move to a day, or tick</small></div><div class="cw-tl">${late.map(e=>caCardHtml(e,'late')).join('')}</div></section>`;
     lateHtml+=`</div>`;
   }
+  const old=open.filter(caStale).sort((a,b)=>String(b.day||b.month).localeCompare(String(a.day||a.month)));
+  const oldHtml= !old.length? '' : `<details class="cw-trays below cw-oldw"${caOldOpen?' open':''}><summary class="cw-tray old"><span class="cw-th">${IC.hourglass} Old — not answering <span class="n">${old.length}</span><small>over ${CA_STALE_DAYS} days late · not in Leads, Today or the badge · tap to ${caOldOpen?'hide':'show'}</small></span></summary><div class="cw-tray old in"><div class="cw-oldbar"><span>Call one more time if you like: <b>Today</b> puts it back on today · <b>✕</b> closes it.</span><button type="button" class="cw-oldall" data-oldall>Close all ${old.length}</button></div><div class="cw-tl">${old.map(e=>caCardHtml(e,'old')).join('')}</div></div></details>`;
   const nodHtml= !nod.length? '' : `<div class="cw-trays below"><section class="cw-tray nod" data-drop=""><div class="cw-th">${IC.hourglass} No day yet <span class="n">${nod.length}</span><small>drag onto a day, or tap the day shown on the card</small>${guessN?`<button type="button" class="cw-guessall" data-guessall>Put ${guessN===nod.length?'all '+guessN:guessN} on the day written in their text</button>`:''}</div><div class="cw-tl">${nod.map(e=>caCardHtml(e,'nod')).join('')}</div></section></div>`;
   if(!caMobDay || !days.includes(caMobDay)) caMobDay= days.includes(t)? t : days[0];
   h+=`<div class="cw-mtabs">${days.map(d=>{ const n=open.filter(e=>e.day===d).length; const dd=new Date(d+'T12:00'); return `<button type="button" data-mday="${d}" class="${d===caMobDay?'on':''}${d===t?' today':''}"><span>${DOW[caDowIdx(d)]}</span><b>${dd.getDate()}</b><i>${n||''}</i></button>`; }).join('')}</div>`;
@@ -6437,7 +6461,7 @@ function renderCaAgenda(){
       <div class="cw-dl">${items.map(e=>caCardHtml(e,'day')).join('')}${!items.length?`<div class="cw-empty">${past?'':'Nothing yet'}</div>`:''}</div>
     </section>`; }).join('')+`</div>`;
   if(after) h+=`<button type="button" class="cw-more" data-wk="1">${after} more after ${esc(caShort(days[6]))} → see the next 7 days</button>`;
-  h+=nodHtml+lateHtml;
+  h+=nodHtml+lateHtml+oldHtml;
   el.innerHTML=h;
   const map={}; all.forEach(e=>map[e.key]=e);
   el.querySelectorAll('.cw-card').forEach(c=>{ const e=map[c.dataset.k]; if(!e) return;
@@ -6453,6 +6477,11 @@ function renderCaAgenda(){
       else if(e.src==='cb' && e.day){ e.it.day=''; e.it.time=''; e.it.updated=Date.now(); save(); cbRefresh(); toast(e.name+' → no day yet'); } });
   });
   el.querySelectorAll('[data-mday]').forEach(b=>b.addEventListener('click',()=>{ caMobDay=b.dataset.mday; renderCaAgenda(); }));
+  const ow=el.querySelector('.cw-oldw'); if(ow) ow.addEventListener('toggle',()=>{ caOldOpen=ow.open; const sm=ow.querySelector('summary small'); if(sm) sm.textContent='over '+CA_STALE_DAYS+' days late · not in Leads, Today or the badge · tap to '+(ow.open?'hide':'show'); });
+  const oa=el.querySelector('[data-oldall]'); if(oa) oa.addEventListener('click',ev=>{ ev.preventDefault();
+    const back=[]; old.forEach(e=>{ if(e.src==='lead'){ back.push(['l',e.l,{...e.l.cb}]); delete e.l.cb; e.l.updated=Date.now(); } else { back.push(['c',e.it]); e.it.done=true; e.it.doneAt=Date.now(); } });
+    save(); cbRefresh(); try{ renderLeads(); }catch(x){}
+    toastUndo(back.length+' old callbacks closed', ()=>{ back.forEach(([k,o,cb])=>{ if(k==='l') o.cb=cb; else { o.done=false; o.doneAt=null; } }); save(); cbRefresh(); try{ renderLeads(); }catch(x){} }); });
   const mo=el.querySelector('.cw-more'); if(mo) mo.addEventListener('click',()=>{ caWeekOff++; caMobDay=''; renderCaTop(); renderCaAgenda(); window.scrollTo({top:($('#caTop').getBoundingClientRect().top+scrollY-90), behavior:'smooth'}); });
   const ga=el.querySelector('[data-guessall]'); if(ga) ga.addEventListener('click',()=>{
     const done=[]; nod.forEach(e=>{ const gs=caGuessOf(e); if(!gs.day) return;
@@ -6466,6 +6495,7 @@ function caAct(e, a, ev){
   if(a==='open') return caModal(e.key);
   if(a==='msg') return caModal(e.key, 'msg');
   if(a==='done') return caDoneEntry(e);
+  if(a==='revive') return caSetDay(e, todayIso(), '');
   if(a==='undone'){ if(e.src==='cb'){ e.it.done=false; e.it.doneAt=null; save(); cbRefresh(); } return; }
   if(a==='book') return caOutcome(e,'g');
   if(a==='no') return caOutcome(e,'r');
@@ -8758,7 +8788,7 @@ const LD_CB_MINS=['00','15','30','45'];
 function ldInMin(n){ const d=new Date(Date.now()+n*60000); d.setMinutes(Math.ceil(d.getMinutes()/5)*5,0,0); return {day:isoDate(d), time:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}; }
 const ldNowHM=()=>{ const n=new Date(); return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'); };
 const ldCbAt=l=>(l.cb&&l.cb.day)? l.cb.day+'T'+(l.cb.time||'00:00') : '';
-function ldCbDue(l){ if(!l.cb||!l.cb.day) return false; const t=todayIso(); if(l.cb.day!==t) return l.cb.day<t; return !l.cb.time || l.cb.time<=ldNowHM(); }
+function ldCbDue(l){ if(!l.cb||!l.cb.day) return false; const t=todayIso(); if(caStale({day:l.cb.day})) return false; if(l.cb.day!==t) return l.cb.day<t; return !l.cb.time || l.cb.time<=ldNowHM(); }
 function ldDayWord(d){ if(!d) return ''; const t=todayIso(); if(d===t) return 'today'; if(d===isoDate(new Date(Date.now()+864e5))) return 'tomorrow'; if(d===isoDate(new Date(Date.now()-864e5))) return 'yesterday'; const x=new Date(d+'T00:00'); return DOW[(x.getDay()+6)%7]+' '+fmtDay(d); }
 const ldCbLabel=l=>(l.cb.how==='sms'?'SMS ':l.cb.how==='email'?'E-mail ':'Call back ')+ldDayWord(l.cb.day)+(l.cb.time?' · '+l.cb.time:'');
 const ldPr=l=>l.pr!=null? +l.pr : 1e9;
@@ -9019,7 +9049,7 @@ function renderLdCbDay(){
   let el=$('#ldCbDay');
   if(!el){ const f=$('#ldFocus'); if(!f) return; el=document.createElement('section'); el.id='ldCbDay'; el.className='ld-cbday'; f.parentNode.insertBefore(el, f); }
   const t=todayIso();
-  const list=(state.leads||[]).filter(l=>l.cb && l.cb.day && l.cb.day<=t && ldOpen(l)).sort((a,b)=>ldCbAt(a).localeCompare(ldCbAt(b)));
+  const list=(state.leads||[]).filter(l=>l.cb && l.cb.day && l.cb.day<=t && !caStale({day:l.cb.day}) && ldOpen(l)).sort((a,b)=>ldCbAt(a).localeCompare(ldCbAt(b)));
   let own=[]; try{ own=caEntries().filter(e=>e.src==='cb' && caDue(e)).sort(caCmpDay); }catch(e){}
   el.classList.toggle('on', !!(list.length+own.length));
   if(!list.length && !own.length){ el.innerHTML=''; return; }
