@@ -2870,6 +2870,153 @@ body.dark .mn-mail b{color:#10141F;}
   .mq-pill{left:16px; right:16px; bottom:calc(84px + env(safe-area-inset-bottom)); max-width:none; justify-content:center;}
   .fu-row{flex-wrap:wrap;} .fu-tx{flex:1 1 calc(100% - 90px);} .fu-act{margin-left:auto;}
 }
+
+/* ===== Callbacks 3.0 (9 Oct 2026) — one list by DAY: who to call / text / e-mail today, tomorrow, every day after =====
+   Callbacks you write here or in Leads (a lead's «Call back» box) land in the same list. */
+.ca-top{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:12px;}
+@media(max-width:1100px){.ca-top{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:560px){.ca-top{grid-template-columns:repeat(3,1fr); gap:6px;}}
+.ca-cell{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 12px 9px; text-align:left; cursor:pointer; box-shadow:var(--shadow); transition:transform .12s, box-shadow .12s; min-width:0; font:inherit; color:var(--ink);}
+@media(hover:hover){.ca-cell:hover{transform:translateY(-1px); box-shadow:var(--shadow-lg);}}
+.ca-cell .k{font-size:10px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.ca-cell .v{font-family:'Sora'; font-weight:800; font-size:26px; line-height:1.1; letter-spacing:-.02em; font-variant-numeric:tabular-nums; margin-top:3px;}
+.ca-cell .s{font-size:11px; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.ca-cell.today{background:linear-gradient(135deg,#0F1A33,#1D3B8B); color:#fff; border-color:transparent;}
+.ca-cell.today .k,.ca-cell.today .s{color:rgba(255,255,255,.7);}
+.ca-cell.today .v{color:#fff; font-size:30px;}
+.ca-cell.over .v{color:var(--red);}
+.ca-cell.nod .v{color:#B86A00;}
+.ca-cell.done .v{color:var(--green);}
+.ca-cell.zero .v{opacity:.35;}
+
+/* quick add */
+.cq{padding:12px 14px; margin-bottom:12px;}
+.cq-h{display:flex; align-items:center; gap:8px; margin-bottom:9px; font-family:'Sora'; font-weight:700; font-size:13.5px;}
+.cq-h .ic{width:16px; height:16px; color:var(--brand);}
+.cq-h small{font-family:'Inter'; font-weight:500; font-size:12px; color:var(--muted);}
+.cq-h .cq-bell{margin-left:auto; font-size:11.5px; font-weight:700; padding:5px 10px; border-radius:9px; background:var(--blue-soft); color:var(--brand); border:none;}
+.cq-r{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+.cq-r + .cq-r{margin-top:8px;}
+.cq-r input[type=text],.cq-r input[type=tel],.cq-r input[type=email],.cq-r input[type=date],.cq-r input[type=time]{height:38px; border:1px solid var(--line); border-radius:10px; padding:0 11px; font:inherit; font-size:13.5px; background:var(--bg); color:var(--ink); min-width:0;}
+.cq-r input:focus{outline:2px solid var(--brand); outline-offset:-1px; background:var(--surface);}
+.cq-r .w-name{flex:1.1 1 220px;} .cq-r .w-note{flex:2 1 260px;} .cq-r .w-ph{flex:0 1 140px;} .cq-r .w-em{flex:0 1 210px;}
+.cq-seg{display:inline-flex; background:var(--bg); border:1px solid var(--line); border-radius:11px; padding:3px; gap:2px;}
+.cq-seg button{display:inline-flex; align-items:center; gap:5px; height:30px; padding:0 11px; border-radius:8px; font-size:12.5px; font-weight:700; color:var(--muted); background:transparent; border:none; white-space:nowrap; position:relative;}
+.cq-seg button .ic{width:14px; height:14px;}
+.cq-seg button.on{background:var(--surface); color:var(--ink); box-shadow:0 1px 4px rgba(16,24,40,.14);}
+.cq-seg button.on[data-how=call]{color:#0A8F5A;} .cq-seg button.on[data-how=sms]{color:var(--brand);} .cq-seg button.on[data-how=email]{color:#6B4CE6;}
+.cq-seg button.auto::after{content:''; position:absolute; top:4px; right:4px; width:6px; height:6px; border-radius:50%; background:var(--orange);}
+.cq-lbl{font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-left:4px;}
+.cq-r .cq-time{width:108px;} .cq-r .cq-date{width:150px;}
+.cq-hi{height:38px; padding:0 12px; border-radius:10px; font-size:12.5px; font-weight:800; border:1px solid var(--line); background:var(--bg); color:var(--muted); display:inline-flex; align-items:center; gap:6px;}
+.cq-hi i{width:8px; height:8px; border-radius:50%; background:currentColor; opacity:.5;}
+.cq-hi.on{background:var(--red-soft); color:var(--red); border-color:#FFC9D0;} .cq-hi.on i{opacity:1;}
+.cq-add{height:38px; padding:0 18px; border-radius:10px; background:var(--ink); color:#fff; font-weight:800; font-size:13.5px; border:none; margin-left:auto;}
+body.dark .cq-add{background:var(--brand);}
+.cq-guess{font-size:12px; color:#B86A00; font-weight:600; margin-top:7px; min-height:0;}
+.cq-guess:empty{display:none;}
+.cq-leads{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+.cq-leads:empty{display:none;}
+.cq-leads span{font-size:11.5px; color:var(--muted); align-self:center;}
+.cq-leads button{font-size:12px; font-weight:700; padding:5px 10px; border-radius:99px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
+.cq-leads button.on{background:var(--blue-soft); border-color:var(--brand); color:var(--brand);}
+
+/* the agenda */
+.ca-list{padding:6px 14px 14px;}
+.ca-g{margin-top:12px;}
+.ca-gh{display:flex; align-items:center; gap:8px; padding:8px 4px 7px; font-family:'Sora'; font-size:13px; font-weight:800; color:var(--ink); border-bottom:2px solid var(--line); margin-bottom:6px;}
+.ca-gh .n{font-size:11px; font-weight:800; border-radius:99px; padding:2px 9px; background:var(--bg); color:var(--muted);}
+.ca-gh small{font-family:'Inter'; font-weight:600; font-size:11.5px; color:var(--muted);}
+.ca-gh .ca-gact{margin-left:auto; font-family:'Inter'; font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:8px; background:var(--orange-soft); color:#B45D00; border:none;}
+.ca-g.over .ca-gh{color:var(--red); border-color:#FFC9D0;} .ca-g.over .ca-gh .n{background:var(--red-soft); color:var(--red);}
+.ca-g.today .ca-gh{color:var(--brand); border-color:var(--brand);} .ca-g.today .ca-gh .n{background:var(--brand); color:#fff;}
+.ca-g.nod .ca-gh{color:#B86A00; border-color:#FFE0BC;}
+.ca-g.done .ca-gh{color:var(--deep); cursor:pointer; border-color:var(--green-soft);}
+.ca-empty{font-size:12.5px; color:var(--muted); padding:6px 4px 2px;}
+
+.ca-it{display:grid; grid-template-columns:22px 58px minmax(0,1fr) auto; align-items:center; gap:10px; padding:8px 10px; border-radius:12px; margin-bottom:5px; background:var(--bg); border:1px solid transparent;}
+.ca-it.pr-high{box-shadow:inset 4px 0 0 var(--red);}
+.ca-it.pr-medium{box-shadow:inset 4px 0 0 var(--orange);}
+.ca-it.now{background:var(--blue-soft); border-color:#BFD3FF;}
+.ca-it.late{background:var(--red-soft); border-color:#FFC9D0;}
+.ca-it.hot{background:var(--green-soft); border-color:#B9EBD3;}
+.ca-it.tried{opacity:.72;}
+.ca-it.done{opacity:.5;} .ca-it.done .ca-nm{text-decoration:line-through;}
+body.dark .ca-it.now{border-color:#22386A;} body.dark .ca-it.late{border-color:#4A1A22;} body.dark .ca-it.hot{border-color:#1B4A36;}
+.ca-ck{width:22px; height:22px; border-radius:7px; border:2px solid var(--line); background:var(--surface); display:grid; place-items:center; color:#fff; padding:0;}
+.ca-ck .ic{width:13px; height:13px;}
+@media(hover:hover){.ca-ck:hover{border-color:var(--green);}}
+.ca-it.done .ca-ck{background:var(--green); border-color:var(--green);}
+.ca-when{font-family:'Sora'; font-weight:800; font-size:13px; color:var(--ink); line-height:1.15; font-variant-numeric:tabular-nums;}
+.ca-when small{display:block; font-family:'Inter'; font-size:10.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+.ca-it.now .ca-when{color:var(--brand);} .ca-it.late .ca-when{color:var(--red);}
+.ca-main{min-width:0;}
+.ca-l1{display:flex; align-items:center; gap:7px; min-width:0;}
+.ca-how{display:inline-flex; align-items:center; gap:4px; flex-shrink:0; font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px 2px 6px; border-radius:99px;}
+.ca-how .ic{width:12px; height:12px;}
+.ca-how.call{background:#DDF6EA; color:#0A7A4C;} .ca-how.sms{background:var(--blue-soft); color:var(--brand);} .ca-how.email{background:var(--violet-soft); color:#5B3FD0;}
+body.dark .ca-how.call{background:rgba(16,185,129,.16); color:#4BE8A0;}
+.ca-nm{font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; min-width:0;}
+.ca-tag{flex-shrink:0; font-size:10px; font-weight:800; padding:1px 7px; border-radius:99px; background:var(--surface); border:1px solid var(--line); color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
+.ca-tag.lead{color:var(--brand); border-color:#BFD3FF;}
+.ca-tag.hotl{color:#0A7A4C; border-color:#B9EBD3; background:#DDF6EA;}
+.ca-l2{display:flex; gap:4px 10px; align-items:center; font-size:12px; color:var(--muted); margin-top:2px; min-width:0; flex-wrap:nowrap;}
+.ca-l2 > *{white-space:nowrap; flex-shrink:0;}
+.ca-l2 .nt{flex:0 1 auto; min-width:30px; overflow:hidden; text-overflow:ellipsis;}
+.ca-l2 a{color:inherit; font-weight:600; text-decoration:none;}
+.ca-l2 .tr{font-size:10.5px; font-weight:700; padding:1px 7px; border-radius:99px; background:var(--yellow-soft); color:#8A6400;}
+.ca-acts{display:flex; align-items:center; gap:4px; flex-shrink:0;}
+.ca-acts > a,.ca-acts > button{display:inline-flex; align-items:center; gap:5px; height:30px; padding:0 10px; border-radius:9px; font-size:12px; font-weight:800; border:1px solid var(--line); background:var(--surface); color:var(--ink); white-space:nowrap; text-decoration:none; cursor:pointer;}
+.ca-acts .ic{width:14px; height:14px;}
+.ca-acts .go.call{background:#12B76A; border-color:#12B76A; color:#fff;}
+.ca-acts .go.sms{background:var(--brand); border-color:var(--brand); color:#fff;}
+.ca-acts .go.email{background:#6B4CE6; border-color:#6B4CE6; color:#fff;}
+.ca-acts .ok{color:#0A7A4C;} .ca-acts .no{color:var(--red);} .ca-acts .na{color:#8A6400;}
+.ca-acts .ico{padding:0 8px;}
+.ca-acts .sep{width:1px; height:20px; background:var(--line); margin:0 2px; padding:0; border:none;}
+@media(hover:hover){.ca-acts > a:hover,.ca-acts > button:hover{border-color:var(--ink);} .ca-acts .go:hover{filter:brightness(1.08);}}
+@media(max-width:1180px){
+  .ca-it{grid-template-columns:22px 52px minmax(0,1fr);}
+  .ca-acts{grid-column:2 / -1; flex-wrap:wrap;}
+}
+@media(max-width:560px){
+  .ca-it{grid-template-columns:22px 46px minmax(0,1fr); gap:8px; padding:9px 8px;}
+  .ca-acts{grid-column:1 / -1;}
+  .ca-acts > a,.ca-acts > button{height:34px;}
+  .ca-l2{flex-wrap:wrap;}
+}
+
+/* small panels that open under a row: move · message · edit */
+.ca-pop{grid-column:1 / -1; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-top:2px; display:flex; flex-direction:column; gap:8px;}
+.ca-pop .row{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+.ca-pop .lbl{font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted);}
+.ca-pop button,.ca-pop a.b{height:32px; padding:0 11px; border-radius:9px; font-size:12.5px; font-weight:700; border:1px solid var(--line); background:var(--bg); color:var(--ink); display:inline-flex; align-items:center; gap:5px; text-decoration:none; white-space:nowrap;}
+.ca-pop button.on{background:var(--blue-soft); border-color:var(--brand); color:var(--brand);}
+.ca-pop button.pri,.ca-pop a.pri{background:var(--brand); color:#fff; border-color:var(--brand);}
+.ca-pop button.x{margin-left:auto; color:var(--muted);}
+.ca-pop button.del{color:var(--red);}
+.ca-pop .ic{width:14px; height:14px;}
+.ca-pop input{height:34px; border:1px solid var(--line); border-radius:9px; padding:0 10px; font:inherit; font-size:13px; background:var(--bg); color:var(--ink); min-width:0;}
+.ca-pop textarea{width:100%; min-height:118px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; font-size:13.5px; line-height:1.45; background:var(--bg); color:var(--ink); resize:vertical; box-sizing:border-box;}
+.ca-pop .hint{font-size:11.5px; color:var(--muted);}
+
+/* Leads: «＋ Callback» bar and the how-chips in a lead's call-back box */
+.ld-cbq{margin:0 0 12px;}
+.ld-cbq[hidden]{display:none;}
+.ld-edit .row .how-on{background:var(--blue-soft)!important; color:var(--brand)!important; border-color:var(--brand)!important;}
+.ld-cbday .it .hw{font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--brand);}
+@media(max-width:560px){
+  .ca-top{display:flex; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-bottom:2px;}
+  .ca-top::-webkit-scrollbar{display:none;}
+  .ca-cell{flex:0 0 112px;}
+  .cq-h small{display:none;}
+  .cq-h{flex-wrap:wrap;} .cq-h .cq-bell{font-size:11px; padding:5px 8px; margin-left:0; flex-basis:100%; text-align:left;}
+  .cq-seg[data-cqday]{max-width:100%; overflow-x:auto; scrollbar-width:none;}
+  .cq-seg[data-cqday]::-webkit-scrollbar{display:none;}
+  .cq-r .w-ph{flex:1 1 120px;}
+  .cq-r .cq-date{flex:1 1 130px;} .cq-r .cq-time{flex:1 1 100px;}
+  .ca-list{padding:4px 10px 12px;}
+}
 </style>
 </head>
 <body class="locked">
@@ -2907,7 +3054,7 @@ body.dark .mn-mail b{color:#10141F;}
       <button class="tab" data-view="calendar">Calendar</button>
       <button class="tab" data-view="todo">To Do</button>
       <button class="tab" data-view="ideas">Ideas</button>
-      <button class="tab" data-view="callbacks">Callbacks</button>
+      <button class="tab" data-view="callbacks">Callbacks<span class="tab-n" id="cbTabN" hidden>0</span></button>
       <button class="tab" data-view="monthly">Monthly</button>
       <button class="tab" data-view="renewals">Renewals</button>
       <button class="tab" data-view="remaining">Remaining</button>
@@ -3294,53 +3441,9 @@ body.dark .mn-mail b{color:#10141F;}
 
 <!-- CALLBACKS -->
 <main class="view" id="view-callbacks">
-  <div class="cb-banner" id="cbBanner"></div>
-  <section class="panel cb-prio" id="cbPrioPanel">
-      <div class="panel-head">
-        <div class="ico" style="background:var(--red-soft);color:var(--red)" data-ic="flag"></div>
-        <div><h3>Call first</h3><p>Your next calls — drag anyone here from the lists below, or type a name</p></div>
-        <div class="cb-head-n" id="prioHeadN"><b>0</b><small>to call</small></div>
-      </div>
-      <div class="panel-form">
-        <input class="grow" id="prioName" placeholder="Name">
-        <input id="prioPhone" placeholder="Phone" style="width:125px;">
-        <input class="grow" id="prioNote" placeholder="Why first — e.g. asked me to call back today">
-        <button id="prioAdd">Add</button>
-      </div>
-      <div class="panel-body" id="prioList"></div>
-    </section>
-  <div class="cb-grid">
-    <section class="panel">
-      <div class="panel-head">
-        <div class="ico" style="background:var(--orange-soft);color:var(--orange)" data-ic="fire"></div>
-        <div><h3>Warm leads — call back</h3><p>Interested people to chase in the next days · oldest first</p></div>
-        <div class="cb-head-n" id="warmHeadN"><b>0</b><small>left to call</small></div>
-      </div>
-      <div class="panel-form">
-        <input class="grow" id="warmName" placeholder="Name">
-        <input id="warmPhone" placeholder="Phone" style="width:125px;">
-        <input class="grow" id="warmNote" placeholder="Note — e.g. call Tuesday after 5">
-        <button id="warmAdd">Add</button>
-      </div>
-      <div class="panel-body" id="warmList"></div>
-    </section>
-    <section class="panel">
-      <div class="panel-head">
-        <div class="ico" style="background:var(--violet-soft);color:var(--violet)" data-ic="calendar"></div>
-        <div><h3>Scheduled callbacks</h3><p>"Call me in October" — overdue first, then this month, then later</p></div>
-        <div class="cb-head-n" id="schedHeadN"><b>0</b><small>to call</small></div>
-      </div>
-      <div class="panel-form">
-        <input class="grow" id="schedName" placeholder="Name">
-        <input id="schedPhone" placeholder="Phone" style="width:125px;">
-        <input type="month" id="schedMonth" style="width:150px;" title="Month to call them in">
-        <input class="grow" id="schedNote" placeholder="Note (optional)">
-        <button id="schedAdd">Add</button>
-      </div>
-      <div class="cb-chips" id="schedChips"></div>
-      <div class="panel-body" id="schedList"></div>
-    </section>
-  </div>
+  <div class="ca-top" id="caTop"></div>
+  <section class="panel cq" id="caQuick"></section>
+  <section class="panel ca-panel"><div class="ca-list" id="caAgenda"></div></section>
 </main>
 
 <!-- LEADS — cold-calling list with one-tap outcomes (13 Sept 2026) -->
@@ -3357,11 +3460,13 @@ body.dark .mn-mail b{color:#10141F;}
       <option value="name">Name A–Ω</option>
     </select>
     <div class="ld-import">
+      <button class="btn btn-ghost" id="ldCbNew" title="Write a callback — it goes straight into Callbacks on its day">＋ Callback</button>
       <button class="btn btn-ghost" id="ldPull" title="Fetch new leads from the weekly harvest">Pull new leads</button>
       <button class="btn btn-ghost" id="ldImport" title="Import a CSV (name, spec, phone, city, address, reviews, url)">Import CSV</button>
       <input type="file" id="ldImportFile" accept=".csv,text/csv" style="display:none">
     </div>
   </div>
+  <section class="panel cq ld-cbq" id="ldCbQuick" hidden></section>
   <div class="ld-lists" id="ldLists"></div>
   <section class="ld-focus" id="ldFocus"></section>
   <div class="ld-grid">
@@ -5996,19 +6101,6 @@ $('#qlDate').addEventListener('change',()=>{
 
 /* ---------- callbacks 2.0 — exact numbers on top, three groups, one-tap outcomes ---------- */
 const cbMonthKey=()=>todayIso().slice(0,7);
-/* The numbers: warm leads not yet called + scheduled ones overdue or due this month = "left to call now" */
-function cbCounts(){
-  const cm=cbMonthKey();
-  const warm=state.warm||[], sched=state.sched||[];
-  const warmLeft=warm.filter(w=>!w.done).length, warmDone=warm.filter(w=>w.done).length;
-  const open=sched.filter(s=>!s.done);
-  const over=open.filter(s=>s.month && s.month<cm).length;
-  const cur=open.filter(s=>s.month===cm).length;
-  const later=open.filter(s=>!s.month || s.month>cm).length;
-  const schedDone=sched.filter(s=>s.done).length;
-  const prio=(state.prio||[]).filter(p=>!p.done).length, prioDone=(state.prio||[]).filter(p=>p.done).length;
-  return { warmLeft, warmDone, over, cur, later, schedDone, prio, now:prio+warmLeft+over+cur, called:warmDone+schedDone+prioDone, total:warm.length+sched.length+(state.prio||[]).length };
-}
 const cbWaitDays=t=>Math.max(0,Math.floor((Date.now()-(t||Date.now()))/864e5));
 /* 22 Sept 2026 — priority per callback (high / medium / low) and «No answer» with the days you tried */
 const CB_PR={high:['High',0],medium:['Medium',1],low:['Low',3]}; const CB_PR_NEXT={'':'high',high:'medium',medium:'low',low:''};
@@ -6021,22 +6113,6 @@ function cbNoAnswer(item, listName){
   save(); cbRefresh();
   toastUndo(item.name+' → no answer · tried '+item.tries.length+(item.tries.length===1?' time':' times')+' — stays in the list', ()=>{ item.tries.pop(); save(); cbRefresh(); });
 }
-let cbDrag=null;
-function renderCbBanner(){
-  const el=$('#cbBanner'); if(!el) return;
-  const n=cbCounts();
-  const pct=n.total? Math.round(n.called/n.total*100):0;
-  const mn=MONTHS[+cbMonthKey().slice(5,7)-1];
-  el.innerHTML=`
-    <div class="cell now"><div class="k">${IC.flag} Call first</div><div class="big">${n.prio}</div><div class="sub">${n.now} waiting in total</div></div>
-    <div class="cell"><div class="k">${IC.phone} Left to call now</div><div class="big">${n.now}</div><div class="sub">${n.warmLeft} warm · ${n.over} overdue · ${n.cur} due in ${mn}</div></div>
-    <div class="cell"><div class="k">${IC.fire} Warm leads</div><div class="big">${n.warmLeft}</div><div class="sub">${n.warmDone} already called</div></div>
-    <div class="cell over"><div class="k">${IC.flag} Overdue</div><div class="big">${n.over}</div><div class="sub">from earlier months</div></div>
-    <div class="cell"><div class="k">${IC.calendar} Due in ${mn}</div><div class="big">${n.cur}</div><div class="sub">said «call me this month»</div></div>
-    <div class="cell"><div class="k">${IC.clock} Later</div><div class="big">${n.later}</div><div class="sub">coming months</div></div>
-    <div class="cell done"><div class="k">${IC.check} Called</div><div class="big">${n.called}<span style="font-size:15px;opacity:.6;"> / ${n.total}</span></div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
-}
-function cbRefresh(){ renderPrio(); renderWarm(); renderSched(); renderHome(); }
 /* One-tap outcome: Booked / No writes the call into Quick Log for today (so the statistics stay honest) and ticks the callback */
 function cbOutcome(item, listName, type){
   const date=todayIso();
@@ -6048,169 +6124,444 @@ function cbOutcome(item, listName, type){
   save(); renderAll();
   toast(type==='g'? item.name+' → Booked · on the Board (add € and the meeting time in Quick Log)' : item.name+' → No · logged for today');
 }
-function cbItemEl(item, cls, listName){
-  const row=document.createElement('div'); row.className='cb-item '+cls+(item.done?' done':'');
-  if(!item.done){
-    row.draggable=true;
-    row.addEventListener('dragstart',e=>{ cbDrag={list:listName,id:item.id}; row.classList.add('dragging'); try{e.dataTransfer.setData('text/plain',item.name);}catch(err){} });
-    row.addEventListener('dragend',()=>{ row.classList.remove('dragging'); setTimeout(()=>{cbDrag=null;},80); });
-  }
-  const wait=cbWaitDays(item.created);
-  const meta=[];
-  if(item.note) meta.push(`<span class="w-note" title="${esc(item.note)}">${esc(item.note)}</span>`);
-  if(item.phone) meta.push(`<a class="w-phone" href="tel:${esc(item.phone)}">${IC.phone}${esc(item.phone)}</a>`);
-  if(listName==='warm' && !item.done) meta.push(`<span class="w-wait${wait>=7?' hot':''}">${wait===0?'added today':wait===1?'waiting 1 day':'waiting '+wait+' days'}</span>`);
-  if(listName==='sched' && !item.done && cls==='over') meta.push(`<span class="w-wait hot">was due ${item.month?fmtMonth(item.month):'—'}</span>`);
-  if(Array.isArray(item.tries) && item.tries.length){ const n=item.tries.length; meta.push(`<span class="w-wait na${n>=3?' hot':''}" title="Called, no answer">${IC.hourglass} no answer ${item.tries.map(fmtDay).join(', ')} · ${n} ${n===1?'try':'tries'}</span>`); }
-  if(item.done && item.doneAt) meta.push(`<span class="w-wait">called ${fmtDay(isoDate(new Date(item.doneAt)))}</span>`);
-  const pr=CB_PR[item.pr]?item.pr:'';
-  if(pr) row.classList.add('pr-'+pr);
-  row.innerHTML=`<button class="w-check" title="${item.done?'Not called yet — put it back':'Mark called'}">${item.done?IC.check:''}</button>
-    <div class="w-main"><div class="w-name">${item.done||!pr?'':`<button class="cb-pr ${pr}" title="Priority: ${CB_PR[pr][0]} — click to change (High → Medium → Low → none)"><i></i>${CB_PR[pr][0]}</button>`}${esc(item.name)}</div>${meta.length?`<div class="w-meta">${meta.join('')}</div>`:''}</div>
-    <div class="cb-acts">
-      ${item.done?'':`<button class="a-book" title="They said yes — logs a Booked call for today and adds them to the Board">${IC.check}Booked</button>
-      <button class="a-no" title="They said no — logs the no for today">${IC.x}No</button>
-      <button class="a-na" title="Didn't answer — keeps them in the list with today's date">${IC.hourglass}No answer</button>
-      ${pr?'':`<button class="a-pr" title="Give this call a priority (High → Medium → Low)">${IC.flag}Priority</button>`}
-      ${listName==='sched'?`<button class="a-now" title="Call in the next days — move to Warm leads">${IC.fire}Now</button>`:`<button class="a-later" title="Not now — move to Scheduled callbacks for a later month">${IC.calendar}Later</button>`}`}
-      <button class="a-x" title="Remove">${IC.x}</button>
-    </div>`;
-  row.querySelector('.w-check').addEventListener('click',()=>{ item.done=!item.done; item.doneAt=item.done?Date.now():null; save(); cbRefresh(); });
-  row.querySelector('.a-x').addEventListener('click',()=>{ state[listName]=state[listName].filter(x=>x.id!==item.id); save(); cbRefresh(); });
-  const bk=row.querySelector('.a-book'); if(bk) bk.addEventListener('click',()=>cbOutcome(item, listName, 'g'));
-  const no=row.querySelector('.a-no'); if(no) no.addEventListener('click',()=>cbOutcome(item, listName, 'r'));
-  const na=row.querySelector('.a-na'); if(na) na.addEventListener('click',()=>cbNoAnswer(item, listName));
-  row.querySelectorAll('.cb-pr,.a-pr').forEach(pb=>{ pb.addEventListener('mousedown',e=>e.stopPropagation()); pb.addEventListener('click',e=>{ e.stopPropagation(); const nx=CB_PR_NEXT[item.pr||'']; if(nx) item.pr=nx; else delete item.pr; item.updated=Date.now(); save(); cbRefresh(); toast(item.name+(nx?' · priority '+CB_PR[nx][0]:' · priority cleared')); }); });
-  const lt=row.querySelector('.a-later'); if(lt) lt.addEventListener('click',()=>{
-    const cm=cbMonthKey(); const [y,m]=cm.split('-').map(Number); const next=(m===12?(y+1)+'-01':y+'-'+pad(m+1));
-    const v=prompt('Call '+item.name+' in which month? (YYYY-MM)', next); if(v===null) return;
-    const mk=v.trim(); if(!/^\d{4}-\d{2}$/.test(mk)){ toast('Write the month like 2026-10'); return; }
-    state[listName]=state[listName].filter(x=>x.id!==item.id);
-    state.sched.push({id:uid(), name:item.name, phone:item.phone||'', month:mk, note:item.note||'', done:false, created:Date.now(), ...(item.pr?{pr:item.pr}:{}), ...(item.tries&&item.tries.length?{tries:item.tries.slice()}:{})});
-    save(); cbRefresh(); toast(item.name+' → call in '+fmtMonth(mk));
-  });
-  const nw=row.querySelector('.a-now'); if(nw) nw.addEventListener('click',()=>{
-    state[listName]=state[listName].filter(x=>x.id!==item.id);
-    state.warm.push({id:uid(), name:item.name, phone:item.phone||'', note:item.note||'', done:false, created:Date.now(), ...(item.pr?{pr:item.pr}:{}), ...(item.tries&&item.tries.length?{tries:item.tries.slice()}:{})});
-    save(); cbRefresh(); toast(item.name+' → warm leads · call in the next days');
-  });
-  return row;
+/* ---------- CALLBACKS 3.0 (9 Oct 2026) — one list by DAY ----------
+   Angelo: «organize it so I can see each day which one I have to call; some I remind with an SMS / e-mail; super quick and easy;
+   synced with Leads; an option in Leads to write it so it goes in Callbacks; reminders when the day / time comes».
+   • Storage stays where it was (state.prio / state.warm / state.sched — every report, the brief, Home and the backup keep working);
+     each entry now also carries day (YYYY-MM-DD), time (HH:MM, optional), how ('call' | 'sms' | 'email') and email.
+     New ones go into state.prio. Leads keep their own call-back on the lead (l.cb = {day, time, how}) and show here too.
+   • The agenda: Overdue → Today (by time) → Tomorrow → every day of the next two weeks → Later (by month) → No day yet → Done.
+   • One-tap actions per row: Call / SMS / E-mail (with a ready Greek text), Booked · No · No answer (→ next working day) · Sent,
+     Move (+1 h · tomorrow · weekdays · any date), edit, phone-calendar reminder.
+   • Reminders: the tab badge (overdue + today), a toast + a computer notification when a time comes, one «today's callbacks»
+     ping in the morning, the once-a-day «Today» window, Leads' «Call-backs today» strip, and the morning brief (Telegram). */
+const CA_HOW={call:['Call','phone'], sms:['SMS','message'], email:['E-mail','mail']};
+const CA_LISTS=['prio','warm','sched'];
+const CA_BOOK_LINK='https://advonmedia.com/dorean';
+let caOpen={id:'', kind:''};             /* which row has its small panel open: move | msg | edit */
+let caDoneOpen=false;
+let caQ={how:'call', day:'', time:'', pr:'', howAuto:false, dayAuto:false, timeAuto:false, lead:''};
+const caAddDays=(iso,n)=>{ const d=new Date(iso+'T12:00'); d.setDate(d.getDate()+n); return isoDate(d); };
+const caDowIdx=iso=>(new Date(iso+'T12:00').getDay()+6)%7;   /* 0 = Monday */
+const caNextWork=iso=>{ let d=caAddDays(iso,1); while(caDowIdx(d)>4) d=caAddDays(d,1); return d; };
+const caDayName=iso=>{ const t=todayIso(); if(iso===t) return 'Today'; if(iso===caAddDays(t,1)) return 'Tomorrow'; if(iso===caAddDays(t,-1)) return 'Yesterday';
+  const d=new Date(iso+'T12:00'); return ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][caDowIdx(iso)]+' '+d.getDate()+' '+MONTHS[d.getMonth()].slice(0,3); };
+const caShort=iso=>{ const d=new Date(iso+'T12:00'); return DOW[caDowIdx(iso)]+' '+d.getDate()+'/'+(d.getMonth()+1); };
+const caNowHM=()=>{ const n=new Date(); return pad(n.getHours())+':'+pad(n.getMinutes()); };
+const caTel=p=>{ const s=String(p||'').replace(/[^\d+]/g,''); if(!s) return ''; if(s[0]==='+') return s; if(s.startsWith('00')) return '+'+s.slice(2); if(/^(69|2)\d{8}$/.test(s)) return '+30'+s; return s; };
+function caWeekdayDays(n){ const out=[]; const t=todayIso(); out.push({k:t,t:'Today'}); out.push({k:caAddDays(t,1),t:'Tomorrow'}); let d=caAddDays(t,1); while(out.length<n){ d=caAddDays(d,1); if(caDowIdx(d)>4) continue; out.push({k:d,t:caShort(d)}); } return out; }
+
+/* «CALL DEYTERA», «ON SUNDAY», «FROM 12/10», «send again…», «στις 17:00» → a day, a time and how, read from the text */
+const caW=alts=>new RegExp('(?<![\\p{L}\\d])('+alts+')(?![\\p{L}\\d])','gu');
+const CA_DAYW=[['δευτερα|deytera|deutera|deftera|monday|mon',0],['τριτη|triti|tuesday|tue',1],['τεταρτη|tetarti|wednesday|wed',2],['πεμπτη|pempti|pemti|thursday|thu',3],['παρασκευη|paraskevi|paraskeui|friday|fri',4],['σαββατο|savvato|sabbato|savato|saturday|sat',5],['κυριακη|kyriaki|kuriaki|kiriaki|sunday|sun',6]];
+function caGuess(text, refIso){
+  const raw=String(text||''); if(!raw.trim()) return {};
+  const s=raw.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ς/g,'σ');
+  const ref=refIso||todayIso(); const hits=[];
+  const ty=+ref.slice(0,4);
+  const reDate=/(?<!\d)(\d{1,2})\s*\/\s*(\d{1,2})(?:\s*\/\s*(\d{2,4}))?(?!\d)/g; let m;
+  while((m=reDate.exec(s))){ const dd=+m[1], mm=+m[2]; if(dd<1||dd>31||mm<1||mm>12) continue; const y=m[3]?(+m[3]<100?2000+(+m[3]):+m[3]):ty;
+    let iso=y+'-'+pad(mm)+'-'+pad(dd); if(!m[3] && iso<caAddDays(ref,-60)) iso=(y+1)+'-'+pad(mm)+'-'+pad(dd); hits.push({at:m.index, day:iso}); }
+  CA_DAYW.forEach(([alts,idx])=>{ const r=caW(alts); let x; while((x=r.exec(s))){ let d=caAddDays(ref,1); while(caDowIdx(d)!==idx) d=caAddDays(d,1);
+    if(caDowIdx(ref)===idx && caW('this|σημερα|simera|today|αυτη|auth|afti').test(s.slice(Math.max(0,x.index-12),x.index))) d=ref; hits.push({at:x.index, day:d}); } });
+  [['αυριο|avrio|aurio|tomorrow',1],['σημερα|simera|today',0],['μεθαυριο|methavrio|methaurio',2]].forEach(([alts,n])=>{ const x=caW(alts).exec(s); if(x) hits.push({at:x.index, day:caAddDays(ref,n)}); });
+  hits.sort((a,b)=>a.at-b.at);
+  const out={}; if(hits.length) out.day=hits[0].day;
+  const s2=s.replace(reDate,' ');
+  const tm=/(?<!\d)([01]?\d|2[0-3])[:.]([0-5]\d)(?!\d)/.exec(s2);
+  if(tm) out.time=pad(+tm[1])+':'+tm[2];
+  else { const t2=new RegExp('(?<![\\p{L}\\d])(?:at|στισ|stis|meta tis|μετα τισ|after)\\s*([1-9]|1[0-2])(?!\\d)','u').exec(s2); if(t2){ let h=+t2[1]; if(h<9) h+=12; out.time=pad(h)+':00'; } }
+  const sentAlready=caW('sent|εστειλα|esteila|steilame|στειλαμε');
+  if(caW('email|e-mail|mail|εμαιλ|ημειλ|ιμειλ').test(s) && !sentAlready.test(s)) out.how='email';
+  else if(caW('sms|μηνυμα|minima|send|στειλε|steile|στειλω|steilw|steilo|viber').test(s)) out.how='sms';
+  return out;
 }
-function cbCalledGroup(items, listName){
-  const g=document.createElement('div'); g.className='cb-group';
-  state.meta||={};
-  const open=!!state.meta['cbCalledOpen_'+listName];
-  g.innerHTML=`<div class="cb-group-h calledh" title="${open?'Hide':'Show'} the called ones">${IC.check2} Called <span class="n">${items.length}</span><button class="cb-clear" title="Remove every called entry from this list">Clear called</button></div>`;
-  const h=g.querySelector('.cb-group-h');
-  h.addEventListener('click',e=>{ if(e.target.closest('.cb-clear')) return; state.meta['cbCalledOpen_'+listName]=!open; save(); listName==='warm'?renderWarm():renderSched(); });
-  h.querySelector('.cb-clear').addEventListener('click',()=>{ if(!confirm('Remove the '+items.length+' called entries? The calls stay in Quick Log.')) return; state[listName]=state[listName].filter(x=>!x.done); save(); cbRefresh(); });
-  if(open) items.forEach(it=>g.appendChild(cbItemEl(it,'done',listName)));
+
+/* every open callback — from the callback lists and from Leads — in one shape */
+function caEntries(withDone){
+  const out=[]; const t=todayIso();
+  CA_LISTS.forEach(list=>(state[list]||[]).forEach(it=>{
+    if(it.done && !(withDone && it.doneAt && Date.now()-it.doneAt<7*864e5)) return;
+    out.push({key:list+':'+it.id, src:'cb', list, it, name:it.name, phone:it.phone||'', email:it.email||'', note:it.note||'',
+      day:it.day||'', time:it.time||'', how:CA_HOW[it.how]?it.how:'call', pr:it.pr||'', tries:Array.isArray(it.tries)?it.tries:[], month:(!it.day && it.month)?it.month:'',
+      created:it.created||0, done:!!it.done, doneAt:it.doneAt||0});
+  }));
+  try{ (state.leads||[]).forEach(l=>{ if(!l.cb || !l.cb.day || !ldOpen(l)) return;
+    out.push({key:'lead:'+l.id, src:'lead', l, name:l.name, phone:l.phone||'', email:l.email||'', note:l.memo||'', day:l.cb.day, time:l.cb.time||'',
+      how:CA_HOW[l.cb.how]?l.cb.how:'call', pr:l.hot?'high':'', hot:!!l.hot, tries:l.tries||[], sub:[ldSpecShort(l), l.city].filter(Boolean).join(' · '), created:l.created||0}); }); }catch(e){}
+  return out;
+}
+const caDue=e=>!e.done && ((e.day && e.day<=todayIso()) || (!e.day && e.month && e.month<todayIso().slice(0,7)));
+const caIsNow=e=>e.day===todayIso() && e.time && e.time<=caNowHM();
+const caPrRank=e=>({high:0, medium:1, low:3}[e.pr] ?? 2);
+const caCmpDay=(a,b)=>((a.time?0:1)-(b.time?0:1)) || String(a.time).localeCompare(String(b.time)) || (caPrRank(a)-caPrRank(b)) || ((a.tries.includes(todayIso())?1:0)-(b.tries.includes(todayIso())?1:0)) || (a.created-b.created);
+function caGroups(){
+  const t=todayIso(), cm=t.slice(0,7), end=caAddDays(t,13);
+  const all=caEntries(true); const open=all.filter(e=>!e.done);
+  const g={over:[], today:[], days:{}, later:{}, nod:[], done:all.filter(e=>e.done).sort((a,b)=>b.doneAt-a.doneAt)};
+  open.forEach(e=>{
+    if(e.day){ if(e.day<t) g.over.push(e); else if(e.day===t) g.today.push(e); else if(e.day<=end) (g.days[e.day] ||= []).push(e); else (g.later[e.day.slice(0,7)] ||= []).push(e); }
+    else if(e.month && e.month<cm) g.over.push(e);
+    else if(e.month && e.month>cm) (g.later[e.month] ||= []).push(e);
+    else g.nod.push(e);
+  });
+  g.over.sort((a,b)=>String(a.day||a.month).localeCompare(String(b.day||b.month)) || caCmpDay(a,b));
+  g.today.sort(caCmpDay); Object.values(g.days).forEach(a=>a.sort(caCmpDay)); Object.values(g.later).forEach(a=>a.sort((a,b)=>String(a.day||'').localeCompare(String(b.day||''))||caCmpDay(a,b)));
+  g.nod.sort((a,b)=>caPrRank(a)-caPrRank(b) || a.created-b.created);
   return g;
 }
-function renderWarm(){
-  const el=$('#warmList'); if(!el) return; el.innerHTML='';
-  state.warm||=[];
-  const open=cbSort(state.warm.filter(w=>!w.done),(a,b)=>(a.created||0)-(b.created||0));
-  const done=state.warm.filter(w=>w.done).sort((a,b)=>(b.doneAt||0)-(a.doneAt||0));
-  const hn=$('#warmHeadN'); if(hn) hn.innerHTML=`<b>${open.length}</b><small>left to call</small>`;
-  if(!open.length && !done.length){ el.innerHTML='<div class="empty-note">No warm leads waiting. Nice and clean.</div>'; renderCbBanner(); return; }
-  if(open.length){
-    const g=document.createElement('div'); g.className='cb-group';
-    g.innerHTML=`<div class="cb-group-h warmh">${IC.fire} To call — oldest waiting first <span class="n">${open.length}</span></div>`;
-    open.forEach(w=>g.appendChild(cbItemEl(w,'warm','warm')));
-    el.appendChild(g);
-  } else el.innerHTML='<div class="empty-note">Everyone called. Nice and clean.</div>';
-  if(done.length) el.appendChild(cbCalledGroup(done,'warm'));
-  renderCbBanner();
+/* the numbers every other part of the CRM reads (Home «Calls to make», the brief, the cold-call game) */
+function cbCounts(){
+  const t=todayIso(), cm=t.slice(0,7); const g=caGroups();
+  const tomorrow=(g.days[caAddDays(t,1)]||[]).length;
+  const week=Object.keys(g.days).filter(k=>k<=caAddDays(t,6)).reduce((a,k)=>a+g.days[k].length,0);
+  const later=Object.values(g.days).reduce((a,x)=>a+x.length,0)+Object.values(g.later).reduce((a,x)=>a+x.length,0);
+  const warm=state.warm||[], sched=state.sched||[], prio=state.prio||[];
+  const doneWeek=g.done.length;
+  return { over:g.over.length, today:g.today.length, tomorrow, week, later, nod:g.nod.length, doneWeek,
+    due:g.over.length+g.today.length, now:g.over.length+g.today.length+g.nod.length,
+    warmLeft:warm.filter(w=>!w.done).length, warmDone:warm.filter(w=>w.done).length,
+    cur:sched.filter(s=>!s.done && (s.day?s.day.slice(0,7)===cm:s.month===cm)).length, schedDone:sched.filter(s=>s.done).length,
+    prio:prio.filter(p=>!p.done).length, called:[...warm,...sched,...prio].filter(x=>x.done).length, total:warm.length+sched.length+prio.length };
 }
-$('#warmAdd').addEventListener('click',()=>{
-  const name=$('#warmName').value.trim(); if(!name){ $('#warmName').focus(); return; }
-  state.warm.push({id:uid(), name, phone:$('#warmPhone').value.trim(), note:$('#warmNote').value.trim(), done:false, created:Date.now()});
-  ['#warmName','#warmPhone','#warmNote'].forEach(s=>$(s).value='');
-  save(); cbRefresh(); toast('Warm lead saved'); $('#warmName').focus();
-});
-['warmName','warmPhone','warmNote'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#warmAdd').click();}));
 
-/* month chips under the form — one tap instead of typing a month */
-function renderSchedChips(){
-  const el=$('#schedChips'); if(!el) return;
-  const cm=cbMonthKey(); const [y,m]=cm.split('-').map(Number);
-  const keys=[0,1,2,3,4,5].map(k=>{ const mm=m+k; const yy=y+Math.floor((mm-1)/12); const m2=((mm-1)%12)+1; return yy+'-'+pad(m2); });
-  const cur=$('#schedMonth').value;
-  el.innerHTML='<span>Call in</span>'+keys.map((k,i)=>`<button type="button" data-m="${k}" class="${cur===k?'on':''}" title="${fmtMonth(k)}">${i===0?'This month':i===1?'Next month':MONTHS[+k.slice(5,7)-1].slice(0,3)+' '+k.slice(2,4)}</button>`).join('');
-  el.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ $('#schedMonth').value=b.dataset.m; renderSchedChips(); $('#schedName').focus(); }));
+/* ---------- writing to an entry ---------- */
+function caFind(key){ return caEntries(true).find(e=>e.key===key); }
+function caSetDay(e, day, time, silent){
+  if(e.src==='lead'){ e.l.cb={...(e.l.cb||{}), day, time:time||''}; e.l.updated=Date.now(); try{ ldCbPinged.delete(e.l.id+'@'+day+(time||'')); }catch(x){} }
+  else { e.it.day=day; e.it.time=time||''; if(day) e.it.month=day.slice(0,7); e.it.updated=Date.now(); }
+  caOpen={id:'',kind:''}; save(); cbRefresh();
+  if(!silent) toast(e.name+' → '+caDayName(day)+(time?' · '+time:''));
 }
-function renderSched(){
-  const el=$('#schedList'); if(!el) return; el.innerHTML='';
-  state.sched||=[];
-  renderSchedChips();
-  const cm=cbMonthKey();
-  const open=state.sched.filter(s=>!s.done);
-  const done=state.sched.filter(s=>s.done).sort((a,b)=>(b.doneAt||0)-(a.doneAt||0));
-  const hn=$('#schedHeadN'); if(hn) hn.innerHTML=`<b>${open.length}</b><small>to call</small>`;
-  if(!open.length && !done.length){ el.innerHTML='<div class="empty-note">Nothing scheduled. Add the "call me in October" people here.</div>'; renderCbBanner(); return; }
-  const over=cbSort(open.filter(s=>s.month && s.month<cm),(a,b)=>String(a.month).localeCompare(String(b.month)));
-  const cur=cbSort(open.filter(s=>s.month===cm),(a,b)=>(a.created||0)-(b.created||0));
-  const later=cbSort(open.filter(s=>!s.month || s.month>cm),(a,b)=>(a.created||0)-(b.created||0));
-  const grp=(cls,title,items)=>{ const g=document.createElement('div'); g.className='cb-group'; g.innerHTML=`<div class="cb-group-h ${cls}">${title} <span class="n">${items.length}</span></div>`; items.forEach(s=>g.appendChild(cbItemEl(s,cls,'sched'))); return g; };
-  if(over.length) el.appendChild(grp('over', IC.flag+' Overdue — should have been called already', over));
-  const curG=grp('cur', IC.calendar+' '+fmtMonth(cm)+' — due this month', cur);
-  if(!cur.length){ const n=document.createElement('div'); n.className='empty-note'; n.style.padding='2px 10px 12px'; n.textContent='Nobody due this month.'; curG.appendChild(n); }
-  el.appendChild(curG);
-  const months={}; later.forEach(s=>{ (months[s.month||'zz'] ||= []).push(s); });
-  Object.keys(months).sort().forEach(mk=> el.appendChild(grp('later', IC.clock+' '+(mk==='zz'?'No month set':fmtMonth(mk)), months[mk])));
-  if(done.length) el.appendChild(cbCalledGroup(done,'sched'));
-  renderCbBanner();
+function caDoneEntry(e, how){
+  if(e.src==='lead'){ const l=e.l; const prev={...l.cb}; delete l.cb; l.updated=Date.now(); save(); cbRefresh(); try{ renderLeads(); }catch(x){}
+    toastUndo(l.name+' — callback done', ()=>{ l.cb=prev; save(); cbRefresh(); try{ renderLeads(); }catch(x){} }); return; }
+  e.it.done=true; e.it.doneAt=Date.now(); if(how) e.it.sentAt=Date.now(); save(); cbRefresh();
+  toastUndo(e.name+(how==='sent'?' — sent · done':' — done'), ()=>{ e.it.done=false; e.it.doneAt=null; delete e.it.sentAt; save(); cbRefresh(); });
 }
-$('#schedAdd').addEventListener('click',()=>{
-  const name=$('#schedName').value.trim(); const m=$('#schedMonth').value;
-  if(!name){ $('#schedName').focus(); return; }
-  if(!m){ toast('Pick a month first — tap one of the chips'); $('#schedMonth').focus(); return; }
-  state.sched.push({id:uid(), name, phone:$('#schedPhone').value.trim(), month:m, note:$('#schedNote').value.trim(), done:false, created:Date.now()});
-  $('#schedName').value=''; $('#schedPhone').value=''; $('#schedNote').value='';
-  save(); cbRefresh(); toast('Callback scheduled for '+fmtMonth(m)); $('#schedName').focus();
-});
-$('#schedMonth').addEventListener('change',renderSchedChips);
-['schedName','schedPhone','schedNote'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')$('#schedAdd').click();}));
-
-
-/* ---------- Callbacks · «Call first» — the short list that gets called before anything else ---------- */
-function ensurePrio(){ if(!Array.isArray(state.prio)) state.prio=[]; }
-function renderPrio(){
-  const el=$('#prioList'); if(!el) return; ensurePrio(); el.innerHTML='';
-  const open=cbSort(state.prio.filter(p=>!p.done)), done=state.prio.filter(p=>p.done).sort((a,b)=>(b.doneAt||0)-(a.doneAt||0));
-  const hn=$('#prioHeadN'); if(hn) hn.innerHTML=`<b>${open.length}</b><small>to call</small>`;
-  if(!open.length && !done.length){ el.innerHTML='<div class="empty-note">Nobody here yet. Drag a warm lead or a scheduled callback into this box — or type a name above — and it becomes your next call.</div>'; return; }
-  if(open.length){
-    const g=document.createElement('div'); g.className='cb-group';
-    g.innerHTML=`<div class="cb-group-h warmh">${IC.flag} Call these first <span class="n">${open.length}</span></div>`;
-    open.forEach(p=>g.appendChild(cbItemEl(p,'warm','prio')));
-    el.appendChild(g);
+function caNoAnswer(e){
+  const t=todayIso(); const next=caNextWork(t);
+  if(e.src==='lead'){ const l=e.l; const prev={cb:{...l.cb}, tries:l.tries.slice(), status:l.status};
+    if(ldLastTry(l)!==t) l.tries.push(t); l.status='na'; l.cb={...l.cb, day:next}; l.updated=Date.now(); save(); cbRefresh(); try{ renderLeads(); }catch(x){}
+    toastUndo(l.name+' → no answer · moved to '+caDayName(next)+(l.cb.time?' '+l.cb.time:''), ()=>{ l.cb=prev.cb; l.tries=prev.tries; l.status=prev.status; save(); cbRefresh(); try{ renderLeads(); }catch(x){} }); return; }
+  const it=e.it; const prev={day:it.day, time:it.time, month:it.month, tries:(it.tries||[]).slice()};
+  if(!Array.isArray(it.tries)) it.tries=[]; if(it.tries[it.tries.length-1]!==t) it.tries.push(t);
+  it.day=next; it.month=next.slice(0,7); it.updated=Date.now(); save(); cbRefresh();
+  toastUndo(it.name+' → no answer ('+it.tries.length+(it.tries.length===1?' try':' tries')+') · moved to '+caDayName(next), ()=>{ Object.assign(it,prev); if(!prev.day) delete it.day; save(); cbRefresh(); });
+}
+function caOutcome(e, type){
+  if(e.src==='lead'){
+    if(type==='g'){ ensureLeads(); state.meta.ld.focus=e.l.id; ldFilter.list=''; ldCallMode=true; switchView('leads'); ldOpenBooking(e.l); window.scrollTo({top:0}); return; }
+    ldOutcome(e.l, type); cbRefresh(); return;
   }
-  if(done.length) el.appendChild(cbCalledGroup(done,'prio'));
+  cbOutcome(e.it, e.list, type);
 }
-(function(){
-  const add=$('#prioAdd'); if(!add) return;
-  add.addEventListener('click',()=>{
-    const name=$('#prioName').value.trim(); if(!name){ $('#prioName').focus(); return; }
-    ensurePrio();
-    state.prio.push({id:uid(), name, phone:$('#prioPhone').value.trim(), note:$('#prioNote').value.trim(), done:false, created:Date.now()});
-    ['#prioName','#prioPhone','#prioNote'].forEach(s=>$(s).value='');
-    save(); cbRefresh(); toast('On the call-first list'); $('#prioName').focus();
-  });
-  ['prioName','prioPhone','prioNote'].forEach(id=>{ const e=document.getElementById(id); if(e) e.addEventListener('keydown',ev=>{ if(ev.key==='Enter') add.click(); }); });
-  const panel=$('#cbPrioPanel');
-  panel.addEventListener('dragover',e=>{ if(!cbDrag) return; e.preventDefault(); panel.classList.add('dragover'); });
-  panel.addEventListener('dragleave',()=>panel.classList.remove('dragover'));
-  panel.addEventListener('drop',e=>{
-    e.preventDefault(); panel.classList.remove('dragover');
-    if(!cbDrag || cbDrag.list==='prio') return;
-    const src=state[cbDrag.list]||[]; const it=src.find(x=>x.id===cbDrag.id); if(!it) return;
-    state[cbDrag.list]=src.filter(x=>x.id!==cbDrag.id);
-    ensurePrio(); state.prio.push({id:uid(), name:it.name, phone:it.phone||'', note:it.note||'', done:false, created:Date.now()});
-    cbDrag=null; save(); cbRefresh(); toast(it.name+' → call first');
-  });
-})();
+function caRemove(e){
+  if(e.src==='lead'){ const prev={...e.l.cb}; delete e.l.cb; save(); cbRefresh(); try{ renderLeads(); }catch(x){} toastUndo('Callback removed — '+e.name+' (still in Leads)', ()=>{ e.l.cb=prev; save(); cbRefresh(); }); return; }
+  const arr=state[e.list]; const i=arr.indexOf(e.it); if(i<0) return; arr.splice(i,1); save(); cbRefresh();
+  toastUndo('Removed — '+e.name, ()=>{ arr.splice(i,0,e.it); save(); cbRefresh(); });
+}
+function caAdd(o){
+  const name=String(o.name||'').trim(); if(!name) return null;
+  if(o.leadId){ const l=(state.leads||[]).find(x=>x.id===o.leadId);
+    if(l){ l.cb={day:o.day||todayIso(), time:o.time||'', how:o.how||'call'}; if(o.note) l.memo=o.note; if(l.status==='new'||l.status==='np') l.status='na'; if(o.pr==='high' && !l.hot) l.hot=true; l.updated=Date.now(); return {lead:l}; } }
+  ensurePrio();
+  const it={id:uid(), name, phone:String(o.phone||'').trim(), email:String(o.email||'').trim(), note:String(o.note||'').trim(), how:o.how||'call', day:o.day||'', time:o.time||'', done:false, created:Date.now(), updated:Date.now()};
+  if(it.day) it.month=it.day.slice(0,7);
+  if(o.pr) it.pr=o.pr;
+  state.prio.push(it); return {it};
+}
+
+/* ---------- the ready text for SMS / e-mail (editable; «Save as my text» keeps it) ---------- */
+function caDefaultText(how){
+  const hi=new Date().getHours()<12?'Καλημέρα σας':'Καλησπέρα σας';
+  if(how==='email') return hi+',\n\nσας γράφω σε συνέχεια της επικοινωνίας μας για την ιστοσελίδα σας.\n\nΜπορούμε να κάνουμε μια σύντομη γνωριμία 15 λεπτών στο Google Meet, χωρίς καμία δέσμευση. Διαλέξτε τη μέρα και την ώρα που σας βολεύει εδώ:\n{link}\n\nή απαντήστε μου απλά με μια μέρα και ώρα και το κανονίζω εγώ.\n\nΕυχαριστώ πολύ,\nΆγγελος Μετρίδης - 6934088046\nAdvon Media\nadvonmedia.com';
+  return hi+', ο Άγγελος από την Advon Media. Σας στέλνω, όπως είπαμε, για τη σύντομη γνωριμία 15 λεπτών για την ιστοσελίδα σας. Διαλέξτε τη μέρα και την ώρα που σας βολεύει εδώ: {link} — ή απαντήστε μου απλά με μια μέρα και ώρα. Ευχαριστώ πολύ! Άγγελος Μετρίδης - 6934088046';
+}
+function caText(e, how){
+  ensureMeta(); const tp=(state.meta.caTpl||{})[how==='email'?'email':'sms'];
+  const hi=new Date().getHours()<12?'Καλημέρα σας':'Καλησπέρα σας';
+  return String(tp||caDefaultText(how)).replace(/\{link\}/g, (state.meta.caTpl&&state.meta.caTpl.link)||CA_BOOK_LINK).replace(/^(Καλημέρα σας|Καλησπέρα σας)/, hi);
+}
+const caSmsHref=(phone,text)=>'sms:'+caTel(phone)+'?&body='+encodeURIComponent(text);
+const caMailHref=(email,text)=>'mailto:'+encodeURIComponent(email||'')+'?subject='+encodeURIComponent('Η ιστοσελίδα σας — Advon Media')+'&body='+encodeURIComponent(text);
+function caCopy(text, msg){ (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(()=>toast(msg||'Copied')).catch(()=>prompt('Copy the text:', text)); }
+/* a reminder on the phone: a prefilled Google Calendar event (Google then rings at that time) */
+function caGcalHref(e){
+  const day=(e.day||todayIso()).replace(/-/g,''); const t=(e.time||'09:30').replace(':','');
+  const endD=new Date((e.day||todayIso())+'T'+(e.time||'09:30')); endD.setMinutes(endD.getMinutes()+15);
+  const end=isoDate(endD).replace(/-/g,'')+'T'+pad(endD.getHours())+pad(endD.getMinutes())+'00';
+  const what=(e.how==='sms'?'SMS to ':e.how==='email'?'E-mail to ':'Call back ')+e.name;
+  const det=[e.note, e.phone?('Τηλ: '+e.phone):'', e.email?('E-mail: '+e.email):'', 'crm.advonmedia.com/#callbacks'].filter(Boolean).join('\n');
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(what)+'&dates='+day+'T'+t+'00/'+end+'&details='+encodeURIComponent(det)+'&ctz=Europe/Athens';
+}
+
+/* ---------- drawing ---------- */
+function renderCaTop(){
+  const el=$('#caTop'); if(!el) return; const n=cbCounts(); const t=todayIso();
+  const cell=(cls,k,v,s,go)=>`<button type="button" class="ca-cell ${cls}${v?'':' zero'}" data-cago="${go}"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></button>`;
+  el.innerHTML=cell('over','Overdue',n.over,'from earlier days','over')
+    +cell('today','Today · '+caShort(t),n.today,n.today?'to call / send today':'nothing today','today')
+    +cell('','Tomorrow',n.tomorrow,caShort(caAddDays(t,1)),'d'+caAddDays(t,1))
+    +cell('','Next 7 days',n.week,'after today','d'+caAddDays(t,1))
+    +cell('','Later',n.later-n.week,'further ahead','later')
+    +cell('nod','No day yet',n.nod,n.nod?'give them a day':'all planned','nod')
+    +cell('done','Done',n.doneWeek,'last 7 days','done');
+  el.querySelectorAll('[data-cago]').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.cago; let g=document.querySelector('.ca-g[data-g="'+k+'"]');
+    if(!g && k[0]==='d') g=document.querySelector('.ca-g[data-g^="d"]'); if(!g && k==='later') g=document.querySelector('.ca-g[data-g^="m"]');
+    if(k==='done' && !caDoneOpen){ caDoneOpen=true; renderCaAgenda(); g=document.querySelector('.ca-g[data-g="done"]'); }
+    if(g) g.scrollIntoView({behavior:'smooth', block:'start'}); }));
+}
+function caItemHtml(e){
+  const t=todayIso(); const H=CA_HOW[e.how];
+  const late=!e.done && ((e.day && e.day<t) || (!e.day && e.month && e.month<t.slice(0,7)));
+  const now=!e.done && caIsNow(e);
+  const tried=e.day===t && e.tries.includes(t);
+  const cls=['ca-it', e.pr?'pr-'+e.pr:'', e.hot?'hot':'', now?'now':'', late?'late':'', tried?'tried':'', e.done?'done':''].filter(Boolean).join(' ');
+  let when;
+  if(e.done) when=`${e.doneAt?esc(fmtDay(isoDate(new Date(e.doneAt)))):''}<small>done</small>`;
+  else if(!e.day) when=e.month?`${esc(MONTHS[+e.month.slice(5,7)-1].slice(0,3))}<small>month</small>`:`—<small>no day</small>`;
+  else if(e.day===t) when=e.time?`${esc(e.time)}<small>${now?'now':'today'}</small>`:`Any<small>time</small>`;
+  else if(e.day<t) when=`${esc(caShort(e.day).split(' ')[1])}<small>${(Math.round((Date.parse(t)-Date.parse(e.day))/864e5))}d late</small>`;
+  else when=e.time?`${esc(e.time)}<small>${esc(DOW[caDowIdx(e.day)])}</small>`:`${esc(DOW[caDowIdx(e.day)])}<small>${esc(fmtDay(e.day))}</small>`;
+  const meta=[];
+  if(e.note && e.note!==e.name) meta.push(`<span class="nt" title="${esc(e.note)}">${esc(e.note)}</span>`);
+  if(e.phone) meta.push(`<a href="tel:${esc(caTel(e.phone))}" title="Call">${esc(ldFmtPhone(String(e.phone).replace(/\s+/g,'')))}</a>`);
+  if(e.email) meta.push(`<a href="mailto:${esc(e.email)}">${esc(e.email)}</a>`);
+  if(e.sub) meta.push(`<span>${esc(e.sub)}</span>`);
+  if(e.tries.length) meta.push(`<span class="tr" title="Called, no answer">no answer ${e.tries.slice(-3).map(fmtDay).join(', ')}${e.tries.length>3?' …':''} · ${e.tries.length}×</span>`);
+  if(!e.day && e.month) meta.push(`<span>said: call in ${esc(fmtMonth(e.month))}</span>`);
+  const guess=(!e.day && !e.done && e.src==='cb')? caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))) : {};
+  const tel=caTel(e.phone);
+  let acts='';
+  if(e.done) acts=`<button type="button" data-a="undone" title="Put it back in the list">${IC.undo}Back</button><button type="button" class="ico" data-a="del" title="Remove">${IC.x}</button>`;
+  else {
+    const main = e.how==='call' ? (tel?`<a class="go call" href="tel:${esc(tel)}" data-a="dial">${IC.phone}Call</a>`:`<button type="button" class="go call" data-a="edit" title="No phone yet — add it">${IC.phone}Add phone</button>`)
+      : e.how==='sms' ? `<button type="button" class="go sms" data-a="msg">${IC.message}SMS</button>`
+      : `<button type="button" class="go email" data-a="msg">${IC.mail}E-mail</button>`;
+    const alt=[]; if(e.how!=='call' && tel) alt.push(`<a class="ico" href="tel:${esc(tel)}" title="Call ${esc(e.phone)}">${IC.phone}</a>`);
+    if(e.how==='call') alt.push(`<button type="button" class="ico" data-a="msg" title="SMS / Viber / e-mail with a ready text">${IC.message}</button>`);
+    acts=main+alt.join('')+`<span class="sep"></span>`
+      +(e.how==='call'
+        ? `<button type="button" class="ok" data-a="book" title="They said yes — logs a Booked call and puts them on the Board">${IC.check}Booked</button><button type="button" class="no" data-a="no" title="They said no — logs the no">${IC.x}No</button><button type="button" class="na" data-a="na" title="Didn't answer — moves to the next working day, keeps the dates tried">${IC.hourglass}No answer</button>`
+        : `<button type="button" class="ok" data-a="sent" title="Sent — tick it off">${IC.check}Sent</button>`)
+      +`<button type="button" data-a="move" title="Another day / time">${IC.calendar}${guess.day?'Day…':'Move'}</button><button type="button" class="ico" data-a="edit" title="Edit / priority / phone reminder / remove">${IC.edit}</button>`;
+  }
+  let pop='';
+  if(caOpen.id===e.key) pop=caPopHtml(e, caOpen.kind, guess);
+  const guessBtn = guess.day ? `<button type="button" class="ca-tag" style="border-color:#FFD08A;color:#B45D00;cursor:pointer" data-a="setguess" title="Set this day">${esc(caShort(guess.day))}${guess.time?' '+esc(guess.time):''}?</button>` : '';
+  return `<div class="${cls}" data-k="${esc(e.key)}">
+    <button type="button" class="ca-ck" data-a="${e.done?'undone':'done'}" title="${e.done?'Put it back':'Done — tick it off (nothing logged)'}">${e.done?IC.check:''}</button>
+    <div class="ca-when">${when}</div>
+    <div class="ca-main"><div class="ca-l1"><span class="ca-how ${e.how}">${IC[H[1]]}${H[0]}</span><span class="ca-nm" data-a="edit" title="${esc(e.name)} — click to edit">${esc(e.name)}</span>${e.src==='lead'?`<span class="ca-tag lead" title="From Leads">Lead</span>`:''}${e.hot?'<span class="ca-tag hotl">almost booked</span>':''}${e.pr==='high'&&!e.hot?'<span class="ca-tag" style="color:var(--red);border-color:#FFC9D0">High</span>':''}${guessBtn}</div>${meta.length?`<div class="ca-l2">${meta.join('')}</div>`:''}</div>
+    <div class="ca-acts">${acts}</div>${pop}</div>`;
+}
+function caPopHtml(e, kind, guess){
+  const t=todayIso();
+  if(kind==='move'){
+    const days=caWeekdayDays(7);
+    if(guess && guess.day && !days.some(d=>d.k===guess.day)) days.push({k:guess.day,t:caShort(guess.day)});
+    const cur=e.day; const ct=e.time||'';
+    return `<div class="ca-pop"><div class="row"><span class="lbl">Day</span>${days.map(d=>`<button type="button" data-mday="${d.k}" class="${cur===d.k?'on':''}">${d.t}${guess&&guess.day===d.k?' ·  guessed':''}</button>`).join('')}<input type="date" data-mdate value="${esc(cur||'')}" title="Any other day"></div>
+      <div class="row"><span class="lbl">Time</span><button type="button" data-mtime="" class="${!ct?'on':''}">Any time</button>${['10:00','11:00','12:00','13:00','15:00','16:00','17:00','18:00','19:00'].map(x=>`<button type="button" data-mtime="${x}" class="${ct===x?'on':''}">${x}</button>`).join('')}<input type="time" data-mtimein value="${esc(ct)}" step="300"><button type="button" data-mrel="60">in 1 hour</button></div>
+      <div class="row"><button type="button" class="pri" data-msave>${IC.check}Save</button><button type="button" class="x" data-pclose>Close</button></div></div>`;
+  }
+  if(kind==='msg'){
+    const how=caOpen.how||(e.how==='email'?'email':'sms'); const txt=caOpen.text!=null?caOpen.text:caText(e, how);
+    const tel=caTel(e.phone);
+    return `<div class="ca-pop"><div class="row"><span class="lbl">Message to ${esc(e.name)}</span><button type="button" data-mhow="sms" class="${how!=='email'?'on':''}">SMS / Viber</button><button type="button" data-mhow="email" class="${how==='email'?'on':''}">E-mail</button></div>
+      <textarea data-mtext>${esc(txt)}</textarea>
+      <div class="row">${how==='email'
+        ? `<input type="email" data-memail placeholder="their e-mail" value="${esc(e.email)}" style="flex:1 1 200px"><a class="b pri" data-msend="mail" href="#">${IC.mail}Open e-mail</a>`
+        : `${tel?`<a class="b pri" data-msend="sms" href="#">${IC.message}Send SMS</a><button type="button" data-msend="viber">Copy + open Viber</button>`:'<span class="hint">No phone on this one — add it with ✎ to send an SMS</span>'}`}
+        <button type="button" data-mcopy>Copy text</button><button type="button" data-mtpl title="Use this wording every time from now on">Save as my text</button><button type="button" data-mreset title="Back to the original wording">Reset</button><button type="button" class="x" data-pclose>Close</button></div>
+      <div class="hint">After sending, tap «Sent» on the row to tick it off. The link in the text is your booking page (${esc((state.meta.caTpl&&state.meta.caTpl.link)||CA_BOOK_LINK)}).</div></div>`;
+  }
+  if(kind==='edit'){
+    const isLead=e.src==='lead';
+    return `<div class="ca-pop"><div class="row">${isLead?`<b style="font-size:13px">${esc(e.name)}</b><span class="hint">· from Leads — name and phone are edited there</span>`:`<input data-ename value="${esc(e.name)}" placeholder="Name" style="flex:1 1 220px">`}
+        ${isLead?'':`<input data-ephone value="${esc(e.phone)}" placeholder="Phone" style="width:140px"><input data-eemail value="${esc(e.email)}" placeholder="E-mail (optional)" style="width:200px">`}</div>
+      <div class="row"><input data-enote value="${esc(e.note)}" placeholder="Note — what to say / what they said" style="flex:1 1 300px"></div>
+      <div class="row"><span class="lbl">How</span>${Object.keys(CA_HOW).map(h=>`<button type="button" data-ehow="${h}" class="${e.how===h?'on':''}">${IC[CA_HOW[h][1]]}${CA_HOW[h][0]}</button>`).join('')}
+        ${isLead?'':`<span class="lbl" style="margin-left:8px">Priority</span>${['high','medium',''].map(p=>`<button type="button" data-epr="${p}" class="${(e.pr||'')===p?'on':''}">${p?CB_PR[p][0]:'None'}</button>`).join('')}`}</div>
+      <div class="row"><button type="button" class="pri" data-esave>${IC.check}Save</button><a class="b" href="${esc(caGcalHref(e))}" target="_blank" rel="noopener" title="Opens Google Calendar with this callback filled in — save it and your phone rings at that time">${IC.calendar}Reminder on my phone</a>${isLead?`<button type="button" data-eopenlead>Open in Leads</button>`:''}<button type="button" class="del" data-edel>${IC.trash}Remove</button><button type="button" class="x" data-pclose>Close</button></div></div>`;
+  }
+  return '';
+}
+function caWireRow(row, e){
+  const act=(a,ev)=>{
+    if(a==='dial'){ return; }                                  /* the tel: link does the work */
+    ev && ev.preventDefault();
+    if(a==='done') return caDoneEntry(e);
+    if(a==='undone'){ if(e.src==='cb'){ e.it.done=false; e.it.doneAt=null; save(); cbRefresh(); } return; }
+    if(a==='del') return caRemove(e);
+    if(a==='book') return caOutcome(e,'g');
+    if(a==='no') return caOutcome(e,'r');
+    if(a==='na') return caNoAnswer(e);
+    if(a==='sent'){ if(e.src==='lead'){ ldOutcome(e.l,'y'); cbRefresh(); return; } return caDoneEntry(e,'sent'); }
+    if(a==='setguess'){ const g=caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))); if(g.day){ if(e.src==='cb' && g.how && !e.it.how) e.it.how=g.how; caSetDay(e, g.day, g.time||e.time); } return; }
+    if(a==='move'||a==='msg'||a==='edit'){ caOpen= (caOpen.id===e.key && caOpen.kind===a)? {id:'',kind:''} : {id:e.key, kind:a}; renderCaAgenda();
+      const r=document.querySelector('.ca-it[data-k="'+CSS.escape(e.key)+'"] .ca-pop'); if(r){ try{ r.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(x){} const f=r.querySelector('textarea,input[data-ename],input[data-enote]'); if(f && a!=='move') f.focus({preventScroll:true}); } return; }
+  };
+  row.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('click',ev=>act(b.dataset.a,ev)));
+  const pop=row.querySelector('.ca-pop'); if(!pop) return;
+  const close=()=>{ caOpen={id:'',kind:''}; renderCaAgenda(); };
+  pop.querySelectorAll('[data-pclose]').forEach(b=>b.addEventListener('click',close));
+  if(caOpen.kind==='move'){
+    const P={day:e.day||'', time:e.time||''};
+    const mark=()=>{ pop.querySelectorAll('[data-mday]').forEach(b=>b.classList.toggle('on',b.dataset.mday===P.day)); pop.querySelectorAll('[data-mtime]').forEach(b=>b.classList.toggle('on',b.dataset.mtime===P.time)); pop.querySelector('[data-mdate]').value=P.day; pop.querySelector('[data-mtimein]').value=P.time; };
+    pop.querySelectorAll('[data-mday]').forEach(b=>b.addEventListener('click',()=>{ P.day=b.dataset.mday; if(!pop.dataset.touchedTime && P.day!==e.day){ caSetDay(e,P.day,P.time); return; } mark(); }));
+    pop.querySelectorAll('[data-mtime]').forEach(b=>b.addEventListener('click',()=>{ P.time=b.dataset.mtime; pop.dataset.touchedTime=1; if(!P.day) P.day=todayIso(); mark(); }));
+    pop.querySelector('[data-mdate]').addEventListener('change',ev=>{ P.day=ev.target.value; mark(); });
+    pop.querySelector('[data-mtimein]').addEventListener('change',ev=>{ P.time=ev.target.value; pop.dataset.touchedTime=1; if(!P.day) P.day=todayIso(); mark(); });
+    pop.querySelector('[data-mrel]').addEventListener('click',()=>{ const d=new Date(Date.now()+3600e3); d.setMinutes(Math.ceil(d.getMinutes()/5)*5,0,0); caSetDay(e, isoDate(d), pad(d.getHours())+':'+pad(d.getMinutes())); });
+    pop.querySelector('[data-msave]').addEventListener('click',()=>{ if(!P.day){ toast('Pick a day'); return; } caSetDay(e,P.day,P.time); });
+  }
+  if(caOpen.kind==='msg'){
+    const ta=pop.querySelector('[data-mtext]'); ta.addEventListener('input',()=>{ caOpen.text=ta.value; });
+    pop.querySelectorAll('[data-mhow]').forEach(b=>b.addEventListener('click',()=>{ caOpen.how=b.dataset.mhow; caOpen.text=null; renderCaAgenda(); }));
+    pop.querySelector('[data-mcopy]').addEventListener('click',()=>caCopy(ta.value,'Text copied'));
+    pop.querySelector('[data-mtpl]').addEventListener('click',()=>{ ensureMeta(); state.meta.caTpl ||= {}; const how=caOpen.how||(e.how==='email'?'email':'sms');
+      state.meta.caTpl[how==='email'?'email':'sms']=ta.value.replace((state.meta.caTpl.link)||CA_BOOK_LINK,'{link}'); save(); toast('Saved — this '+(how==='email'?'e-mail':'SMS')+' text is used for every callback from now on'); });
+    pop.querySelector('[data-mreset]').addEventListener('click',()=>{ ensureMeta(); const how=caOpen.how||(e.how==='email'?'email':'sms'); if(state.meta.caTpl) delete state.meta.caTpl[how==='email'?'email':'sms']; caOpen.text=null; save(); renderCaAgenda(); });
+    pop.querySelectorAll('[data-msend]').forEach(b=>b.addEventListener('click',ev=>{ ev.preventDefault(); const k=b.dataset.msend; const txt=ta.value;
+      if(k==='sms') location.href=caSmsHref(e.phone, txt);
+      else if(k==='viber'){ caCopy(txt,'Text copied — paste it in Viber'); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(caTel(e.phone)); },250); }
+      else { const em=pop.querySelector('[data-memail]').value.trim(); if(em && e.src==='cb' && em!==e.it.email){ e.it.email=em; save(); } location.href=caMailHref(em, txt); }
+    }));
+  }
+  if(caOpen.kind==='edit'){
+    const E={how:e.how, pr:e.pr||''};
+    pop.querySelectorAll('[data-ehow]').forEach(b=>b.addEventListener('click',()=>{ E.how=b.dataset.ehow; pop.querySelectorAll('[data-ehow]').forEach(x=>x.classList.toggle('on',x===b)); }));
+    pop.querySelectorAll('[data-epr]').forEach(b=>b.addEventListener('click',()=>{ E.pr=b.dataset.epr; pop.querySelectorAll('[data-epr]').forEach(x=>x.classList.toggle('on',x===b)); }));
+    const sv=()=>{ const note=pop.querySelector('[data-enote]').value.trim();
+      if(e.src==='lead'){ e.l.cb={...e.l.cb, how:E.how}; if(note) e.l.memo=note; else delete e.l.memo; e.l.updated=Date.now(); }
+      else { const it=e.it; const nm=pop.querySelector('[data-ename]').value.trim(); if(nm) it.name=nm; it.phone=pop.querySelector('[data-ephone]').value.trim(); it.email=pop.querySelector('[data-eemail]').value.trim(); it.note=note; it.how=E.how; if(E.pr) it.pr=E.pr; else delete it.pr; it.updated=Date.now(); }
+      caOpen={id:'',kind:''}; save(); cbRefresh(); try{ if(e.src==='lead') renderLeads(); }catch(x){} toast('Saved — '+e.name); };
+    pop.querySelector('[data-esave]').addEventListener('click',sv);
+    pop.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',ev=>{ if(ev.key==='Enter') sv(); if(ev.key==='Escape') close(); }));
+    pop.querySelector('[data-edel]').addEventListener('click',()=>{ caOpen={id:'',kind:''}; caRemove(e); });
+    const ol=pop.querySelector('[data-eopenlead]'); if(ol) ol.addEventListener('click',()=>{ caOpen={id:'',kind:''}; ensureLeads(); state.meta.ld.focus=e.l.id; ldFilter.list=''; ldCallMode=true; switchView('leads'); renderLeads(); window.scrollTo({top:0}); });
+  }
+}
+function renderCaAgenda(){
+  const el=$('#caAgenda'); if(!el || !state) return;
+  const g=caGroups(); const t=todayIso();
+  const blocks=[];
+  const grp=(key,cls,title,sub,items,extra)=>{ if(!items.length && key!=='today') return;
+    blocks.push(`<div class="ca-g ${cls}" data-g="${key}"><div class="ca-gh">${title}<span class="n">${items.length}</span>${sub?`<small>${sub}</small>`:''}${extra||''}</div>${items.length?items.map(caItemHtml).join(''):'<div class="ca-empty">Nothing planned for today yet — add one above, or move someone here.</div>'}</div>`); };
+  grp('over','over',IC.flag+' Overdue','should have happened already — call, move or tick',g.over);
+  const td=g.today; const tdCall=td.filter(e=>e.how==='call').length, tdTxt=td.length-tdCall;
+  grp('today','today',IC.clock+' Today · '+caDayName(t).replace('Today','')+' '+esc(caShort(t)),td.length?(tdCall+' to call'+(tdTxt?' · '+tdTxt+' to text / e-mail':'')):'',td);
+  Object.keys(g.days).sort().forEach(k=>grp('d'+k,'',IC.calendar+' '+esc(caDayName(k)), '', g.days[k]));
+  Object.keys(g.later).sort().forEach(k=>grp('m'+k,'',IC.calendar+' Later · '+esc(fmtMonth(k)),'',g.later[k]));
+  const guessN=g.nod.filter(e=>e.src==='cb' && caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))).day).length;
+  grp('nod','nod',IC.hourglass+' No day yet','give each one a day so it shows up on that day',g.nod, guessN?`<button type="button" class="ca-gact" data-guessall>Set the ${guessN} days read from the text</button>`:'');
+  if(g.done.length) blocks.push(`<div class="ca-g done" data-g="done"><div class="ca-gh" data-donetoggle>${IC.check2} Done · last 7 days<span class="n">${g.done.length}</span><small>${caDoneOpen?'click to hide':'click to show'}</small></div>${caDoneOpen?g.done.map(caItemHtml).join(''):''}</div>`);
+  el.innerHTML=blocks.join('') || '<div class="ca-empty">No callbacks. Add one above — or from Leads with «Call back».</div>';
+  const map={}; caEntries(true).forEach(e=>map[e.key]=e);
+  el.querySelectorAll('.ca-it').forEach(r=>{ const e=map[r.dataset.k]; if(e) caWireRow(r,e); });
+  const dt=el.querySelector('[data-donetoggle]'); if(dt) dt.addEventListener('click',()=>{ caDoneOpen=!caDoneOpen; renderCaAgenda(); });
+  const ga=el.querySelector('[data-guessall]'); if(ga) ga.addEventListener('click',()=>{
+    const done=[]; g.nod.forEach(e=>{ if(e.src!=='cb') return; const gs=caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))); if(!gs.day) return;
+      done.push([e.it,{day:e.it.day,time:e.it.time,month:e.it.month,how:e.it.how}]); e.it.day=gs.day; e.it.month=gs.day.slice(0,7); if(gs.time && !e.it.time) e.it.time=gs.time; if(gs.how && !e.it.how) e.it.how=gs.how; e.it.updated=Date.now(); });
+    save(); cbRefresh(); toastUndo(done.length+' callbacks got their day', ()=>{ done.forEach(([it,p])=>{ ['day','time','month','how'].forEach(k=>{ if(p[k]==null) delete it[k]; else it[k]=p[k]; }); }); save(); cbRefresh(); }); });
+}
+
+/* ---------- the quick «＋ New callback» form — the same one sits on Callbacks and on Leads ---------- */
+function caQuickHtml(id){
+  const days=caWeekdayDays(7);
+  return `<div class="cq-h">${IC.phone} New callback <small>Who · what · how · which day — Enter saves it. Days and «SMS / e-mail» written in the text are picked up by themselves.</small>${('Notification' in window && Notification.permission==='default')?'<button type="button" class="cq-bell" data-cqbell>Ping me on this computer when it’s time</button>':''}</div>
+    <div class="cq-r"><input type="text" class="w-name" data-cq="name" placeholder="Who — e.g. Λαγιάκου" autocomplete="off"><input type="tel" class="w-ph" data-cq="phone" placeholder="Phone"><input type="text" class="w-note" data-cq="note" placeholder="What — e.g. call Monday to book · sent e-mail already" autocomplete="off"><input type="email" class="w-em" data-cq="email" placeholder="E-mail (for e-mails)"${caQ.how==='email'?'':' hidden'}></div>
+    <div class="cq-r"><div class="cq-seg" data-cqhow>${Object.keys(CA_HOW).map(h=>`<button type="button" data-h="${h}" class="${caQ.how===h?'on':''}${caQ.how===h&&caQ.howAuto?' auto':''}">${IC[CA_HOW[h][1]]}${CA_HOW[h][0]}</button>`).join('')}</div>
+      <div class="cq-seg" data-cqday>${days.map(d=>`<button type="button" data-d="${d.k}" class="${caQ.day===d.k?'on':''}${caQ.day===d.k&&caQ.dayAuto?' auto':''}">${d.t}</button>`).join('')}</div>
+      <input type="date" class="cq-date" data-cq="date" value="${esc(caQ.day&&!days.some(d=>d.k===caQ.day)?caQ.day:'')}" title="Another day"><input type="time" class="cq-time" data-cq="time" value="${esc(caQ.time)}" step="300" title="Time (optional)">
+      <button type="button" class="cq-hi${caQ.pr==='high'?' on':''}" data-cqhi><i></i>High</button><button type="button" class="cq-add" data-cqadd>Add</button></div>
+    <div class="cq-guess" data-cqguess></div><div class="cq-leads" data-cqleads></div>`;
+}
+function caQuickWire(box){
+  const $q=s=>box.querySelector(s); const val=k=>($q('[data-cq="'+k+'"]')||{}).value||'';
+  const paint=()=>{ box.querySelectorAll('[data-cqhow] button').forEach(b=>{ b.classList.toggle('on',b.dataset.h===caQ.how); b.classList.toggle('auto',b.dataset.h===caQ.how && caQ.howAuto); });
+    box.querySelectorAll('[data-cqday] button').forEach(b=>{ b.classList.toggle('on',b.dataset.d===caQ.day); b.classList.toggle('auto',b.dataset.d===caQ.day && caQ.dayAuto); });
+    const di=$q('[data-cq="date"]'); di.value= caQ.day && ![...box.querySelectorAll('[data-cqday] button')].some(b=>b.dataset.d===caQ.day) ? caQ.day : '';
+    $q('[data-cq="time"]').value=caQ.time; $q('[data-cq="email"]').hidden= caQ.how!=='email'; $q('[data-cqhi]').classList.toggle('on',caQ.pr==='high');
+    const gs=[]; if(caQ.dayAuto && caQ.day) gs.push(caDayName(caQ.day)); if(caQ.timeAuto && caQ.time) gs.push(caQ.time); if(caQ.howAuto) gs.push(CA_HOW[caQ.how][0]);
+    $q('[data-cqguess]').textContent= gs.length? 'Read from your text: '+gs.join(' · ')+' — tap another chip to change it' : '';
+  };
+  const guess=()=>{ const g=caGuess(val('name')+' · '+val('note'));
+    if(g.day && (caQ.dayAuto || !caQ.day)){ caQ.day=g.day; caQ.dayAuto=true; } else if(!g.day && caQ.dayAuto){ caQ.day=''; caQ.dayAuto=false; }
+    if(g.time && (caQ.timeAuto || !caQ.time)){ caQ.time=g.time; caQ.timeAuto=true; } else if(!g.time && caQ.timeAuto){ caQ.time=''; caQ.timeAuto=false; }
+    if(g.how && (caQ.howAuto || caQ.how==='call')){ caQ.how=g.how; caQ.howAuto=true; } else if(!g.how && caQ.howAuto){ caQ.how='call'; caQ.howAuto=false; }
+    paint(); };
+  /* matching leads: the same phone, or the name — pick one and the callback is saved on that lead */
+  const leadsBox=$q('[data-cqleads]');
+  const findLeads=()=>{ const n=val('name').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); const ph=val('phone').replace(/\D/g,'').slice(-9);
+    let ls=[]; try{ ensureLeads(); ls=state.leads.filter(l=>ldOpen(l) || l.status==='np').filter(l=>(ph.length>=9 && String(l.phone||'').replace(/\D/g,'').slice(-9)===ph) || (n.length>=4 && l.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').includes(n))).slice(0,5); }catch(e){}
+    if(caQ.lead && !ls.some(l=>l.id===caQ.lead)) caQ.lead='';
+    leadsBox.innerHTML= ls.length? '<span>In your Leads:</span>'+ls.map(l=>`<button type="button" data-lid="${esc(l.id)}" class="${caQ.lead===l.id?'on':''}" title="Save the callback on this lead">${caQ.lead===l.id?'✓ ':''}${esc(l.name)} · ${esc([ldSpecShort(l),l.city].filter(Boolean).join(' · '))}</button>`).join('') : '';
+    leadsBox.querySelectorAll('[data-lid]').forEach(b=>b.addEventListener('click',()=>{ caQ.lead= caQ.lead===b.dataset.lid?'':b.dataset.lid; const l=state.leads.find(x=>x.id===caQ.lead); if(l && !val('phone')) $q('[data-cq="phone"]').value=l.phone||''; findLeads(); })); };
+  ['name','note'].forEach(k=>$q('[data-cq="'+k+'"]').addEventListener('input',()=>{ guess(); if(k==='name') findLeads(); }));
+  $q('[data-cq="phone"]').addEventListener('input',findLeads);
+  box.querySelectorAll('[data-cqhow] button').forEach(b=>b.addEventListener('click',()=>{ caQ.how=b.dataset.h; caQ.howAuto=false; paint(); }));
+  box.querySelectorAll('[data-cqday] button').forEach(b=>b.addEventListener('click',()=>{ caQ.day= caQ.day===b.dataset.d && !caQ.dayAuto ? '' : b.dataset.d; caQ.dayAuto=false; paint(); }));
+  $q('[data-cq="date"]').addEventListener('change',ev=>{ caQ.day=ev.target.value; caQ.dayAuto=false; paint(); });
+  $q('[data-cq="time"]').addEventListener('change',ev=>{ caQ.time=ev.target.value; caQ.timeAuto=false; if(!caQ.day) caQ.day=todayIso(); paint(); });
+  $q('[data-cqhi]').addEventListener('click',()=>{ caQ.pr= caQ.pr==='high'?'':'high'; paint(); });
+  const bell=$q('[data-cqbell]'); if(bell) bell.addEventListener('click',()=>{ try{ Notification.requestPermission().then(p=>{ toast(p==='granted'?'Done — the computer will ping you when a callback is due':'Pings stay off (the browser said no)'); bell.remove(); }); }catch(e){} });
+  const add=()=>{ const name=val('name').trim()||val('note').trim(); if(!name){ $q('[data-cq="name"]').focus(); return; }
+    const day=caQ.day||todayIso();
+    const r=caAdd({name, phone:val('phone'), email:val('email'), note:val('name').trim()?val('note'):'', how:caQ.how, day, time:caQ.time, pr:caQ.pr, leadId:caQ.lead});
+    if(!r) return;
+    const where=caDayName(day)+(caQ.time?' · '+caQ.time:'');
+    box.querySelectorAll('[data-cq]').forEach(i=>{ if(i.type!=='date'&&i.type!=='time') i.value=''; });
+    caQ={how:'call', day:'', time:'', pr:'', howAuto:false, dayAuto:false, timeAuto:false, lead:''};
+    leadsBox.innerHTML=''; save(); cbRefresh(); try{ renderLeads(); }catch(e){} paint();
+    toast((r.lead?'Saved on the lead '+r.lead.name:name)+' → Callbacks · '+where); $q('[data-cq="name"]').focus(); };
+  $q('[data-cqadd]').addEventListener('click',add);
+  box.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ ev.preventDefault(); add(); } }));
+  paint();
+}
+function caQuickMount(id){ const box=document.getElementById(id); if(!box || box.dataset.wired) return; box.innerHTML=caQuickHtml(id); box.dataset.wired=1; caQuickWire(box); }
+
+function renderCaBadge(){
+  const b=$('#cbTabN'); if(!b || !state) return; let n=0; try{ n=cbCounts().due; }catch(e){}
+  b.textContent=n; b.hidden=!n; b.title=n+' callback'+(n===1?'':'s')+' for today (overdue included)';
+}
+function renderCallbacks(){ if(!state) return; caQuickMount('caQuick'); renderCaTop(); renderCaAgenda(); renderCaBadge(); }
+function cbRefresh(){ renderCallbacks(); try{ renderHome(); }catch(e){} try{ if(curView==='leads') renderLdCbDay(); }catch(e){} }
+/* the old three-list renderers are kept as names (renderAll and older code call them) */
+function renderPrio(){ renderCallbacks(); }
+function renderWarm(){}
+function renderSched(){}
+function renderCbBanner(){ renderCaTop(); }
+function ensurePrio(){ if(!Array.isArray(state.prio)) state.prio=[]; }
+
+/* ---------- reminders when the day / time comes ---------- */
+function caPinged(){ try{ const o=JSON.parse(localStorage.getItem('advon-ca-pinged')||'{}'); return o.d===todayIso()?o:{d:todayIso(),k:[]}; }catch(e){ return {d:todayIso(),k:[]}; } }
+function caPingSave(o){ try{ localStorage.setItem('advon-ca-pinged', JSON.stringify(o)); }catch(e){} }
+const caPingMem=new Set();
+function caNotify(title, body, tag){
+  try{ if('Notification' in window && Notification.permission==='granted'){ const n=new Notification(title,{body, tag:'advon-ca-'+tag}); n.onclick=()=>{ try{ window.focus(); switchView('callbacks'); }catch(e){} n.close(); }; } }catch(e){}
+}
+function caTick(){
+  if(!state || document.body.classList.contains('locked')) return;
+  const t=todayIso(), hm=caNowHM(); const P=caPinged(); let changed=false;
+  const due=caEntries().filter(e=>e.day===t && e.time && e.time<=hm && !e.tries.includes(t));
+  due.forEach(e=>{ const k=e.key+'@'+e.day+e.time; if(P.k.includes(k) || caPingMem.has(k)) return; caPingMem.add(k); P.k.push(k); changed=true;
+    const what=(e.how==='sms'?'Send the SMS to ':e.how==='email'?'Send the e-mail to ':'Call back ')+e.name;
+    if(e.src!=='lead') toast(what+' now — '+e.time+(e.phone?' · '+e.phone:''));   /* Leads already toasts its own call-backs */
+    caNotify(what+' — '+e.time, (e.note||'')+(e.phone?' · '+e.phone:''), e.key); });
+  /* one morning ping with the day's list (from 09:00, once a day) */
+  if(hm>='09:00' && !P.k.includes('morning')){ const g=caGroups(); const list=g.over.concat(g.today);
+    if(list.length){ caNotify('Callbacks today: '+list.length, list.slice(0,6).map(e=>(e.time?e.time+' ':'')+e.name).join(' · ')+(list.length>6?' …':''), 'morning'); }
+    P.k.push('morning'); changed=true; }
+  if(changed) caPingSave(P);
+  renderCaBadge();
+  if(curView==='callbacks' && !caOpen.id && !document.activeElement.closest?.('.cq')) renderCaAgenda();
+}
+setInterval(()=>{ try{ caTick(); }catch(e){} }, 30000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') setTimeout(()=>{ try{ caTick(); }catch(e){} },1500); });
+
 /* ---------- renewals ---------- */
 let rnYear=now.getFullYear();
 let rnPaidOpen=true;
@@ -7483,7 +7834,7 @@ function renderHome(){
   const thinkDue=state.clients.filter(c=>!isTrashed(c) && (fuOpen(c) ? fuDue(c) : thinkOverdue(c)));
   const openTodos=(state.todos||[]).filter(n=>!n.done).length;   /* every new task is high now, so count what is open instead */
   const hiCount=openTodos;
-  const cbNow=cbCounts().now;   /* callbacks left to call now */
+  const cbNow=cbCounts().due;   /* callbacks for today + overdue (Callbacks 3.0) */
   // hero
   const rem=mTotal-mPaid;
   const mGenerated=generatedForMonth(curMonth), mt=monthTarget(curMonth);
@@ -7513,7 +7864,7 @@ function renderHome(){
       <div class="hg attention${(overdue.length+thinkDue.length+hiCount+cbNow)?' hot':''}">
         <div class="hg-title">${IC.flag} Attention <span class="hg-note">${(overdue.length+thinkDue.length+hiCount+cbNow)? (overdue.length+thinkDue.length+hiCount+cbNow)+' open' : 'all clear'}</span></div>
         <div class="hero-stats">
-          <div class="hs" data-goto="callbacks" style="cursor:pointer" title="Warm leads + overdue + due this month — opens Callbacks"><div class="k">Calls to make</div><div class="v ${cbNow?'c':'g'}">${cbNow}</div></div>
+          <div class="hs" data-goto="callbacks" style="cursor:pointer" title="Callbacks for today + overdue (calls, SMS and e-mails, from Callbacks and Leads) — opens Callbacks"><div class="k">Callbacks today</div><div class="v ${cbNow?'c':'g'}">${cbNow}</div></div>
           <div class="hs"><div class="k">Overdue renewals</div><div class="v ${overdue.length?'c':'g'}">${overdue.length}</div></div>
           <div class="hs"><div class="k">Chase after meeting</div><div class="v ${thinkDue.length?'c':'g'}">${thinkDue.length}</div></div>
           <div class="hs" data-goto="todo" style="cursor:pointer" title="Open tasks on the To Do board"><div class="k">Open to-dos</div><div class="v ${hiCount?'c':'g'}">${hiCount}</div></div>
@@ -8311,7 +8662,7 @@ const ldNowHM=()=>{ const n=new Date(); return String(n.getHours()).padStart(2,'
 const ldCbAt=l=>(l.cb&&l.cb.day)? l.cb.day+'T'+(l.cb.time||'00:00') : '';
 function ldCbDue(l){ if(!l.cb||!l.cb.day) return false; const t=todayIso(); if(l.cb.day!==t) return l.cb.day<t; return !l.cb.time || l.cb.time<=ldNowHM(); }
 function ldDayWord(d){ if(!d) return ''; const t=todayIso(); if(d===t) return 'today'; if(d===isoDate(new Date(Date.now()+864e5))) return 'tomorrow'; if(d===isoDate(new Date(Date.now()-864e5))) return 'yesterday'; const x=new Date(d+'T00:00'); return DOW[(x.getDay()+6)%7]+' '+fmtDay(d); }
-const ldCbLabel=l=>'Call back '+ldDayWord(l.cb.day)+(l.cb.time?' · '+l.cb.time:'');
+const ldCbLabel=l=>(l.cb.how==='sms'?'SMS ':l.cb.how==='email'?'E-mail ':'Call back ')+ldDayWord(l.cb.day)+(l.cb.time?' · '+l.cb.time:'');
 const ldPr=l=>l.pr!=null? +l.pr : 1e9;
 const ldNaCmp=(a,b)=>(ldPr(a)-ldPr(b))||ldLastTry(a).localeCompare(ldLastTry(b));
 let ldCbFor=null, ldCbPick={day:'',time:'',memo:''}, ldMemoFor=null;
@@ -8472,14 +8823,14 @@ function ldSkip(l){
   renderLeads(); save();
   toast('Skipped '+l.name+(next?' → next: '+next.name:''));
 }
-function ldSetCb(l, day, time, memo){
+function ldSetCb(l, day, time, memo, how){
   ensureLeads(); if(!day){ toast('Pick the day to call back'); return; }
-  l.cb={day, time:time||''}; if(memo!=null){ const m=String(memo).trim(); if(m) l.memo=m; }
+  l.cb={day, time:time||''}; if(how && how!=='call') l.cb.how=how; if(memo!=null){ const m=String(memo).trim(); if(m) l.memo=m; }
   if(l.status==='new'||l.status==='np') l.status='na';
   l.updated=Date.now(); delete state.meta.ld.skip[l.id];
   if(state.meta.ld.focus===l.id){ const nx=ldQueue().find(x=>x.id!==l.id); if(nx) state.meta.ld.focus=nx.id; else delete state.meta.ld.focus; }
   ldCbFor=null; ldCbPick={day:'',time:'',memo:''};
-  renderLeads(); save(); toast(l.name+' → '+ldCbLabel(l)+' · at the top of «No answer»');
+  renderLeads(); save(); try{ renderCaBadge(); }catch(e){} toast(l.name+' → '+ldCbLabel(l)+' · at the top of «No answer» and in Callbacks');
 }
 function ldClearCb(l){ delete l.cb; l.updated=Date.now(); ldCbFor=null; renderLeads(); save(); toast('Call-back removed — '+l.name); }
 function ldSaveMemo(l, text){ const m=String(text||'').trim(); if(m) l.memo=m; else delete l.memo; l.updated=Date.now(); ldMemoFor=null; renderLeads(); save(); toast(m?'Note saved — '+l.name:'Note removed'); }
@@ -8528,6 +8879,7 @@ function ldCbEl(l){
     <div class="row" data-days>${days.map(o=>`<button type="button" data-day="${o.k}" class="${P.day===o.k?'on':''}" title="${fmtDate(o.k)}">${o.t}</button>`).join('')}<input type="date" data-dayinput value="${P.day}" title="Another day"></div>
     <div class="row" data-times>${LD_CB_TIMES.map(t=>`<button type="button" data-hour="${t.slice(0,2)}" class="${P.time.slice(0,2)===t.slice(0,2)?'on':''}">${t.slice(0,2)}:</button>`).join('')}<span class="sep"></span>${LD_CB_MINS.map(m=>`<button type="button" data-min="${m}" class="${P.time&&P.time.slice(3)===m?'on':''}">:${m}</button>`).join('')}<input type="time" data-timeinput value="${P.time}" step="300" title="Exact time"></div>
     <div class="row"><button type="button" data-rel="30">in 30 min</button><button type="button" data-rel="60">in 1 hour</button><button type="button" data-rel="120">in 2 hours</button>${P.day&&P.time?`<b style="margin-left:6px;color:var(--brand)">→ ${esc(ldDayWord(P.day))} · ${esc(P.time)}</b>`:''}</div>
+    <div class="row" data-hows><span style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">How</span>${Object.keys(CA_HOW).map(h=>`<button type="button" data-how="${h}" class="${(P.how||'call')===h?'how-on':''}">${CA_HOW[h][0]}</button>`).join('')}<span style="font-size:11.5px;color:var(--muted)">· it also shows in <b>Callbacks</b> on that day, with a reminder</span></div>
     <textarea data-memo placeholder="What did you say? e.g. very interested — wants to talk more and book">${esc(P.memo)}</textarea>
     <div class="row"><button type="button" class="go" data-go>${IC.check} Save call-back</button>${l.cb?'<button type="button" data-clear>Remove call-back</button>':''}<button type="button" class="x" data-cancel>Cancel</button></div>`;
   const keep=()=>{ P.memo=box.querySelector('[data-memo]').value; };
@@ -8538,16 +8890,17 @@ function ldCbEl(l){
   box.querySelector('[data-dayinput]').addEventListener('change',e=>{ keep(); P.day=e.target.value; renderLeads(); });
   box.querySelector('[data-timeinput]').addEventListener('change',e=>{ keep(); P.time=e.target.value; renderLeads(); });
   box.querySelector('[data-memo]').addEventListener('input',e=>{ P.memo=e.target.value; });
-  box.querySelector('[data-go]').addEventListener('click',()=>{ keep(); ldSetCb(l, P.day, P.time, P.memo); });
+  box.querySelectorAll('[data-how]').forEach(b=>b.addEventListener('click',()=>{ keep(); P.how=b.dataset.how; renderLeads(); }));
+  box.querySelector('[data-go]').addEventListener('click',()=>{ keep(); ldSetCb(l, P.day, P.time, P.memo, P.how); });
   const c=box.querySelector('[data-clear]'); if(c) c.addEventListener('click',()=>ldClearCb(l));
   box.querySelector('[data-cancel]').addEventListener('click',()=>{ ldCbFor=null; renderLeads(); });
   return box;
 }
-function ldOpenCb(l){ ldMemoFor=null; ldBookingFor=null; ldCbFor= ldCbFor===l.id? null : l.id; ldCbPick={day:(l.cb&&l.cb.day)||todayIso(), time:(l.cb&&l.cb.time)||'', memo:l.memo||''}; renderLeads(); }
+function ldOpenCb(l){ ldMemoFor=null; ldBookingFor=null; ldCbFor= ldCbFor===l.id? null : l.id; ldCbPick={day:(l.cb&&l.cb.day)||todayIso(), time:(l.cb&&l.cb.time)||'', memo:l.memo||'', how:(l.cb&&l.cb.how)||'call'}; renderLeads(); }
 /* change the call-back straight on the card */
 function ldMoveCb(l, day, time){
   if(!day){ toast('Pick a day'); renderLeads(); return; }
-  l.cb={day, time:time||''}; l.updated=Date.now(); ldCbPinged.delete(l.id+'@'+day+(time||''));
+  l.cb={...l.cb, day, time:time||''}; l.updated=Date.now(); ldCbPinged.delete(l.id+'@'+day+(time||''));
   renderLeads(); save(); toast(l.name+' → '+ldCbLabel(l));
 }
 /* the box on the card: «Call back [day] [time] · +1 h · tomorrow» with the note under it — everything editable in place */
@@ -8569,11 +8922,13 @@ function renderLdCbDay(){
   if(!el){ const f=$('#ldFocus'); if(!f) return; el=document.createElement('section'); el.id='ldCbDay'; el.className='ld-cbday'; f.parentNode.insertBefore(el, f); }
   const t=todayIso();
   const list=(state.leads||[]).filter(l=>l.cb && l.cb.day && l.cb.day<=t && ldOpen(l)).sort((a,b)=>ldCbAt(a).localeCompare(ldCbAt(b)));
-  el.classList.toggle('on', !!list.length);
-  if(!list.length){ el.innerHTML=''; return; }
-  el.innerHTML=`<div class="h">${IC.clock} Call-backs today · ${list.length} <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted)">· tap to open in call mode</span></div><div class="list">${list.map(l=>{ const d=ldCbDue(l);
+  let own=[]; try{ own=caEntries().filter(e=>e.src==='cb' && caDue(e)).sort(caCmpDay); }catch(e){}
+  el.classList.toggle('on', !!(list.length+own.length));
+  if(!list.length && !own.length){ el.innerHTML=''; return; }
+  el.innerHTML=`<div class="h">${IC.clock} Call-backs today · ${list.length+own.length} <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted)">· tap to open</span></div><div class="list">${own.map(e=>`<div class="it${e.day<t||caIsNow(e)?' due':''}" data-cbown="1" title="${esc(e.note||'')}"><span class="t">${e.day&&e.day<t?esc(fmtDay(e.day)):esc(e.time||'—')}</span><div style="min-width:0"><div class="n">${esc(e.name)}</div><div class="m"><span class="hw">${CA_HOW[e.how][0]}</span>${e.note?' · '+esc(e.note):''}</div></div>${e.phone?`<a href="tel:${esc(caTel(e.phone))}" title="Call ${esc(e.phone)}" data-tel>${IC.phone}</a>`:''}</div>`).join('')}${list.map(l=>{ const d=ldCbDue(l);
     return `<div class="it${d?' due':''}${l.hot?' hot':''}" data-cbgo="${esc(l.id)}" title="${esc(l.memo||'')}"><span class="t">${l.cb.day<t?esc(fmtDay(l.cb.day)):esc(l.cb.time||'—')}</span><div style="min-width:0"><div class="n">${esc(l.name)}</div>${l.memo?`<div class="m">${esc(l.memo)}</div>`:''}</div>${l.phone?`<a href="tel:+30${esc(l.phone)}" title="Call ${esc(ldFmtPhone(l.phone))}" data-tel>${IC.phone}</a>`:''}</div>`; }).join('')}</div>`;
   el.querySelectorAll('[data-tel]').forEach(a=>a.addEventListener('click',e=>e.stopPropagation()));
+  el.querySelectorAll('[data-cbown]').forEach(it=>it.addEventListener('click',()=>{ switchView('callbacks'); window.scrollTo({top:0}); }));
   el.querySelectorAll('[data-cbgo]').forEach(it=>it.addEventListener('click',()=>{ ensureLeads(); state.meta.ld.focus=it.dataset.cbgo; ldFilter.list=''; state.meta.ld.list=''; ldCallMode=true; renderLeads(); window.scrollTo({top:0, behavior:'smooth'}); }));
 }
 function ldMemoEl(l){
@@ -8877,6 +9232,7 @@ $('#ldSpec').addEventListener('change',()=>{ ldFilter.spec=$('#ldSpec').value; l
 $('#ldCity').addEventListener('change',()=>{ ldFilter.city=$('#ldCity').value; ldShown=LD_PAGE; ensureLeads(); delete state.meta.ld.focus; renderLeads(); });
 $('#ldSort').addEventListener('change',()=>{ ldFilter.sort=$('#ldSort').value; renderLeads(); });
 $('#ldPull').addEventListener('click',()=>Leads.pull(true));
+$('#ldCbNew').addEventListener('click',()=>{ const b=$('#ldCbQuick'); b.hidden=!b.hidden; if(!b.hidden){ caQuickMount('ldCbQuick'); const f=b.querySelector('[data-cq="name"]'); if(f) f.focus(); } });
 $('#ldImport').addEventListener('click',()=>$('#ldImportFile').click());
 $('#ldImportFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>ldImportCSV(String(r.result)); r.readAsText(f,'utf-8'); e.target.value=''; });
 document.addEventListener('keydown',e=>{
@@ -8962,14 +9318,16 @@ const Brief={ lastAt:0, lastHash:'', busy:false,
     const toCollect=cl.filter(c=>isUnpaid(c) && c.stage!=='thinking' && !(c.remFlag==='orange'||c.remFlag==='red')).reduce((a,c)=>a+cowed(c),0);
     const followups=state.clients.filter(c=>fuOpen(c) && c.fu.day<=t).map(c=>({name:c.name, phone:c.phone||'', day:c.fu.day, what:c.fu.what, stage:stName(c.stage), overdue:c.fu.day<t}));
     const extras=upsList().filter(x=>x.u.day<=t).map(({c,u})=>({name:c.name, phone:c.phone||'', day:u.day, what:u.what.join(', '), note:u.note||'', overdue:u.day<t}));
-    const asap=followups.map(f=>({text:'Follow up '+f.name+' — '+f.what+(f.phone?' · '+f.phone:''), hot:f.overdue})).concat(extras.map(x=>({text:'Offer '+x.name+': '+x.what+(x.note?' — «'+x.note+'»':'')+(x.phone?' · '+x.phone:''), hot:x.overdue}))).concat((state.asap||[]).filter(a=>!a.done).sort((a,b)=>(a.sort||0)-(b.sort||0)).map(a=>({text:a.text, hot:!!a.hot})));
+    let cbToday=[]; try{ cbToday=caEntries().filter(caDue).sort(caCmpDay).map(e=>({name:e.name, day:e.day||'', time:e.time||'', how:e.how, phone:e.phone||'', note:e.note&&e.note!==e.name?e.note:'', overdue:!!(e.day&&e.day<t), lead:e.src==='lead'})); }catch(e){}
+    const asap=(followups.map(f=>({text:'Follow up '+f.name+' — '+f.what+(f.phone?' · '+f.phone:''), hot:f.overdue})).concat(extras.map(x=>({text:'Offer '+x.name+': '+x.what+(x.note?' — «'+x.note+'»':'')+(x.phone?' · '+x.phone:''), hot:x.overdue}))).concat((state.asap||[]).filter(a=>!a.done).sort((a,b)=>(a.sort||0)-(b.sort||0)).map(a=>({text:a.text, hot:!!a.hot}))));
     const todosHigh=(state.todos||[]).filter(x=>!x.done && x.prio==='high').map(x=>x.text).slice(0,12);
     const fc=cashForecast();
     return { updated:new Date().toISOString(), today:t, month:curMonth,
       money:{ earned, target, toCollect, forecast30:fc[30].sum, forecast60:fc[60].sum, forecast90:fc[90].sum },
       chase:{ unpaid, materials, feedback, changes, building, thinking, flagged },
       meetings, renewals:ren, subsDue,
-      callbacks:{ leftNow:n.now, warm, scheduledDue:schedDue },
+      /* the morning message prints «callbacks due now N (first five names)» — so: today's + overdue ones, with time and SMS / e-mail */
+      callbacks:{ leftNow:cbToday.length, today:cbToday, warm, scheduledDue:cbToday.map(c=>({name:c.name+(c.time?' '+c.time:'')+(c.how!=='call'?' ('+(c.how==='sms'?'SMS':'e-mail')+')':'')+(c.overdue?' (late)':''), phone:c.phone, note:c.note})), schedMonthDue:schedDue },
       leads:{ fresh:lc.new, retry:naRetry, noAnswerParked:lc.na, booked:lc.g, sms:lc.y, no:lc.r, total:lc.total, yesterday:ydLeads },
       calls:{ yesterday:{date:yd, calls:ydStats.calls, booked:ydStats.booked, sms:ydStats.sms, no:ydStats.nos}, month:{calls:mStats.calls||0, booked:mStats.booked||0, rate:mStats.callConv||0, workingDays:mStats.workingDays||0} },
       asap, todosHigh, followups, extras };
@@ -10086,7 +10444,7 @@ function migrate20260922(){
   if(!state.meta.chatAutoSince){ state.meta.chatAutoSince=Date.now(); ch=true; }
   return ch;
 }
-function boot(){ document.body.dataset.view=document.querySelector('.tab.active').dataset.view; if(migrate20260922()) save(); $('#schedMonth').value=curMonth; $('#qlDate').value=todayIso(); if(migrateCallStats()){ save(); setTimeout(()=>toast('Cold-call statistics cleared — every month and the year start from your next logged call'),900); } renderAll(); Bookings.start(); setTimeout(()=>Chats.start(),3200); setTimeout(()=>Leads.pull(false),1500); setTimeout(()=>Reminders.pull(false),2600); setTimeout(()=>Brief.send(false),4000); }
+function boot(){ document.body.dataset.view=document.querySelector('.tab.active').dataset.view; if(migrate20260922()) save(); $('#qlDate').value=todayIso(); if(migrateCallStats()){ save(); setTimeout(()=>toast('Cold-call statistics cleared — every month and the year start from your next logged call'),900); } renderAll(); Bookings.start(); setTimeout(()=>Chats.start(),3200); setTimeout(()=>Leads.pull(false),1500); setTimeout(()=>Reminders.pull(false),2600); setTimeout(()=>Brief.send(false),4000); }
 let loggingIn=false;
 async function tryLogin(){
   if(loggingIn) return;
@@ -10968,7 +11326,7 @@ function dayItems(){
   const rem=(Reminders.list||[]).filter(r=>!r.done && r.day<=today).sort((a,b)=>a.day.localeCompare(b.day));
   const meet=(state&&state.clients||[]).filter(c=>c.day===today && !isTrashed(c) && c.stage!=='lost').sort((a,b)=>String(a.time||'').localeCompare(String(b.time||'')));
   ensureAsap(); const asap=state.asap.filter(t=>!t.done).sort((a,b)=>(b.hot-a.hot)||((a.sort||0)-(b.sort||0)));
-  let cbs=[]; try{ cbs=(state.leads||[]).filter(l=>l.cb && l.cb.day && l.cb.day<=today && ldOpen(l)).sort((a,b)=>ldCbAt(a).localeCompare(ldCbAt(b))); }catch(e){}
+  let cbs=[]; try{ cbs=caEntries().filter(caDue).sort((a,b)=>((a.day||'')<today?0:1)-((b.day||'')<today?0:1) || caCmpDay(a,b)); }catch(e){}
   let fus=[], ups=[]; try{ fus=fuList().filter(c=>c.fu.day<=today); ups=upsList().filter(x=>x.u.day<=today); }catch(e){}
   return {rem, meet, asap, cbs, fus, ups, n:rem.length+meet.length+asap.length+cbs.length+fus.length+ups.length};
 }
@@ -10981,7 +11339,7 @@ function openDay(){
   if(fus.length) h+=`<div class="day-h rem">🤝 Follow up after the meeting · ${fus.length}</div>`+fus.map(c=>`<div class="day-row${c.fu.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(c.fu.what)}${c.fu.day<today?`<small>was due ${esc(mqDayLbl(c.fu.day))}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button data-fuup="${c.id}">Update</button><button class="go" data-fudone="${c.id}">✓ Done</button></div>`).join('');
   if(ups.length) h+=`<div class="day-h rem">➕ Extras to bring up · ${ups.length}</div>`+ups.map(({c,u})=>`<div class="day-row${u.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(u.what.join(', '))}${u.note?`<small>«${esc(u.note)}»</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button class="go" data-updone="${c.id}|${u.id}">✓ Done</button></div>`).join('');
   if(meet.length) h+=`<div class="day-h meet">📅 Meetings today · ${meet.length}</div>`+meet.map(c=>`<div class="day-row"><span class="tm">${esc(c.time||'—')}</span><div class="tx"><b>${esc(c.name)}</b>${c.phone?`<small>${esc(c.phone)}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(String(c.phone).replace(/\s+/g,''))}'">Call</button>`:''}<button data-open="${esc(c.id)}">Open</button></div>`).join('');
-  if(cbs.length) h+=`<div class="day-h meet">📞 Call back today · ${cbs.length}</div>`+cbs.map(l=>`<div class="day-row"><span class="tm${l.cb.day<today?' due':''}">${esc(l.cb.day<today?fmtDay(l.cb.day):(l.cb.time||'—'))}</span><div class="tx"><b>${esc(l.name)}</b>${l.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${l.memo?`<small>${esc(l.memo)}</small>`:''}</div>${l.phone?`<button onclick="location.href='tel:+30${esc(l.phone)}'">Call</button>`:''}<button class="go" data-lcb="${esc(l.id)}">Open</button></div>`).join('');
+  if(cbs.length) h+=`<div class="day-h meet">📞 Callbacks today · ${cbs.length}</div>`+cbs.map(e=>`<div class="day-row${e.day&&e.day<today?' over':''}"><span class="tm">${esc(e.day&&e.day<today?fmtDay(e.day):(e.time||'today'))}</span><div class="tx"><b>${esc(e.name)}</b> · ${CA_HOW[e.how][0]}${e.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${e.note&&e.note!==e.name?`<small>${esc(e.note)}</small>`:''}</div>${e.phone?(e.how==='sms'?`<button data-cbsms="${esc(e.key)}">SMS</button>`:`<button onclick="location.href='tel:${esc(caTel(e.phone))}'">Call</button>`):''}<button class="go" data-cbk="${esc(e.key)}">Open</button></div>`).join('');
   if(asap.length) h+=`<div class="day-h asap">🚩 Do ASAP · ${asap.length}</div>`+asap.map((t,i)=>`<div class="day-row${t.hot?' hot':''}" data-a="${esc(t.id)}"><div class="tx">${t.hot?'🔥 ':''}${esc(t.text)}</div><button class="go" data-adone="${esc(t.id)}">✓ Done</button></div>`).join('');
   if(!n) h='<div class="home-empty">Nothing to remind, no meetings, nothing in Do ASAP. Enjoy the day.</div>';
   try{ if(gmWorkday()) h=gmDayBlock()+h; }catch(e){}
@@ -10993,7 +11351,8 @@ function openDay(){
   body.querySelectorAll('[data-fuup]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); mqOpen(b.dataset.fuup); }));
   body.querySelectorAll('[data-updone]').forEach(b=>b.addEventListener('click',()=>{ const [cid,id]=b.dataset.updone.split('|'); upDone(cid,id); b.closest('.day-row').classList.add('done'); b.remove(); }));
   body.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',()=>{ fuDone(b.dataset.fudone); b.closest('.day-row').classList.add('done'); b.remove(); }));
-  body.querySelectorAll('[data-lcb]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); ensureLeads(); state.meta.ld.focus=b.dataset.lcb; ldFilter.list=''; ldCallMode=true; switchView('leads'); renderLeads(); window.scrollTo({top:0}); }));
+  body.querySelectorAll('[data-cbsms]').forEach(b=>b.addEventListener('click',()=>{ const e=caFind(b.dataset.cbsms); if(e) location.href=caSmsHref(e.phone, caText(e,'sms')); }));
+  body.querySelectorAll('[data-cbk]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); switchView('callbacks'); setTimeout(()=>{ const r=document.querySelector('.ca-it[data-k="'+CSS.escape(b.dataset.cbk)+'"]'); if(r) r.scrollIntoView({block:'center'}); },60); }));
   $('#dayOverlay').classList.add('open'); setTimeout(()=>{ const ok=$('#dayOk'); if(ok) ok.focus(); },60);
 }
 function closeDay(){ const ov=$('#dayOverlay'); if(!ov||!ov.classList.contains('open')) return; ov.classList.remove('open'); ensureMeta(); if(state.meta.daySeen!==todayIso()){ state.meta.daySeen=todayIso(); save(); } }
@@ -11133,6 +11492,7 @@ function renderHomeChats(){
   const fit=()=>{ const tb=document.querySelector('.topbar'); if(tb) document.documentElement.style.setProperty('--ch-top',Math.round(tb.getBoundingClientRect().bottom+30)+'px'); };
   window.addEventListener('resize',fit); setTimeout(fit,50); setTimeout(fit,1500);
   if(location.hash==='#chats') setTimeout(()=>switchView('chats'),300);
+  if(location.hash==='#callbacks') setTimeout(()=>switchView('callbacks'),300);
   const chFromHash=()=>{ const m=/^#chat=([a-z0-9-]{2,50})$/.exec(location.hash||''); if(!m) return; Chats.wantOpen=m[1]; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} if(Chats.list.length) renderChats(); else setTimeout(()=>switchView('chats'),300); };
   chFromHash(); window.addEventListener('hashchange',chFromHash);
   $('#bkupClose').addEventListener('click',()=>$('#bkupOverlay').classList.remove('open'));
