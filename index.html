@@ -6138,7 +6138,7 @@ function cbOutcome(item, listName, type){
    • Storage stays where it was (state.prio / state.warm / state.sched — every report, the brief, Home and the backup keep working);
      each entry now also carries day (YYYY-MM-DD), time (HH:MM, optional), how ('call' | 'sms' | 'email') and email.
      New ones go into state.prio. Leads keep their own call-back on the lead (l.cb = {day, time, how}) and show here too.
-   • The agenda: Overdue → Today (by time) → Tomorrow → every day of the next two weeks → Later (by month) → No day yet → Done.
+   • The agenda: Today (by time) → Tomorrow → every day of the next two weeks → Later (by month) → No day yet → Overdue → Done.
    • One-tap actions per row: Call / SMS / E-mail (with a ready Greek text), Booked · No · No answer (→ next working day) · Sent,
      Move (+1 h · tomorrow · weekdays · any date), edit, phone-calendar reminder.
    • Reminders: the tab badge (overdue + today), a toast + a computer notification when a time comes, one «today's callbacks»
@@ -6458,13 +6458,14 @@ function renderCaAgenda(){
   const blocks=[];
   const grp=(key,cls,title,sub,items,extra)=>{ if(!items.length && key!=='today') return;
     blocks.push(`<div class="ca-g ${cls}" data-g="${key}"><div class="ca-gh">${title}<span class="n">${items.length}</span>${sub?`<small>${sub}</small>`:''}${extra||''}</div>${items.length?items.map(caItemHtml).join(''):'<div class="ca-empty">Nothing planned for today yet — add one above, or move someone here.</div>'}</div>`); };
-  grp('over','over',IC.flag+' Overdue','should have happened already — call, move or tick',g.over);
   const td=g.today; const tdCall=td.filter(e=>e.how==='call').length, tdTxt=td.length-tdCall;
   grp('today','today',IC.clock+' Today · '+caDayName(t).replace('Today','')+' '+esc(caShort(t)),td.length?(tdCall+' to call'+(tdTxt?' · '+tdTxt+' to text / e-mail':'')):'',td);
   Object.keys(g.days).sort().forEach(k=>grp('d'+k,'',IC.calendar+' '+esc(caDayName(k)), '', g.days[k]));
   Object.keys(g.later).sort().forEach(k=>grp('m'+k,'',IC.calendar+' Later · '+esc(fmtMonth(k)),'',g.later[k]));
   const guessN=g.nod.filter(e=>e.src==='cb' && caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))).day).length;
   grp('nod','nod',IC.hourglass+' No day yet','give each one a day so it shows up on that day',g.nod, guessN?`<button type="button" class="ca-gact" data-guessall>Set the ${guessN} days read from the text</button>`:'');
+  /* 9 Oct 2026 (Angelo): Overdue sits at the bottom, right after «No day yet» — Today comes first */
+  grp('over','over',IC.flag+' Overdue','should have happened already — call, move or tick',g.over);
   if(g.done.length) blocks.push(`<div class="ca-g done" data-g="done"><div class="ca-gh" data-donetoggle>${IC.check2} Done · last 7 days<span class="n">${g.done.length}</span><small>${caDoneOpen?'click to hide':'click to show'}</small></div>${caDoneOpen?g.done.map(caItemHtml).join(''):''}</div>`);
   el.innerHTML=blocks.join('') || '<div class="ca-empty">No callbacks. Add one above — or from Leads with «Call back».</div>';
   const map={}; caEntries(true).forEach(e=>map[e.key]=e);
