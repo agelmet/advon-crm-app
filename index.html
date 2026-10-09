@@ -9547,10 +9547,13 @@ function gmDayMap(){
   Object.keys(g.extra).forEach(k=>{ const n=+g.extra[k]||0; if(!n) return; const o=d(k); o.calls+=n; o.extra+=n; });
   return m;
 }
+/* Angelo, 9 Oct 2026: the streak = calling days in a row on which the MEETINGS goal was hit (5 booked), not 20+ calls.
+   Today adds 1 once the goal is hit; a today that is not there yet never breaks the streak. Rest days are skipped. */
 function gmStreak(m, g){
-  let s=0; const t=m[todayIso()]; if(t && t.calls>=g.streakMin && g.days.includes(new Date().getDay())) s=1;
+  const need=Math.max(1, g.meet|0);
+  let s=0; const t=m[todayIso()]; if(t && t.meet>=need && g.days.includes(new Date().getDay())) s=1;
   const d=new Date(); d.setHours(12,0,0,0);
-  for(let i=0;i<400;i++){ d.setDate(d.getDate()-1); if(!g.days.includes(d.getDay())) continue; const o=m[isoDate(d)]; if(o && o.calls>=g.streakMin) s++; else break; }
+  for(let i=0;i<400;i++){ d.setDate(d.getDate()-1); if(!g.days.includes(d.getDay())) continue; const o=m[isoDate(d)]; if(o && o.meet>=need) s++; else break; }
   return s;
 }
 /* the calling day before iso (skips rest days) */
@@ -9659,7 +9662,7 @@ function renderGoalBar(p){
     <div class="gm-num"><b data-gm-n="meet">${p.meet}</b> / ${p.M} meetings</div>
     <div class="gm-calls"><div class="gm-cbar"><i style="width:${pct.toFixed(1)}%"></i>${ticks}</div><div class="gm-num"><b data-gm-n="calls">${p.calls}</b> / ${p.T} calls</div></div>
     <div class="gm-next">${gmNextText(p)}</div>
-    <div class="gm-streak${p.streak?'':' cold'}" title="Days in a row with at least ${p.g.streakMin} calls">${IC.fire}${p.streak} day${p.streak===1?'':'s'}</div>
+    <div class="gm-streak${p.streak?'':' cold'}" title="Calling days in a row with ${p.M}+ meetings booked (your daily goal)">${IC.fire}${p.streak} day${p.streak===1?'':'s'}</div>
     <div class="gm-acts">
       <button class="gm-btn" data-gm="plus" title="A call you made outside the CRM (from Excel, your phone…) — counts toward today">+1 call</button>
       ${inCall?'':`<button class="gm-btn go" data-gm="start">${GM_PHONE}${p.calls?'Keep calling':'Start calling'}</button>`}
@@ -9716,7 +9719,7 @@ function renderGoalCard(p){
       <div class="gm-stat"><div class="l">Potential from today's meetings<small>${p.meet} booked → ≈ ${String(+(p.meet*g.close/100).toFixed(1))} clients × ${fmtMoney(g.value)} · you win it at the meeting</small></div><div class="v g">${fmtMoney(Math.round(p.potential))}</div></div>
       <div class="gm-stat"><div class="l">If you close every meeting<small>${p.meet} booked × ${fmtMoney(g.value)} · 100% instead of ${g.close}%</small></div><div class="v b">${fmtMoney(Math.round(p.potentialAll))}</div></div>
       <div class="gm-stat"><div class="l">A full day is worth<small>${p.M} meetings → ≈ ${String(+clientsDay.toFixed(1))} clients × ${fmtMoney(g.value)}</small></div><div class="v b">${fmtMoney(Math.round(clientsDay*g.value))}</div></div>
-      <div class="gm-stat"><div class="l">Streak<small>days in a row with ${g.streakMin}+ calls</small></div><div class="v o">${p.streak} day${p.streak===1?'':'s'}</div></div>
+      <div class="gm-stat"><div class="l">Streak<small>days in a row with ${p.M}+ meetings booked</small></div><div class="v o">${p.streak} day${p.streak===1?'':'s'}</div></div>
       <div class="gm-stat"><div class="l">Personal best<small>${p.best.meet? 'meetings in one day · '+fmtDay(p.best.mDay) : 'your first booked day sets it'}</small></div><div class="v">${p.best.meet}</div></div>
       <div class="gm-lvl"><div class="row">Level ${lv.n} · ${lv.name}<span>${lv.to? (lv.to-p.life)+' calls to '+lv.nextName : 'top level'}</span></div><div class="bar"><i style="width:${lvPct.toFixed(0)}%"></i></div></div>
     </div>`;
@@ -9743,12 +9746,11 @@ function gmEditHtml(){
   const d=gmDraft; const T=gmCallsTarget(d), vpc=gmPerCall(d), cl=d.meet*d.close/100;
   const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], order=[1,2,3,4,5,6,0];
   return `<div class="gm-edit">
-    <div class="gm-f"><label>Meetings a day — the goal</label><div class="gm-step"><button type="button" data-gme="meet-">−</button><input data-gmi="meet" inputmode="numeric" value="${d.meet}"><button type="button" data-gme="meet+">+</button></div><div class="hint">What you want booked every calling day.</div></div>
+    <div class="gm-f"><label>Meetings a day — the goal</label><div class="gm-step"><button type="button" data-gme="meet-">−</button><input data-gmi="meet" inputmode="numeric" value="${d.meet}"><button type="button" data-gme="meet+">+</button></div><div class="hint">What you want booked every calling day — the streak counts the days in a row you hit it.</div></div>
     <div class="gm-f"><label>Calls it takes per meeting · <span class="rv" data-h="cpm">${d.cpm}</span></label><input type="range" min="5" max="15" step="1" data-gmi="cpm" value="${d.cpm}"><div class="hint">5 = great day · 10 = normal · 15 = tough list. So the day needs <b data-h="T">${T} calls</b>.</div></div>
     <div class="gm-f"><label>Meetings that become clients · <span class="rv" data-h="close">${d.close}%</span></label><input type="range" min="10" max="90" step="5" data-gmi="close" value="${d.close}"><div class="hint">${d.meet} meetings → about <b data-h="cl">${String(+cl.toFixed(1))} clients</b> a day.</div></div>
     <div class="gm-f"><label>One client is worth (€)</label><input class="gm-in" data-gmi="value" inputmode="numeric" value="${d.value}"><div class="hint">Used for the potential of the meetings you book.</div></div>
     <div class="gm-f"><label>Calling days</label><div class="gm-daysel">${order.map(k=>`<button type="button" data-gmd="${k}" class="${d.days.includes(k)?'on':''}">${dn[k]}</button>`).join('')}</div><div class="hint">Other days are rest days — they never count.</div></div>
-    <div class="gm-f"><label>Streak needs at least</label><div class="gm-step"><button type="button" data-gme="streakMin-">−</button><input data-gmi="streakMin" inputmode="numeric" value="${d.streakMin}"><button type="button" data-gme="streakMin+">+</button></div><div class="hint">calls a day to keep the flame going — set it low enough to never break it.</div></div>
     <div class="gm-f"><label>No answer</label><label class="gm-tog" style="text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink)"><input type="checkbox" data-gmi="na" ${d.na?'checked':''}> Count «No answer» as a call</label><div class="hint">You still picked up the phone and dialled — it counts as effort.</div></div>
     <div class="gm-editfoot"><span class="sum">Every calling day: <b data-h="sum">${d.meet} meetings ≈ ${T} calls</b> · <span data-h="sum2">≈ ${String(+cl.toFixed(1))} clients · ${fmtMoney(Math.round(cl*d.value))}</span></span><button type="button" class="b2" data-gm="edit-cancel">Cancel</button><button type="button" class="b1" data-gm="edit-save">Save goal</button></div>
   </div>`;
