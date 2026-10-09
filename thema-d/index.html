@@ -1,0 +1,1759 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#F6F3EC">
+<title>Θέμα Δ — Σχέδιο & MVP</title>
+<meta name="description" content="Προσχέδιο: πλατφόρμα προσομοιώσεων Πανελληνίων με διόρθωση σαν βαθμολογητής, αναφορά γονέα και πίνακα για φροντιστήρια και σχολεία.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314213D'/%3E%3Cpath d='M32 13 L51 49 H13 Z' fill='none' stroke='%23F6F3EC' stroke-width='5' stroke-linejoin='round'/%3E%3Cpath d='M38 40 l5 5 l10 -14' fill='none' stroke='%23E0313F' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+@font-face{font-family:Literata;font-weight:400;font-style:normal;font-display:swap;src:url(assets/fonts/literata-greek-400-normal.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Literata;font-weight:400;font-style:normal;font-display:swap;src:url(assets/fonts/literata-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:Literata;font-weight:400;font-style:italic;font-display:swap;src:url(assets/fonts/literata-greek-400-italic.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Literata;font-weight:400;font-style:italic;font-display:swap;src:url(assets/fonts/literata-latin-400-italic.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:Literata;font-weight:600;font-style:normal;font-display:swap;src:url(assets/fonts/literata-greek-600-normal.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Literata;font-weight:600;font-style:normal;font-display:swap;src:url(assets/fonts/literata-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:Literata;font-weight:600;font-style:italic;font-display:swap;src:url(assets/fonts/literata-greek-600-italic.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Literata;font-weight:600;font-style:italic;font-display:swap;src:url(assets/fonts/literata-latin-600-italic.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:Manrope;font-weight:400;font-display:swap;src:url(assets/fonts/manrope-greek-400-normal.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Manrope;font-weight:400;font-display:swap;src:url(assets/fonts/manrope-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:Manrope;font-weight:500;font-display:swap;src:url(assets/fonts/manrope-greek-500-normal.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Manrope;font-weight:500;font-display:swap;src:url(assets/fonts/manrope-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:Manrope;font-weight:700;font-display:swap;src:url(assets/fonts/manrope-greek-700-normal.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Manrope;font-weight:700;font-display:swap;src:url(assets/fonts/manrope-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:Manrope;font-weight:800;font-display:swap;src:url(assets/fonts/manrope-greek-800-normal.woff2) format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:Manrope;font-weight:800;font-display:swap;src:url(assets/fonts/manrope-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-024F,U+2000-22FF}
+@font-face{font-family:JBM;font-weight:500;font-display:swap;src:url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2')}
+
+:root{
+  color-scheme: light only;
+  --paper:#F6F3EC; --paper-2:#EFEADF; --card:#FFFFFF; --line:#E3DCCD; --line-2:#D4CBB8;
+  --ink:#14213D; --ink-2:#36435E; --muted:#69708A; --faint:#9AA0B4;
+  --red:#D62839; --red-soft:#FCE9EA; --red-ink:#B11E2E;
+  --pen:#2346A8; --green:#11795F; --green-soft:#E3F3EC; --amber:#A8650A; --amber-soft:#FBF0DC;
+  --c1:#2F5BD3; --c2:#C2410C; --c3:#0F8A6C;
+  --serif: Literata, Georgia, 'Times New Roman', serif;
+  --sans: Manrope, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --mono: JBM, ui-monospace, SFMono-Regular, Menlo, monospace;
+  --r:18px; --r-sm:12px;
+  --shadow-1: 0 1px 2px rgba(20,33,61,.06), 0 4px 14px rgba(20,33,61,.06);
+  --shadow-2: 0 2px 6px rgba(20,33,61,.07), 0 18px 48px -12px rgba(20,33,61,.18);
+  --shadow-3: 0 30px 80px -20px rgba(20,33,61,.32);
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--sans);overflow-x:hidden;
+  background-image:
+    linear-gradient(rgba(20,33,61,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20,33,61,.035) 1px, transparent 1px);
+  background-size: 28px 28px; background-attachment: fixed;}
+img,svg{display:block;max-width:100%}
+a{color:var(--pen)}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;letter-spacing:-.015em;line-height:1.15;margin:0}
+p{margin:0 0 .8em}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ===== top bar ===== */
+.top{position:sticky;top:0;z-index:50;background:rgba(246,243,236,.86);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex:none}
+.brand-mark{width:34px;height:34px}
+.brand b{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-.02em}
+.badge-draft{font:700 10.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--red-ink);background:var(--red-soft);border:1px solid #F5C8CC;padding:5px 8px;border-radius:99px}
+.nav{display:flex;gap:4px;margin-left:auto;background:var(--paper-2);padding:4px;border-radius:99px;border:1px solid var(--line)}
+.nav a{font:600 14px/1 var(--sans);text-decoration:none;color:var(--ink-2);padding:10px 15px;border-radius:99px;white-space:nowrap;transition:background .25s,color .25s}
+.nav a:hover{color:var(--ink)}
+.nav a[aria-current="page"]{background:var(--ink);color:#fff;box-shadow:0 4px 12px -4px rgba(20,33,61,.5)}
+@media (max-width:880px){
+  .top .wrap{height:auto;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:10px}
+  .nav{order:3;width:100%;margin-left:0;overflow-x:auto;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{flex:1;text-align:center;padding:10px 12px;font-size:13.5px}
+  .badge-draft{margin-left:auto}
+}
+
+/* ===== views ===== */
+.view{display:none}
+.view.active{display:block;animation:viewIn .5s var(--ease)}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== shared ===== */
+.eyebrow{font:700 12px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--red-ink);display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--red);border-radius:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font:700 15px/1 var(--sans);padding:15px 22px;border-radius:12px;border:1px solid transparent;text-decoration:none;transition:transform .2s var(--ease),box-shadow .2s,background .2s}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-ink{background:var(--ink);color:#fff;box-shadow:0 10px 24px -10px rgba(20,33,61,.7)}
+.btn-ink:hover{transform:translateY(-2px);box-shadow:0 16px 30px -12px rgba(20,33,61,.75)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 10px 24px -10px rgba(214,40,57,.7)}
+.btn-red:hover{transform:translateY(-2px)}
+.btn-line{background:var(--card);color:var(--ink);border-color:var(--line-2)}
+.btn-line:hover{border-color:var(--ink);transform:translateY(-2px)}
+.btn-sm{padding:10px 14px;font-size:13.5px;border-radius:10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font:700 11.5px/1 var(--sans);letter-spacing:.04em;padding:6px 10px;border-radius:99px;background:var(--paper-2);color:var(--ink-2);border:1px solid var(--line)}
+.pill.red{background:var(--red-soft);color:var(--red-ink);border-color:#F3C6CA}
+.pill.green{background:var(--green-soft);color:var(--green);border-color:#BFE3D3}
+.pill.amber{background:var(--amber-soft);color:var(--amber);border-color:#F0D7A8}
+.pill.ink{background:var(--ink);color:#fff;border-color:var(--ink)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono)}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.no-js .rv{opacity:1;transform:none}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,30px);opacity:0;background:var(--ink);color:#fff;padding:13px 18px;border-radius:12px;font:600 14px/1.4 var(--sans);box-shadow:var(--shadow-3);z-index:200;transition:.35s var(--ease);max-width:calc(100% - 32px);pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+<style>
+/* ===== PLAN ===== */
+.hero{position:relative;padding:72px 0 56px;overflow:clip}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(36px,5.2vw,62px);margin:18px 0 18px}
+.hero h1 em{font-style:italic;color:var(--red);position:relative;white-space:nowrap}
+.hero h1 em svg{position:absolute;left:-4%;bottom:-.18em;width:108%;height:.42em;overflow:visible}
+.hero h1 em svg path{stroke:var(--red);stroke-width:3.2;fill:none;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;animation:draw 1.2s .7s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.hero .lead{font-size:clamp(17px,1.6vw,19.5px);color:var(--ink-2);max-width:36em;line-height:1.65}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.hero-note{margin-top:20px;font-size:13.5px;color:var(--muted);max-width:40em}
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:30px;max-width:560px}
+.steps3 div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 13px;box-shadow:var(--shadow-1)}
+.steps3 b{display:block;font:800 12px/1 var(--sans);color:var(--red-ink);letter-spacing:.08em;margin-bottom:6px}
+.steps3 span{font:600 14px/1.35 var(--sans)}
+
+/* exam paper visual */
+.paper-stack{position:relative;height:540px;perspective:1400px}
+.sheet{position:absolute;background:#fff;border-radius:6px;box-shadow:var(--shadow-3);border:1px solid #ece6d8}
+.sheet.back{inset:30px 10px 0 60px;transform:rotate(5deg);background:#FBFAF6}
+.sheet.front{inset:0 50px 30px 0;transform:rotate(-2.2deg);padding:30px 32px;overflow:hidden;animation:floaty 7s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:rotate(-2.2deg) translateY(0)}50%{transform:rotate(-1.6deg) translateY(-8px)}}
+.sheet .ruled{position:absolute;inset:0;background:repeating-linear-gradient(transparent 0 33px,#e7eef8 33px 34px);opacity:.9}
+.sheet .margin{position:absolute;top:0;bottom:0;left:56px;width:1.5px;background:#f2b9bf}
+.hw{position:relative;font:italic 400 17.5px/34px var(--serif);color:var(--pen);padding-left:40px}
+.hw .q{font-style:normal;font-weight:600;color:var(--ink)}
+.hw sup{font-size:.68em;line-height:0}
+.red-note{position:absolute;font:italic 600 15px/1.25 var(--serif);color:var(--red);transform:rotate(-3deg)}
+.score-ring{position:absolute;right:26px;top:22px;width:92px;height:92px}
+.score-ring svg{width:100%;height:100%}
+.score-ring circle{fill:none;stroke:var(--red);stroke-width:3;stroke-dasharray:300;stroke-dashoffset:300;animation:draw 1.1s 1.2s var(--ease) forwards}
+.score-ring span{position:absolute;inset:0;display:grid;place-items:center;font:italic 600 26px/1 var(--serif);color:var(--red);opacity:0;animation:fadeIn .5s 1.9s forwards}
+@keyframes fadeIn{to{opacity:1}}
+.tick{display:inline-block;vertical-align:-4px;width:30px;height:24px;margin-left:6px;overflow:visible}
+.hw .ul{position:relative;display:inline-block}
+.hw .ul .mark{position:absolute;left:-2%;bottom:-4px;width:104%;height:14px;overflow:visible}
+.hw .red-note{position:relative;display:block;margin-top:6px;max-width:300px;line-height:1.35}
+.tick path,.mark path{stroke:var(--red);stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:80;stroke-dashoffset:80}
+.paper-stack.go .tick path,.paper-stack.go .mark path{animation:draw .5s var(--ease) forwards}
+.paper-stack.go .t1 path{animation-delay:.9s}.paper-stack.go .t2 path{animation-delay:1.1s}.paper-stack.go .t3 path{animation-delay:1.3s}
+.paper-stack.go .m1 path{animation-delay:1.6s}
+.paper-stack .red-note{opacity:0}
+.paper-stack.go .red-note{animation:fadeIn .6s 1.9s forwards}
+.float-chip{position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-2);padding:12px 14px;font:600 13px/1.3 var(--sans);display:flex;gap:10px;align-items:center;z-index:3}
+.float-chip i{font-style:normal;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font:800 13px/1 var(--sans);flex:none}
+.fc1{left:-26px;bottom:72px;animation:bob 6s ease-in-out infinite}
+.fc2{right:0;bottom:-6px;animation:bob 7s 1s ease-in-out infinite}
+.fc3{right:-14px;top:150px;animation:bob 6.5s .5s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+section.blk{padding:64px 0;position:relative}
+.blk-head{max-width:760px;margin-bottom:34px}
+.blk-head h2{font-size:clamp(28px,3.4vw,42px);margin:12px 0 12px}
+.blk-head p{color:var(--ink-2);font-size:17.5px}
+.numtag{font:800 13px/1 var(--mono);color:var(--red);margin-right:4px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{padding:22px 22px 20px;position:relative;overflow:hidden}
+.kpi .v{font:600 clamp(30px,3.3vw,40px)/1 var(--serif);letter-spacing:-.02em}
+.kpi .l{margin-top:10px;font-size:14.5px;color:var(--ink-2);line-height:1.45}
+.kpi .s{margin-top:8px;font-size:12px;color:var(--muted)}
+.kpi::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(214,40,57,.10),transparent 70%)}
+
+.compare{overflow:hidden}
+.compare table{width:100%;border-collapse:collapse;font-size:15px}
+.compare th,.compare td{padding:14px 18px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.compare thead th{font:700 13px/1.2 var(--sans);letter-spacing:.04em;color:var(--muted);background:var(--paper-2)}
+.compare thead th.us{color:#fff;background:var(--ink)}
+.compare td.us{background:#F3F5FB;font-weight:700}
+.compare tr:last-child td{border-bottom:0}
+.yes,.no,.meh{display:inline-flex;align-items:center;gap:7px;font-weight:700;white-space:nowrap}
+.yes{color:var(--green)}.no{color:var(--red-ink)}.meh{color:var(--amber)}
+.yes::before,.no::before,.meh::before{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:800 12px/1 var(--sans);color:#fff;flex:none}
+.yes::before{content:"✓";background:var(--green)}
+.no::before{content:"✕";background:var(--red)}
+.meh::before{content:"~";background:var(--amber)}
+@media (max-width:720px){.compare{overflow-x:auto}.compare table{min-width:640px}}
+
+.markets{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.mkt{padding:24px;display:flex;flex-direction:column;gap:10px;grid-column:span 2;transition:transform .35s var(--ease),box-shadow .35s}
+.mkt:hover{transform:translateY(-4px);box-shadow:var(--shadow-2)}
+.mkt.wide{grid-column:span 3}
+.mkt h3{font-size:22px}
+.mkt .verdict{align-self:flex-start}
+.mkt ul{margin:2px 0 0;padding-left:18px;color:var(--ink-2);font-size:14.5px}
+.mkt li{margin:4px 0}
+.mkt.first{border:2px solid var(--ink);box-shadow:0 0 0 6px rgba(20,33,61,.06),var(--shadow-2)}
+.mkt.newmk{background:linear-gradient(160deg,#fff 40%,#FFF5F5)}
+.mkt .who{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line-2);font-size:13.5px;color:var(--muted)}
+
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{padding:22px;position:relative}
+.feat .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--paper-2);border:1px solid var(--line);margin-bottom:14px}
+.feat .ico svg{width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.feat h3{font-size:19px;margin-bottom:8px}
+.feat p{font-size:14.5px;color:var(--ink-2);margin:0}
+.feat .pill{position:absolute;top:20px;right:18px}
+.feat-group{font:700 13px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px;grid-column:1/-1}
+
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.price{padding:26px;display:flex;flex-direction:column}
+.price .who{font:700 13px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.price .amt{font:600 40px/1 var(--serif);margin:14px 0 4px;letter-spacing:-.02em}
+.price .amt small{font:500 15px/1 var(--sans);color:var(--muted);letter-spacing:0}
+.price .alt{font-size:14px;color:var(--ink-2)}
+.price ul{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:9px;font-size:14.5px}
+.price li{padding-left:24px;position:relative}
+.price li::before{content:"";position:absolute;left:2px;top:7px;width:12px;height:7px;border-left:2.5px solid var(--green);border-bottom:2.5px solid var(--green);transform:rotate(-45deg)}
+.price.hl{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:var(--shadow-3);transform:translateY(-8px)}
+.price.hl .who,.price.hl .amt small{color:#AEB7CF}.price.hl .alt{color:#D5DAE8}
+.price.hl li::before{border-color:#7FE0BE}
+.price .why{margin-top:auto;padding-top:16px;font-size:13px;color:var(--muted)}
+.price.hl .why{color:#AEB7CF}
+
+.scen{margin-top:22px;padding:24px;overflow-x:auto}
+.scen table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:620px}
+.scen th,.scen td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left}
+.scen th{font:700 12.5px/1.2 var(--sans);color:var(--muted);letter-spacing:.04em}
+.scen td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.scen tr.tot td{font-weight:800;border-bottom:0;font-size:15.5px}
+.scen .cap{font-size:13px;color:var(--muted);margin-top:12px}
+
+.costs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+.costs .card{padding:22px}
+.costs dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:10px 18px;font-size:14.5px}
+.costs dt{color:var(--ink-2)} .costs dd{margin:0;font-weight:700;text-align:right;white-space:nowrap}
+
+.risks{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.risk{padding:22px;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:start}
+.risk .lvl{grid-row:span 2;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font:800 14px/1 var(--sans);color:#fff}
+.risk .lvl.h{background:var(--red)}.risk .lvl.m{background:var(--amber)}.risk .lvl.l{background:var(--green)}
+.risk h3{font-size:18px;align-self:center}
+.risk p{grid-column:2;font-size:14.5px;color:var(--ink-2);margin:0}
+.risk p b{color:var(--ink)}
+
+.timeline{position:relative;display:grid;gap:14px;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--red),var(--line-2))}
+.tl{position:relative;padding:18px 22px}
+.tl::before{content:"";position:absolute;left:-30px;top:22px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:3px solid var(--red)}
+.tl.now::before{background:var(--red);box-shadow:0 0 0 6px rgba(214,40,57,.18);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 11px rgba(214,40,57,.04)}}
+.tl .when{font:800 12.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--red-ink)}
+.tl h3{font-size:19px;margin:8px 0 6px}
+.tl p{margin:0;font-size:14.5px;color:var(--ink-2)}
+
+.todo{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.todo .card{padding:22px}
+.todo h3{font-size:19px;margin-bottom:4px;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.todo h3 small{font:700 12.5px/1 var(--sans);color:var(--muted)}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed var(--line);cursor:pointer;font-size:14.5px;line-height:1.45}
+.chk:last-child{border-bottom:0}
+.chk input{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;border:2px solid var(--line-2);border-radius:7px;margin:0;background:#fff;display:grid;place-items:center;transition:.2s;cursor:pointer}
+.chk input:checked{background:var(--green);border-color:var(--green)}
+.chk input:checked::after{content:"";width:9px;height:5px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:translateY(-1px) rotate(-45deg)}
+.chk input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(105,112,138,.5)}
+.progress-bar{height:6px;border-radius:9px;background:var(--paper-2);overflow:hidden;margin:10px 0 6px}
+.progress-bar i{display:block;height:100%;background:var(--green);border-radius:9px;transition:width .4s var(--ease)}
+
+.tips{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tip{padding:22px}
+.tip .n{font:600 34px/1 var(--serif);color:var(--red);font-style:italic}
+.tip h3{font-size:18px;margin:10px 0 8px}
+.tip p{font-size:14.5px;color:var(--ink-2);margin:0}
+.objs{margin-top:16px;padding:8px 24px}
+.obj{border-bottom:1px solid var(--line)}
+.obj:last-child{border-bottom:0}
+.obj summary{list-style:none;cursor:pointer;padding:16px 0;font:700 16px/1.4 var(--sans);display:flex;justify-content:space-between;gap:16px}
+.obj summary::-webkit-details-marker{display:none}
+.obj summary::after{content:"+";font:400 24px/1 var(--sans);color:var(--red);transition:transform .3s}
+.obj[open] summary::after{transform:rotate(45deg)}
+.obj p{padding:0 0 16px;margin:0;color:var(--ink-2);font-size:15px}
+.script{margin-top:16px;padding:26px;background:#FFFDF7;border-left:4px solid var(--red)}
+.script h3{font-size:19px;margin-bottom:10px}
+.script p{font:italic 400 16px/1.7 var(--serif);color:var(--ink-2);margin:0 0 10px}
+.script p b{font-style:normal;font-family:var(--sans);font-size:13px;color:var(--red-ink);letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
+
+.has{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.has .card{padding:24px}
+.has h3{font-size:20px;margin-bottom:12px}
+.has ul{margin:0;padding-left:0;list-style:none;display:grid;gap:9px;font-size:14.5px}
+.has li{display:flex;gap:10px}
+.has li::before{flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font:800 11px/1 var(--sans);color:#fff;margin-top:2px}
+.has .ok li::before{content:"✓";background:var(--green)}
+.has .miss li::before{content:"·";background:var(--line-2);font-size:20px}
+
+.names{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.names span{font:600 17px/1 var(--serif);padding:12px 16px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.names span.pick{border:2px solid var(--red);color:var(--red-ink)}
+.sources{font-size:13.5px;color:var(--ink-2)}
+.sources li{margin:6px 0}
+.foot{padding:40px 0 60px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:30px}
+
+@media (max-width:1000px){
+  .hero-grid{grid-template-columns:1fr}
+  .paper-stack{height:470px;max-width:540px;margin:10px auto 0;width:100%}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .markets{grid-template-columns:repeat(2,1fr)}
+  .mkt,.mkt.wide{grid-column:span 1}
+  .features,.tips{grid-template-columns:repeat(2,1fr)}
+  .prices{grid-template-columns:1fr}
+  .price.hl{transform:none}
+}
+@media (max-width:680px){
+  .hero{padding:40px 0 30px}
+  section.blk{padding:44px 0}
+  .markets,.features,.tips,.risks,.todo,.has,.costs{grid-template-columns:1fr}
+  .kpis{gap:10px}.kpi{padding:16px}
+  .steps3{grid-template-columns:1fr}
+  .paper-stack{height:470px}
+  .sheet.front{padding:22px 18px}
+  .hw{font-size:15px;line-height:30px;padding-left:34px}
+  .sheet .ruled{background:repeating-linear-gradient(transparent 0 29px,#e7eef8 29px 30px)}
+  .sheet .margin{left:44px}
+  .fc1{left:0;bottom:40px}.fc3{display:none}.fc2{right:0;bottom:-10px}
+  .hw{font-size:14.5px}.hw .red-note{font-size:13.5px;max-width:240px}
+  .score-ring{width:70px;height:70px;right:14px;top:14px}
+  .score-ring span{font-size:20px}
+}
+</style>
+</head>
+<body class="no-js">
+<script>document.body.classList.remove('no-js');document.documentElement.classList.add('js')</script>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#plan" aria-label="Θέμα Δ — αρχή">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#14213D"/><path d="M32 13 L51 49 H13 Z" fill="none" stroke="#F6F3EC" stroke-width="5" stroke-linejoin="round"/><path d="M38 40 l5 5 l10 -14" fill="none" stroke="#E0313F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <b>Θέμα Δ</b>
+    </a>
+    <span class="badge-draft">Προσχέδιο MVP</span>
+    <nav class="nav" aria-label="Ενότητες">
+      <a href="#plan" data-view="plan">Σχέδιο</a>
+      <a href="#student" data-view="student">Μαθητής</a>
+      <a href="#parent" data-view="parent">Γονέας</a>
+      <a href="#school" data-view="school"><span class="nl">Φροντιστήριο & Σχολείο</span><span class="ns">Φροντ./Σχολείο</span></a>
+    </nav>
+  </div>
+</header>
+<main>
+<!-- ================= PLAN ================= -->
+<div class="view" id="view-plan">
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Σχέδιο + λειτουργικό πρωτότυπο · 9 Οκτωβρίου 2026</span>
+      <h1>Η προσομοίωση Πανελληνίων που σε διορθώνει <em>σαν βαθμολογητής<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 70 4, 150 4, 297 10"/></svg></em></h1>
+      <p class="lead">Ο μαθητής γράφει παλιά θέματα <b>με το χέρι</b>, με χρόνο, χωρίς βοήθεια. Τα φωτογραφίζει. Παίρνει βαθμό ανά ερώτημα, πάνω στο επίσημο σχέδιο βαθμολόγησης, και βλέπει ακριβώς πού χάνει μόρια. Ο γονιός παίρνει αναφορά κάθε Κυριακή. Το φροντιστήριο ή το σχολείο βλέπει όλη την τάξη.</p>
+      <div class="steps3">
+        <div><b>1 · ΓΡΑΦΕΙΣ</b><span>3 ώρες, χαρτί και στυλό, χωρίς βοήθεια</span></div>
+        <div><b>2 · ΦΩΤΟΓΡΑΦΙΖΕΙΣ</b><span>Τις σελίδες σου, με το κινητό</span></div>
+        <div><b>3 · ΒΑΘΜΟΛΟΓΕΙΣΑΙ</b><span>Ανά ερώτημα, όπως στις εξετάσεις</span></div>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-ink" href="#student">Δοκίμασε τη demo ως μαθητής →</a>
+        <a class="btn btn-line" href="#parent">Αναφορά γονέα</a>
+        <a class="btn btn-line" href="#school">Πίνακας φροντιστηρίου/σχολείου</a>
+      </div>
+      <p class="hero-note">Όνομα εργασίας: <b>«Θέμα Δ»</b>, από το πιο δύσκολο θέμα των Πανελληνίων. Αλλάζει εύκολα. Οι αριθμοί που λένε «εκτίμηση» είναι δικές μας υποθέσεις, για να τις ελέγξουμε στο πιλοτικό.</p>
+    </div>
+
+    <div class="paper-stack" id="paperStack" aria-hidden="true">
+      <div class="sheet back"></div>
+      <div class="sheet front">
+        <div class="ruled"></div><div class="margin"></div>
+        <div class="score-ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" transform="rotate(-100 50 50)"/></svg><span>5/8</span></div>
+        <div class="hw">
+          <div><span class="q">Γ2.</span> Θεωρώ g(x) = x·e<sup>−x</sup> − ¼</div>
+          <div>g συνεχής στο [0, 1]</div>
+          <div>g(0) = −¼ &lt; 0</div>
+          <div>g(1) = 1/e − ¼ &gt; 0 <svg class="tick t1" viewBox="0 0 34 28"><path d="M3 15 l9 9 l19 -21"/></svg></div>
+          <div>Θ. Bolzano ⇒ ρίζα στο (0, 1) <svg class="tick t2" viewBox="0 0 34 28"><path d="M3 15 l9 9 l19 -21"/></svg></div>
+          <div>Ομοίως g(4) = 4/e<sup>4</sup> − ¼ &lt; 0</div>
+          <div>⇒ ρίζα στο (1, 4) <svg class="tick t3" viewBox="0 0 34 28"><path d="M3 15 l9 9 l19 -21"/></svg></div>
+          <div><span class="ul">Άρα η εξίσωση έχει δύο ρίζες.<svg class="mark m1" viewBox="0 0 300 22" preserveAspectRatio="none"><path d="M4 12 C 80 18, 200 6, 296 12" style="stroke-dasharray:320;stroke-dashoffset:320"/></svg></span></div>
+          <div class="red-note">«Ακριβώς δύο» θέλει μονοτονία σε κάθε διάστημα. −3</div>
+        </div>
+      </div>
+      <div class="float-chip fc1"><i style="background:var(--green-soft);color:var(--green)">+1,3</i>Μαθηματικά: 13,9 → 15,2</div>
+      <div class="float-chip fc3"><i style="background:var(--red-soft);color:var(--red-ink)">!</i>Αδυναμία: Ασύμπτωτες</div>
+      <div class="float-chip fc2"><i style="background:var(--paper-2)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#14213D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 7l9 6 9-6"/></svg></i>Αναφορά στον γονιό · Κυρ. 20:00</div>
+    </div>
+  </div>
+</section>
+
+<!-- KPIs -->
+<section class="blk" style="padding-top:20px">
+  <div class="wrap">
+    <div class="kpis">
+      <div class="card kpi rv"><div class="v" data-count="89032">89.032</div><div class="l">υποψήφιοι έδωσαν Πανελλήνιες το 2026</div><div class="s">75.109 ΓΕΛ + 13.923 ΕΠΑΛ · κάθε χρόνο, σταθερά</div></div>
+      <div class="card kpi rv"><div class="v" data-count="13805">13.805</div><div class="l">μαθητές Θετικών Σπουδών 2026 (η πρώτη μας ομάδα)</div><div class="s">+13.066 Υγείας, +28.978 Οικονομίας & Πληροφορικής</div></div>
+      <div class="card kpi rv"><div class="v">€0,10–0,30</div><div class="l">κόστος AI για να διορθωθεί ένα τρίωρο γραπτό</div><div class="s">εκτίμηση · θα το μετρήσουμε στο πιλοτικό</div></div>
+      <div class="card kpi rv"><div class="v">~85%+</div><div class="l">περιθώριο κέρδους σε συνδρομή €24,90/μήνα</div><div class="s">εκτίμηση · ακόμα και με 3 διαγωνίσματα/εβδομάδα</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY DIFFERENT -->
+<section class="blk" id="why">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">01 · Γιατί να μας πληρώσουν</span>
+      <h2>Δεν πουλάμε «AI». Πουλάμε την προετοιμασία που το AI μόνο του δεν κάνει.</h2>
+      <p>Κάθε μαθητής έχει ήδη δωρεάν ChatGPT, Claude ή Gemini. Τα παλιά θέματα και οι λύσεις του Υπουργείου είναι δωρεάν στο internet. Και το Δημόσιο έχει πει ότι εξετάζει «ψηφιακό φροντιστήριο» με AI. Άρα αν φτιάξουμε «ρώτα ό,τι θέλεις», χάνουμε από την πρώτη μέρα. Η διαφορά μας είναι <b>η δομή, οι συνθήκες εξέτασης, η βαθμολόγηση, η παρακολούθηση και ο γονιός</b>.</p>
+    </div>
+    <div class="card compare rv">
+      <table>
+        <thead><tr><th>Τι χρειάζεται ο υποψήφιος</th><th>ChatGPT / Claude / Gemini</th><th>Δωρεάν παλιά θέματα</th><th class="us">Θέμα Δ</th></tr></thead>
+        <tbody>
+          <tr><td>Τον βάζει να γράψει τρίωρο με το χέρι, με χρόνο</td><td><span class="no">Όχι</span></td><td><span class="meh">Μόνος του</span></td><td class="us"><span class="yes">Ναι, με κλείδωμα</span></td></tr>
+          <tr><td>Βαθμός ανά ερώτημα με το επίσημο σχέδιο βαθμολόγησης</td><td><span class="meh">Αν το ζητήσεις σωστά</span></td><td><span class="no">Όχι</span></td><td class="us"><span class="yes">Πάντα, ίδιος τρόπος</span></td></tr>
+          <tr><td>Δεν δίνει τη λύση πριν προσπαθήσεις</td><td><span class="no">Τη δίνει αμέσως</span></td><td><span class="meh">Η λύση είναι δίπλα</span></td><td class="us"><span class="yes">Μόνο μετά τη διόρθωση</span></td></tr>
+          <tr><td>Θυμάται τις αδυναμίες σου για μήνες</td><td><span class="no">Όχι</span></td><td><span class="no">Όχι</span></td><td class="us"><span class="yes">Χάρτης αδυναμιών</span></td></tr>
+          <tr><td>Επόμενη προσομοίωση φτιαγμένη για τα κενά σου</td><td><span class="no">Όχι</span></td><td><span class="no">Όχι</span></td><td class="us"><span class="yes">Ναι</span></td></tr>
+          <tr><td>Ο γονιός ξέρει πού βρίσκεται το παιδί</td><td><span class="no">Όχι</span></td><td><span class="no">Όχι</span></td><td class="us"><span class="yes">Αναφορά κάθε Κυριακή</span></td></tr>
+          <tr><td>Ο καθηγητής βλέπει όλη την τάξη</td><td><span class="no">Όχι</span></td><td><span class="no">Όχι</span></td><td class="us"><span class="yes">Πίνακας τάξης</span></td></tr>
+          <tr><td>Τα νέα θέματα μέσα σε 24 ώρες κάθε Ιούνιο</td><td><span class="meh">Ίσως</span></td><td><span class="meh">Ναι, χωρίς οργάνωση</span></td><td class="us"><span class="yes">Ναι, ανά κεφάλαιο</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETS -->
+<section class="blk" id="markets">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">02 · Οι αγορές</span>
+      <h2>Πέντε αγορές. Ξεκινάμε από μία, πουλάμε μέσα από δύο.</h2>
+      <p>Ο μαθητής χρησιμοποιεί το προϊόν, αλλά <b>πληρώνει ο γονιός, το φροντιστήριο ή το σχολείο</b>. Γι' αυτό τα φροντιστήρια και τα ιδιωτικά σχολεία είναι ο δρόμος: με ένα «ναι» παίρνουμε 40 έως 300 μαθητές μαζί.</p>
+    </div>
+    <div class="markets">
+      <article class="card mkt first wide rv">
+        <span class="pill ink verdict">① ΞΕΚΙΝΑΜΕ ΕΔΩ</span>
+        <h3>Πανελλήνιες (Β' & Γ' Λυκείου)</h3>
+        <ul>
+          <li>~89.000 υποψήφιοι κάθε χρόνο, το πιο σοβαρό διαγώνισμα μιας ελληνικής οικογένειας.</li>
+          <li>Οι γονείς ήδη πληρώνουν φροντιστήρια και ιδιαίτερα. Τα €25 τον μήνα φαίνονται μικρά δίπλα σε αυτά.</li>
+          <li>Η ύλη είναι συγκεκριμένη και δημόσια (θέματα, λύσεις, σχολικά βιβλία), άρα μπορούμε να γίνουμε πολύ ακριβείς.</li>
+          <li>Το αποτέλεσμα μετριέται: βαθμοί και μόρια.</li>
+        </ul>
+        <div class="who">Πρώτα: <b>Θετικών Σπουδών</b>: Μαθηματικά, Φυσική, Χημεία. Είναι τα πιο αντικειμενικά στη βαθμολόγηση.</div>
+      </article>
+      <article class="card mkt wide rv">
+        <span class="pill green verdict">② ΤΟ ΚΑΝΑΛΙ ΠΩΛΗΣΗΣ</span>
+        <h3>Φροντιστήρια</h3>
+        <ul>
+          <li>Τους το δίνουμε με το δικό τους λογότυπο: «το φροντιστήριό μας έχει πλατφόρμα προσομοιώσεων με AI».</li>
+          <li>Οι καθηγητές βλέπουν τι να κάνουν στο επόμενο μάθημα και γλιτώνουν ώρες διόρθωσης.</li>
+          <li>Ανανεώνουν κάθε χρόνο, ακόμα κι όταν οι μαθητές αλλάζουν.</li>
+          <li>Έχεις ήδη λίστα: όσοι δήλωσαν ενδιαφέρον στο vresfrontistirio.gr.</li>
+        </ul>
+        <div class="who">Ποιος αποφασίζει: ο ιδιοκτήτης/διευθυντής. Γρήγορη απόφαση, ακόμα και στο πρώτο τηλέφωνο.</div>
+      </article>
+      <article class="card mkt newmk rv">
+        <span class="pill red verdict">③ ΝΕΟ · ΣΧΟΛΕΙΑ</span>
+        <h3>Ιδιωτικά σχολεία</h3>
+        <ul>
+          <li>Ανταγωνίζονται με τις «επιτυχίες στις Πανελλήνιες». Αυτό τους φέρνει εγγραφές.</li>
+          <li>Έχουν προϋπολογισμό και οι καθηγητές τους διορθώνουν ατελείωτα διαγωνίσματα.</li>
+          <li>Πολλά έχουν και IB: με το ίδιο συμβόλαιο τους δίνουμε αργότερα και IB.</li>
+          <li>Ένα συμβόλαιο = 100–300 μαθητές.</li>
+        </ul>
+        <div class="who">Αποφασίζουν άνοιξη/καλοκαίρι για τον Σεπτέμβριο → ραντεβού Φεβ–Ιούν 2027. Δημόσια σχολεία: όχι τώρα, μόνο μέσω Υπουργείου.</div>
+      </article>
+      <article class="card mkt rv">
+        <span class="pill amber verdict">④ ΑΡΓΟΤΕΡΑ · 2027–28</span>
+        <h3>IB & IAL</h3>
+        <ul>
+          <li>Οι γονείς πληρώνουν τα περισσότερα, αλλά η αγορά στην Ελλάδα είναι μικρή.</li>
+          <li>Τα θέματα είναι στα αγγλικά, όπου τα γενικά AI είναι ήδη πολύ καλά, και υπάρχουν δυνατοί ξένοι ανταγωνιστές.</li>
+          <li>Η ίδια «μηχανή» δουλεύει και εδώ. Το πουλάμε μέσα από τα ιδιωτικά σχολεία.</li>
+        </ul>
+        <div class="who">Ξεκίνημα: Maths AA/AI, Physics, Chemistry.</div>
+      </article>
+      <article class="card mkt rv">
+        <span class="pill verdict">⑤ ΑΡΓΟΤΕΡΑ · «JUNIOR»</span>
+        <h3>Γυμνάσιο – Α' Λυκείου</h3>
+        <ul>
+          <li>Δεν υπάρχει μεγάλη εξέταση, άρα ούτε βιασύνη, και οι γονείς πληρώνουν λιγότερο πρόθυμα.</li>
+          <li>Εδώ το δωρεάν ChatGPT μας αντικαθιστά πιο εύκολα.</li>
+          <li>Αργότερα, ως φθηνό πακέτο για τα διαγωνίσματα τριμήνου.</li>
+        </ul>
+        <div class="who">Αξίζει μόνο όταν η μηχανή υπάρχει ήδη.</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="blk" id="product">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">03 · Το προϊόν</span>
+      <h2>Τι κάνει, με απλά λόγια</h2>
+      <p>Ό,τι γράφει <span class="pill green" style="vertical-align:2px">ΣΤΗ DEMO</span> μπορείς να το πατήσεις ήδη σε αυτό το προσχέδιο. Τα <span class="pill" style="vertical-align:2px">ΑΡΓΟΤΕΡΑ</span> μπαίνουν στο πραγματικό MVP.</p>
+    </div>
+    <div class="features">
+      <div class="feat-group">Για τον μαθητή</div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></div><h3>Λειτουργία εξέτασης</h3><p>Διαλέγει θέμα ή προσομοίωση. Ξεκινά τρίωρο χρονόμετρο, η βοήθεια κλειδώνει και γράφει στο χαρτί του. Αν βγει από την οθόνη, καταγράφεται.</p></div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg></div><h3>Φωτογραφία → βαθμός</h3><p>Φωτογραφίζει τις σελίδες. Το σύστημα διαβάζει τον γραφικό χαρακτήρα και βαθμολογεί ανά ερώτημα, με το επίσημο σχέδιο βαθμολόγησης.</p></div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></div><h3>«Κόκκινο στυλό»</h3><p>Βλέπει το γραπτό του διορθωμένο: τι πήρε μονάδες, πού έχασε και γιατί. Η επίσημη λύση εμφανίζεται μόνο μετά τη διόρθωση.</p></div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><h3>Χάρτης αδυναμιών</h3><p>Ανά κεφάλαιο: «Ολοκληρώματα 45%, Μιγαδικοί 88%». Η επόμενη προσομοίωση δίνει βάρος σε όσα κεφάλαια έχει πιο αδύναμα.</p></div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.6 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></div><h3>3 παρόμοιες ασκήσεις</h3><p>Για κάθε λάθος, 3 ασκήσεις να λύσει ξανά με το χέρι. Πρώτα παίρνει υπόδειξη και μετά τη λύση, ποτέ ανάποδα.</p></div>
+      <div class="card feat rv"><span class="pill">ΑΡΓΟΤΕΡΑ</span><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div><h3>Πρόγραμμα ως τις εξετάσεις</h3><p>Αντίστροφη μέτρηση και εβδομαδιαίο πλάνο: πόσα διαγωνίσματα, ποια κεφάλαια, πότε επανάληψη.</p></div>
+      <div class="feat-group">Για τον γονιό</div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 7l9 6 9-6"/></svg></div><h3>Αναφορά κάθε Κυριακή</h3><p>Μία σελίδα σε email ή Viber: πόσα διαγωνίσματα έγραψε, πώς πάνε οι βαθμοί του, πού δυσκολεύεται, πόσες ώρες διάβασε.</p></div>
+      <div class="card feat rv"><span class="pill">ΑΡΓΟΤΕΡΑ</span><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Ο λογαριασμός ανοίγει από τον γονιό</h3><p>Ο γονιός δίνει τη συναίνεση για τα δεδομένα του ανήλικου, όπως ζητά ο νόμος, και πληρώνει.</p></div>
+      <div class="card feat rv"><span class="pill">ΑΡΓΟΤΕΡΑ</span><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div><h3>Ειδοποίηση αν «χαθεί»</h3><p>Αν το παιδί δεν γράψει τίποτα 10 μέρες ή οι βαθμοί του πέσουν, ο γονιός ενημερώνεται ήρεμα, με πρόταση τι να κάνει.</p></div>
+      <div class="feat-group">Για το φροντιστήριο και το σχολείο</div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><h3>Πίνακας τάξης</h3><p>Μαθητές × κεφάλαια σε χρώματα. Με μια ματιά φαίνεται τι πρέπει να ξαναδουλέψει όλο το τμήμα και ποιος μένει πίσω.</p></div>
+      <div class="card feat rv"><span class="pill green">ΣΤΗ DEMO</span><div class="ico"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9"/></svg></div><h3>Διόρθωση γραπτών τάξης</h3><p>Ο καθηγητής ανεβάζει τα γραπτά όλης της τάξης. Το σύστημα προτείνει βαθμό και ο καθηγητής εγκρίνει ή αλλάζει. Ο τελικός λόγος είναι πάντα δικός του.</p></div>
+      <div class="card feat rv"><span class="pill">ΑΡΓΟΤΕΡΑ</span><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div><h3>Με το δικό τους λογότυπο</h3><p>Το φροντιστήριο ή το σχολείο το δίνει ως δική του υπηρεσία, με τα δικά του διαγωνίσματα δίπλα στα δικά μας.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MONEY -->
+<section class="blk" id="money">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">04 · Πώς βγάζει χρήματα</span>
+      <h2>Τρεις τρόποι πληρωμής, ένα προϊόν</h2>
+      <p>Οι μαθητές «φεύγουν» κάθε χρόνο μετά τις εξετάσεις, οπότε η συνδρομή μόνο από γονείς έχει όριο. Τα φροντιστήρια και τα σχολεία ανανεώνουν κάθε Σεπτέμβριο. Γι' αυτό είναι η βάση μας.</p>
+    </div>
+    <div class="prices">
+      <div class="card price rv">
+        <div class="who">Γονιός / μαθητής</div>
+        <div class="amt">€24,90 <small>/ μήνα</small></div>
+        <div class="alt">ή «Σεζόν» <b>€199</b> για Σεπτέμβριο–Ιούνιο</div>
+        <ul><li>Απεριόριστες προσομοιώσεις & διορθώσεις</li><li>Όλα τα μαθήματα της κατεύθυνσης</li><li>Χάρτης αδυναμιών & παρόμοιες ασκήσεις</li><li>Αναφορά γονέα κάθε Κυριακή</li></ul>
+        <div class="why">Μικρό ποσό δίπλα σε ένα φροντιστήριο, και ο γονιός βλέπει κάθε εβδομάδα τι παίρνει.</div>
+      </div>
+      <div class="card price hl rv">
+        <div class="who">Φροντιστήριο</div>
+        <div class="amt">€149 <small>/ μήνα</small></div>
+        <div class="alt">έως 40 μαθητές · <b>€249</b> έως 100 · μόνο Σεπ–Ιούν</div>
+        <ul><li>Όλα τα παραπάνω για κάθε μαθητή</li><li>Πίνακας τάξης για τους καθηγητές</li><li>Διόρθωση γραπτών τάξης με έγκριση καθηγητή</li><li>Με το λογότυπο του φροντιστηρίου</li><li>Δωρεάν πιλοτικό ως τέλη Ιανουαρίου</li></ul>
+        <div class="why">Ο πιο γρήγορος δρόμος: μία απόφαση, δεκάδες μαθητές, ανανέωση κάθε χρόνο.</div>
+      </div>
+      <div class="card price rv">
+        <div class="who">Ιδιωτικό σχολείο</div>
+        <div class="amt">€30–40 <small>/ μαθητή / έτος</small></div>
+        <div class="alt">ελάχιστο <b>€2.500</b> · π.χ. 150 μαθητές ≈ €4.500–6.000</div>
+        <ul><li>Β' & Γ' Λυκείου (και IB αργότερα)</li><li>Διόρθωση διαγωνισμάτων όλων των τμημάτων</li><li>Αναφορές για διεύθυνση και γονείς</li><li>Εκπαίδευση καθηγητών & υποστήριξη</li></ul>
+        <div class="why">Πιο αργή απόφαση, αλλά μεγάλα και σταθερά συμβόλαια.</div>
+      </div>
+    </div>
+
+    <div class="card scen rv">
+      <h3 style="font-size:20px;margin-bottom:6px">Παράδειγμα εσόδων <span class="pill amber" style="vertical-align:3px">παράδειγμα, όχι πρόβλεψη</span></h3>
+      <p class="muted" style="font-size:14px">Μόνο για να φανεί το μέγεθος. Τους πραγματικούς αριθμούς θα τους δώσει το πιλοτικό.</p>
+      <table>
+        <thead><tr><th>Πηγή</th><th>Σεζόν 1 (Φεβ–Ιούν 2027) · συντηρητικά</th><th class="n" style="text-align:right">€</th><th>Σεζόν 2 (Σεπ 2027–Ιούν 2028)</th><th class="n" style="text-align:right">€</th></tr></thead>
+        <tbody>
+          <tr><td>Φροντιστήρια</td><td>8 × €149 × 5 μήνες</td><td class="n">5.960</td><td>40 × ~€199 × 10 μήνες</td><td class="n">79.600</td></tr>
+          <tr><td>Γονείς (B2C)</td><td>100 οικογένειες × €24,90 × 5</td><td class="n">12.450</td><td>800 «Σεζόν» × €199</td><td class="n">159.200</td></tr>
+          <tr><td>Ιδιωτικά σχολεία</td><td>—</td><td class="n">0</td><td>6 σχολεία × ~€5.000</td><td class="n">30.000</td></tr>
+          <tr class="tot"><td>Σύνολο</td><td></td><td class="n">≈ 18.400</td><td></td><td class="n">≈ 268.800</td></tr>
+        </tbody>
+      </table>
+      <p class="cap">Κόστος AI (εκτίμηση): ένας μαθητής με 3 διαγωνίσματα την εβδομάδα για 40 εβδομάδες ≈ 120 διορθώσεις ≈ €12–36 τον χρόνο. Μένει μεγάλο περιθώριο ακόμα και στη «Σεζόν» των €199.</p>
+    </div>
+
+    <div class="costs">
+      <div class="card rv">
+        <h3 style="font-size:19px;margin-bottom:14px">Τι κοστίζει να στηθεί <span class="pill amber" style="vertical-align:2px">εκτιμήσεις</span></h3>
+        <dl>
+          <dt>Κατασκευή (εμείς, εσύ + Claude)</dt><dd>€0 σε μετρητά</dd>
+          <dt>Server, βάση δεδομένων & αποθήκευση φωτογραφιών (ΕΕ)</dt><dd>€25–60/μήνα</dd>
+          <dt>Καθηγητής-συνεργάτης για έλεγχο ποιότητας</dt><dd>€500–1.000 ή ποσοστό</dd>
+          <dt>Νομικός: όροι, απόρρητο ανηλίκων, AI Act</dt><dd>€300–800 μία φορά</dd>
+          <dt>Domain, email, πληρωμές (Viva Wallet ή Stripe)</dt><dd>~€20 + προμήθεια</dd>
+        </dl>
+      </div>
+      <div class="card rv">
+        <h3 style="font-size:19px;margin-bottom:14px">Ο καθηγητής-συνεργάτης: το πιο σημαντικό πρόσωπο</h3>
+        <p style="font-size:14.5px;color:var(--ink-2)">Ένας έμπειρος καθηγητής Μαθηματικών (ιδανικά και βαθμολογητής Πανελληνίων) που:</p>
+        <ul style="font-size:14.5px;color:var(--ink-2);padding-left:18px;margin:0">
+          <li>ελέγχει ότι τα σχέδια βαθμολόγησης είναι σωστά,</li>
+          <li>διορθώνει 30 γραπτά «στα τυφλά» για να συγκρίνουμε με το AI,</li>
+          <li>δίνει το όνομά του για αξιοπιστία («ελεγμένο από βαθμολογητή»),</li>
+          <li>μας ανοίγει πόρτες σε φροντιστήρια.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RISKS -->
+<section class="blk" id="risks">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">05 · Ρίσκα, ειλικρινά</span>
+      <h2>Τι μπορεί να πάει στραβά και τι κάνουμε γι' αυτό</h2>
+    </div>
+    <div class="risks">
+      <div class="card risk rv"><div class="lvl h">!</div><h3>Ένας λάθος βαθμός = τέλος εμπιστοσύνης</h3><p>Αν διορθώσει λάθος ένα γραπτό Μαθηματικών μπροστά σε καθηγητή, μας πετάνε. <b>Λύση:</b> βαθμολόγηση μόνο πάνω στο επίσημο σχέδιο, η επίσημη λύση δίπλα στη δική του, κουμπί «Διαφωνώ με τον βαθμό», και τελικός λόγος στον καθηγητή. Στο πιλοτικό μετράμε: στόχος να απέχει το πολύ ±1 μονάδα από τον καθηγητή στο 90% των ερωτημάτων.</p></div>
+      <div class="card risk rv"><div class="lvl h">!</div><h3>Νόμος για το AI στην εκπαίδευση (EU AI Act)</h3><p>Ένα σύστημα που βαθμολογεί μαθητές θεωρείται πιθανότατα «υψηλού κινδύνου». Μετά τις τελευταίες αλλαγές της ΕΕ (Digital Omnibus), οι υποχρεώσεις για την εκπαίδευση ισχύουν από <b>2 Δεκεμβρίου 2027</b>: τεκμηρίωση, ανθρώπινη εποπτεία, αρχεία. <b>Λύση:</b> το χτίζουμε από τώρα με «ο άνθρωπος εγκρίνει» και μιλάμε με νομικό πριν από τα σχολεία.</p></div>
+      <div class="card risk rv"><div class="lvl m">~</div><h3>Ανήλικοι & GDPR</h3><p>Στην Ελλάδα, για παιδιά κάτω των 15 χρειάζεται συναίνεση γονέα. <b>Λύση:</b> τον λογαριασμό τον ανοίγει πάντα ο γονιός, τα δεδομένα μένουν σε servers στην ΕΕ, οι φωτογραφίες σβήνονται μετά από Χ μήνες και δεν χρησιμοποιούμε γραπτά για «εκπαίδευση» AI χωρίς άδεια.</p></div>
+      <div class="card risk rv"><div class="lvl m">~</div><h3>Έκθεση: υποκειμενική βαθμολόγηση</h3><p>Η Νεοελληνική αφορά όλους τους υποψήφιους, αλλά η βαθμολόγησή της προκαλεί διαφωνίες. <b>Λύση:</b> μπαίνει σε δεύτερη φάση, πρώτα ως «σχόλια» με βάση τα επίσημα κριτήρια και όχι ως βαθμός.</p></div>
+      <div class="card risk rv"><div class="lvl m">~</div><h3>Εποχικότητα</h3><p>Τα έσοδα ανεβαίνουν Ιανουάριο–Μάιο και κάθε μαθητής φεύγει μετά τις εξετάσεις. <b>Λύση:</b> φροντιστήρια και σχολεία ανανεώνουν, πουλάμε «Σεζόν» με προπληρωμή, και η Β' Λυκείου κρατά την οικογένεια για 2 χρόνια.</p></div>
+      <div class="card risk rv"><div class="lvl m">~</div><h3>Ανταγωνισμός</h3><p>Τα μεγάλα AI βγάζουν «λειτουργίες μελέτης», το Δημόσιο εξετάζει ψηφιακό φροντιστήριο, και οι μεγάλοι εκδότες μπορεί να αντιδράσουν. <b>Λύση:</b> ελληνικό σχέδιο βαθμολόγησης, καθηγητής μέσα στη διαδικασία, γονιός, και τα φροντιστήρια ως συνεργάτες και όχι ως αντίπαλοι.</p></div>
+      <div class="card risk rv"><div class="lvl l">✓</div><h3>Αντιγραφή κατά την εξέταση</h3><p>Κανείς δεν εμποδίζει έναν μαθητή να ανοίξει ChatGPT. <b>Λύση:</b> δεν το κυνηγάμε. Καταγράφουμε κάθε έξοδο από την οθόνη και τη δείχνουμε στην αναφορά του γονέα. Πουλάμε σε όσους θέλουν να περάσουν.</p></div>
+      <div class="card risk rv"><div class="lvl l">✓</div><h3>Δικαιώματα στο υλικό</h3><p>Τα θέματα και οι λύσεις του Υπουργείου είναι δημόσια, και τα σχολικά βιβλία είναι ελεύθερα για αναφορά. <b>Ποτέ:</b> υλικό φροντιστηρίων ή εκδοτών χωρίς γραπτή άδεια. Επιβεβαιώνουμε με νομικό.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="blk" id="timeline">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">06 · Χρονοδιάγραμμα</span>
+      <h2>Από σήμερα ως τον Σεπτέμβριο 2027</h2>
+      <p>Η «αιχμή» είναι Ιανουάριος–Μάιος, η εποχή των επαναλήψεων. Αν είμαστε έτοιμοι τον Δεκέμβριο, πιάνουμε την πρώτη σεζόν.</p>
+    </div>
+    <div class="timeline">
+      <div class="card tl now rv"><div class="when">Οκτώβριος 2026 · τώρα</div><h3>Έλεγχος ότι το θέλουν, πριν χτίσουμε</h3><p>Αυτό το προσχέδιο → 2 σελίδες προσφοράς (φροντιστήρια, γονείς) → 15 τηλέφωνα σε φροντιστήρια → 3 επιδείξεις. Βρίσκουμε τον καθηγητή-συνεργάτη.</p></div>
+      <div class="card tl rv"><div class="when">Νοέμβριος 2026</div><h3>Το πραγματικό MVP</h3><p>Αν 3–4 φροντιστήρια πουν «ναι»: λογαριασμοί γονέα/μαθητή/καθηγητή, Μαθηματικά–Φυσική–Χημεία Θετικών, όλα τα θέματα 2015–2026 ταξινομημένα ανά κεφάλαιο, βαθμολόγηση, αναφορά γονέα, πίνακας τάξης.</p></div>
+      <div class="card tl rv"><div class="when">Δεκέμβριος 2026</div><h3>Κλειστή δοκιμή</h3><p>20–30 μαθητές. Ο καθηγητής διορθώνει «στα τυφλά» και συγκρίνουμε με το AI. Διορθώνουμε ό,τι δεν πάει καλά.</p></div>
+      <div class="card tl rv"><div class="when">Ιανουάριος 2027</div><h3>Δωρεάν πιλοτικό σε 3–4 φροντιστήρια</h3><p>Ένα τμήμα Γ' Λυκείου στο καθένα. Μετράμε βαθμούς πριν και μετά: αυτό θα είναι το «case study» μας.</p></div>
+      <div class="card tl rv"><div class="when">Φεβρουάριος 2027</div><h3>Ξεκινά η χρέωση</h3><p>Τα φροντιστήρια πληρώνουν και ανοίγουμε σε γονείς. Παράλληλα κλείνουμε ραντεβού με ιδιωτικά σχολεία για τον Σεπτέμβριο.</p></div>
+      <div class="card tl rv"><div class="when">Μάρτιος – Μάιος 2027</div><h3>Αιχμή</h3><p>+ Βιολογία, ΑΟΘ, Πληροφορική. Νεοελληνική ως «σχόλια». Διαφημίσεις σε γονείς Β' και Γ' Λυκείου.</p></div>
+      <div class="card tl rv"><div class="when">Ιούνιος 2027</div><h3>Πανελλήνιες</h3><p>Τα νέα θέματα μπαίνουν μέσα σε 24 ώρες. Μαζεύουμε αποτελέσματα και κριτικές.</p></div>
+      <div class="card tl rv"><div class="when">Ιούλιος – Σεπτέμβριος 2027</div><h3>Σχολεία & IB</h3><p>Υπογραφή συμβολαίων με σχολεία. Ενότητα IB (Maths AA/AI, Physics). Νέα σεζόν με σχολεία + φροντιστήρια + γονείς.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TODO -->
+<section class="blk" id="todo">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">07 · Τι κάνεις εσύ</span>
+      <h2>Η λίστα σου, βήμα βήμα</h2>
+      <p>Τσέκαρε ό,τι κάνεις. Η λίστα θυμάται τις επιλογές σου σε αυτή τη συσκευή.</p>
+      <div class="progress-bar" style="max-width:420px"><i id="todoBar" style="width:0"></i></div>
+      <div class="muted" style="font-size:13.5px" id="todoTxt">0 από 0</div>
+    </div>
+    <div class="todo" id="todoGrid">
+      <div class="card rv"><h3>Αυτή την εβδομάδα <small>~2 ώρες</small></h3>
+        <label class="chk"><input type="checkbox" data-k="t1"><span>Πέρασε όλη τη demo: γράψε ένα «διαγώνισμα» ως μαθητής, δες την αναφορά γονέα και τον πίνακα φροντιστηρίου.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t2"><span>Δοκίμασε τη <b>Ζωντανή διόρθωση</b> με το API key σου: λύσε ένα ερώτημα με το χέρι, φωτογράφισέ το και δες αν ο βαθμός είναι σωστός.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t3"><span>Διάλεξε όνομα (ή κράτα «Θέμα Δ») και έλεγξε αν το .gr είναι ελεύθερο στο Papaki.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t4"><span>Βρες έναν καθηγητή Μαθηματικών (φίλο ή γνωστό) για 1 ώρα: να δει τη demo και να κρίνει τη βαθμολόγηση.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t5"><span>Πες μου «γράψε τις σελίδες προσφοράς» για να φτιάξω τη σελίδα για φροντιστήρια, τη σελίδα για γονείς και το σενάριο τηλεφώνου.</span></label>
+      </div>
+      <div class="card rv"><h3>Επόμενες 2 εβδομάδες <small>τηλέφωνα</small></h3>
+        <label class="chk"><input type="checkbox" data-k="t6"><span>15 τηλέφωνα σε φροντιστήρια. Ξεκίνα από όσα δήλωσαν ενδιαφέρον στο vresfrontistirio.gr.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t7"><span>Κλείσε 3 επιδείξεις: δείξε αυτή τη σελίδα στο κινητό και φωτογράφισε ένα γραπτό μπροστά τους.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t8"><span>Ρώτα: «Θα το δίνατε στους μαθητές σας για €149 τον μήνα; Τι θα έπρεπε να έχει;» και κράτα σημειώσεις.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t9"><span>Ρώτα 3 γονείς μαθητών Β' ή Γ' Λυκείου: «Θα πληρώνατε €25 τον μήνα γι' αυτό;»</span></label>
+        <label class="chk"><input type="checkbox" data-k="t10"><span>Απόφαση: αν πουν «ναι» 3–4 φροντιστήρια, προχωράμε. Αν όχι, αλλάζουμε την προσφορά πριν χτίσουμε.</span></label>
+      </div>
+      <div class="card rv"><h3>Αν πουν «ναι» <small>Νοέμβριος</small></h3>
+        <label class="chk"><input type="checkbox" data-k="t11"><span>Πες μου «χτίσε το πραγματικό MVP». Στήνω λογαριασμούς, βάση, βαθμολόγηση, αναφορές και πίνακα τάξης.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t12"><span>Συμφωνία με τον καθηγητή-συνεργάτη (αμοιβή ή ποσοστό) και έλεγχος 30 διορθώσεων.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t13"><span>Νομικός: όροι χρήσης, απόρρητο για ανηλίκους, θέσεις για το AI Act.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t14"><span>Λογαριασμός πληρωμών για συνδρομές (Viva Wallet ή Stripe).</span></label>
+        <label class="chk"><input type="checkbox" data-k="t15"><span>Υπογραφή πιλοτικού με 3–4 φροντιστήρια για τον Ιανουάριο.</span></label>
+      </div>
+      <div class="card rv"><h3>Σχολεία <small>Φεβ–Ιούν 2027</small></h3>
+        <label class="chk"><input type="checkbox" data-k="t16"><span>Λίστα ιδιωτικών σχολείων Αττικής και Θεσσαλονίκης με Λύκειο (σημείωσε όσα έχουν IB).</span></label>
+        <label class="chk"><input type="checkbox" data-k="t17"><span>Πάρε 2–3 πραγματικά αποτελέσματα από το πιλοτικό: «το τμήμα ανέβηκε Χ μονάδες».</span></label>
+        <label class="chk"><input type="checkbox" data-k="t18"><span>Ραντεβού με τον Υπεύθυνο Σπουδών. Πρόταση: δωρεάν πιλοτικό σε ένα τμήμα Γ' Λυκείου.</span></label>
+        <label class="chk"><input type="checkbox" data-k="t19"><span>Ετήσιο συμβόλαιο από Σεπτέμβριο 2027 (Πανελλήνιες + IB).</span></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section class="blk" id="tips">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">08 · Συμβουλές πώλησης</span>
+      <h2>Πώς το πουλάς</h2>
+    </div>
+    <div class="tips">
+      <div class="card tip rv"><div class="n">1</div><h3>Στον γονιό πουλάς ησυχία</h3><p>Όχι «τεχνητή νοημοσύνη». Πες: «Κάθε Κυριακή ξέρετε ακριβώς πού βρίσκεται το παιδί σας και τι να κάνει την επόμενη εβδομάδα».</p></div>
+      <div class="card tip rv"><div class="n">2</div><h3>Στο φροντιστήριο: «δεν σας αντικαθιστούμε»</h3><p>«Οι καθηγητές σας γλιτώνουν ώρες διόρθωσης και ξέρουν τι να κάνουν στο επόμενο μάθημα. Και οι γονείς βλέπουν ότι έχετε κάτι που δεν έχουν οι άλλοι.»</p></div>
+      <div class="card tip rv"><div class="n">3</div><h3>Στο σχολείο: επιτυχίες = εγγραφές</h3><p>«Περισσότεροι μαθητές σας στα πρώτα τους πανεπιστήμια σημαίνει περισσότερες εγγραφές του χρόνου.»</p></div>
+      <div class="card tip rv"><div class="n">4</div><h3>Δείχνεις, δεν εξηγείς</h3><p>Άνοιξε τη demo στο κινητό, φωτογράφισε ένα πραγματικό γραπτό μπροστά τους και δείξε τη διόρθωση. Τα 30 δευτερόλεπτα αυτά πουλάνε περισσότερο από κάθε λόγο.</p></div>
+      <div class="card tip rv"><div class="n">5</div><h3>Ζητάς το πιλοτικό, όχι τα χρήματα</h3><p>«Δωρεάν για ένα τμήμα ως τέλη Ιανουαρίου, και αν δεν σας αρέσει, σταματάμε.» Είναι πιο εύκολο «ναι» και στο τέλος έχεις αποδείξεις.</p></div>
+      <div class="card tip rv"><div class="n">6</div><h3>Ένα case study αξίζει 100 διαφημίσεις</h3><p>Μέτρα τους βαθμούς πριν και μετά στο πιλοτικό. «Το τμήμα ανέβηκε 1,8 μονάδες σε 6 εβδομάδες» είναι η πιο δυνατή σου πρόταση για τα σχολεία.</p></div>
+    </div>
+
+    <div class="card script rv">
+      <h3>Σενάριο πρώτου τηλεφώνου σε φροντιστήριο (≈ 60″)</h3>
+      <p><b>Άνοιγμα</b>Καλησπέρα, είμαι ο Άγγελος. Φτιάχνουμε ένα εργαλείο για υποψήφιους Πανελληνίων και θα ήθελα τη γνώμη σας, 1 λεπτό μόνο.</p>
+      <p><b>Πρόβλημα</b>Τα παιδιά λύνουν παλιά θέματα, αλλά ποιος τα διορθώνει όλα; Οι καθηγητές σας δεν προλαβαίνουν.</p>
+      <p><b>Λύση</b>Ο μαθητής γράφει το θέμα με το χέρι, το φωτογραφίζει και σε λίγα λεπτά έχει βαθμό ανά ερώτημα, με το επίσημο σχέδιο βαθμολόγησης. Εσείς βλέπετε όλη την τάξη και οι γονείς παίρνουν αναφορά.</p>
+      <p><b>Ερώτηση</b>Θα σας ενδιέφερε να το δοκιμάσετε δωρεάν σε ένα τμήμα Γ' Λυκείου ως τέλη Ιανουαρίου; Να σας το δείξω 15 λεπτά από κοντά;</p>
+    </div>
+
+    <div class="card objs rv">
+      <details class="obj"><summary>«Τα παιδιά θα κλέβουν με το ChatGPT.»</summary><p>Μπορεί. Όποιος κλέβει, κλέβει τον εαυτό του, και στις Πανελλήνιες δεν θα έχει ChatGPT. Εμείς καταγράφουμε κάθε έξοδο από την οθόνη και τη βλέπει ο γονιός και ο καθηγητής.</p></details>
+      <details class="obj"><summary>«Το AI κάνει λάθη στη διόρθωση.»</summary><p>Γι' αυτό βαθμολογεί μόνο πάνω στο επίσημο σχέδιο, δείχνει δίπλα την επίσημη λύση, έχει κουμπί «Διαφωνώ», και στα τμήματά σας τον τελικό λόγο τον έχει ο καθηγητής. Στο πιλοτικό θα δείτε μόνοι σας πόσο ακριβές είναι.</p></details>
+      <details class="obj"><summary>«Έχουμε ήδη τα δικά μας διαγωνίσματα.»</summary><p>Τέλεια, μπορείτε να τα ανεβάσετε. Εμείς βοηθάμε σε όσα γράφουν τα παιδιά στο σπίτι, εκεί όπου σήμερα δεν τα διορθώνει κανείς.</p></details>
+      <details class="obj"><summary>«Είναι ακριβό.»</summary><p>€149 τον μήνα για 40 μαθητές είναι λιγότερο από €4 τον μαθητή. Αν γλιτώσει έστω 5 ώρες διόρθωσης τον μήνα σε έναν καθηγητή, έχει ήδη πληρωθεί. Και ξεκινάτε δωρεάν.</p></details>
+      <details class="obj"><summary>«Τι γίνεται με τα προσωπικά δεδομένα των παιδιών;»</summary><p>Ο λογαριασμός ανοίγει από τον γονιό, τα δεδομένα μένουν στην ΕΕ, οι φωτογραφίες σβήνονται αυτόματα και δεν χρησιμοποιούνται για εκπαίδευση AI.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- MVP STATUS -->
+<section class="blk" id="status">
+  <div class="wrap">
+    <div class="blk-head rv">
+      <span class="eyebrow">09 · Αυτό το προσχέδιο</span>
+      <h2>Τι έχει ήδη, και τι λείπει για να γίνει προϊόν</h2>
+    </div>
+    <div class="has">
+      <div class="card ok rv"><h3>Έχει (πατήστε το)</h3><ul>
+        <li>Λειτουργία εξέτασης με χρονόμετρο και καταγραφή εξόδων από την οθόνη</li>
+        <li>Ανέβασμα φωτογραφιών από κινητό ή υπολογιστή</li>
+        <li>Διορθωμένο γραπτό με «κόκκινο στυλό» και βαθμό ανά ερώτημα</li>
+        <li>Επίσημη λύση που εμφανίζεται μόνο μετά, και 3 παρόμοιες ασκήσεις με υπόδειξη</li>
+        <li>Χάρτης αδυναμιών και εκτίμηση βαθμού ανά μάθημα</li>
+        <li>Εβδομαδιαία αναφορά γονέα, όπως θα φτάνει σε email ή Viber</li>
+        <li>Πίνακας τάξης, διόρθωση γραπτών με έγκριση καθηγητή, ανάθεση διαγωνίσματος</li>
+        <li><b>Ζωντανή διόρθωση με πραγματικό AI</b>: βάζεις το δικό σου API key και φωτογραφίζεις ένα γραπτό</li>
+      </ul></div>
+      <div class="card miss rv"><h3>Λείπει (μπαίνει στο πραγματικό MVP)</h3><ul>
+        <li>Λογαριασμοί και σύνδεση (γονιός, μαθητής, καθηγητής, διαχειριστής)</li>
+        <li>Βάση δεδομένων και αποθήκευση γραπτών σε server στην ΕΕ</li>
+        <li>Όλα τα επίσημα θέματα 2015–2026 ταξινομημένα ανά κεφάλαιο (η demo έχει ένα δικό μας θέμα σε ύφος Πανελληνίων)</li>
+        <li>Η διόρθωση να γίνεται από τον δικό μας server, όχι με κλειδί στον browser</li>
+        <li>Αυτόματη αποστολή αναφορών με email ή Viber</li>
+        <li>Συνδρομές και πληρωμές</li>
+        <li>Εφαρμογή στο κινητό (ξεκινάμε με web app που «εγκαθίσταται» στην αρχική οθόνη)</li>
+        <li>Όροι χρήσης, πολιτική απορρήτου, έλεγχος ακρίβειας με καθηγητή</li>
+      </ul></div>
+    </div>
+
+    <div class="card rv" style="padding:24px;margin-top:16px">
+      <h3 style="font-size:20px;margin-bottom:8px">Ιδέες για όνομα</h3>
+      <p class="muted" style="font-size:14.5px;margin-bottom:12px">Σύντομο, ελληνικό, να το λέει εύκολα ένας γονιός στο τηλέφωνο. Πρώτα ελέγχουμε αν είναι ελεύθερο το .gr.</p>
+      <div class="names"><span class="pick">Θέμα Δ</span><span>Βαθμολογητής</span><span>Προσομοίωση+</span><span>Μόριο</span><span>Ξανά & Σωστά</span><span>Τρίωρο</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" style="padding-top:10px">
+  <div class="wrap">
+    <div class="card rv" style="padding:24px">
+      <h3 style="font-size:18px;margin-bottom:6px">Πηγές</h3>
+      <ul class="sources">
+        <li><a href="https://www.cnn.gr/ellada/story/540544/panellinies-2026-posoi-ypopsifioi-symmeteixan-stis-eksetaseis-ana-epistimoniko-pedio" target="_blank" rel="noopener">CNN Greece: Πανελλήνιες 2026, πόσοι υποψήφιοι ανά επιστημονικό πεδίο</a></li>
+        <li><a href="https://www.alfavita.gr/ekpaideysi/484582_mitsotakis-sto-synedrio-greeks-ai-erhetai-pilotiko-psifiako-frontistirio-gia-tis" target="_blank" rel="noopener">Alfavita (Ιούλ. 2025): το Δημόσιο εξετάζει πιλοτικό ψηφιακό φροντιστήριο με AI</a></li>
+        <li><a href="https://www.tutopiya.com/tools/for-schools/school-blog/eu-ai-act-international-schools-europe-changes-when/" target="_blank" rel="noopener">EU AI Act & σχολεία: βαθμολόγηση = υψηλού κινδύνου, υποχρεώσεις από 2 Δεκ. 2027 (Digital Omnibus)</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap">Θέμα Δ · εσωτερικό προσχέδιο Advon Media · δεν είναι δημόσιο προϊόν. Τα ονόματα μαθητών, φροντιστηρίων και σχολείων στη demo είναι φανταστικά.</div></footer>
+</div>
+<style>
+/* ===== APP (demo views) ===== */
+.app{padding:34px 20px 70px}
+.demo-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--ink-2);background:#FFFDF6;border:1px dashed #E9CF95;border-radius:12px;padding:10px 14px;margin-bottom:24px}
+.demo-bar b{color:var(--amber)}
+.app-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.app-head h1{font-size:clamp(28px,3.4vw,40px)}
+.app-head .sub{color:var(--ink-2);margin-top:6px}
+.count{display:flex;align-items:center;gap:14px;padding:12px 16px}
+.count .big{font:600 34px/1 var(--serif)}
+.count small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.grid-2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start}
+.grid-2>*,.col>*,.marked>*{min-width:0}
+.col{display:grid;gap:18px}
+.panel{padding:22px}
+.panel h2{font-size:21px;margin-bottom:4px}
+.panel .hint{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+.subj{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.subj .card{padding:16px;box-shadow:none}
+.subj .nm{font:700 12.5px/1.2 var(--sans);color:var(--muted);letter-spacing:.02em}
+.subj .gr{font:600 30px/1 var(--serif);margin:8px 0 2px}
+.subj .gr small{font:500 13px var(--sans);color:var(--muted)}
+.subj .d{font:700 12.5px/1 var(--sans)}
+.up{color:var(--green)}.down{color:var(--red-ink)}
+.spark{width:100%;height:34px;margin-top:8px}
+.next{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:24px;background:var(--ink);color:#fff;border-color:var(--ink);position:relative;overflow:hidden}
+.next::after{content:"Δ";position:absolute;right:-20px;bottom:-70px;font:600 240px/1 var(--serif);color:rgba(255,255,255,.05)}
+.next .k{font:700 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#FF8A94}
+.next h2{font-size:24px;margin:10px 0 6px;color:#fff}
+.next p{margin:0;color:#C8CEE0;font-size:14.5px}
+.next .btn{position:relative;z-index:1}
+.weak{display:grid;gap:12px}
+.wk{display:grid;grid-template-columns:190px 1fr 44px;gap:12px;align-items:center;font-size:14px}
+.wk .bar{height:10px;border-radius:99px;background:var(--paper-2);overflow:hidden}
+.wk .bar i{display:block;height:100%;border-radius:99px;width:0;transition:width 1s var(--ease)}
+.wk b{text-align:right;font-variant-numeric:tabular-nums}
+.hist{display:grid}
+.hrow{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.hrow:last-child{border-bottom:0}
+.hrow .t{font-weight:700}
+.hrow .t small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.hrow .sc{font:600 20px/1 var(--serif)}
+.plan-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.plan-week div{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:8px 6px;text-align:center;font-size:11.5px;line-height:1.3;min-height:74px}
+.plan-week b{display:block;font-size:12px;margin-bottom:4px;color:var(--muted)}
+.plan-week .ex{background:var(--red-soft);border-color:#F3C6CA;color:var(--red-ink);font-weight:700}
+.plan-week .rv2{background:var(--green-soft);border-color:#BFE3D3;color:var(--green);font-weight:700}
+
+/* brief */
+.brief{max-width:760px;margin:0 auto;padding:34px}
+.brief h1{font-size:34px;margin:10px 0 10px}
+.rules{list-style:none;padding:0;margin:22px 0;display:grid;gap:12px}
+.rules li{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px}
+.rules i{font-style:normal;width:40px;height:40px;border-radius:11px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:18px}
+.paper-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 22px}
+.paper-pick label{border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;background:#fff;font-size:14px;line-height:1.35;transition:.2s}
+.paper-pick input{display:none}
+.paper-pick b{display:block;font-family:var(--serif);font-size:16px;margin-bottom:4px}
+.paper-pick label:has(input:checked){border-color:var(--ink);box-shadow:0 0 0 4px rgba(20,33,61,.08)}
+.paper-pick label.dis{opacity:.55;cursor:not-allowed}
+
+/* exam mode */
+.exam{position:fixed;inset:0;z-index:120;background:#FBFAF6;display:none;flex-direction:column}
+.exam.on{display:flex;animation:viewIn .4s var(--ease)}
+.exam-top{display:flex;align-items:center;gap:16px;padding:12px 20px;background:var(--ink);color:#fff;flex-wrap:wrap}
+.exam-top .ttl{font:600 15px/1.3 var(--sans)}
+.exam-top .ttl small{display:block;color:#AEB7CF;font-weight:500;font-size:12.5px}
+.timer{margin-left:auto;font:500 30px/1 var(--mono);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.timer.warn{color:#FF8A94}
+.lock{display:inline-flex;align-items:center;gap:6px;font:700 12px/1 var(--sans);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:7px 10px;border-radius:99px}
+.exits{font:600 12.5px/1 var(--sans);color:#FFB3BA}
+.exam-body{flex:1;overflow:auto;padding:28px 20px 120px}
+.exam-paper{max-width:820px;margin:0 auto;background:#fff;border:1px solid #E8E2D3;box-shadow:var(--shadow-2);border-radius:4px;padding:46px 56px;font:400 16.5px/1.75 var(--serif);color:#111}
+.exam-paper .ph{text-align:center;border-bottom:2px solid #111;padding-bottom:16px;margin-bottom:24px}
+.exam-paper .ph b{display:block;font-size:14px;letter-spacing:.12em}
+.exam-paper .ph h2{font-size:22px;margin:8px 0 4px;letter-spacing:.02em}
+.exam-paper .ph small{font-family:var(--sans);font-size:12.5px;color:#666}
+.exam-paper h3{font:700 17px/1.3 var(--serif);letter-spacing:.14em;margin:30px 0 10px;text-align:center}
+.qq{margin:10px 0 14px;display:grid;grid-template-columns:42px 1fr;gap:4px}
+.qq .id{font-weight:600}
+.qq .pts{display:block;text-align:right;font-size:14px;font-style:italic;color:#444}
+.qq ol{margin:6px 0;padding-left:22px}
+.exam-paper sup{font-size:.7em}
+.exam-bottom{position:fixed;left:0;right:0;bottom:0;padding:14px 20px;background:rgba(251,250,246,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;z-index:2}
+.exam-bottom .muted{font-size:13px}
+
+/* upload */
+.upl{max-width:860px;margin:0 auto;padding:30px}
+.drop{border:2px dashed var(--line-2);border-radius:18px;padding:34px;text-align:center;background:var(--paper);transition:.2s;cursor:pointer;display:block}
+.drop:hover,.drop.over{border-color:var(--ink);background:#fff}
+.drop svg{width:46px;height:46px;margin:0 auto 10px;stroke:var(--ink);fill:none;stroke-width:1.6}
+.drop b{font-size:17px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:16px}
+.thumbs figure{margin:0;position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff;aspect-ratio:3/4;display:grid;place-items:center}
+.thumbs img{width:100%;height:100%;object-fit:contain;background:#f3f1ec}
+.thumbs figcaption{position:absolute;left:6px;top:6px;background:var(--ink);color:#fff;font:700 11px/1 var(--sans);padding:4px 7px;border-radius:7px}
+.thumbs button{position:absolute;right:6px;top:6px;width:24px;height:24px;border-radius:50%;border:0;background:#fff;box-shadow:var(--shadow-1);font-size:14px;line-height:1}
+.live{margin-top:20px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.live summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:700;display:flex;gap:10px;align-items:center}
+.live summary::-webkit-details-marker{display:none}
+.live .in{padding:0 18px 18px;display:grid;gap:12px;font-size:14px;color:var(--ink-2)}
+.field{display:grid;gap:6px}
+.field span{font:700 12.5px/1 var(--sans);color:var(--ink)}
+.field input,.field select,.field textarea{font:500 15px/1.3 var(--sans);padding:12px 14px;border-radius:11px;border:1.5px solid var(--line-2);background:#fff;color:var(--ink);width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 4px rgba(20,33,61,.08)}
+.upl-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+
+/* grading animation */
+.grading{max-width:560px;margin:60px auto;text-align:center;padding:40px 30px}
+.pen-anim{width:120px;height:120px;margin:0 auto 18px}
+.pen-anim path{stroke:var(--red);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:120;animation:penloop 1.6s var(--ease) infinite}
+@keyframes penloop{0%{stroke-dashoffset:120}60%,100%{stroke-dashoffset:0}}
+.glog{list-style:none;padding:0;margin:20px auto 0;text-align:left;max-width:360px;display:grid;gap:8px;font-size:14.5px}
+.glog li{opacity:.35;transition:.3s;display:flex;gap:10px;align-items:center}
+.glog li.done{opacity:1}
+.glog li::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--line-2);flex:none}
+.glog li.done::before{background:var(--green);border-color:var(--green);box-shadow:inset 0 0 0 3px #fff}
+
+/* result */
+.res-top{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center;padding:28px}
+.big-score{width:190px;height:190px;position:relative}
+.big-score svg{width:100%;height:100%;transform:rotate(-90deg)}
+.big-score .trk{fill:none;stroke:var(--paper-2);stroke-width:12}
+.big-score .val{fill:none;stroke:var(--red);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1.4s var(--ease)}
+.big-score .c{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.big-score .c b{font:600 54px/1 var(--serif)}
+.big-score .c small{font-size:13px;color:var(--muted)}
+.themes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.themes div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px}
+.themes b{font:600 22px/1 var(--serif)}
+.themes span{display:block;font:700 11.5px/1 var(--sans);color:var(--muted);letter-spacing:.08em;margin-bottom:8px}
+.themes i{display:block;height:5px;border-radius:9px;background:var(--line);margin-top:10px;overflow:hidden}
+.themes i em{display:block;height:100%;background:var(--ink);border-radius:9px}
+.marked{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.qlist{display:grid;gap:10px}
+.qi{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.qi summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:14px 16px}
+.qi summary::-webkit-details-marker{display:none}
+.qi .qid{font:700 15px/1 var(--serif);width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--paper-2)}
+.qi.full .qid{background:var(--green-soft);color:var(--green)}
+.qi.part .qid{background:var(--amber-soft);color:var(--amber)}
+.qi.low .qid{background:var(--red-soft);color:var(--red-ink)}
+.qi .qt{font-size:14.5px;font-weight:600;line-height:1.35}
+.qi .qt small{display:block;font-weight:500;color:var(--muted);font-size:12.5px;margin-top:2px}
+.qi .qs{font:600 18px/1 var(--serif);white-space:nowrap}
+.qi .qs small{font:500 12px var(--sans);color:var(--muted)}
+.qi .body{padding:0 16px 16px 72px;font-size:14.5px;color:var(--ink-2);display:grid;gap:10px}
+.qi .lost{background:var(--red-soft);border-radius:10px;padding:10px 12px;color:#7E1520}
+.qi .got{background:var(--green-soft);border-radius:10px;padding:10px 12px;color:#0B5A46}
+.sol-btn{justify-self:start}
+.sol{display:none;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font:400 15px/1.7 var(--serif);color:var(--ink)}
+.sol.on{display:block;animation:viewIn .35s var(--ease)}
+.scan{position:sticky;top:84px;background:#fff;border-radius:6px;border:1px solid #ECE6D8;box-shadow:var(--shadow-2);padding:26px 22px 22px 70px;overflow:hidden;min-height:420px}
+.scan .ruled{position:absolute;inset:0;background:repeating-linear-gradient(transparent 0 31px,#e7eef8 31px 32px)}
+.scan .margin{position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:#f2b9bf}
+.scan .hw2{position:relative;font:italic 400 16px/32px var(--serif);color:var(--pen)}
+.scan .hw2 .q{font-style:normal;font-weight:600;color:var(--ink)}
+.scan .rn{font:italic 600 14.5px/1.35 var(--serif);color:var(--red);display:block;margin:2px 0 8px;transform:rotate(-1.5deg)}
+.scan .mg{position:absolute;left:8px;font:italic 700 15px/1 var(--serif);color:var(--red);width:40px;text-align:center}
+.scan .cap{position:absolute;right:12px;top:10px;font:700 11px/1 var(--sans);color:var(--muted);background:var(--paper);border:1px solid var(--line);padding:5px 8px;border-radius:7px}
+.scan .stamp{position:absolute;right:18px;top:38px;width:76px;height:76px;border:3px solid var(--red);border-radius:50%;display:grid;place-items:center;font:italic 600 22px/1 var(--serif);color:var(--red);transform:rotate(-8deg)}
+.scan-photos{display:grid;gap:10px}
+.scan-photos img{width:100%;border-radius:10px;border:1px solid var(--line)}
+.prac{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.prac .card{padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:none}
+.prac .tg{font:700 11.5px/1 var(--sans);color:var(--red-ink);letter-spacing:.06em;text-transform:uppercase}
+.prac p{font:400 15.5px/1.65 var(--serif);margin:0}
+.prac .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.prac .hintx,.prac .solx{display:none;font-size:14px;border-radius:10px;padding:10px 12px}
+.prac .hintx{background:var(--amber-soft);color:#6B4207}
+.prac .solx{background:var(--paper);border:1px solid var(--line);font-family:var(--serif);font-size:15px;line-height:1.65}
+.prac .on{display:block;animation:viewIn .3s var(--ease)}
+.after-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.err{background:var(--red-soft);color:#7E1520;border:1px solid #F3C6CA;border-radius:12px;padding:12px 14px;font-size:14px;display:none}
+.err.on{display:block}
+
+/* parent */
+.report{max-width:860px;margin:0 auto}
+.mail-head{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13.5px;color:var(--ink-2)}
+.mail-head .av{width:40px;height:40px;border-radius:12px;background:var(--ink);display:grid;place-items:center}
+.mail-head .av svg{width:24px;height:24px}
+.mail-head b{color:var(--ink);font-size:14.5px}
+.rep-body{padding:30px}
+.rep-body h1{font-size:30px;margin:6px 0 12px}
+.rep-lead{font:400 18px/1.65 var(--serif);color:var(--ink-2)}
+.rep-lead b{color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
+.tile{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px}
+.tile .v{font:600 26px/1 var(--serif)}
+.tile .l{font-size:12.5px;color:var(--ink-2);margin-top:8px;line-height:1.35}
+.chart-wrap{position:relative;border:1px solid var(--line);border-radius:14px;padding:16px 16px 8px;background:#fff}
+.chart-wrap h3{font-size:17px;margin-bottom:2px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin:6px 0 4px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+#trend{width:100%;height:260px;display:block}
+.tt{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font:600 12.5px/1.5 var(--sans);padding:8px 10px;border-radius:9px;box-shadow:var(--shadow-2);opacity:0;transition:opacity .15s;white-space:nowrap;z-index:3}
+.tt b{display:block;font-size:11.5px;color:#AEB7CF;margin-bottom:2px}
+.tt i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.rep-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.rep-2 .box{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.rep-2 h3{font-size:17px;margin-bottom:10px}
+.rep-2 ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink-2)}
+.rep-2 li{margin:5px 0}
+.viber{max-width:340px;margin:22px auto 0;background:#fff;border:1px solid var(--line);border-radius:26px;padding:14px;box-shadow:var(--shadow-2)}
+.viber .vh{display:flex;gap:10px;align-items:center;font:700 13.5px/1.2 var(--sans);padding:4px 6px 12px;border-bottom:1px solid var(--line)}
+.viber .vh i{width:30px;height:30px;border-radius:50%;background:#7360F2;display:grid;place-items:center;color:#fff;font-style:normal;font-size:14px}
+.viber .msg{background:#F1EFFD;border-radius:16px 16px 16px 4px;padding:11px 13px;margin-top:12px;font-size:13.5px;line-height:1.5}
+.viber .tm{font-size:11px;color:var(--muted);margin-top:4px;text-align:right}
+
+/* school */
+.seg{display:inline-flex;background:var(--paper-2);border:1px solid var(--line);border-radius:99px;padding:4px}
+.seg button{border:0;background:transparent;padding:9px 14px;border-radius:99px;font:700 13.5px/1 var(--sans);color:var(--ink-2)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow-1)}
+.skpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.skpis .card{padding:18px}
+.skpis .v{font:600 30px/1 var(--serif)}
+.skpis .l{font-size:13px;color:var(--ink-2);margin-top:8px}
+.heat-wrap{overflow-x:auto;position:relative}
+table.heat{border-collapse:separate;border-spacing:3px;width:100%;min-width:640px;font-size:13px}
+.heat th{font:700 11.5px/1.2 var(--sans);color:var(--muted);padding:4px 6px;text-align:center;vertical-align:bottom}
+.heat th.nm{text-align:left}
+.heat td.nm{font-weight:700;white-space:nowrap;padding-right:10px;font-size:13.5px}
+.heat td.c{height:34px;border-radius:7px;text-align:center;font:700 12px/1 var(--sans);cursor:default;transition:transform .15s,box-shadow .15s}
+.heat td.c:hover{transform:scale(1.08);box-shadow:0 0 0 2px var(--ink)}
+.heat tr.avg td{border-top:2px solid var(--line)}
+.scale{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
+.scale i{width:150px;height:8px;border-radius:9px;background:linear-gradient(90deg,#B8E0CF,#EDEFF4,#F6C9CD);display:inline-block}
+.suggest{background:var(--ink);color:#fff;border-color:var(--ink);padding:20px}
+.suggest .k{font:700 11.5px/1 var(--sans);letter-spacing:.12em;color:#FF8A94;text-transform:uppercase}
+.suggest p{margin:10px 0 14px;font:400 16px/1.6 var(--serif);color:#E4E8F2}
+.suggest b{color:#fff}
+.flag{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.flag:last-child{border-bottom:0}
+.flag .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:700 13px/1 var(--sans);background:var(--paper-2)}
+.flag small{display:block;color:var(--muted);font-size:12.5px}
+.queue .qr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.queue .qr:last-child{border-bottom:0}
+.queue .qr small{display:block;color:var(--muted);font-size:12.5px}
+.queue .ai{font:600 18px/1 var(--serif);text-align:right}
+.queue .ai small{font:600 11px var(--sans);color:var(--muted)}
+.queue .acts{display:flex;gap:6px}
+.queue .ok{color:var(--green);font-weight:800;font-size:13px}
+.assign{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.assign .full{grid-column:1/-1}
+.brand-prev{display:flex;align-items:center;gap:12px;padding:14px;border:1px dashed var(--line-2);border-radius:14px;margin-top:12px;font-size:13.5px;color:var(--ink-2)}
+.brand-prev .lg{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font:700 18px/1 var(--serif);color:#fff;flex:none}
+
+@media (max-width:1000px){
+  .grid-2,.marked{grid-template-columns:1fr}
+  .scan{position:relative;top:0}
+  .subj,.skpis,.tiles{grid-template-columns:repeat(2,1fr)}
+  .prac{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .app{padding:22px 16px 60px}
+  .brief,.upl{padding:20px}
+  .paper-pick{grid-template-columns:1fr}
+  .exam-paper{padding:26px 18px;font-size:15.5px}
+  .qq{grid-template-columns:34px 1fr}
+  .timer{font-size:24px}
+  .exam-top{padding:10px 14px;gap:10px}
+  .res-top{grid-template-columns:1fr;justify-items:center;text-align:center;padding:22px}
+  .big-score{width:160px;height:160px}
+  .themes{grid-template-columns:repeat(2,1fr)}
+  .qi .body{padding:0 14px 14px}
+  .wk{grid-template-columns:110px 1fr 40px;font-size:13px}
+  .rep-body{padding:20px}
+  .rep-2,.assign{grid-template-columns:1fr}
+  .next{grid-template-columns:1fr}
+  .plan-week{grid-template-columns:repeat(4,1fr)}
+  .scan{padding:22px 14px 18px 56px}
+  .scan .margin{left:44px}
+  .scan .mg{left:2px;font-size:13px}
+  .scan .stamp{display:none}
+  .scan .hw2{font-size:14.5px}
+}
+</style>
+
+<!-- ================= STUDENT ================= -->
+<div class="view" id="view-student">
+  <div class="wrap app">
+    <div class="demo-bar"><b>DEMO</b> Δες την εφαρμογή όπως θα την έβλεπε η Μαρία Κ. (Γ' Λυκείου, Θετικών Σπουδών). Οι αριθμοί είναι παράδειγμα. Τη διόρθωση μπορείς να τη δοκιμάσεις και με πραγματικό AI.</div>
+
+    <!-- dashboard -->
+    <div class="stage" id="st-dash">
+      <div class="app-head">
+        <div><h1>Καλησπέρα, Μαρία</h1><div class="sub">Αυτή την εβδομάδα: 2 από 3 προσομοιώσεις. Μένει μία.</div></div>
+        <div class="card count"><div class="big" id="daysLeft">—</div><small>μέρες ως τις<br>Πανελλήνιες 2027 (εκτίμηση)</small></div>
+      </div>
+      <div class="grid-2">
+        <div class="col">
+          <div class="card next">
+            <div><div class="k">Επόμενο, φτιαγμένο για σένα</div><h2>Μαθηματικά: Προσομοίωση #7</h2><p>Περισσότερο βάρος σε Ασύμπτωτες και Ολοκληρώματα, που είναι οι αδυναμίες σου. 3 ώρες, όπως στις εξετάσεις.</p></div>
+            <button class="btn btn-red" data-go="brief">Ξεκίνα εξέταση</button>
+          </div>
+          <div class="card panel"><h2>Εκτίμηση βαθμού ανά μάθημα</h2><div class="hint">Από τις τελευταίες προσομοιώσεις σου (άριστα 20)</div><div class="subj" id="subj"></div></div>
+          <div class="card panel"><h2>Το πρόγραμμά σου αυτή την εβδομάδα</h2><div class="hint">Φτιάχνεται μόνο του από τις αδυναμίες σου και τις ώρες του φροντιστηρίου</div><div class="plan-week" id="week"></div></div>
+        </div>
+        <div class="col">
+          <div class="card panel"><h2>Χάρτης αδυναμιών · Μαθηματικά</h2><div class="hint">% μονάδων που παίρνεις ανά κεφάλαιο</div><div class="weak" id="weak"></div></div>
+          <div class="card panel"><h2>Τελευταία γραπτά</h2><div class="hist" id="hist"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- brief -->
+    <div class="stage" id="st-brief" hidden>
+      <div class="card brief">
+        <span class="eyebrow">Πριν ξεκινήσεις</span>
+        <h1>Συνθήκες εξέτασης</h1>
+        <p class="muted">Διάλεξε θέμα. Στο πραγματικό προϊόν θα υπάρχουν όλα τα επίσημα θέματα και οι «έξυπνες» προσομοιώσεις.</p>
+        <div class="paper-pick">
+          <label><input type="radio" name="pp" checked><b>Προσομοίωση #7</b>Μαθηματικά Προσανατολισμού · 4 θέματα · 3 ώρες</label>
+          <label class="dis"><input type="radio" name="pp" disabled><b>Πανελλήνιες 2026</b>Επίσημα θέματα · στο πραγματικό MVP</label>
+          <label class="dis"><input type="radio" name="pp" disabled><b>Μόνο Θέμα Δ</b>45 λεπτά · στο πραγματικό MVP</label>
+        </div>
+        <ul class="rules">
+          <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#14213D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg></i><span><b>Γράφεις στο χαρτί σου</b>, με στυλό. Όχι στην οθόνη.</span></li>
+          <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#14213D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></i><span><b>3 ώρες</b>. Το χρονόμετρο δεν σταματά.</span></li>
+          <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#14213D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></i><span><b>Καμία βοήθεια</b> μέχρι να παραδώσεις. Λύσεις και υποδείξεις είναι κλειδωμένες.</span></li>
+          <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#14213D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></i><span>Αν φύγεις από την οθόνη, <b>καταγράφεται</b> και φαίνεται στην αναφορά.</span></li>
+          <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#14213D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg></i><span>Στο τέλος <b>φωτογραφίζεις</b> τις σελίδες σου με τη σειρά.</span></li>
+        </ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn btn-red" data-go="exam">Είμαι έτοιμος/η · Έναρξη</button><button class="btn btn-line" data-go="dash">Πίσω</button></div>
+      </div>
+    </div>
+
+    <!-- upload -->
+    <div class="stage" id="st-upload" hidden>
+      <div class="card upl">
+        <span class="eyebrow">Παράδοση γραπτού</span>
+        <h1 style="font-size:32px;margin:10px 0 6px">Φωτογράφισε τις σελίδες σου</h1>
+        <p class="muted" id="examSummary">Με τη σειρά, σε καλό φως, ολόκληρη η σελίδα μέσα στο κάδρο.</p>
+        <label class="drop" id="drop">
+          <input type="file" id="files" accept="image/*" multiple hidden>
+          <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+          <b>Πάτα για φωτογραφία ή επιλογή αρχείων</b>
+          <div class="muted" style="font-size:13.5px;margin-top:4px">Στο κινητό ανοίγει η κάμερα. Στον υπολογιστή μπορείς να σύρεις τις εικόνες εδώ.</div>
+        </label>
+        <div class="thumbs" id="thumbs"></div>
+
+        <details class="live" id="liveBox">
+          <summary><span class="pill red">ΓΙΑ ΔΟΚΙΜΗ</span> Ζωντανή διόρθωση με πραγματικό AI</summary>
+          <div class="in">
+            <p style="margin:0">Λύσε με το χέρι ένα ή περισσότερα ερωτήματα από την Προσομοίωση #7, φωτογράφισέ τα και βάλε το Anthropic API key σου. Το AI θα βαθμολογήσει με το σχέδιο βαθμολόγησης. Το key μένει μόνο σε αυτή την καρτέλα και πάει μόνο στο api.anthropic.com. <b>Μόνο για τη δική σου δοκιμή:</b> στο πραγματικό προϊόν η διόρθωση θα γίνεται από τον δικό μας server.</p>
+            <label class="field"><span>Anthropic API key</span><input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off"></label>
+            <label class="field"><span>Μοντέλο</span><select id="model"><option value="claude-opus-5-5">Claude Opus 5.5 · πιο ακριβές</option><option value="claude-sonnet-5-5">Claude Sonnet 5.5 · πιο φθηνό/γρήγορο</option></select></label>
+          </div>
+        </details>
+        <div class="err" id="err"></div>
+        <div class="upl-actions">
+          <button class="btn btn-red" id="btnLive">Ζωντανή διόρθωση με AI</button>
+          <button class="btn btn-ink" id="btnDemo">Δες παράδειγμα διόρθωσης</button>
+          <button class="btn btn-line" data-go="dash">Ακύρωση</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- grading -->
+    <div class="stage" id="st-grading" hidden>
+      <div class="card grading">
+        <svg class="pen-anim" viewBox="0 0 60 60"><path d="M10 32 l13 13 l27 -32"/></svg>
+        <h2 style="font-size:26px">Ο βαθμολογητής διαβάζει το γραπτό σου</h2>
+        <p class="muted" id="gradeNote">Συγκρίνει κάθε ερώτημα με το επίσημο σχέδιο βαθμολόγησης.</p>
+        <ul class="glog" id="glog"></ul>
+      </div>
+    </div>
+
+    <!-- result -->
+    <div class="stage" id="st-result" hidden></div>
+  </div>
+
+  <!-- exam overlay -->
+  <div class="exam" id="exam" role="dialog" aria-label="Λειτουργία εξέτασης">
+    <div class="exam-top">
+      <div class="ttl">Μαθηματικά Προσανατολισμού · Προσομοίωση #7<small>Γράφε στο χαρτί σου · η βοήθεια είναι κλειδωμένη</small></div>
+      <span class="lock"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Κλείδωμα</span>
+      <span class="exits" id="exits"></span>
+      <div class="timer" id="timer">03:00:00</div>
+    </div>
+    <div class="exam-body"><div class="exam-paper" id="paper"></div></div>
+    <div class="exam-bottom">
+      <span class="muted">Demo: <button class="btn btn-line btn-sm" id="ff">Γρήγορα προς τα εμπρός ×120</button></span>
+      <button class="btn btn-red" id="handIn">Τέλος · Παράδοση γραπτού</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PARENT ================= -->
+<div class="view" id="view-parent">
+  <div class="wrap app">
+    <div class="demo-bar"><b>DEMO</b> Έτσι θα φτάνει στον γονιό κάθε Κυριακή στις 20:00, σε email (και σύντομα σε Viber). Μαθήτρια: Μαρία Κ. (φανταστική).</div>
+    <div class="card report">
+      <div class="mail-head">
+        <div class="av"><svg viewBox="0 0 64 64"><path d="M32 13 L51 49 H13 Z" fill="none" stroke="#F6F3EC" stroke-width="5" stroke-linejoin="round"/><path d="M38 40 l5 5 l10 -14" fill="none" stroke="#E0313F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><b>Θέμα Δ · Εβδομαδιαία αναφορά</b><br>προς: κ. Κ. (γονέας) · Κυριακή 11 Οκτωβρίου 2026, 20:00</div>
+      </div>
+      <div class="rep-body">
+        <span class="eyebrow">Εβδομάδα 5–11 Οκτωβρίου</span>
+        <h1>Η εβδομάδα της Μαρίας</h1>
+        <p class="rep-lead">Η Μαρία έγραψε <b>3 από τις 3</b> προσομοιώσεις της εβδομάδας, σε συνθήκες εξέτασης. Στα Μαθηματικά ανέβηκε από <b>13,9 σε 15,2</b>. Δυσκολεύεται ακόμα στις <b>Ασύμπτωτες</b> και στις <b>ανισότητες με ολοκληρώματα</b>, και γι' αυτό η επόμενη εβδομάδα επικεντρώνεται εκεί.</p>
+        <div class="tiles">
+          <div class="tile"><div class="v">3/3</div><div class="l">προσομοιώσεις που ολοκληρώθηκαν</div></div>
+          <div class="tile"><div class="v">8ω 40′</div><div class="l">γραψίματος σε συνθήκες εξέτασης</div></div>
+          <div class="tile"><div class="v up">+1,3</div><div class="l">μονάδες στα Μαθηματικά από την προηγούμενη</div></div>
+          <div class="tile"><div class="v">1</div><div class="l">έξοδος από την οθόνη κατά την εξέταση (Τρίτη, 2 λεπτά)</div></div>
+        </div>
+        <div class="chart-wrap" id="chartWrap">
+          <h3>Πορεία βαθμών · τελευταίες 8 εβδομάδες</h3>
+          <div class="muted" style="font-size:12.5px">Μέσος βαθμός προσομοιώσεων ανά εβδομάδα (άριστα 20)</div>
+          <div class="legend" id="legend"></div>
+          <svg id="trend" role="img" aria-label="Γράφημα πορείας βαθμών ανά εβδομάδα για Μαθηματικά, Φυσική και Χημεία"></svg>
+          <div class="tt" id="tt"></div>
+        </div>
+        <details style="margin-top:8px;font-size:13.5px"><summary style="cursor:pointer;color:var(--muted)">Δείξε τα νούμερα σε πίνακα</summary><div id="trendTable" style="overflow-x:auto;margin-top:8px"></div></details>
+        <div class="rep-2">
+          <div class="box"><h3>Πού χρειάζεται βοήθεια</h3><ul><li><b>Ασύμπτωτες</b>: παίρνει το 50% των μονάδων. Ξεχνά να ελέγξει πλάγια ασύμπτωτη.</li><li><b>Ανισότητες με ολοκληρώματα</b>: 45%. Δεν βρίσκει από πού να ξεκινήσει.</li><li><b>Αιτιολόγηση</b>: χάνει 1–3 μονάδες ανά θέμα επειδή δεν γράφει το «γιατί».</li></ul></div>
+          <div class="box"><h3>Τι μπορείτε να κάνετε εσείς</h3><ul><li>Ρωτήστε την πώς πήγε η Προσομοίωση #7. Ένα «μπράβο για το +1,3» βοηθά.</li><li>Την Πέμπτη 17:00–20:00 έχει τρίωρο. Βοηθά πολύ να είναι ήσυχο το σπίτι.</li><li>Δεν χρειάζεται να εξηγήσετε εσείς Μαθηματικά. Το πρόγραμμα έχει ήδη τις ασκήσεις.</li></ul></div>
+        </div>
+        <div class="viber">
+          <div class="vh"><i>Δ</i>Θέμα Δ<span class="muted" style="font-weight:500;margin-left:auto;font-size:11.5px">Viber</span></div>
+          <div class="msg">Καλησπέρα! Η εβδομάδα της Μαρίας: 3/3 προσομοιώσεις ✓, Μαθηματικά 13,9 → 15,2 (+1,3). Αυτή την εβδομάδα δουλεύουμε Ασύμπτωτες. Όλη η αναφορά: themad.gr/r/…</div>
+          <div class="tm">Κυρ 20:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SCHOOL ================= -->
+<div class="view" id="view-school">
+  <div class="wrap app">
+    <div class="demo-bar"><b>DEMO</b> Ο πίνακας που βλέπει ο καθηγητής ή ο διευθυντής. Τα ονόματα είναι φανταστικά. Άλλαξε από «Φροντιστήριο» σε «Σχολείο» για να δεις τη διαφορά.</div>
+    <div class="app-head">
+      <div>
+        <div class="seg" id="seg"><button class="on" data-m="fr">Φροντιστήριο</button><button data-m="sc">Σχολείο</button></div>
+        <h1 style="margin-top:14px" id="orgName">Φροντιστήριο «Ορίζοντας»</h1>
+        <div class="sub" id="orgSub">Τμήμα Γ1 Θετικών · Μαθηματικά Προσανατολισμού · κ. Παπαδάκης</div>
+      </div>
+      <button class="btn btn-ink" onclick="document.getElementById('assignBox').scrollIntoView({behavior:'smooth',block:'center'})">+ Ανάθεση διαγωνίσματος</button>
+    </div>
+    <div class="skpis" id="skpis"></div>
+    <div class="grid-2">
+      <div class="col">
+        <div class="card panel">
+          <h2>Πίνακας τάξης</h2>
+          <div class="hint">% μονάδων ανά κεφάλαιο, από όλα τα γραπτά του μήνα. Πέρνα το ποντίκι πάνω από ένα κουτάκι για λεπτομέρειες.</div>
+          <div class="heat-wrap" id="heatWrap"></div>
+          <div class="scale"><span>καλά</span><i></i><span>χρειάζεται δουλειά</span></div>
+        </div>
+        <div class="card panel queue">
+          <h2>Διόρθωση γραπτών τάξης</h2>
+          <div class="hint">Το AI προτείνει βαθμό και εσείς εγκρίνετε ή αλλάζετε. Ο τελικός βαθμός είναι πάντα του καθηγητή.</div>
+          <div id="queue"></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card suggest">
+          <div class="k">Πρόταση για το επόμενο μάθημα</div>
+          <p>Το <b>64% του τμήματος</b> χάνει μονάδες στις <b>Ασύμπτωτες</b> (κυρίως την πλάγια στο −∞). Προτείνουμε 20′ επανάληψη και την <b>Προσομοίωση #8</b>, που έχει βάρος εκεί.</p>
+          <button class="btn btn-red btn-sm" data-toast="Η Προσομοίωση #8 ανατέθηκε στο Γ1 για την Πέμπτη (demo)">Ανάθεση #8 στο τμήμα</button>
+        </div>
+        <div class="card panel">
+          <h2>Χρειάζονται προσοχή</h2>
+          <div class="hint">Πέφτουν βαθμοί ή δεν γράφουν διαγωνίσματα</div>
+          <div id="flags"></div>
+        </div>
+        <div class="card panel" id="assignBox">
+          <h2>Ανάθεση διαγωνίσματος</h2>
+          <div class="hint">Όλο το τμήμα το γράφει στο σπίτι, σε συνθήκες εξέτασης</div>
+          <div class="assign">
+            <label class="field full"><span>Θέμα</span><select><option>Προσομοίωση #8 (Ασύμπτωτες, Ολοκληρώματα)</option><option>Πανελλήνιες 2025 · Μαθηματικά</option><option>Πανελλήνιες 2024 · Μαθηματικά</option><option>Δικό μας διαγώνισμα (ανέβασμα PDF)</option></select></label>
+            <label class="field"><span>Τμήμα</span><select><option>Γ1 Θετικών</option><option>Γ2 Θετικών</option><option>Β1</option></select></label>
+            <label class="field"><span>Προθεσμία</span><input type="date" value="2026-10-15"></label>
+            <button class="btn btn-ink full" data-toast="Ανατέθηκε σε 14 μαθητές. Θα πάρουν ειδοποίηση (demo)">Ανάθεση</button>
+          </div>
+          <div class="brand-prev"><div class="lg" id="lg" style="background:#1D5C8C">Ο</div><div>Οι μαθητές και οι γονείς βλέπουν <b id="lgName">το λογότυπο και το όνομα του φροντιστηρίου σας</b>. Το «Θέμα Δ» φαίνεται μόνο διακριτικά.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/* ============ DATA: demo paper (own paper, Πανελλήνιες style) ============ */
+const PAPER = {
+  title: 'ΜΑΘΗΜΑΤΙΚΑ ΠΡΟΣΑΝΑΤΟΛΙΣΜΟΥ',
+  sub: 'Προσομοίωση #7 · δοκιμαστικό θέμα σε ύφος Πανελληνίων (όχι επίσημο)',
+  themes: [
+    { t: 'ΘΕΜΑ Α', intro: '', qs: [
+      { id: 'Α1', pts: 7, topic: 'Ολοκληρώματα (θεωρία)',
+        text: 'Έστω f μια συνεχής συνάρτηση σε ένα διάστημα [α, β]. Αν G είναι μια παράγουσα της f στο [α, β], να αποδείξετε ότι ∫<sub>α</sub><sup>β</sup> f(t)dt = G(β) − G(α).',
+        sol: 'Η F(x) = ∫<sub>α</sub><sup>x</sup> f(t)dt είναι μια παράγουσα της f στο [α, β]. Αφού και η G είναι παράγουσα της f, υπάρχει c ∈ ℝ ώστε G(x) = F(x) + c. Για x = α: G(α) = F(α) + c = c. Άρα G(x) = F(x) + G(α) και για x = β: G(β) = ∫<sub>α</sub><sup>β</sup> f(t)dt + G(α), δηλαδή ∫<sub>α</sub><sup>β</sup> f(t)dt = G(β) − G(α).',
+        scheme: ['Η F(x)=∫ από α ως x είναι παράγουσα της f: 2 μονάδες', 'G(x)=F(x)+c: 2 μονάδες', 'c=G(α): 2 μονάδες', 'Συμπέρασμα για x=β: 1 μονάδα'] },
+      { id: 'Α2', pts: 4, topic: 'Συναρτήσεις (θεωρία)',
+        text: 'Πότε μια συνάρτηση f με πεδίο ορισμού Α λέγεται συνάρτηση 1−1;',
+        sol: 'Μια συνάρτηση f: Α → ℝ λέγεται 1−1 όταν για οποιαδήποτε x<sub>1</sub>, x<sub>2</sub> ∈ Α ισχύει η συνεπαγωγή: αν x<sub>1</sub> ≠ x<sub>2</sub>, τότε f(x<sub>1</sub>) ≠ f(x<sub>2</sub>).',
+        scheme: ['Πλήρης ορισμός: 4 μονάδες'] },
+      { id: 'Α3', pts: 4, topic: 'Παράγωγοι & ΘΜΤ (θεωρία)',
+        text: 'Να διατυπώσετε το Θεώρημα Μέσης Τιμής του Διαφορικού Λογισμού.',
+        sol: 'Αν μια συνάρτηση f είναι <b>συνεχής στο κλειστό διάστημα [α, β]</b> και <b>παραγωγίσιμη στο ανοικτό διάστημα (α, β)</b>, τότε υπάρχει ένα τουλάχιστον ξ ∈ (α, β) τέτοιο ώστε f′(ξ) = (f(β) − f(α)) / (β − α).',
+        scheme: ['Οι δύο προϋποθέσεις (συνέχεια στο [α,β], παραγωγισιμότητα στο (α,β)): 2 μονάδες', 'Συμπέρασμα: 2 μονάδες'] },
+      { id: 'Α4', pts: 10, topic: 'Θεωρία (Σωστό/Λάθος)',
+        text: 'Να χαρακτηρίσετε τις προτάσεις που ακολουθούν ως Σωστό ή Λάθος:<ol type="α"><li>Αν η f είναι παραγωγίσιμη στο x<sub>0</sub>, τότε είναι και συνεχής στο x<sub>0</sub>.</li><li>Κάθε συνάρτηση συνεχής σε ένα διάστημα Δ είναι και παραγωγίσιμη στο Δ.</li><li>Αν lim<sub>x→x<sub>0</sub></sub> f(x) = +∞, τότε lim<sub>x→x<sub>0</sub></sub> 1/f(x) = 0.</li><li>(ln|x|)′ = 1/x για κάθε x ≠ 0.</li><li>Αν ορίζονται οι f∘g και g∘f, τότε είναι πάντα ίσες.</li></ol>',
+        sol: 'α) Σωστό · β) Λάθος (π.χ. f(x)=|x| στο 0) · γ) Σωστό · δ) Σωστό · ε) Λάθος',
+        scheme: ['2 μονάδες για κάθε σωστό χαρακτηρισμό'] }
+    ]},
+    { t: 'ΘΕΜΑ Β', intro: 'Δίνεται η συνάρτηση f(x) = x·e<sup>−x</sup>, x ∈ ℝ.', qs: [
+      { id: 'Β1', pts: 7, topic: 'Μονοτονία & ακρότατα',
+        text: 'Να μελετήσετε την f ως προς τη μονοτονία και τα ακρότατα.',
+        sol: 'f′(x) = e<sup>−x</sup> − x·e<sup>−x</sup> = e<sup>−x</sup>(1 − x). Είναι f′(x) &gt; 0 για x &lt; 1 και f′(x) &lt; 0 για x &gt; 1. Άρα η f είναι γνησίως αύξουσα στο (−∞, 1], γνησίως φθίνουσα στο [1, +∞) και παρουσιάζει ολικό μέγιστο f(1) = 1/e.',
+        scheme: ['Σωστή f′: 3 μονάδες', 'Πρόσημο f′ και μονοτονία: 2 μονάδες', 'Μέγιστο f(1)=1/e: 2 μονάδες'] },
+      { id: 'Β2', pts: 6, topic: 'Κυρτότητα',
+        text: 'Να μελετήσετε την f ως προς την κυρτότητα και να βρείτε τα σημεία καμπής.',
+        sol: 'f″(x) = −e<sup>−x</sup>(1 − x) − e<sup>−x</sup> = e<sup>−x</sup>(x − 2). Η f είναι κοίλη στο (−∞, 2], κυρτή στο [2, +∞) και έχει σημείο καμπής το (2, 2/e<sup>2</sup>).',
+        scheme: ['Σωστή f″: 2 μονάδες', 'Πρόσημο και κυρτότητα: 2 μονάδες', 'Σημείο καμπής: 2 μονάδες'] },
+      { id: 'Β3', pts: 6, topic: 'Ασύμπτωτες',
+        text: 'Να βρείτε τις ασύμπτωτες της γραφικής παράστασης της f.',
+        sol: 'Η f είναι συνεχής στο ℝ, άρα δεν έχει κατακόρυφες ασύμπτωτες. Στο +∞: lim x·e<sup>−x</sup> = lim x/e<sup>x</sup> = lim 1/e<sup>x</sup> = 0 (De L’Hospital), άρα y = 0 οριζόντια ασύμπτωτη στο +∞. Στο −∞: lim f(x) = −∞ και lim f(x)/x = lim e<sup>−x</sup> = +∞, άρα δεν υπάρχει ούτε οριζόντια ούτε πλάγια ασύμπτωτη στο −∞.',
+        scheme: ['Κατακόρυφες (καμία, λόγω συνέχειας): 1 μονάδα', 'Οριζόντια y=0 στο +∞: 2 μονάδες', 'Εξέταση στο −∞ (όριο f και f(x)/x): 3 μονάδες'] },
+      { id: 'Β4', pts: 6, topic: 'Σύνολο τιμών',
+        text: 'Να βρείτε το σύνολο τιμών της f.',
+        sol: 'Η f είναι συνεχής και γνησίως αύξουσα στο Δ<sub>1</sub> = (−∞, 1], άρα f(Δ<sub>1</sub>) = (lim<sub>x→−∞</sub> f(x), f(1)] = (−∞, 1/e]. Είναι συνεχής και γνησίως φθίνουσα στο Δ<sub>2</sub> = [1, +∞), άρα f(Δ<sub>2</sub>) = (0, 1/e]. Σύνολο τιμών: f(ℝ) = (−∞, 1/e].',
+        scheme: ['Αιτιολόγηση: συνεχής και γνησίως μονότονη σε κάθε διάστημα: 2 μονάδες', 'Σωστά όρια: 2 μονάδες', 'Ένωση: 2 μονάδες'] }
+    ]},
+    { t: 'ΘΕΜΑ Γ', intro: 'Θεωρούμε τη συνάρτηση f(x) = x·e<sup>−x</sup> του Θέματος Β.', qs: [
+      { id: 'Γ1', pts: 8, topic: 'Ολοκληρώματα & εμβαδά',
+        text: 'Να βρείτε το εμβαδόν του χωρίου που περικλείεται από τη C<sub>f</sub>, τον άξονα x′x και τις ευθείες x = 0 και x = 2.',
+        sol: 'Για x ∈ [0, 2] είναι f(x) ≥ 0. Άρα E = ∫<sub>0</sub><sup>2</sup> x·e<sup>−x</sup> dx = [−x·e<sup>−x</sup>]<sub>0</sub><sup>2</sup> + ∫<sub>0</sub><sup>2</sup> e<sup>−x</sup> dx = −2e<sup>−2</sup> + [−e<sup>−x</sup>]<sub>0</sub><sup>2</sup> = −2e<sup>−2</sup> − e<sup>−2</sup> + 1 = <b>1 − 3/e<sup>2</sup></b> τ.μ.',
+        scheme: ['Πρόσημο της f στο [0,2]: 2 μονάδες', 'Παραγοντική ολοκλήρωση: 4 μονάδες', 'Αποτέλεσμα: 2 μονάδες'] },
+      { id: 'Γ2', pts: 8, topic: 'Bolzano & πλήθος ριζών',
+        text: 'Να αποδείξετε ότι η εξίσωση x·e<sup>−x</sup> = 1/4 έχει ακριβώς δύο ρίζες.',
+        sol: 'Από το Β4: f((−∞, 1]) = (−∞, 1/e] και f([1, +∞)) = (0, 1/e]. Επειδή 0 &lt; 1/4 &lt; 1/e, το 1/4 ανήκει και στα δύο σύνολα τιμών, άρα η εξίσωση έχει ρίζα σε καθένα από τα (−∞, 1) και (1, +∞). Η f είναι <b>γνησίως μονότονη σε κάθε διάστημα</b>, άρα η ρίζα σε καθένα είναι μοναδική. Επειδή f(1)=1/e ≠ 1/4, το 1 δεν είναι ρίζα. Συνολικά: ακριβώς δύο ρίζες.',
+        scheme: ['Ύπαρξη ρίζας στο (−∞,1): 3 μονάδες', 'Μοναδικότητα (γνησίως αύξουσα): 1 μονάδα', 'Ύπαρξη ρίζας στο (1,+∞): 3 μονάδες', 'Μοναδικότητα (γνησίως φθίνουσα): 1 μονάδα'] },
+      { id: 'Γ3', pts: 9, topic: 'Ανισότητες',
+        text: 'Να αποδείξετε ότι e<sup>x</sup> ≥ e·x για κάθε x ∈ ℝ και να βρείτε πότε ισχύει η ισότητα.',
+        sol: 'Από το Β1, η f έχει ολικό μέγιστο στο 1: x·e<sup>−x</sup> ≤ 1/e για κάθε x ∈ ℝ. Πολλαπλασιάζοντας με e·e<sup>x</sup> &gt; 0: e·x ≤ e<sup>x</sup>. Η ισότητα ισχύει μόνο όταν f(x) = f(1), δηλαδή <b>μόνο για x = 1</b>, αφού η f είναι γνησίως αύξουσα στο (−∞, 1] και γνησίως φθίνουσα στο [1, +∞).',
+        scheme: ['Χρήση του ολικού μεγίστου: 4 μονάδες', 'Σωστός μετασχηματισμός: 3 μονάδες', 'Ισότητα μόνο για x=1, με αιτιολόγηση: 2 μονάδες'] }
+    ]},
+    { t: 'ΘΕΜΑ Δ', intro: 'Δίνεται συνεχής συνάρτηση f: ℝ → ℝ, για την οποία ισχύει f(x) = 1 + ∫<sub>0</sub><sup>x</sup> t·f(t) dt για κάθε x ∈ ℝ.', qs: [
+      { id: 'Δ1', pts: 8, topic: 'Συναρτησιακές σχέσεις',
+        text: 'Να αποδείξετε ότι f(x) = e<sup>x²/2</sup>, x ∈ ℝ.',
+        sol: 'Η t·f(t) είναι συνεχής, άρα η ∫<sub>0</sub><sup>x</sup> t·f(t)dt είναι παραγωγίσιμη, οπότε <b>και η f είναι παραγωγίσιμη</b> με f′(x) = x·f(x). Επίσης f(0) = 1. Θέτουμε g(x) = f(x)·e<sup>−x²/2</sup>: g′(x) = e<sup>−x²/2</sup>(f′(x) − x·f(x)) = 0, άρα η g είναι σταθερή: g(x) = g(0) = 1. Επομένως f(x) = e<sup>x²/2</sup>.',
+        scheme: ['Αιτιολόγηση ότι η f είναι παραγωγίσιμη: 2 μονάδες', 'f′(x)=x·f(x): 2 μονάδες', 'Βοηθητική g με g′=0: 2 μονάδες', 'f(0)=1 και συμπέρασμα: 2 μονάδες'] },
+      { id: 'Δ2', pts: 5, topic: 'Κυρτότητα',
+        text: 'Να αποδείξετε ότι η f είναι κυρτή στο ℝ.',
+        sol: 'f′(x) = x·e<sup>x²/2</sup>, f″(x) = (1 + x<sup>2</sup>)·e<sup>x²/2</sup> &gt; 0 για κάθε x ∈ ℝ, άρα η f είναι κυρτή στο ℝ.',
+        scheme: ['Σωστή f″: 3 μονάδες', 'Πρόσημο και συμπέρασμα: 2 μονάδες'] },
+      { id: 'Δ3', pts: 6, topic: 'Ανισότητες με ολοκληρώματα',
+        text: 'Να αποδείξετε ότι ∫<sub>0</sub><sup>1</sup> f(x) dx &lt; (1 + √e) / 2.',
+        sol: 'Θεωρούμε h(x) = f(x) − 1 − (√e − 1)x (η f μείον τη χορδή της στο [0,1]). Είναι h(0) = h(1) = 0 και h″ = f″ &gt; 0, άρα η h′ είναι γνησίως αύξουσα. Από Rolle υπάρχει ξ ∈ (0,1) με h′(ξ) = 0, οπότε η h είναι γνησίως φθίνουσα στο [0, ξ] και γνησίως αύξουσα στο [ξ, 1]. Άρα h(x) &lt; 0 για κάθε x ∈ (0, 1). Επομένως ∫<sub>0</sub><sup>1</sup> h(x)dx &lt; 0 ⇒ ∫<sub>0</sub><sup>1</sup> f(x)dx &lt; 1 + (√e − 1)/2 = (1 + √e)/2.',
+        scheme: ['Ιδέα της χορδής / βοηθητική h: 2 μονάδες', 'h(x)<0 στο (0,1) με αιτιολόγηση: 2 μονάδες', 'Ολοκλήρωση και αποτέλεσμα: 2 μονάδες'] },
+      { id: 'Δ4', pts: 6, topic: 'Bolzano & πλήθος ριζών',
+        text: 'Να αποδείξετε ότι η εξίσωση f(x) = 2 − x<sup>2</sup> έχει ακριβώς δύο ρίζες, οι οποίες είναι αντίθετες.',
+        sol: 'Έστω φ(x) = e<sup>x²/2</sup> + x<sup>2</sup> − 2, που είναι άρτια. φ′(x) = x(e<sup>x²/2</sup> + 2), άρα η φ είναι γνησίως φθίνουσα στο (−∞, 0] και γνησίως αύξουσα στο [0, +∞). φ(0) = −1 &lt; 0 και φ(1) = √e − 1 &gt; 0, οπότε από Bolzano και μονοτονία υπάρχει μοναδική ρίζα ρ ∈ (0, 1) στο [0, +∞). Επειδή η φ είναι άρτια, φ(−ρ) = 0 και, λόγω μονοτονίας, η −ρ είναι η μοναδική ρίζα στο (−∞, 0]. Άρα ακριβώς δύο ρίζες, οι ρ και −ρ.',
+        scheme: ['Μονοτονία της φ: 2 μονάδες', 'Bolzano και μοναδικότητα στο [0,+∞): 2 μονάδες', 'Άρτια, δεύτερη (αντίθετη) ρίζα: 2 μονάδες'] }
+    ]}
+  ]
+};
+
+/* demo grading of Μαρία's paper */
+const DEMO_RESULT = {
+  prev: 13.9,
+  questions: {
+    'Α1': { a: 7, got: 'Πλήρης και σωστή απόδειξη.' },
+    'Α2': { a: 4, got: 'Σωστός ορισμός.' },
+    'Α3': { a: 2, got: 'Σωστό συμπέρασμα f′(ξ) = (f(β) − f(α))/(β − α).', lost: 'Έγραψες μόνο «παραγωγίσιμη στο (α, β)». Λείπει η προϋπόθεση «συνεχής στο [α, β]». −2' },
+    'Α4': { a: 8, got: 'Σωστά τα α, β, δ, ε.', lost: 'Στο γ έγραψες «Λάθος». Είναι Σωστό: αν f(x) → +∞, τότε 1/f(x) → 0. −2' },
+    'Β1': { a: 7, got: 'Σωστή παράγωγος, πίνακας μονοτονίας και μέγιστο f(1) = 1/e.' },
+    'Β2': { a: 6, got: 'Σωστή f″, κυρτότητα και σημείο καμπής (2, 2/e²).' },
+    'Β3': { a: 3, got: 'Σωστά: καμία κατακόρυφη, y = 0 οριζόντια στο +∞.', lost: 'Δεν εξέτασες καθόλου το −∞. Έπρεπε να δείξεις ότι lim f(x)/x = +∞, άρα δεν υπάρχει πλάγια ασύμπτωτη. −3' },
+    'Β4': { a: 4, got: 'Σωστό τελικό σύνολο τιμών (−∞, 1/e].', lost: 'Δεν γράφεις ότι η f είναι συνεχής και γνησίως μονότονη σε κάθε διάστημα. Χωρίς αυτό ο βαθμολογητής κόβει μονάδες. −2' },
+    'Γ1': { a: 8, got: 'Σωστό πρόσημο, σωστή παραγοντική ολοκλήρωση, E = 1 − 3/e².' },
+    'Γ2': { a: 5, got: 'Σωστή χρήση Bolzano για ύπαρξη ρίζας σε δύο διαστήματα.', lost: 'Δείχνεις ότι υπάρχουν «τουλάχιστον» δύο ρίζες, όχι «ακριβώς» δύο. Λείπει η μονοτονία σε κάθε διάστημα. −3' },
+    'Γ3': { a: 6, got: 'Σωστή ιδέα (ολικό μέγιστο από Β1) και σωστός μετασχηματισμός.', lost: 'Δεν απάντησες πότε ισχύει η ισότητα (μόνο για x = 1) και γιατί. −3' },
+    'Δ1': { a: 6, got: 'Σωστή f′ = x·f και σωστή βοηθητική συνάρτηση.', lost: 'Δεν αιτιολόγησες γιατί η f είναι παραγωγίσιμη (ολοκλήρωμα με συνεχή ολοκληρωτέα). −2' },
+    'Δ2': { a: 5, got: 'Σωστή f″ > 0.' },
+    'Δ3': { a: 1, got: 'Σωστή αρχική παρατήρηση ότι η f είναι κυρτή.', lost: 'Προσπάθησες να υπολογίσεις το ολοκλήρωμα, που δεν γίνεται με γνωστές συναρτήσεις. Η ιδέα είναι ότι η κυρτή f είναι κάτω από τη χορδή της στο [0,1]. −5' },
+    'Δ4': { a: 4, got: 'Σωστή μονοτονία και ρίζα στο (0, 1) με Bolzano.', lost: 'Βρήκες μόνο τη μία ρίζα. Δεν χρησιμοποίησες ότι η φ είναι άρτια για τη δεύτερη (αντίθετη) ρίζα. −2' }
+  }
+};
+
+const PRACTICE = [
+  { tag: 'Για το Γ2 · πλήθος ριζών', text: 'Να αποδείξετε ότι η εξίσωση ln x = x − 2 έχει ακριβώς δύο ρίζες.',
+    hint: 'Μελέτησε τη μονοτονία της h(x) = ln x − x + 2 και βρες το σύνολο τιμών σε καθένα από τα διαστήματα μονοτονίας.',
+    sol: 'h′(x) = 1/x − 1: η h είναι γνησίως αύξουσα στο (0, 1] και γνησίως φθίνουσα στο [1, +∞), με h(1) = 1 &gt; 0. Επειδή lim<sub>x→0⁺</sub> h(x) = −∞ και lim<sub>x→+∞</sub> h(x) = −∞, είναι h((0,1]) = (−∞, 1] και h([1,+∞)) = (−∞, 1]. Το 0 ανήκει και στα δύο, οπότε, λόγω μονοτονίας, υπάρχει ακριβώς μία ρίζα σε κάθε διάστημα.' },
+  { tag: 'Για το Β3 · ασύμπτωτες', text: 'Να βρείτε τις ασύμπτωτες της γραφικής παράστασης της f(x) = x + e<sup>x</sup>.',
+    hint: 'Στο −∞ υπολόγισε τα lim f(x)/x και lim (f(x) − λx). Μην ξεχάσεις να εξετάσεις και το +∞.',
+    sol: 'Συνεχής στο ℝ, άρα δεν έχει κατακόρυφες. Στο −∞: lim f(x)/x = lim (1 + e<sup>x</sup>/x) = 1 και lim (f(x) − x) = lim e<sup>x</sup> = 0, άρα <b>y = x πλάγια ασύμπτωτη στο −∞</b>. Στο +∞: lim f(x)/x = +∞, άρα καμία ασύμπτωτη.' },
+  { tag: 'Για το Δ3 · κυρτότητα & ολοκλήρωμα', text: 'Να αποδείξετε ότι ∫<sub>0</sub><sup>1</sup> e<sup>x²</sup> dx &lt; (1 + e) / 2.',
+    hint: 'Η g(x) = e<sup>x²</sup> είναι κυρτή. Σύγκρινέ τη με τη χορδή της από το (0, 1) ως το (1, e).',
+    sol: 'g″(x) = (2 + 4x<sup>2</sup>)e<sup>x²</sup> &gt; 0, άρα η g είναι κυρτή. Όπως στο Δ3, η h(x) = g(x) − 1 − (e − 1)x έχει h(0) = h(1) = 0 και h &lt; 0 στο (0, 1). Άρα ∫<sub>0</sub><sup>1</sup> e<sup>x²</sup>dx &lt; ∫<sub>0</sub><sup>1</sup> (1 + (e − 1)x)dx = 1 + (e − 1)/2 = (1 + e)/2.' }
+];
+
+const SUBJECTS = [
+  { n: 'Μαθηματικά', g: 13.9, d: +0.8, s: [12.1, 12.6, 12.4, 13.2, 13.5, 13.1, 13.9] },
+  { n: 'Φυσική', g: 14.6, d: +0.3, s: [13.0, 13.4, 13.9, 13.6, 14.2, 14.5, 14.3, 14.6] },
+  { n: 'Χημεία', g: 16.8, d: +0.2, s: [15.2, 15.5, 15.9, 16.1, 16.0, 16.4, 16.6, 16.8] },
+  { n: 'Νεοελληνική', g: 14.1, d: -0.2, s: [13.6, 14.0, 13.8, 14.3, 14.1, 14.4, 14.3, 14.1] }
+];
+const WEAK = [
+  ['Όρια & συνέχεια', 82], ['Bolzano & πλήθος ριζών', 62], ['Παράγωγοι & ΘΜΤ', 78], ['Μονοτονία & ακρότατα', 88],
+  ['Κυρτότητα', 71], ['Ασύμπτωτες', 50], ['Ολοκληρώματα & εμβαδά', 74], ['Ανισότητες με ολοκληρώματα', 45]
+];
+const HIST = [
+  ['Μαθηματικά · Προσομοίωση #6', '2 Οκτ · 2ω 51′', '13,9'],
+  ['Φυσική · Πανελλήνιες 2024', '30 Σεπ · 3ω 00′', '14,6'],
+  ['Χημεία · Προσομοίωση #4', '27 Σεπ · 2ω 34′', '16,8'],
+  ['Νεοελληνική · Κείμενο & ερωτήσεις', '24 Σεπ · 3ω 00′', '14,1']
+];
+const WEEK = [['Δευ', 'Φροντ. Μαθ.', ''], ['Τρι', 'Τρίωρο Φυσική', 'ex'], ['Τετ', 'Ασύμπτωτες · 3 ασκ.', 'rv2'], ['Πεμ', 'Τρίωρο Μαθ. #7', 'ex'], ['Παρ', 'Φροντ. Φυσ./Χημ.', ''], ['Σαβ', 'Χημεία 2 ώρες', ''], ['Κυρ', 'Ξαναγράφω τα λάθη', 'rv2']];
+
+const TREND = {
+  weeks: ['17/8', '24/8', '31/8', '7/9', '14/9', '21/9', '28/9', '5/10'],
+  series: [
+    { n: 'Μαθηματικά', c: '#2F5BD3', v: [12.1, 12.6, 12.4, 13.2, 13.5, 13.1, 13.9, 15.2] },
+    { n: 'Φυσική', c: '#C2410C', v: [13.0, 13.4, 13.9, 13.6, 14.2, 14.5, 14.3, 14.6] },
+    { n: 'Χημεία', c: '#0F8A6C', v: [15.2, 15.5, 15.9, 16.1, 16.0, 16.4, 16.6, 16.8] }
+  ]
+};
+
+const CHAPTERS = ['Όρια & συνέχεια', 'Bolzano', 'Παράγωγοι', 'Μονοτονία', 'Κυρτότητα', 'Ασύμπτωτες', 'Ολοκληρώματα'];
+const ORG = {
+  fr: { name: 'Φροντιστήριο «Ορίζοντας»', sub: 'Τμήμα Γ1 Θετικών · Μαθηματικά Προσανατολισμού · κ. Παπαδάκης', lg: 'Ο', col: '#1D5C8C', lgName: 'το λογότυπο και το όνομα του φροντιστηρίου σας',
+    kpis: [['14', 'μαθητές στο τμήμα (48 συνολικά)'], ['37', 'γραπτά διορθώθηκαν αυτή την εβδομάδα'], ['14,1', 'μέσος βαθμός τμήματος (+0,8 τον μήνα)'], ['~19 ώρες', 'διόρθωσης που γλίτωσαν οι καθηγητές τον μήνα']],
+    students: ['Μαρία Κ.', 'Νίκος Β.', 'Ελένη Τ.', 'Γιώργος Μ.', 'Δήμητρα Α.', 'Κώστας Π.', 'Σοφία Λ.', 'Άννα Ρ.', 'Παύλος Ζ.', 'Ιωάννα Χ.', 'Στέλιος Δ.', 'Κατερίνα Ν.'] },
+  sc: { name: 'Εκπαιδευτήρια «Αστέρι»', sub: 'Γ\' Λυκείου · 3 τμήματα Θετικών & Υγείας · Υπεύθυνη σπουδών: κ. Αλεξίου', lg: 'Α', col: '#7A2E4B', lgName: 'το έμβλημα και το όνομα του σχολείου σας',
+    kpis: [['86', 'μαθητές Γ\' Λυκείου σε 3 τμήματα'], ['212', 'γραπτά διορθώθηκαν αυτή την εβδομάδα'], ['15,0', 'μέσος βαθμός Μαθηματικών (+0,6 τον μήνα)'], ['~74 ώρες', 'διόρθωσης που γλίτωσαν οι καθηγητές τον μήνα']],
+    students: ['Γ1 · Θετικών', 'Γ2 · Θετικών', 'Γ3 · Υγείας', 'Β1 · Θετικών', 'Β2 · Υγείας', 'IB DP1 · Maths AA'] }
+};
+const QUEUE = [
+  ['Ελένη Τ.', 'Προσομοίωση #6 · 4 σελίδες', 12.8],
+  ['Κώστας Π.', 'Προσομοίωση #6 · 6 σελίδες', 16.4],
+  ['Σοφία Λ.', 'Πανελλήνιες 2025 · 5 σελίδες', 14.2],
+  ['Στέλιος Δ.', 'Προσομοίωση #6 · 3 σελίδες', 9.6]
+];
+const FLAGS = [
+  ['ΝΒ', 'Νίκος Β.', 'Κανένα γραπτό τις τελευταίες 12 μέρες', 'amber', 'Ανενεργός'],
+  ['ΕΤ', 'Ελένη Τ.', 'Μαθηματικά: 15,1 → 12,8 σε 3 εβδομάδες', 'red', 'Πτώση'],
+  ['ΓΜ', 'Γιώργος Μ.', '3 έξοδοι από την οθόνη στο τελευταίο τρίωρο', 'amber', 'Προσοχή']
+];
+/* ============ helpers ============ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const fmt = (n, d = 1) => Number(n).toLocaleString('el-GR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const store = {
+  get(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600); }
+const allQs = () => PAPER.themes.flatMap(th => th.qs.map(q => ({ ...q, theme: th.t })));
+const strip = h => h.replace(/<sup>(.*?)<\/sup>/g, '^($1)').replace(/<sub>(.*?)<\/sub>/g, '_($1)').replace(/<li>/g, '\n- ').replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+
+/* ============ router ============ */
+const VIEWS = ['plan', 'student', 'parent', 'school'];
+function route() {
+  const v = (location.hash || '#plan').slice(1);
+  const view = VIEWS.includes(v) ? v : 'plan';
+  $$('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + view));
+  $$('.nav a').forEach(a => { if (a.dataset.view === view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  if (!VIEWS.includes(v) && v) { const t = document.getElementById(v); if (t) { setTimeout(() => t.scrollIntoView(), 30); return; } }
+  window.scrollTo(0, 0);
+  if (view === 'parent') drawTrend();
+  if (view === 'student') animateWeak();
+}
+window.addEventListener('hashchange', route);
+
+/* ============ reveal + counters ============ */
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); const c = e.target.querySelector('[data-count]'); if (c) countUp(c); }
+}), { rootMargin: '0px 0px -6% 0px', threshold: .05 }) : null;
+$$('.rv').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+setTimeout(() => $$('.view.active .rv').forEach(el => { const r = el.getBoundingClientRect(); if (r.top < innerHeight) el.classList.add('in'); }), 1500);
+function countUp(el) {
+  const to = +el.dataset.count, t0 = performance.now(), dur = 1300;
+  (function step(t) { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * e).toLocaleString('el-GR'); if (p < 1) requestAnimationFrame(step); })(t0);
+}
+setTimeout(() => $('#paperStack')?.classList.add('go'), 200);
+
+/* ============ checklist ============ */
+(function todo() {
+  const st = store.get('themad-todo', {});
+  const boxes = $$('#todoGrid input[type=checkbox]');
+  const upd = () => { const n = boxes.filter(b => b.checked).length; $('#todoBar').style.width = (n / boxes.length * 100) + '%'; $('#todoTxt').textContent = `${n} από ${boxes.length} έγιναν`; };
+  boxes.forEach(b => { b.checked = !!st[b.dataset.k]; b.addEventListener('change', () => { st[b.dataset.k] = b.checked; store.set('themad-todo', st); upd(); }); });
+  upd();
+})();
+
+/* ============ STUDENT: dashboard ============ */
+function spark(vals, w = 120, h = 34) {
+  const mn = Math.min(...vals) - .3, mx = Math.max(...vals) + .3;
+  const pts = vals.map((v, i) => [i / (vals.length - 1) * (w - 6) + 3, h - 4 - (v - mn) / (mx - mn) * (h - 8)]);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const l = pts[pts.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="#14213D" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/><circle cx="${l[0]}" cy="${l[1]}" r="3.5" fill="#D62839" stroke="#fff" stroke-width="1.5"/></svg>`;
+}
+function renderDash() {
+  $('#subj').innerHTML = SUBJECTS.map(s => `<div class="card"><div class="nm">${s.n}</div><div class="gr">${fmt(s.g)}<small> /20</small></div><div class="d ${s.d >= 0 ? 'up' : 'down'}">${s.d >= 0 ? '▲ +' : '▼ '}${fmt(s.d)} τον μήνα</div>${spark(s.s)}</div>`).join('');
+  $('#weak').innerHTML = WEAK.map(([n, v]) => { const c = v >= 75 ? 'var(--green)' : v >= 60 ? '#C98A12' : 'var(--red)'; return `<div class="wk"><span>${n}</span><span class="bar"><i data-w="${v}" style="background:${c}"></i></span><b>${v}%</b></div>`; }).join('');
+  $('#hist').innerHTML = HIST.map(([t, s, g], i) => `<div class="hrow"><div class="t">${t}<small>${s}</small></div><span class="sc">${g}</span>${i === 0 && HIST.justDone ? '<span class="pill green">ΝΕΟ</span>' : '<button class="btn btn-line btn-sm" data-toast="Στο πραγματικό MVP ανοίγει το διορθωμένο γραπτό">Άνοιγμα</button>'}</div>`).join('');
+  $('#week').innerHTML = WEEK.map(([d, t, c]) => `<div class="${c}"><b>${d}</b>${t}</div>`).join('');
+  const days = Math.max(0, Math.ceil((new Date('2027-05-28') - new Date()) / 864e5));
+  $('#daysLeft').textContent = days;
+}
+function animateWeak() { setTimeout(() => $$('#weak i').forEach(i => i.style.width = i.dataset.w + '%'), 120); }
+
+/* ============ STUDENT: stages ============ */
+function stage(name) {
+  $$('#view-student .stage').forEach(s => s.hidden = s.id !== 'st-' + name);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]');
+  if (g) { const to = g.dataset.go; if (to === 'exam') startExam(); else { stage(to); if (to === 'dash') animateWeak(); } }
+  const t = e.target.closest('[data-toast]');
+  if (t) toast(t.dataset.toast);
+});
+
+/* ============ exam mode ============ */
+function renderPaper() {
+  $('#paper').innerHTML = `<div class="ph"><b>ΠΡΟΣΟΜΟΙΩΣΗ ΕΞΕΤΑΣΕΩΝ · Γ' ΛΥΚΕΙΟΥ</b><h2>${PAPER.title}</h2><small>${PAPER.sub} · Διάρκεια: 3 ώρες · Σύνολο: 100 μονάδες</small></div>` +
+    PAPER.themes.map(th => `<h3>${th.t}</h3>${th.intro ? `<p>${th.intro}</p>` : ''}` + th.qs.map(q => `<div class="qq"><span class="id">${q.id}.</span><div>${q.text}<span class="pts">Μονάδες ${q.pts}</span></div></div>`).join('')).join('') +
+    `<p style="text-align:center;margin-top:30px;font-style:italic">Καλή επιτυχία</p>`;
+}
+let ex = { left: 0, speed: 1, exits: 0, t: null, start: 0 };
+function startExam() {
+  ex = { left: 3 * 3600, speed: 1, exits: 0, t: null, start: Date.now(), used: 0 };
+  $('#exam').classList.add('on'); document.body.style.overflow = 'hidden'; $('#exits').textContent = '';
+  $('#exam .exam-body').scrollTop = 0;
+  try { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {}
+  tick(); ex.t = setInterval(() => { ex.left = Math.max(0, ex.left - ex.speed); ex.used += ex.speed; tick(); if (ex.left <= 0) handIn(); }, 1000);
+}
+function tick() {
+  const s = ex.left, h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
+  const el = $('#timer'); el.textContent = [h, m, ss].map(x => String(x).padStart(2, '0')).join(':'); el.classList.toggle('warn', s < 900);
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden && $('#exam').classList.contains('on')) { ex.exits++; $('#exits').textContent = `Έξοδοι από την οθόνη: ${ex.exits}`; } });
+$('#ff').addEventListener('click', () => { ex.speed = ex.speed === 1 ? 120 : 1; $('#ff').textContent = ex.speed === 1 ? 'Γρήγορα προς τα εμπρός ×120' : 'Κανονική ταχύτητα'; });
+function handIn() {
+  clearInterval(ex.t); $('#exam').classList.remove('on'); document.body.style.overflow = '';
+  try { document.fullscreenElement && document.exitFullscreen(); } catch (e) {}
+  const u = ex.used, h = Math.floor(u / 3600), m = Math.floor(u % 3600 / 60);
+  $('#examSummary').innerHTML = `Παρέδωσες μετά από <b>${h}ω ${String(m).padStart(2, '0')}′</b> · έξοδοι από την οθόνη: <b>${ex.exits}</b>. Φωτογράφισε τις σελίδες σου με τη σειρά, σε καλό φως, με ολόκληρη τη σελίδα μέσα στο κάδρο.`;
+  stage('upload');
+}
+$('#handIn').addEventListener('click', handIn);
+
+/* ============ upload ============ */
+let photos = [];
+function resizeImage(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const M = 1568, k = Math.min(1, M / Math.max(img.width, img.height));
+      const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url); const d = c.toDataURL('image/jpeg', .86); res({ name: file.name, url: d, b64: d.split(',')[1] });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Δεν διαβάστηκε η εικόνα ' + file.name)); };
+    img.src = url;
+  });
+}
+async function addFiles(list) {
+  const fs = [...list].filter(f => f.type.startsWith('image/')).slice(0, 12 - photos.length);
+  for (const f of fs) { try { photos.push(await resizeImage(f)); } catch (e) { showErr(e.message); } }
+  renderThumbs();
+}
+function renderThumbs() {
+  $('#thumbs').innerHTML = photos.map((p, i) => `<figure><img src="${p.url}" alt="Σελίδα ${i + 1}"><figcaption>Σελ. ${i + 1}</figcaption><button type="button" data-rm="${i}" aria-label="Αφαίρεση">×</button></figure>`).join('');
+}
+$('#files').addEventListener('change', e => { addFiles(e.target.files); e.target.value = ''; });
+$('#thumbs').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (b) { e.preventDefault(); photos.splice(+b.dataset.rm, 1); renderThumbs(); } });
+const drop = $('#drop');
+['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+try { $('#apiKey').value = sessionStorage.getItem('themad-key') || ''; } catch (e) {}
+$('#apiKey').addEventListener('input', e => { try { sessionStorage.setItem('themad-key', e.target.value.trim()); } catch (er) {} });
+function showErr(m) { const e = $('#err'); e.innerHTML = m; e.classList.toggle('on', !!m); }
+
+/* ============ grading ============ */
+const LOG = ['Διαβάζει τον γραφικό χαρακτήρα', 'Θέμα Α · θεωρία', 'Θέμα Β · μελέτη συνάρτησης', 'Θέμα Γ · εμβαδόν & ρίζες', 'Θέμα Δ · συναρτησιακή σχέση', 'Συγκρίνει με το σχέδιο βαθμολόγησης'];
+function runLog(fast) {
+  $('#glog').innerHTML = LOG.map(l => `<li>${l}</li>`).join('');
+  const lis = $$('#glog li'); let i = 0;
+  return new Promise(res => { const t = setInterval(() => { if (i < lis.length) lis[i++].classList.add('done'); if (i >= lis.length && fast) { clearInterval(t); setTimeout(res, 350); } }, fast ? 420 : 2600); runLog._t = t; });
+}
+$('#btnDemo').addEventListener('click', async () => {
+  showErr(''); $('#gradeNote').textContent = 'Συγκρίνει κάθε ερώτημα με το επίσημο σχέδιο βαθμολόγησης.';
+  stage('grading'); await runLog(true);
+  const qs = allQs().map(q => ({ id: q.id, max: q.pts, awarded: DEMO_RESULT.questions[q.id].a, got: DEMO_RESULT.questions[q.id].got, lost: DEMO_RESULT.questions[q.id].lost || '', topic: q.topic, attempted: true }));
+  renderResult({ questions: qs, mode: 'demo', userPhotos: photos.length });
+  if (!HIST.justDone) { HIST.unshift(['Μαθηματικά · Προσομοίωση #7', 'σήμερα · διορθώθηκε', '15,2']); HIST.justDone = true; SUBJECTS[0].g = 15.2; SUBJECTS[0].d = 1.3; SUBJECTS[0].s.push(15.2); renderDash(); }
+});
+$('#btnLive').addEventListener('click', async () => {
+  const key = $('#apiKey').value.trim();
+  if (!photos.length) { showErr('Πρώτα φωτογράφισε ή ανέβασε τουλάχιστον μία σελίδα με λύσεις σου από την Προσομοίωση #7.'); return; }
+  if (!key) { $('#liveBox').open = true; showErr('Βάλε το Anthropic API key σου στο πλαίσιο «Ζωντανή διόρθωση» (μόνο για δοκιμή).'); $('#apiKey').focus(); return; }
+  showErr(''); $('#gradeNote').textContent = 'Πραγματική διόρθωση από AI. Συνήθως παίρνει 20–60 δευτερόλεπτα.';
+  stage('grading'); runLog(false);
+  try {
+    const out = await gradeLive(key, $('#model').value);
+    clearInterval(runLog._t); $$('#glog li').forEach(l => l.classList.add('done'));
+    renderResult({ questions: out.questions, mode: 'live', summary: out.summary, model: $('#model').selectedOptions[0].text });
+  } catch (e) {
+    clearInterval(runLog._t); stage('upload'); showErr(e.message || String(e));
+  }
+});
+
+function buildPrompt() {
+  let s = `ΘΕΜΑΤΑ ΚΑΙ ΣΧΕΔΙΟ ΒΑΘΜΟΛΟΓΗΣΗΣ\n${PAPER.title} — ${PAPER.sub}\n`;
+  PAPER.themes.forEach(th => {
+    s += `\n${th.t}${th.intro ? '\n' + strip(th.intro) : ''}\n`;
+    th.qs.forEach(q => { s += `\n[${q.id}] (${q.pts} μονάδες) ${strip(q.text)}\nΕπίσημη λύση: ${strip(q.sol)}\nΣχέδιο βαθμολόγησης: ${q.scheme.join('; ')}\n`; });
+  });
+  return s;
+}
+const SYS = `Είσαι έμπειρος βαθμολογητής Πανελληνίων Εξετάσεων στα Μαθηματικά Προσανατολισμού. Βαθμολογείς χειρόγραφα γραπτά μαθητών από φωτογραφίες, αυστηρά και δίκαια, ΜΟΝΟ με βάση το σχέδιο βαθμολόγησης που σου δίνεται, όπως θα έκανε ένας Έλληνας βαθμολογητής. Δίνεις μονάδες για σωστά βήματα ακόμα κι αν το τελικό αποτέλεσμα είναι λάθος. Κόβεις μονάδες για ελλιπή αιτιολόγηση. Αν κάτι δεν διαβάζεται, το λες. Γράφεις τα σχόλια στα ελληνικά, απλά, απευθυνόμενος στον μαθητή (β' ενικό). Δεν λύνεις ο ίδιος την άσκηση στα σχόλια, εξηγείς μόνο πού κέρδισε και πού έχασε μονάδες.`;
+async function gradeLive(key, model) {
+  const ids = allQs().map(q => q.id).join(', ');
+  const instr = `${buildPrompt()}\n\nΟΔΗΓΙΕΣ\nΟι εικόνες είναι οι σελίδες του γραπτού του μαθητή, με τη σειρά. Ο μαθητής μπορεί να έχει απαντήσει μόνο σε κάποια ερωτήματα.\nΒαθμολόγησε ΚΑΘΕ ερώτημα (${ids}). Αν ένα ερώτημα δεν απαντήθηκε καθόλου, βάλε attempted:false και awarded:0.\nΑπάντησε ΜΟΝΟ με έγκυρο JSON, χωρίς κείμενο πριν ή μετά, με αυτή τη μορφή:\n{"readable": true, "summary": "2-3 προτάσεις για το συνολικό γραπτό", "questions": [{"id": "Α1", "attempted": true, "awarded": 0, "max": 7, "got": "τι έκανε σωστά (σύντομα)", "lost": "πού έχασε μονάδες και πόσες (κενό αν πήρε όλες)", "confidence": "high|medium|low"}]}`;
+  const content = photos.map(p => ({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: p.b64 } }));
+  content.push({ type: 'text', text: instr });
+  let r;
+  try {
+    r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model, max_tokens: 6000, system: SYS, messages: [{ role: 'user', content }] })
+    });
+  } catch (e) { throw new Error('Δεν έγινε σύνδεση με το api.anthropic.com. Έλεγξε το internet και δοκίμασε ξανά.'); }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const m = j?.error?.message || r.statusText;
+    if (r.status === 401) throw new Error('Το API key δεν είναι σωστό (401). Έλεγξέ το στο console.anthropic.com.');
+    if (r.status === 404) throw new Error(`Το μοντέλο δεν βρέθηκε (404): ${m}. Δοκίμασε το άλλο μοντέλο από τη λίστα.`);
+    if (r.status === 413) throw new Error('Οι φωτογραφίες είναι πολύ μεγάλες. Δοκίμασε λιγότερες σελίδες.');
+    throw new Error(`Σφάλμα από το AI (${r.status}): ${m}`);
+  }
+  const txt = (j.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
+  const a = txt.indexOf('{'), b = txt.lastIndexOf('}');
+  let data; try { data = JSON.parse(txt.slice(a, b + 1)); } catch (e) { throw new Error('Το AI δεν απάντησε με τη σωστή μορφή. Δοκίμασε ξανά.'); }
+  const meta = Object.fromEntries(allQs().map(q => [q.id, q]));
+  const qs = (data.questions || []).filter(q => meta[q.id]).map(q => ({ id: q.id, max: meta[q.id].pts, awarded: Math.max(0, Math.min(meta[q.id].pts, +q.awarded || 0)), got: q.got || '', lost: q.lost || '', topic: meta[q.id].topic, attempted: q.attempted !== false, conf: q.confidence }));
+  if (data.readable === false && !qs.some(q => q.attempted)) throw new Error('Το AI δεν μπόρεσε να διαβάσει τις φωτογραφίες. Δοκίμασε με καλύτερο φως και ολόκληρη τη σελίδα.');
+  return { questions: qs, summary: data.summary || '' };
+}
+
+/* ============ result ============ */
+function renderResult(R) {
+  const live = R.mode === 'live';
+  const qs = live ? R.questions.filter(q => q.attempted) : R.questions;
+  const tot = qs.reduce((s, q) => s + q.awarded, 0), max = qs.reduce((s, q) => s + q.max, 0);
+  const pct = max ? tot / max : 0, g20 = pct * 20;
+  const byTheme = PAPER.themes.map(th => { const ids = th.qs.map(q => q.id); const list = qs.filter(q => ids.includes(q.id)); return { t: th.t, a: list.reduce((s, q) => s + q.awarded, 0), m: list.reduce((s, q) => s + q.max, 0) }; }).filter(x => x.m);
+  const C = 2 * Math.PI * 80;
+  const cls = q => q.awarded === q.max ? 'full' : q.awarded / q.max >= .5 ? 'part' : 'low';
+  const meta = Object.fromEntries(allQs().map(q => [q.id, q]));
+  const lostTopics = qs.filter(q => q.awarded < q.max).sort((a, b) => (b.max - b.awarded) - (a.max - a.awarded)).slice(0, 3);
+
+  const head = live
+    ? `<span class="pill red">ΖΩΝΤΑΝΗ ΔΙΟΡΘΩΣΗ · ${R.model}</span><h1 style="font-size:32px;margin:12px 0 8px">${tot} από ${max} μονάδες στα ερωτήματα που έλυσες</h1><p class="muted" style="margin:0">${R.summary || ''}</p><p style="font-size:13px;margin-top:10px" class="muted">Έλεγξε τη διόρθωση: συμφωνείς; Αυτό ακριβώς θα μετρήσουμε στο πιλοτικό με τον καθηγητή.</p>`
+    : `<span class="pill green">ΔΙΟΡΘΩΘΗΚΕ · ΠΑΡΑΔΕΙΓΜΑ</span><h1 style="font-size:34px;margin:12px 0 8px">Βαθμός ${fmt(g20)} <span class="muted" style="font-size:20px">/ 20</span> <span class="up" style="font:700 18px var(--sans)">▲ +${fmt(g20 - DEMO_RESULT.prev)}</span></h1><p class="muted" style="margin:0">Από ${fmt(DEMO_RESULT.prev)} στην προηγούμενη προσομοίωση. Έχασες τις περισσότερες μονάδες σε <b style="color:var(--ink)">αιτιολόγηση</b> και σε <b style="color:var(--ink)">ανισότητες με ολοκληρώματα</b>.</p>${R.userPhotos ? '<p style="font-size:13px;margin-top:10px" class="muted">Σημείωση: αυτό είναι έτοιμο παράδειγμα, οι δικές σου φωτογραφίες δεν διορθώθηκαν. Για πραγματική διόρθωση πάτα «Ζωντανή διόρθωση».</p>' : ''}`;
+
+  const scan = live
+    ? `<div class="card panel"><h2>Το γραπτό σου</h2><div class="hint">Οι φωτογραφίες που διορθώθηκαν</div><div class="scan-photos">${photos.map((p, i) => `<img src="${p.url}" alt="Σελίδα ${i + 1}">`).join('')}</div></div>`
+    : `<div class="scan"><div class="ruled"></div><div class="margin"></div><span class="cap">Σελίδα 4 από 6</span><div class="stamp">19/25</div>
+        <div class="hw2">
+          <div><span class="q">Γ1.</span> f(x) ≥ 0 στο [0, 2]</div>
+          <div>E = ∫₀² x·e<sup>−x</sup>dx = [−x·e<sup>−x</sup>]₀² + ∫₀² e<sup>−x</sup>dx</div>
+          <div>= −2e<sup>−2</sup> − e<sup>−2</sup> + 1 = 1 − 3/e²</div>
+          <span class="rn">✓ πολύ καλά · 8/8</span>
+          <div><span class="q">Γ2.</span> g(x) = x·e<sup>−x</sup> − ¼ , συνεχής</div>
+          <div>g(0) &lt; 0 , g(1) = 1/e − ¼ &gt; 0 ⇒ ρίζα στο (0,1)</div>
+          <div>g(4) = 4/e⁴ − ¼ &lt; 0 ⇒ ρίζα στο (1,4)</div>
+          <div><u style="text-decoration-color:var(--red);text-decoration-thickness:2px">Άρα δύο ρίζες.</u></div>
+          <span class="rn">«Ακριβώς» δύο; Λείπει η μονοτονία σε κάθε διάστημα. −3 · 5/8</span>
+          <div><span class="q">Γ3.</span> Από Β1: x·e<sup>−x</sup> ≤ 1/e</div>
+          <div>⇒ e·x ≤ e<sup>x</sup> για κάθε x</div>
+          <span class="rn">Πότε ισχύει το «=»; −3 · 6/9</span>
+        </div></div>`;
+
+  $('#st-result').innerHTML = `
+    <div class="card res-top">
+      <div class="big-score"><svg viewBox="0 0 190 190"><circle class="trk" cx="95" cy="95" r="80"/><circle class="val" id="scoreArc" cx="95" cy="95" r="80" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="c"><b>${Math.round(pct * 100)}</b><small>από 100</small></div></div>
+      <div>${head}<div class="themes">${byTheme.map(t => `<div><span>${t.t}</span><b>${t.a}</b><small class="muted"> / ${t.m}</small><i><em style="width:${t.a / t.m * 100}%"></em></i></div>`).join('')}</div></div>
+    </div>
+    <div class="marked" style="margin-top:18px">
+      <div>${scan}</div>
+      <div class="card panel"><h2>Βαθμός ανά ερώτημα</h2><div class="hint">Πάτα ένα ερώτημα. Η επίσημη λύση ανοίγει μόνο τώρα, μετά τη διόρθωση.</div>
+        <div class="qlist">${qs.map(q => `<details class="qi ${cls(q)}"${q.awarded < q.max && q.id === lostTopics[0]?.id ? ' open' : ''}><summary><span class="qid">${q.id}</span><span class="qt">${meta[q.id].topic}<small>${q.awarded === q.max ? 'Όλες οι μονάδες' : `Έχασες ${q.max - q.awarded} ${q.max - q.awarded === 1 ? 'μονάδα' : 'μονάδες'}`}${q.conf && q.conf !== 'high' ? ` · βεβαιότητα AI: ${q.conf === 'low' ? 'χαμηλή' : 'μέτρια'}` : ''}</small></span><span class="qs">${q.awarded}<small> / ${q.max}</small></span></summary>
+          <div class="body">${q.got ? `<div class="got"><b>Σωστά:</b> ${q.got}</div>` : ''}${q.lost ? `<div class="lost"><b>Πού έχασες:</b> ${q.lost}</div>` : ''}
+          <button class="btn btn-line btn-sm sol-btn" data-sol="${q.id}">Δείξε επίσημη λύση</button><div class="sol" id="sol-${q.id}">${meta[q.id].sol}</div></div></details>`).join('')}</div>
+      </div>
+    </div>
+    <div class="card panel" style="margin-top:18px">
+      <h2>Ξαναδούλεψέ τα με το χέρι: 3 παρόμοιες ασκήσεις</h2><div class="hint">${live ? 'Παράδειγμα: στο πραγματικό προϊόν φτιάχνονται από τα δικά σου λάθη.' : 'Διαλεγμένες από τα ερωτήματα όπου έχασες τις περισσότερες μονάδες. Πρώτα προσπαθείς, μετά βλέπεις υπόδειξη, και στο τέλος τη λύση.'}</div>
+      <div class="prac">${PRACTICE.map((p, i) => `<div class="card"><span class="tg">${p.tag}</span><p>${p.text}</p><div class="hintx" id="h${i}"><b>Υπόδειξη:</b> ${p.hint}</div><div class="solx" id="s${i}">${p.sol}</div><div class="acts"><button class="btn btn-line btn-sm" data-hint="${i}">Υπόδειξη</button><button class="btn btn-ink btn-sm" data-psol="${i}">Το έλυσα · δείξε λύση</button></div></div>`).join('')}</div>
+    </div>
+    <div class="after-acts" style="margin-top:18px">
+      <button class="btn btn-line" data-toast="Στάλθηκε στον καθηγητή για έλεγχο. Θα δεις την απάντηση εδώ (demo)">Διαφωνώ με έναν βαθμό</button>
+      <a class="btn btn-ink" href="#parent">Δες τι θα πάρει ο γονιός →</a>
+      <button class="btn btn-line" data-go="dash">Πίσω στην αρχή</button>
+    </div>`;
+  stage('result');
+  requestAnimationFrame(() => setTimeout(() => { const a = $('#scoreArc'); if (a) a.style.strokeDashoffset = C * (1 - pct); }, 80));
+}
+$('#st-result').addEventListener('click', e => {
+  const s = e.target.closest('[data-sol]'); if (s) { const el = $('#sol-' + s.dataset.sol); el.classList.toggle('on'); s.textContent = el.classList.contains('on') ? 'Κρύψε τη λύση' : 'Δείξε επίσημη λύση'; }
+  const h = e.target.closest('[data-hint]'); if (h) $('#h' + h.dataset.hint).classList.toggle('on');
+  const p = e.target.closest('[data-psol]'); if (p) $('#s' + p.dataset.psol).classList.toggle('on');
+});
+
+/* ============ PARENT: trend chart ============ */
+function drawTrend() {
+  const svg = $('#trend'), wrap = $('#chartWrap'), W = svg.clientWidth || 700, H = 260;
+  const m = { l: 34, r: W < 520 ? 104 : 128, t: 14, b: 28 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const y0 = 11, y1 = 18, n = TREND.weeks.length;
+  const X = i => m.l + i / (n - 1) * iw, Y = v => m.t + (1 - (v - y0) / (y1 - y0)) * ih;
+  let s = '';
+  for (let v = 12; v <= 18; v += 2) s += `<line x1="${m.l}" x2="${m.l + iw}" y1="${Y(v)}" y2="${Y(v)}" stroke="#ECE7DC" stroke-width="1"/><text x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="#69708A" font-family="Manrope">${v}</text>`;
+  TREND.weeks.forEach((w, i) => { if (W > 520 || i % 2 === 1) s += `<text x="${X(i)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="#69708A" font-family="Manrope">${w}</text>`; });
+  const ends = [];
+  TREND.series.forEach(se => {
+    const d = se.v.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1)).join(' ');
+    s += `<path d="${d}" fill="none" stroke="${se.c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" class="ln" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.4s var(--ease) forwards"/>`;
+    s += `<circle cx="${X(n - 1)}" cy="${Y(se.v[n - 1])}" r="4.5" fill="${se.c}" stroke="#fff" stroke-width="2"/>`;
+    ends.push({ y: Y(se.v[n - 1]), se });
+  });
+  ends.sort((a, b) => a.y - b.y); for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 16) ends[i].y = ends[i - 1].y + 16;
+  ends.forEach(e => s += `<text x="${X(n - 1) + 10}" y="${e.y + 4}" font-size="12" font-weight="700" fill="#14213D" font-family="Manrope">${e.se.n} ${fmt(e.se.v[n - 1])}</text>`);
+  s += `<line id="xh" x1="0" x2="0" y1="${m.t}" y2="${m.t + ih}" stroke="#14213D" stroke-width="1" stroke-dasharray="3 3" opacity="0"/><g id="xdots"></g><rect id="hit" x="${m.l}" y="0" width="${iw}" height="${H}" fill="transparent"/>`;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = s;
+  $('#legend').innerHTML = TREND.series.map(se => `<span><i style="background:${se.c}"></i>${se.n}</span>`).join('');
+  $('#trendTable').innerHTML = `<table style="border-collapse:collapse;font-size:13px;width:100%"><tr><th style="text-align:left;padding:6px">Εβδομάδα</th>${TREND.series.map(se => `<th style="text-align:right;padding:6px">${se.n}</th>`).join('')}</tr>${TREND.weeks.map((w, i) => `<tr><td style="padding:6px;border-top:1px solid var(--line)">${w}</td>${TREND.series.map(se => `<td style="text-align:right;padding:6px;border-top:1px solid var(--line)">${fmt(se.v[i])}</td>`).join('')}</tr>`).join('')}</table>`;
+  const hit = $('#hit'), tt = $('#tt'), xh = $('#xh'), dots = $('#xdots');
+  const move = ev => {
+    const r = svg.getBoundingClientRect(), px = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+    const i = Math.max(0, Math.min(n - 1, Math.round((px * (W / r.width) - m.l) / iw * (n - 1))));
+    xh.setAttribute('x1', X(i)); xh.setAttribute('x2', X(i)); xh.setAttribute('opacity', 1);
+    dots.innerHTML = TREND.series.map(se => `<circle cx="${X(i)}" cy="${Y(se.v[i])}" r="5" fill="${se.c}" stroke="#fff" stroke-width="2"/>`).join('');
+    tt.innerHTML = `<b>Εβδομάδα ${TREND.weeks[i]}</b>` + TREND.series.map(se => `<div><i style="background:${se.c}"></i>${se.n}: ${fmt(se.v[i])}</div>`).join('');
+    const wr = wrap.getBoundingClientRect(); let lx = X(i) * (r.width / W) + (r.left - wr.left) + 14; if (lx + 170 > wr.width) lx -= 190;
+    tt.style.left = lx + 'px'; tt.style.top = (r.top - wr.top + 20) + 'px'; tt.style.opacity = 1;
+  };
+  hit.addEventListener('mousemove', move); hit.addEventListener('touchstart', move, { passive: true }); hit.addEventListener('touchmove', move, { passive: true });
+  hit.addEventListener('mouseleave', () => { tt.style.opacity = 0; xh.setAttribute('opacity', 0); dots.innerHTML = ''; });
+}
+let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if ($('#view-parent').classList.contains('active')) drawTrend(); }, 200); });
+
+/* ============ SCHOOL ============ */
+function rng(seed) { return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
+function heatColor(v) {
+  const lerp = (a, b, t) => a.map((x, i) => Math.round(x + (b[i] - x) * t));
+  const red = [246, 201, 205], mid = [237, 239, 244], grn = [184, 224, 207];
+  const t = Math.max(0, Math.min(1, (v - 40) / 55));
+  const c = t < .5 ? lerp(red, mid, t * 2) : lerp(mid, grn, (t - .5) * 2);
+  return `rgb(${c.join(',')})`;
+}
+function renderSchool(mode) {
+  const o = ORG[mode];
+  $('#orgName').textContent = o.name; $('#orgSub').textContent = o.sub;
+  $('#lg').textContent = o.lg; $('#lg').style.background = o.col; $('#lgName').textContent = o.lgName;
+  $('#skpis').innerHTML = o.kpis.map(([v, l]) => `<div class="card"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+  const r = rng(mode === 'fr' ? 7 : 19), bias = [8, -6, 4, 10, -2, -20, -4];
+  const rows = o.students.map(n => ({ n, v: CHAPTERS.map((c, j) => Math.round(Math.max(28, Math.min(98, 70 + bias[j] + (r() - .5) * 40)))) }));
+  const avg = CHAPTERS.map((c, j) => Math.round(rows.reduce((s, x) => s + x.v[j], 0) / rows.length));
+  const rowH = (x, cls = '') => `<tr class="${cls}"><td class="nm">${x.n}</td>${x.v.map((v, j) => `<td class="c" style="background:${heatColor(v)}" data-tip="${x.n} · ${CHAPTERS[j]}: ${v}%">${v}</td>`).join('')}</tr>`;
+  $('#heatWrap').innerHTML = `<table class="heat"><thead><tr><th class="nm">${mode === 'fr' ? 'Μαθητής' : 'Τμήμα'}</th>${CHAPTERS.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map(x => rowH(x)).join('')}${rowH({ n: 'Μέσος όρος', v: avg }, 'avg')}</tbody></table><div class="tt" id="htt"></div>`;
+  const htt = $('#htt'), hw = $('#heatWrap');
+  hw.onmousemove = e => { const td = e.target.closest('td.c'); if (!td) { htt.style.opacity = 0; return; } const wr = hw.getBoundingClientRect(), tr = td.getBoundingClientRect(); htt.textContent = td.dataset.tip; htt.style.left = Math.min(tr.left - wr.left + hw.scrollLeft, wr.width - 220 + hw.scrollLeft) + 'px'; htt.style.top = (tr.top - wr.top - 38) + 'px'; htt.style.opacity = 1; };
+  hw.onmouseleave = () => htt.style.opacity = 0;
+  $('#queue').innerHTML = (mode === 'fr' ? QUEUE : QUEUE.map((q, i) => [['Γ1', 'Γ2', 'Γ3', 'Β1'][i] + ' · ' + q[0], q[1], q[2]])).map(([n, p, g], i) => `<div class="qr" data-i="${i}"><div><b>${n}</b><small>${p}</small></div><div class="ai">${fmt(g)}<small> /20 · πρόταση AI</small></div><div class="acts"><button class="btn btn-ink btn-sm" data-ok>Έγκριση</button><button class="btn btn-line btn-sm" data-edit>Αλλαγή</button></div></div>`).join('');
+  $('#flags').innerHTML = FLAGS.map(([a, n, t, c, l]) => `<div class="flag"><span class="av">${a}</span><div><b>${n}</b><small>${t}</small></div><span class="pill ${c}">${l}</span></div>`).join('');
+}
+$('#seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#seg button').forEach(x => x.classList.toggle('on', x === b)); renderSchool(b.dataset.m); });
+$('#queue').addEventListener('click', e => {
+  const row = e.target.closest('.qr'); if (!row) return;
+  if (e.target.closest('[data-ok]')) { const inp = row.querySelector('input'); const v = inp ? inp.value : null; row.querySelector('.acts').innerHTML = `<span class="ok">✓ Εγκρίθηκε${v ? ' · ' + v : ''}</span>`; toast('Ο βαθμός εγκρίθηκε και στάλθηκε στον μαθητή (demo)'); }
+  if (e.target.closest('[data-edit]')) { const ai = row.querySelector('.ai'); const cur = ai.textContent.split(' ')[0]; ai.innerHTML = `<input type="number" min="0" max="20" step="0.1" value="${cur.replace(',', '.')}" style="width:76px;font:600 16px var(--serif);padding:6px 8px;border:1.5px solid var(--ink);border-radius:8px">`; ai.querySelector('input').focus(); e.target.closest('[data-edit]').remove(); }
+});
+
+/* ============ init ============ */
+renderDash(); renderPaper(); renderSchool('fr'); route();
+</script>
+</body></html>

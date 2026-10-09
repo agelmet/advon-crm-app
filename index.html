@@ -7407,16 +7407,18 @@ try{ ideaFilter=localStorage.getItem('advon_idea_filter')||'all'; }catch(e){}
 
 /* The ideas from our chats — added once (state.meta.ideasSeed). An idea already on the board
    (same name/keywords) is never duplicated: only its EMPTY new fields are filled in. */
-const IDEA_SEED_VER='v1-2026-10-09';
+const IDEA_SEED_VER='v2-2026-10-09';
+/* v2: ideas whose seed text changed — a field is replaced only if it still holds the old seed text (never your own edits); new links are added on top */
+const IDEA_SEED_OLD={'seed-ai-education':{"title": "AI-EDUCATION — exam machine for Πανελλήνιες", "pitch": "Not «an AI helper»: the student sits a real past paper by hand with a timer, photographs it, gets graded like a βαθμολογητής against the official marking scheme, and the parents get a report every Sunday.", "why": "About 100,000 Πανελλήνιες candidates every year, and parents already pay €200–500/month for φροντιστήρια. What ChatGPT will never do: real exam conditions, grading against the official solutions, a weak-spot map, and the parent report — the parent is the buyer. Γυμνάσιο: not now. IB / IAL: later, with the same engine.", "nums": "€24.90/month or €199 for the season (Sept–June)\nφροντιστήρια: €149–299/month for up to 50 students\n~100,000 candidates a year\nMVP by mid-December, panic season Jan–May", "risks": "Grading must be right every time — grade only against official solutions and show them side by side. Students leave every year (sell to φροντιστήρια so it renews). Start with Θετικές: Μαθηματικά, Φυσική, Χημεία.", "next": "Call 15 φροντιστήρια (start with the vresfrontistirio sign-ups): «Θα το δίνατε στους μαθητές σας για Χ€/μήνα;» — if 3–4 say yes, build the MVP and pilot it free in January."}};
 const IDEA_SEED=[
-  {id:'seed-ai-education', keys:['ai-education','ai education','ai - education','exam machine','πανελλην'],
-   title:'AI-EDUCATION — exam machine for Πανελλήνιες', type:'product', status:'next', prio:'medium', pin:true, at:'2026-10-09T11:41',
-   pitch:'Not «an AI helper»: the student sits a real past paper by hand with a timer, photographs it, gets graded like a βαθμολογητής against the official marking scheme, and the parents get a report every Sunday.',
-   why:'About 100,000 Πανελλήνιες candidates every year, and parents already pay €200–500/month for φροντιστήρια. What ChatGPT will never do: real exam conditions, grading against the official solutions, a weak-spot map, and the parent report — the parent is the buyer. Γυμνάσιο: not now. IB / IAL: later, with the same engine.',
-   nums:'€24.90/month or €199 for the season (Sept–June)\nφροντιστήρια: €149–299/month for up to 50 students\n~100,000 candidates a year\nMVP by mid-December, panic season Jan–May',
-   risks:'Grading must be right every time — grade only against official solutions and show them side by side. Students leave every year (sell to φροντιστήρια so it renews). Start with Θετικές: Μαθηματικά, Φυσική, Χημεία.',
-   next:'Call 15 φροντιστήρια (start with the vresfrontistirio sign-ups): «Θα το δίνατε στους μαθητές σας για Χ€/μήνα;» — if 3–4 say yes, build the MVP and pilot it free in January.',
-   links:[{t:'Chat · AI-EDUCATION',u:'https://claude.ai/chat/570f3a4f-bc22-4d31-ba6e-8738b5b30dc4'}]},
+  {id:'seed-ai-education', keys:['ai-education','ai education','ai - education','exam machine','πανελλην','θέμα δ','thema-d'],
+   title:'Θέμα Δ (AI-EDUCATION) — exam machine for Πανελλήνιες', type:'product', status:'next', prio:'medium', pin:true, at:'2026-10-09T11:41',
+   pitch:'Working name «Θέμα Δ». Not «an AI helper»: the student sits a past paper BY HAND with a 3-hour timer, photographs it, gets graded like a βαθμολογητής against the official marking scheme, sees exactly where marks were lost, and the parents get a report every Sunday. Plan + clickable MVP are built (Apps → Θέμα Δ).',
+   why:'89,032 Πανελλήνιες candidates in 2026 and parents already pay for φροντιστήρια. What ChatGPT will never do: real exam conditions, grading against the official solutions, a weak-spot map, the parent report (the parent is the buyer) and a class board for the teacher. Sell THROUGH φροντιστήρια (they renew every year) and PRIVATE SCHOOLS (one contract = 100–300 students; they compete on Πανελλήνιες results and many also run IB). Start with Θετικές: Μαθηματικά, Φυσική, Χημεία. Γυμνάσιο and IB/IAL later, with the same engine.',
+   nums:'89,032 candidates in 2026 (75,109 ΓΕΛ + 13,923 ΕΠΑΛ)\nParents: €24.90/month or €199 for the season (Sept–June)\nΦροντιστήρια: €149/month up to 40 students · €249 up to 100\nPrivate schools: €30–40 per student/year, minimum €2,500\nAI cost ≈ €0.10–0.30 per graded exam (estimate)',
+   risks:'Grading must be right every time: official marking scheme only, official solution shown side by side, «Διαφωνώ» button, the teacher has the final say. EU AI Act: AI that grades students = high-risk, rules apply from 2 Dec 2027. Minors: the parent opens the account (consent under 15). Seasonal: students leave every June, so φροντιστήρια and schools are the base.',
+   next:'1) Try «Ζωντανή διόρθωση» in the MVP with your API key on a handwritten answer. 2) Show it to a maths teacher for 1 hour. 3) Call 15 φροντιστήρια (start with the vresfrontistirio sign-ups). If 3–4 say yes: real MVP in November, free pilot in January, charging from February; private schools Feb–June for September 2027.',
+   links:[{t:'Plan + MVP · Θέμα Δ',u:'https://crm.advonmedia.com/thema-d/'},{t:'Chat · AI-EDUCATION',u:'https://claude.ai/chat/570f3a4f-bc22-4d31-ba6e-8738b5b30dc4'}]},
   {id:'seed-ai-automation', keys:['ai automation','automation business','αυτοματοποι','automation for business'],
    title:'AI AUTOMATION BUSINESS — automate Greek companies', type:'business', status:'next', prio:'medium', pin:true, at:'2026-10-09T11:21',
    pitch:'Sell what we built for Advon (CRM, synced calendar, chats, backups, morning brief) to Greek companies: «Show me the job that eats hours every week — I automate it in 2 weeks at no charge; if it doesn\'t save the hours we agreed, you pay nothing.»',
@@ -7487,6 +7489,12 @@ function seedIdeas(){
     if(!hit) hit=orig.find(i=>{ const txt=ideaNorm(i.title+' '+(i.detail||'')); return s.keys.some(k=>txt.includes(ideaNorm(k))); });
     const at=Date.parse(s.at)||Date.now();
     if(hit){
+      const was=IDEA_SEED_OLD[s.id];
+      if(was){
+        ['title','pitch','why','nums','risks','next'].forEach(f=>{ if(hit[f]===was[f]) hit[f]=s[f]; });
+        hit.links=Array.isArray(hit.links)?hit.links:[];
+        s.links.slice().reverse().forEach(l=>{ if(!hit.links.some(x=>x&&x.u===l.u)) hit.links.unshift({...l}); });
+      }
       ['type','pitch','why','nums','risks','next'].forEach(f=>{ if(!hit[f]) hit[f]=s[f]; });
       if(!hit.links||!hit.links.length) hit.links=s.links.map(l=>({...l}));
       if(s.pin && hit.pin===undefined) hit.pin=true;
@@ -9917,6 +9925,9 @@ const MY_APPS=[
     ['Ad Kit','The video ads, their scripts and the 9:16 / 4:5 files','https://claude.ai/artifact/J8pJJEZEcR5tuYJjH4NeZW','#7C5CFC','▶'],
     ['TikTok · today\'s post','The phone page with every day\'s TikTok','https://drafts.advonmedia.com/tiktok/','#111827','♪'],
     ['Instagram · post from phone','Every sales video — copy caption, open in Instagram, add your song','https://drafts.advonmedia.com/meta/','#DD2A7B','◎'],
+  ]],
+  ['Ideas in progress',[
+    ['Θέμα Δ · Πανελλήνιες','Plan + clickable MVP — student, parent, φροντιστήριο & school','https://crm.advonmedia.com/thema-d/','#D62839','Δ'],
   ]],
   ['Learning & personal',[
     ['BOOKS','Your library — key ideas, lessons and tests','https://drafts.advonmedia.com/BOOKS/','#B85F00','B'],
