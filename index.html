@@ -2793,6 +2793,37 @@ body.ld-call .gm-bar{display:none;}
 @keyframes mqIn{from{opacity:0; transform:translateY(16px) scale(.96);} to{opacity:1; transform:none;}}
 @keyframes mqPulse{0%{box-shadow:0 0 0 0 rgba(255,210,77,.6);} 70%{box-shadow:0 0 0 9px rgba(255,210,77,0);} 100%{box-shadow:0 0 0 0 rgba(255,210,77,0);}}
 body.locked .mq-pill{display:none;}
+/* ===== Meeting now (9 Oct 2026) — the client's e-mail + Meet link one tap away during the call ===== */
+.mn-bar{display:flex; flex-direction:column; gap:8px; max-width:1240px; margin:0 auto; padding:2px 24px 12px;}
+.mn-bar[hidden]{display:none;}
+.mn-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:var(--blue-soft); border:1px solid rgba(47,127,224,.25); border-radius:16px; padding:8px 10px 8px 14px;}
+.mn-when{display:flex; align-items:center; gap:7px; font-size:12px; font-weight:800; letter-spacing:.02em; text-transform:uppercase; color:var(--brand); white-space:nowrap;}
+.mn-when .dot{width:9px; height:9px; border-radius:50%; background:#E5484D; box-shadow:0 0 0 0 rgba(229,72,77,.55); animation:mnPulse 1.6s infinite;}
+.mn-when.soon .dot{background:var(--brand); box-shadow:none; animation:none;}
+@keyframes mnPulse{0%{box-shadow:0 0 0 0 rgba(229,72,77,.55)}70%{box-shadow:0 0 0 9px rgba(229,72,77,0)}100%{box-shadow:0 0 0 0 rgba(229,72,77,0)}}
+.mn-name{border:0; background:none; padding:0; font:inherit; font-size:15px; font-weight:800; color:var(--ink); cursor:pointer;}
+.mn-mail{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:5px 5px 5px 12px; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; max-width:100%; min-width:0;}
+.mn-mail span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;}
+.mn-mail b{flex:none; background:var(--ink); color:#fff; border-radius:999px; padding:4px 11px; font-size:12px;}
+body.dark .mn-mail b{color:#10141F;}
+.mn-mail.ok b{background:var(--green); color:#fff;}
+.mn-none{font-size:12.5px; color:var(--muted);}
+.mn-acts{display:flex; gap:8px; margin-left:auto; flex-wrap:wrap;}
+.mn-btn{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:7px 13px; font:inherit; font-size:13px; font-weight:700; text-decoration:none; cursor:pointer; white-space:nowrap;}
+.mn-btn.brand{background:var(--brand); border-color:var(--brand); color:#fff;}
+.mn-x{border:0; background:none; color:var(--muted); font-size:20px; line-height:1; padding:2px 6px; cursor:pointer;}
+@media (hover:hover){.mn-btn:hover,.mn-mail:hover{transform:translateY(-1px);}}
+@media (max-width:640px){
+  .mn-bar{padding:2px 12px 10px;}
+  .mn-row{padding:10px 12px; gap:8px; position:relative;}
+  .mn-name{flex:1 1 auto; text-align:left;}
+  .mn-x{position:absolute; top:6px; right:6px;}
+  .mn-mail{flex:1 1 100%; justify-content:space-between;}
+  .mn-acts{margin-left:0; flex:1 1 100%;}
+  .mn-acts .mn-btn{flex:1 1 0; justify-content:center; padding:9px 6px;}
+}
+.calpop .b-mail{color:var(--brand); font-weight:700;}
+
 /* Home «After meetings» */
 .after-card .home-card-body{max-height:480px;}
 .hc-link.hc-strong{background:var(--ink); color:#fff; border-color:var(--ink);}
@@ -2925,6 +2956,7 @@ body.locked .mq-pill{display:none;}
       </div>
     </div>
   </div>
+  <div class="mn-bar" id="mnBar" hidden aria-live="polite"></div>
 </header>
 <div class="gm-bar" id="gmBar" aria-label="Today's mission"></div>
 
@@ -4788,6 +4820,7 @@ function openCalPop(c, anchor){
       <button class="b-lost">${IC.x} Lost</button>
       <button class="b-noshow">${IC.ban} No show</button>
       <button class="b-log">Log details + reminder…</button>
+      ${mnEmail(c)?'<button class="b-mail b-cpy">Copy e-mail</button><button class="b-mail b-snd">Send Meet link again</button>':''}
       <button class="b-open">Open the card</button>
       ${cur?'<button class="b-clear">clear the outcome</button>':''}
     </div>`;
@@ -4802,6 +4835,8 @@ function openCalPop(c, anchor){
   d.querySelector('.b-noshow').addEventListener('click',()=>go('noshow'));
   d.querySelector('.b-open').addEventListener('click',()=>{ closeCalPop(); openModal(c.id); });
   d.querySelector('.b-log').addEventListener('click',()=>{ closeCalPop(); mqOpen(c.id); });
+  const cpy=d.querySelector('.b-cpy'); if(cpy) cpy.addEventListener('click',()=>{ mnCopy(mnEmail(c)); closeCalPop(); });
+  const snd=d.querySelector('.b-snd'); if(snd) snd.addEventListener('click',()=>{ window.open(mnGmail(c),'_blank','noopener'); closeCalPop(); });
   const cl=d.querySelector('.b-clear'); if(cl) cl.addEventListener('click',()=>go(''));
 }
 /* ================= After the meeting — «How did it go?» in 20 seconds (8 Oct 2026) =================
@@ -5204,6 +5239,71 @@ function fuDone(id){
   toastUndo(c.name+' · follow-up done', ()=>{ c.fu=was; save(); renderAll(); });
 }
 
+
+/* ---- Meeting now (Angelo, 9 Oct 2026) ----
+   During a Google Meet call he needs the client's e-mail (to add them in Meet or send the
+   link again) and had to dig it out of Zoho. The booking already brought the e-mail and the
+   Meet link onto the card, so from 20 min before until 20 min after each meeting a strip under
+   the top bar shows: name · e-mail [Copy] · Open Meet · Send the link again (Gmail, filled in) · Call. */
+const MN_BEFORE=20, MN_AFTER=20;            /* minutes */
+let mnHidden={};
+function mnBk(c){ return (c && c.fromBooking && BK_LIST.find(x=>x.uid===c.fromBooking)) || null; }
+function mnEmail(c){ const b=mnBk(c); return String((c&&c.email) || (b&&b.email) || '').trim(); }
+function mnMeet(c){ const b=mnBk(c); if(b&&b.meet) return b.meet;
+  const m=String((c&&c.notes)||'').match(/https:\/\/meet\.google\.com\/[a-z]{3,4}-[a-z]{3,4}-[a-z]{3,4}/i); return m?m[0]:''; }
+function mnStart(c){ const t=Date.parse(c.day+'T'+c.time); return isNaN(t)?0:t; }
+function mnList(){
+  if(!state) return [];
+  const now=Date.now(), t=todayIso();
+  return state.clients.filter(c=>c.day===t && c.time && !isTrashed(c) && c.stage!=='lost' && !mnHidden[c.id+'|'+c.time])
+    .filter(c=>{ const s0=mnStart(c); return s0 && now>=s0-MN_BEFORE*60000 && now<=s0+(MQ_LEN+MN_AFTER)*60000; })
+    .sort((a,b)=>Math.abs(mnStart(a)-now)-Math.abs(mnStart(b)-now)).slice(0,2);
+}
+function mnGmail(c){
+  const link=mnMeet(c), h=new Date().getHours(), hi=h<13?'Καλημέρα σας':'Καλησπέρα σας';
+  const body=hi+',\n\n'+(link
+      ? 'σας περιμένω στη συνάντησή μας. Μπορείτε να συνδεθείτε από εδώ:\n'+link+'\n\nΑνοίγει κατευθείαν στον browser, χωρίς να χρειάζεται λογαριασμός.'
+      : 'σας περιμένω στη συνάντησή μας στο Google Meet.')
+    +'\n\nΆγγελος Μετρίδης - 6934088046\nAdvon Media\nadvonmedia.com';
+  return 'https://mail.google.com/mail/?authuser=advonmd@gmail.com&view=cm&fs=1&to='+encodeURIComponent(mnEmail(c))
+    +'&su='+encodeURIComponent('Ο σύνδεσμος για τη συνάντησή μας — Advon Media')+'&body='+encodeURIComponent(body);
+}
+function mnCopy(t, el){
+  const ok=()=>{ toast('E-mail copied — paste it in Meet → Add people'); if(el){ el.classList.add('ok'); const b=el.querySelector('b'); if(b) b.textContent='Copied ✓'; setTimeout(()=>{ if(el.isConnected){ el.classList.remove('ok'); if(b) b.textContent='Copy'; } },1800); } };
+  const legacy=()=>{ const ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); let r=false; try{ r=document.execCommand('copy'); }catch(e){} ta.remove(); r?ok():prompt('Copy the e-mail:', t); };
+  if(navigator.clipboard && window.isSecureContext!==false) navigator.clipboard.writeText(t).then(ok, legacy); else legacy();
+}
+function mnRender(){
+  const bar=$('#mnBar'); if(!bar) return;
+  const list=document.body.classList.contains('locked') ? [] : mnList();
+  const now=Date.now();
+  const key=list.map(c=>c.id+c.time+mnEmail(c)+mnMeet(c)+'|'+Math.ceil((mnStart(c)-now)/60000)).join('/');
+  if(bar.dataset.k===key) return; bar.dataset.k=key;
+  if(!list.length){ bar.hidden=true; bar.innerHTML=''; return; }
+  bar.innerHTML=list.map(c=>{
+    const s0=mnStart(c), mins=Math.ceil((s0-now)/60000), em=mnEmail(c), mt=mnMeet(c);
+    const when= now>=s0 ? 'Meeting now · '+c.time : 'In '+mins+' min · '+c.time;
+    const ph=String(c.phone||'').replace(/[^\d+]/g,'');
+    return `<div class="mn-row" data-id="${esc(c.id)}">
+      <span class="mn-when${now>=s0?'':' soon'}"><span class="dot"></span>${esc(when)}</span>
+      <button type="button" class="mn-name" data-mn-open title="Open the card">${esc(c.name)}</button>
+      ${em?`<button type="button" class="mn-mail" data-mn-copy="${esc(em)}" title="Copy the e-mail"><span>${esc(em)}</span><b>Copy</b></button>`:'<span class="mn-none">No e-mail on the card</span>'}
+      <span class="mn-acts">
+        ${mt?`<a class="mn-btn" href="${esc(mt)}" target="_blank" rel="noopener">Open Meet</a>`:''}
+        ${em?`<a class="mn-btn brand" href="${esc(mnGmail(c))}" target="_blank" rel="noopener" title="Opens Gmail with the e-mail and the Meet link filled in">Send the link again</a>`:''}
+        ${ph?`<a class="mn-btn" href="tel:${esc(ph)}">Call</a>`:''}
+      </span>
+      <button type="button" class="mn-x" data-mn-hide aria-label="Hide">×</button>
+    </div>`;
+  }).join('');
+  bar.hidden=false;
+  bar.querySelectorAll('[data-mn-copy]').forEach(el=>el.addEventListener('click',()=>mnCopy(el.dataset.mnCopy, el)));
+  bar.querySelectorAll('[data-mn-open]').forEach(el=>el.addEventListener('click',()=>openModal(el.closest('.mn-row').dataset.id)));
+  bar.querySelectorAll('[data-mn-hide]').forEach(el=>el.addEventListener('click',()=>{ const c=state.clients.find(x=>x.id===el.closest('.mn-row').dataset.id); if(c) mnHidden[c.id+'|'+c.time]=1; bar.dataset.k=''; mnRender(); }));
+}
+setInterval(mnRender, 20000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') setTimeout(mnRender,300); });
+setTimeout(mnRender, 1500);
 /* ---- the little button that never lets a meeting go unlogged ---- */
 function mqPillRender(list){
   const p=$('#mqPill'); if(!p) return;
@@ -9302,7 +9402,7 @@ function applyBookedDefault(){
   (state.clients||[]).forEach(c=>{ if(c.stage==='booked' && !c.v130 && !isTrashed(c)){ c.v130=1; if(!(+c.value>0) && !cxTotal(c)){ c.value=BOOKED_VALUE; } ch=true; } });
   return ch;
 }
-function renderAll(){
+function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e){}
   if(!state) return;
   try{ if(applyBookedDefault()) setTimeout(save,0); }catch(e){}
   try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
