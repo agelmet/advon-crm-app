@@ -2880,22 +2880,6 @@ body.dark .mn-mail b{color:#10141F;}
 
 /* ===== Callbacks 3.0 (9 Oct 2026) — one list by DAY: who to call / text / e-mail today, tomorrow, every day after =====
    Callbacks you write here or in Leads (a lead's «Call back» box) land in the same list. */
-.ca-top{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:12px;}
-@media(max-width:1100px){.ca-top{grid-template-columns:repeat(4,1fr);}}
-@media(max-width:560px){.ca-top{grid-template-columns:repeat(3,1fr); gap:6px;}}
-.ca-cell{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 12px 9px; text-align:left; cursor:pointer; box-shadow:var(--shadow); transition:transform .12s, box-shadow .12s; min-width:0; font:inherit; color:var(--ink);}
-@media(hover:hover){.ca-cell:hover{transform:translateY(-1px); box-shadow:var(--shadow-lg);}}
-.ca-cell .k{font-size:10px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.ca-cell .v{font-family:'Sora'; font-weight:800; font-size:26px; line-height:1.1; letter-spacing:-.02em; font-variant-numeric:tabular-nums; margin-top:3px;}
-.ca-cell .s{font-size:11px; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.ca-cell.today{background:linear-gradient(135deg,#0F1A33,#1D3B8B); color:#fff; border-color:transparent;}
-.ca-cell.today .k,.ca-cell.today .s{color:rgba(255,255,255,.7);}
-.ca-cell.today .v{color:#fff; font-size:30px;}
-.ca-cell.over .v{color:var(--red);}
-.ca-cell.nod .v{color:#B86A00;}
-.ca-cell.done .v{color:var(--green);}
-.ca-cell.zero .v{opacity:.35;}
-
 /* quick add */
 .cq{padding:12px 14px; margin-bottom:12px;}
 .cq-h{display:flex; align-items:center; gap:8px; margin-bottom:9px; font-family:'Sora'; font-weight:700; font-size:13.5px;}
@@ -2928,102 +2912,170 @@ body.dark .cq-add{background:var(--brand);}
 .cq-leads button{font-size:12px; font-weight:700; padding:5px 10px; border-radius:99px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
 .cq-leads button.on{background:var(--blue-soft); border-color:var(--brand); color:var(--brand);}
 
-/* the agenda */
-.ca-list{padding:6px 14px 14px;}
-.ca-g{margin-top:12px;}
-.ca-gh{display:flex; align-items:center; gap:8px; padding:8px 4px 7px; font-family:'Sora'; font-size:13px; font-weight:800; color:var(--ink); border-bottom:2px solid var(--line); margin-bottom:6px;}
-.ca-gh .n{font-size:11px; font-weight:800; border-radius:99px; padding:2px 9px; background:var(--bg); color:var(--muted);}
-.ca-gh small{font-family:'Inter'; font-weight:600; font-size:11.5px; color:var(--muted);}
-.ca-gh .ca-gact{margin-left:auto; font-family:'Inter'; font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:8px; background:var(--orange-soft); color:#B45D00; border:none;}
-.ca-g.over .ca-gh{color:var(--red); border-color:#FFC9D0;} .ca-g.over .ca-gh .n{background:var(--red-soft); color:var(--red);}
-.ca-g.today .ca-gh{color:var(--brand); border-color:var(--brand);} .ca-g.today .ca-gh .n{background:var(--brand); color:#fff;}
-.ca-g.nod .ca-gh{color:#B86A00; border-color:#FFE0BC;}
-.ca-g.done .ca-gh{color:var(--deep); cursor:pointer; border-color:var(--green-soft);}
-.ca-empty{font-size:12.5px; color:var(--muted); padding:6px 4px 2px;}
-
-.ca-it{display:grid; grid-template-columns:22px 58px minmax(0,1fr) auto; align-items:center; gap:10px; padding:8px 10px; border-radius:12px; margin-bottom:5px; background:var(--bg); border:1px solid transparent;}
-.ca-it.pr-high{box-shadow:inset 4px 0 0 var(--red);}
-.ca-it.pr-medium{box-shadow:inset 4px 0 0 var(--orange);}
-.ca-it.now{background:var(--blue-soft); border-color:#BFD3FF;}
-.ca-it.late{background:var(--red-soft); border-color:#FFC9D0;}
-.ca-it.hot{background:var(--green-soft); border-color:#B9EBD3;}
-.ca-it.tried{opacity:.72;}
-.ca-it.done{opacity:.5;} .ca-it.done .ca-nm{text-decoration:line-through;}
-body.dark .ca-it.now{border-color:#22386A;} body.dark .ca-it.late{border-color:#4A1A22;} body.dark .ca-it.hot{border-color:#1B4A36;}
-.ca-ck{width:22px; height:22px; border-radius:7px; border:2px solid var(--line); background:var(--surface); display:grid; place-items:center; color:#fff; padding:0;}
-.ca-ck .ic{width:13px; height:13px;}
-@media(hover:hover){.ca-ck:hover{border-color:var(--green);}}
-.ca-it.done .ca-ck{background:var(--green); border-color:var(--green);}
-.ca-when{font-family:'Sora'; font-weight:800; font-size:13px; color:var(--ink); line-height:1.15; font-variant-numeric:tabular-nums;}
-.ca-when small{display:block; font-family:'Inter'; font-size:10.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
-.ca-it.now .ca-when{color:var(--brand);} .ca-it.late .ca-when{color:var(--red);}
-.ca-main{min-width:0;}
-.ca-l1{display:flex; align-items:center; gap:7px; min-width:0;}
-.ca-how{display:inline-flex; align-items:center; gap:4px; flex-shrink:0; font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:2px 7px 2px 6px; border-radius:99px;}
-.ca-how .ic{width:12px; height:12px;}
-.ca-how.call{background:#DDF6EA; color:#0A7A4C;} .ca-how.sms{background:var(--blue-soft); color:var(--brand);} .ca-how.email{background:var(--violet-soft); color:#5B3FD0;}
-body.dark .ca-how.call{background:rgba(16,185,129,.16); color:#4BE8A0;}
-.ca-nm{font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; min-width:0;}
-.ca-tag{flex-shrink:0; font-size:10px; font-weight:800; padding:1px 7px; border-radius:99px; background:var(--surface); border:1px solid var(--line); color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
-.ca-tag.lead{color:var(--brand); border-color:#BFD3FF;}
-.ca-tag.hotl{color:#0A7A4C; border-color:#B9EBD3; background:#DDF6EA;}
-.ca-l2{display:flex; gap:4px 10px; align-items:center; font-size:12px; color:var(--muted); margin-top:2px; min-width:0; flex-wrap:nowrap;}
-.ca-l2 > *{white-space:nowrap; flex-shrink:0;}
-.ca-l2 .nt{flex:0 1 auto; min-width:30px; overflow:hidden; text-overflow:ellipsis;}
-.ca-l2 a{color:inherit; font-weight:600; text-decoration:none;}
-.ca-l2 .tr{font-size:10.5px; font-weight:700; padding:1px 7px; border-radius:99px; background:var(--yellow-soft); color:#8A6400;}
-.ca-acts{display:flex; align-items:center; gap:4px; flex-shrink:0;}
-.ca-acts > a,.ca-acts > button{display:inline-flex; align-items:center; gap:5px; height:30px; padding:0 10px; border-radius:9px; font-size:12px; font-weight:800; border:1px solid var(--line); background:var(--surface); color:var(--ink); white-space:nowrap; text-decoration:none; cursor:pointer;}
-.ca-acts .ic{width:14px; height:14px;}
-.ca-acts .go.call{background:#12B76A; border-color:#12B76A; color:#fff;}
-.ca-acts .go.sms{background:var(--brand); border-color:var(--brand); color:#fff;}
-.ca-acts .go.email{background:#6B4CE6; border-color:#6B4CE6; color:#fff;}
-.ca-acts .ok{color:#0A7A4C;} .ca-acts .no{color:var(--red);} .ca-acts .na{color:#8A6400;}
-.ca-acts .ico{padding:0 8px;}
-.ca-acts .sep{width:1px; height:20px; background:var(--line); margin:0 2px; padding:0; border:none;}
-@media(hover:hover){.ca-acts > a:hover,.ca-acts > button:hover{border-color:var(--ink);} .ca-acts .go:hover{filter:brightness(1.08);}}
-@media(max-width:1180px){
-  .ca-it{grid-template-columns:22px 52px minmax(0,1fr);}
-  .ca-acts{grid-column:2 / -1; flex-wrap:wrap;}
-}
-@media(max-width:560px){
-  .ca-it{grid-template-columns:22px 46px minmax(0,1fr); gap:8px; padding:9px 8px;}
-  .ca-acts{grid-column:1 / -1;}
-  .ca-acts > a,.ca-acts > button{height:34px;}
-  .ca-l2{flex-wrap:wrap;}
-  .ca-l1{flex-wrap:wrap; row-gap:3px;} .ca-nm{white-space:normal; flex-basis:100%; order:-1; line-height:1.3;}
-}
-
-/* small panels that open under a row: move · message · edit */
-.ca-pop{grid-column:1 / -1; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-top:2px; display:flex; flex-direction:column; gap:8px;}
-.ca-pop .row{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
-.ca-pop .lbl{font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted);}
-.ca-pop button,.ca-pop a.b{height:32px; padding:0 11px; border-radius:9px; font-size:12.5px; font-weight:700; border:1px solid var(--line); background:var(--bg); color:var(--ink); display:inline-flex; align-items:center; gap:5px; text-decoration:none; white-space:nowrap;}
-.ca-pop button.on{background:var(--blue-soft); border-color:var(--brand); color:var(--brand);}
-.ca-pop button.pri,.ca-pop a.pri{background:var(--brand); color:#fff; border-color:var(--brand);}
-.ca-pop button.x{margin-left:auto; color:var(--muted);}
-.ca-pop button.del{color:var(--red);}
-.ca-pop .ic{width:14px; height:14px;}
-.ca-pop input{height:34px; border:1px solid var(--line); border-radius:9px; padding:0 10px; font:inherit; font-size:13px; background:var(--bg); color:var(--ink); min-width:0;}
-.ca-pop textarea{width:100%; min-height:118px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; font-size:13.5px; line-height:1.45; background:var(--bg); color:var(--ink); resize:vertical; box-sizing:border-box;}
-.ca-pop .hint{font-size:11.5px; color:var(--muted);}
-
 /* Leads: «＋ Callback» bar and the how-chips in a lead's call-back box */
 .ld-cbq{margin:0 0 12px;}
 .ld-cbq[hidden]{display:none;}
 .ld-edit .row .how-on{background:var(--blue-soft)!important; color:var(--brand)!important; border-color:var(--brand)!important;}
 .ld-cbday .it .hw{font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--brand);}
+
+/* ===== Callbacks · the WEEK board (9 Oct 2026, v2) ===== */
+.ca-how{display:inline-flex; align-items:center; gap:4px; flex-shrink:0; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:2px 7px 2px 6px; border-radius:99px;}
+.ca-how .ic{width:11px; height:11px;}
+.ca-how.call{background:#DDF6EA; color:#0A7A4C;} .ca-how.sms{background:var(--blue-soft); color:var(--brand);} .ca-how.email{background:var(--violet-soft); color:#5B3FD0;}
+.ca-top{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:12px;}
+.cw-nav{display:flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:5px; box-shadow:var(--shadow);}
+.cw-nav > button{width:38px; height:38px; border-radius:10px; border:none; background:var(--bg); font-size:20px; font-weight:700; color:var(--ink); line-height:1;}
+.cw-nav > button.cw-back{width:auto; padding:0 12px; font-size:12px; font-weight:800; color:var(--brand); background:var(--blue-soft);}
+.cw-title{padding:0 12px; min-width:190px; text-align:center;}
+.cw-title b{display:block; font-family:'Sora'; font-size:17px; font-weight:800; letter-spacing:-.01em;}
+.cw-title span{font-size:12.5px; color:var(--muted); font-weight:600;}
+.cw-sum{display:flex; gap:8px; flex-wrap:wrap; margin-left:auto;}
+.cw-s{display:flex; align-items:baseline; gap:6px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:9px 14px; box-shadow:var(--shadow);}
+.cw-s b{font-family:'Sora'; font-weight:800; font-size:20px; font-variant-numeric:tabular-nums;}
+.cw-s span{font-size:12px; color:var(--muted); font-weight:600;}
+.cw-s.today{background:var(--brand); border-color:var(--brand);} .cw-s.today b,.cw-s.today span{color:#fff;}
+.cw-s.over b{color:var(--red);} .cw-s.nod b{color:#B86A00;}
+
+/* trays above the week */
+.cw-trays{display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:12px;}
+.cw-tray{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; box-shadow:var(--shadow);}
+.cw-tray.over{border-color:#FFC9D0; background:linear-gradient(180deg,#FFF5F6,var(--surface) 60px);}
+.cw-tray.nod{border-color:#FFE0BC; background:linear-gradient(180deg,#FFF9F0,var(--surface) 60px);}
+.cw-tray.dropover{outline:2px dashed #E08A00; outline-offset:-4px;}
+body.dark .cw-tray.over,body.dark .cw-tray.nod{background:var(--surface);}
+.cw-th{display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-family:'Sora'; font-weight:800; font-size:14px; margin-bottom:10px;}
+.cw-th .ic{width:16px; height:16px;}
+.cw-tray.over .cw-th{color:var(--red);} .cw-tray.nod .cw-th{color:#B86A00;}
+.cw-th .n{font-size:11px; padding:2px 9px; border-radius:99px; background:var(--bg); color:inherit;}
+.cw-th small{font-family:'Inter'; font-weight:600; font-size:12px; color:var(--muted);}
+.cw-guessall{margin-left:auto; font-size:12px; font-weight:800; padding:7px 12px; border-radius:10px; border:none; background:#E08A00; color:#fff;}
+.cw-tl{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px;}
+
+/* the week */
+.cw-mtabs{display:none;}
+.cw-week{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:8px; align-items:start;}
+.cw-day{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); min-height:210px; display:flex; flex-direction:column; overflow:hidden;}
+.cw-day.wkend{background:var(--bg);}
+.cw-day.past{opacity:.62;}
+.cw-day.today{border:2px solid var(--brand); box-shadow:0 10px 30px rgba(41,98,255,.18);}
+.cw-day.dropover{outline:2px dashed var(--brand); outline-offset:-5px; background:var(--blue-soft);}
+.cw-dh{padding:11px 12px 9px; border-bottom:1px solid var(--line);}
+.cw-day.today .cw-dh{background:var(--brand); color:#fff; border-bottom-color:var(--brand);}
+.cw-dn{display:flex; align-items:center; gap:6px; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
+.cw-dn em{font-style:normal; font-size:9.5px; letter-spacing:.06em; padding:2px 7px; border-radius:99px; background:#fff; color:var(--brand);}
+.cw-dd{font-family:'Sora'; font-size:22px; font-weight:800; letter-spacing:-.02em; line-height:1.15; margin-top:1px;}
+.cw-dc{font-size:11.5px; font-weight:700; color:var(--muted); margin-top:1px;}
+.cw-dc .ok{color:var(--green);}
+.cw-day.today .cw-dn,.cw-day.today .cw-dc{color:rgba(255,255,255,.82);} .cw-day.today .cw-dc .ok{color:#B9F5D6;}
+.cw-dl{padding:6px; display:flex; flex-direction:column; gap:7px; flex:1;}
+.cw-empty{font-size:12px; color:var(--muted); text-align:center; padding:18px 4px; opacity:.7;}
+
+/* a card */
+.cw-card{position:relative; background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:8px 8px 7px; cursor:pointer; box-shadow:0 1px 3px rgba(16,24,40,.06); transition:transform .12s, box-shadow .12s;}
+.cw-day.wkend .cw-card{background:var(--surface);}
+@media(hover:hover){.cw-card:hover{transform:translateY(-1px); box-shadow:0 6px 18px rgba(16,24,40,.12);}}
+.cw-card.pr-high{background:#FFE3E7; border-color:#FF8C9C;}
+.cw-card.pr-med{background:#FFF3C4; border-color:#F2C230;}
+.cw-card.hot{background:#DDF6EA; border-color:#6FD3A3;}
+.cw-card.now{box-shadow:0 0 0 3px rgba(41,98,255,.35);}
+.cw-card.tried{opacity:.7;}
+.cw-card.done{opacity:.5;} .cw-card.done .cw-nm{text-decoration:line-through;}
+.cw-card.drag{opacity:.4;}
+body.dark .cw-card.pr-high{background:#4A1C24; border-color:#A33A4C;} body.dark .cw-card.pr-med{background:#43380F; border-color:#9C7A10;} body.dark .cw-card.hot{background:#123A2A; border-color:#2F8A5F;}
+.cw-r1{display:flex; align-items:center; gap:5px; flex-wrap:wrap;}
+.cw-t{font-family:'Sora'; font-weight:800; font-size:13px; color:var(--ink); margin-right:2px; font-variant-numeric:tabular-nums;}
+.cw-t.now{color:var(--brand);} .cw-t.late{color:var(--red); font-size:12px;} .cw-t.muted{color:var(--muted); font-size:12px; font-family:'Inter';}
+.cw-lead{font-size:9.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:1px 6px; border-radius:99px; border:1px solid #BFD3FF; color:var(--brand); background:var(--surface);}
+.cw-nm{font-weight:800; font-size:13.5px; line-height:1.3; margin-top:5px; word-break:break-word; color:var(--ink);}
+.cw-nt{font-size:12px; color:var(--muted); margin-top:2px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+.cw-card.pr-high .cw-nt,.cw-card.pr-med .cw-nt,.cw-card.hot .cw-nt{color:rgba(16,24,40,.68);}
+body.dark .cw-card.pr-high .cw-nt,body.dark .cw-card.pr-med .cw-nt,body.dark .cw-card.hot .cw-nt{color:rgba(255,255,255,.7);}
+.cw-ph{font-size:12px; font-weight:700; color:var(--ink); margin-top:3px; opacity:.85; font-variant-numeric:tabular-nums;}
+.cw-tr{display:inline-flex; align-items:center; gap:2px; font-size:10.5px; font-weight:800; padding:1px 6px 1px 4px; border-radius:99px; background:rgba(0,0,0,.07); color:#8A6400;} .cw-tr .ic{width:11px; height:11px;}
+.cw-trays.below{margin:14px 0 0;}
+.cw-guess{display:inline-flex; align-items:center; gap:5px; margin-top:7px; font-size:12px; font-weight:800; padding:5px 10px; border-radius:9px; border:1.5px dashed #E08A00; background:#FFF6E6; color:#B45D00;}
+.cw-guess .ic{width:13px; height:13px;}
+.cw-acts{display:flex; gap:4px; margin-top:8px;}
+.cw-go{flex:1; display:inline-flex; align-items:center; justify-content:center; gap:4px; padding:0 6px; height:32px; border-radius:9px; font-size:12.5px; font-weight:800; text-decoration:none; border:none; color:#fff; white-space:nowrap; min-width:0;}
+.cw-go .ic{width:14px; height:14px;}
+.cw-go.call{background:#12B76A;} .cw-go.sms{background:var(--brand);} .cw-go.email{background:#6B4CE6;}
+.cw-ib{width:30px; height:32px; flex-shrink:0; display:inline-grid; place-items:center; border-radius:9px; border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:0;}
+.cw-ib.wide{width:auto; padding:0 10px; display:inline-flex; gap:4px; font-size:12px; font-weight:800;}
+.cw-ib .ic{width:15px; height:15px;}
+.cw-ib.ok{color:#0A7A4C;} .cw-ib.no{color:var(--red);} .cw-ib.na{color:#8A6400;}
+@media(hover:hover){.cw-ib:hover{border-color:currentColor;} .cw-go:hover{filter:brightness(1.07);}}
+.cw-more{display:block; margin:12px auto 0; font-size:12.5px; font-weight:800; padding:9px 16px; border-radius:11px; border:1px solid var(--line); background:var(--surface); color:var(--brand); box-shadow:var(--shadow);}
+
+/* narrower screens: the weekend shrinks, then one day at a time */
+@media(max-width:1250px){ .cw-week{grid-template-columns:repeat(4,minmax(0,1fr));} .cw-day{min-height:150px;} }
+@media(min-width:1251px) and (max-width:1400px){ .cw-go .ic{display:none;} }
+@media(max-width:760px){
+  .cw-sum{margin-left:0; width:100%;} .cw-s{padding:7px 10px; flex:1 1 auto; justify-content:center;} .cw-s b{font-size:17px;} .cw-s span{font-size:11px;}
+  .cw-nav{width:100%; justify-content:space-between;} .cw-title{min-width:0; flex:1;}
+  .cw-mtabs{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-bottom:10px;}
+  .cw-mtabs button{display:flex; flex-direction:column; align-items:center; gap:1px; padding:7px 0 6px; border-radius:12px; border:1px solid var(--line); background:var(--surface); color:var(--ink); font:inherit; position:relative;}
+  .cw-mtabs button span{font-size:10px; font-weight:800; text-transform:uppercase; color:var(--muted);}
+  .cw-mtabs button b{font-family:'Sora'; font-size:17px; font-weight:800;}
+  .cw-mtabs button i{font-style:normal; font-size:10px; font-weight:800; min-height:14px; color:var(--brand);}
+  .cw-mtabs button.today{border-color:var(--brand); color:var(--brand);}
+  .cw-mtabs button.on{background:var(--brand); border-color:var(--brand); color:#fff;} .cw-mtabs button.on span,.cw-mtabs button.on i{color:rgba(255,255,255,.85);}
+  .cw-week{display:block;} .cw-day{display:none; min-height:0;} .cw-day.mob{display:flex;} .cw-day.past{opacity:1;}
+  .cw-tl{grid-template-columns:1fr;}
+  .cw-go{height:38px;} .cw-ib{width:38px; height:38px;}
+}
+
+/* the card window */
+.ca-ov{position:fixed; inset:0; background:rgba(10,16,32,.45); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); z-index:400; display:none; align-items:flex-start; justify-content:center; padding:5vh 16px 16px; overflow-y:auto;}
+.ca-ov.open{display:flex;}
+.ca-md{width:100%; max-width:640px; background:var(--surface); border-radius:20px; box-shadow:0 24px 64px rgba(10,16,32,.35); padding:18px 20px 16px; border-top:8px solid var(--line);}
+.ca-md.pr-high{border-top-color:#FF4D5E;} .ca-md.pr-med{border-top-color:#F2C230;} .ca-md.hot{border-top-color:#12B76A;}
+.cm-h{display:flex; align-items:center; gap:8px;}
+.cm-hl{display:flex; align-items:center; gap:6px; flex-wrap:wrap; flex:1;}
+.cm-when{font-family:'Sora'; font-weight:800; font-size:13px; color:var(--brand);}
+.cm-x{width:34px; height:34px; border-radius:10px; border:none; background:var(--bg); display:grid; place-items:center; color:var(--muted);}
+.cm-x .ic{width:16px; height:16px;}
+.cm-name{font-family:'Sora'; font-weight:800; font-size:20px; line-height:1.25; margin:10px 0 2px;}
+.cm-sub{font-size:13px; color:var(--muted);}
+.cm-name-in{width:100%; box-sizing:border-box; resize:none; line-height:1.3; display:block; font-family:'Sora'; font-weight:800; font-size:18px; border:1px solid var(--line); border-radius:12px; padding:9px 12px; margin:10px 0 2px; background:var(--bg); color:var(--ink);}
+.cm-contact{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+.cm-big{display:inline-flex; align-items:center; gap:7px; height:42px; padding:0 16px; border-radius:12px; font-weight:800; font-size:14px; text-decoration:none; color:#fff;}
+.cm-big.call{background:#12B76A;} .cm-big .ic{width:16px; height:16px;}
+.cm-in{height:42px; border:1px solid var(--line); border-radius:12px; padding:0 12px; font:inherit; font-size:13.5px; background:var(--bg); color:var(--ink); flex:1 1 150px; min-width:0;}
+.cm-in.sm{height:34px; flex:0 0 auto; width:auto; border-radius:9px; font-size:12.5px;}
+.cm-note{width:100%; box-sizing:border-box; margin-top:8px; min-height:58px; border:1px solid var(--line); border-radius:12px; padding:9px 12px; font:inherit; font-size:13.5px; background:var(--bg); color:var(--ink); resize:vertical;}
+.cm-tries{font-size:12px; font-weight:700; color:#8A6400; margin-top:6px; display:flex; gap:5px; align-items:center;} .cm-tries .ic{width:13px; height:13px;}
+.cm-sec{margin-top:12px;}
+.cm-l{font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+.cm-lnk{font-size:11.5px; font-weight:700; letter-spacing:0; text-transform:none; color:var(--brand); background:none; border:none; padding:0;}
+.cm-chips{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+.cm-chips button{display:inline-flex; align-items:center; gap:5px; height:34px; padding:0 12px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--ink); font-size:12.5px; font-weight:700;}
+.cm-chips button .ic{width:14px; height:14px;}
+.cm-chips button.on{background:var(--ink); border-color:var(--ink); color:#fff;}
+body.dark .cm-chips button.on{background:var(--brand); border-color:var(--brand);}
+.cm-chips button.gs:not(.on){border:1.5px dashed #E08A00; color:#B45D00;}
+.cm-chips button.prh{background:#FFE3E7; border-color:#FF8C9C; color:#B4232F;} .cm-chips button.prh.on{background:#FF4D5E; border-color:#FF4D5E; color:#fff;}
+.cm-chips button.prm{background:#FFF3C4; border-color:#F2C230; color:#7A5A00;} .cm-chips button.prm.on{background:#F2C230; border-color:#F2C230; color:#3D2C00;}
+.cm-chips button.pri{background:var(--brand); border-color:var(--brand); color:#fff;}
+.cm-hint{font-size:12px; color:var(--muted);}
+.cm-msg{display:none;} .cm-sec.msg.open .cm-msg{display:flex; flex-direction:column; gap:8px;}
+.cm-msg textarea{width:100%; box-sizing:border-box; min-height:120px; border:1px solid var(--line); border-radius:12px; padding:10px 12px; font:inherit; font-size:13.5px; line-height:1.45; background:var(--bg); color:var(--ink); resize:vertical;}
+.cm-foot{display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin-top:16px; padding-top:14px; border-top:1px solid var(--line);}
+.cm-foot button,.cm-foot a{display:inline-flex; align-items:center; gap:6px; height:40px; padding:0 14px; border-radius:11px; border:1px solid var(--line); background:var(--surface); color:var(--ink); font-size:13px; font-weight:800; text-decoration:none; white-space:nowrap;}
+.cm-foot .ic{width:15px; height:15px;}
+.cm-foot .ok{background:#12B76A; border-color:#12B76A; color:#fff;} .cm-foot .no{color:var(--red);} .cm-foot .na{color:#8A6400;}
+.cm-foot .sp{flex:1;}
+.cm-foot .cm-sm{height:34px; padding:0 10px; font-size:12px; font-weight:700; color:var(--muted);}
+.cm-foot .cm-sm.del{color:var(--red);}
+.cm-foot .cm-save{background:var(--ink); border-color:var(--ink); color:#fff; padding:0 22px;}
+body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
+@media(max-width:560px){ .ca-ov{padding:0; align-items:flex-end;} .ca-md{border-radius:20px 20px 0 0; max-height:92vh; overflow-y:auto; padding:16px 14px 18px;} .cm-foot .sp{display:none;} }
 @media(max-width:560px){
-  .ca-top{display:flex; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-bottom:2px;}
-  .ca-top::-webkit-scrollbar{display:none;}
-  .ca-cell{flex:0 0 112px;}
   .cq-h small{display:none;}
   .cq-h{flex-wrap:wrap;} .cq-h .cq-bell{font-size:11px; padding:5px 8px; margin-left:0; flex-basis:100%; text-align:left;}
   .cq-seg[data-cqday]{max-width:100%; overflow-x:auto; scrollbar-width:none;}
   .cq-seg[data-cqday]::-webkit-scrollbar{display:none;}
   .cq-r .w-ph{flex:1 1 120px;}
   .cq-r .cq-date{flex:1 1 130px;} .cq-r .cq-time{flex:1 1 100px;}
-  .ca-list{padding:4px 10px 12px;}
 }
 </style>
 </head>
@@ -3449,9 +3501,9 @@ body.dark .ca-how.call{background:rgba(16,185,129,.16); color:#4BE8A0;}
 
 <!-- CALLBACKS -->
 <main class="view" id="view-callbacks">
-  <div class="ca-top" id="caTop"></div>
   <section class="panel cq" id="caQuick"></section>
-  <section class="panel ca-panel"><div class="ca-list" id="caAgenda"></div></section>
+  <div class="ca-top" id="caTop"></div>
+  <div class="cw-wrap" id="caAgenda"></div>
 </main>
 
 <!-- LEADS — cold-calling list with one-tap outcomes (13 Sept 2026) -->
@@ -6196,7 +6248,7 @@ function caEntries(withDone){
   }));
   try{ (state.leads||[]).forEach(l=>{ if(!l.cb || !l.cb.day || !ldOpen(l)) return;
     out.push({key:'lead:'+l.id, src:'lead', l, name:l.name, phone:l.phone||'', email:l.email||'', note:l.memo||'', day:l.cb.day, time:l.cb.time||'',
-      how:CA_HOW[l.cb.how]?l.cb.how:'call', pr:l.hot?'high':'', hot:!!l.hot, tries:l.tries||[], sub:[ldSpecShort(l), l.city].filter(Boolean).join(' · '), created:l.created||0}); }); }catch(e){}
+      how:CA_HOW[l.cb.how]?l.cb.how:'call', pr:l.cb.pr||'', hot:!!l.hot, tries:l.tries||[], sub:[ldSpecShort(l), l.city].filter(Boolean).join(' · '), created:l.created||0}); }); }catch(e){}
   return out;
 }
 const caDue=e=>!e.done && ((e.day && e.day<=todayIso()) || (!e.day && e.month && e.month<todayIso().slice(0,7)));
@@ -6304,177 +6356,206 @@ function caGcalHref(e){
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(what)+'&dates='+day+'T'+t+'00/'+end+'&details='+encodeURIComponent(det)+'&ctz=Europe/Athens';
 }
 
-/* ---------- drawing ---------- */
+/* ---------- drawing: the WEEK board (Angelo, 9 Oct 2026: «a clear weekly thing with exactly who to call — priority colours the whole card») ----------
+   Monday → Sunday columns for the chosen week (‹ › to move a week), each day with its date and its cards sorted by time.
+   Above the week: «Overdue» and «No day yet» trays. A card = time · how · the name in full · phone · three one-tap outcomes.
+   Tap the card → one window with everything (call / SMS / e-mail text, day + time, priority, edit, remove).
+   High priority = the whole card red, Medium = yellow, «almost booked» lead = green. Drag a card onto another day to move it. */
+let caWeekOff=0, caMobDay='';
+const caMonday=off=>caAddDays(todayIso(), 7*off);   /* the board always starts TODAY (no empty past days), then the next 6 days; ‹ › move 7 days */
+const caLate=e=>!e.done && ((e.day && e.day<todayIso()) || (!e.day && e.month && e.month<todayIso().slice(0,7)));
+const caGuessOf=e=>(!e.day && !e.done && e.src==='cb')? caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))) : {};
 function renderCaTop(){
   const el=$('#caTop'); if(!el) return; const n=cbCounts(); const t=todayIso();
-  const cell=(cls,k,v,s,go)=>`<button type="button" class="ca-cell ${cls}${v?'':' zero'}" data-cago="${go}"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></button>`;
-  el.innerHTML=cell('over','Overdue',n.over,'from earlier days','over')
-    +cell('today','Today · '+caShort(t),n.today,n.today?'to call / send today':'nothing today','today')
-    +cell('','Tomorrow',n.tomorrow,caShort(caAddDays(t,1)),'d'+caAddDays(t,1))
-    +cell('','Next 7 days',n.week,'after today','d'+caAddDays(t,1))
-    +cell('','Later',n.later-n.week,'further ahead','later')
-    +cell('nod','No day yet',n.nod,n.nod?'give them a day':'all planned','nod')
-    +cell('done','Done',n.doneWeek,'last 7 days','done');
-  el.querySelectorAll('[data-cago]').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.cago; let g=document.querySelector('.ca-g[data-g="'+k+'"]');
-    if(!g && k[0]==='d') g=document.querySelector('.ca-g[data-g^="d"]'); if(!g && k==='later') g=document.querySelector('.ca-g[data-g^="m"]');
-    if(k==='done' && !caDoneOpen){ caDoneOpen=true; renderCaAgenda(); g=document.querySelector('.ca-g[data-g="done"]'); }
-    if(g) g.scrollIntoView({behavior:'smooth', block:'start'}); }));
+  const mon=caMonday(caWeekOff), sun=caAddDays(mon,6);
+  const md=new Date(mon+'T12:00'), sd=new Date(sun+'T12:00');
+  const range=md.getMonth()===sd.getMonth()? md.getDate()+' – '+sd.getDate()+' '+MONTHS[sd.getMonth()] : md.getDate()+' '+MONTHS[md.getMonth()].slice(0,3)+' – '+sd.getDate()+' '+MONTHS[sd.getMonth()].slice(0,3);
+  const inWeek=caEntries().filter(e=>e.day && e.day>=mon && e.day<=sun);
+  const calls=inWeek.filter(e=>e.how==='call').length, txt=inWeek.length-calls;
+  el.innerHTML=`<div class="cw-nav"><button type="button" data-wk="-1" aria-label="Previous week">‹</button>
+      <div class="cw-title"><b>${caWeekOff===0?'Today + next 6 days':caWeekOff===1?'The 7 days after':caWeekOff<0?'Earlier':'Later'}</b><span>${esc(DOW[caDowIdx(mon)])} ${esc(range.split(' – ')[0])} – ${esc(DOW[caDowIdx(sun)])} ${esc(range.split(' – ')[1])} ${sd.getFullYear()}</span></div>
+      <button type="button" data-wk="1" aria-label="Next week">›</button>${caWeekOff?'<button type="button" class="cw-back" data-wk="0">Back to today</button>':''}</div>
+    <div class="cw-sum">
+      <div class="cw-s today"><b>${n.today}</b><span>today</span></div>
+      <div class="cw-s${n.over?' over':''}"><b>${n.over}</b><span>overdue</span></div>
+      <div class="cw-s"><b>${calls}</b><span>calls in these 7 days</span></div>
+      <div class="cw-s"><b>${txt}</b><span>SMS / e-mails</span></div>
+      <div class="cw-s${n.nod?' nod':''}"><b>${n.nod}</b><span>no day yet</span></div>
+    </div>`;
+  el.querySelectorAll('[data-wk]').forEach(b=>b.addEventListener('click',()=>{ const v=+b.dataset.wk; caWeekOff= v===0?0:caWeekOff+v; caMobDay=''; renderCaTop(); renderCaAgenda(); }));
 }
-function caItemHtml(e){
-  const t=todayIso(); const H=CA_HOW[e.how];
-  const late=!e.done && ((e.day && e.day<t) || (!e.day && e.month && e.month<t.slice(0,7)));
-  const now=!e.done && caIsNow(e);
+function caCardHtml(e, ctx){
+  const t=todayIso(); const H=CA_HOW[e.how]; const late=caLate(e); const now=!e.done && caIsNow(e);
   const tried=e.day===t && e.tries.includes(t);
-  const cls=['ca-it', e.pr?'pr-'+e.pr:'', e.hot?'hot':'', now?'now':'', late?'late':'', tried?'tried':'', e.done?'done':''].filter(Boolean).join(' ');
+  const cls=['cw-card', e.hot?'hot':(e.pr==='high'?'pr-high':e.pr==='medium'?'pr-med':''), now?'now':'', tried?'tried':'', e.done?'done':''].filter(Boolean).join(' ');
   let when;
-  if(e.done) when=`${e.doneAt?esc(fmtDay(isoDate(new Date(e.doneAt)))):''}<small>done</small>`;
-  else if(!e.day) when=e.month?`${esc(MONTHS[+e.month.slice(5,7)-1].slice(0,3))}<small>month</small>`:`—<small>no day</small>`;
-  else if(e.day===t) when=e.time?`${esc(e.time)}<small>${now?'now':'today'}</small>`:`Any<small>time</small>`;
-  else if(e.day<t) when=`${esc(caShort(e.day).split(' ')[1])}<small>${(Math.round((Date.parse(t)-Date.parse(e.day))/864e5))}d late</small>`;
-  else when=e.time?`${esc(e.time)}<small>${esc(DOW[caDowIdx(e.day)])}</small>`:`${esc(DOW[caDowIdx(e.day)])}<small>${esc(fmtDay(e.day))}</small>`;
-  const meta=[];
-  if(e.note && e.note!==e.name) meta.push(`<span class="nt" title="${esc(e.note)}">${esc(e.note)}</span>`);
-  if(e.phone) meta.push(`<a href="tel:${esc(caTel(e.phone))}" title="Call">${esc(ldFmtPhone(String(e.phone).replace(/\s+/g,'')))}</a>`);
-  if(e.email) meta.push(`<a href="mailto:${esc(e.email)}">${esc(e.email)}</a>`);
-  if(e.sub) meta.push(`<span>${esc(e.sub)}</span>`);
-  if(e.tries.length) meta.push(`<span class="tr" title="Called, no answer">no answer ${e.tries.slice(-3).map(fmtDay).join(', ')}${e.tries.length>3?' …':''} · ${e.tries.length}×</span>`);
-  if(!e.day && e.month) meta.push(`<span>said: call in ${esc(fmtMonth(e.month))}</span>`);
-  const guess=(!e.day && !e.done && e.src==='cb')? caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))) : {};
+  if(ctx==='late') when=`<span class="cw-t late">${e.day?esc(caShort(e.day)):esc(fmtMonth(e.month))} · ${e.day?Math.round((Date.parse(t)-Date.parse(e.day))/864e5)+'d late':'late'}</span>`;
+  else if(ctx==='nod') when=`<span class="cw-t muted">${e.month?'said: '+esc(MONTHS[+e.month.slice(5,7)-1]):'no day'}</span>`;
+  else when=`<span class="cw-t${now?' now':''}">${e.time?esc(e.time):'any time'}</span>`;
+  const g=ctx==='nod'?caGuessOf(e):{};
   const tel=caTel(e.phone);
-  let acts='';
-  if(e.done) acts=`<button type="button" data-a="undone" title="Put it back in the list">${IC.undo}Back</button><button type="button" class="ico" data-a="del" title="Remove">${IC.x}</button>`;
-  else {
-    const main = e.how==='call' ? (tel?`<a class="go call" href="tel:${esc(tel)}" data-a="dial">${IC.phone}Call</a>`:`<button type="button" class="go call" data-a="edit" title="No phone yet — add it">${IC.phone}Add phone</button>`)
-      : e.how==='sms' ? `<button type="button" class="go sms" data-a="msg">${IC.message}SMS</button>`
-      : `<button type="button" class="go email" data-a="msg">${IC.mail}E-mail</button>`;
-    const alt=[]; if(e.how!=='call' && tel) alt.push(`<a class="ico" href="tel:${esc(tel)}" title="Call ${esc(e.phone)}">${IC.phone}</a>`);
-    if(e.how==='call') alt.push(`<button type="button" class="ico" data-a="msg" title="SMS / Viber / e-mail with a ready text">${IC.message}</button>`);
-    acts=main+alt.join('')+`<span class="sep"></span>`
-      +(e.how==='call'
-        ? `<button type="button" class="ok" data-a="book" title="They said yes — logs a Booked call and puts them on the Board">${IC.check}Booked</button><button type="button" class="no" data-a="no" title="They said no — logs the no">${IC.x}No</button><button type="button" class="na" data-a="na" title="Didn't answer — moves to the next working day, keeps the dates tried">${IC.hourglass}No answer</button>`
-        : `<button type="button" class="ok" data-a="sent" title="Sent — tick it off">${IC.check}Sent</button>`)
-      +`<button type="button" data-a="move" title="Another day / time">${IC.calendar}${guess.day?'Day…':'Move'}</button><button type="button" class="ico" data-a="edit" title="Edit / priority / phone reminder / remove">${IC.edit}</button>`;
-  }
-  let pop='';
-  if(caOpen.id===e.key) pop=caPopHtml(e, caOpen.kind, guess);
-  const guessBtn = guess.day ? `<button type="button" class="ca-tag" style="border-color:#FFD08A;color:#B45D00;cursor:pointer" data-a="setguess" title="Set this day">${esc(caShort(guess.day))}${guess.time?' '+esc(guess.time):''}?</button>` : '';
-  return `<div class="${cls}" data-k="${esc(e.key)}">
-    <button type="button" class="ca-ck" data-a="${e.done?'undone':'done'}" title="${e.done?'Put it back':'Done — tick it off (nothing logged)'}">${e.done?IC.check:''}</button>
-    <div class="ca-when">${when}</div>
-    <div class="ca-main"><div class="ca-l1"><span class="ca-how ${e.how}">${IC[H[1]]}${H[0]}</span><span class="ca-nm" data-a="edit" title="${esc(e.name)} — click to edit">${esc(e.name)}</span>${e.src==='lead'?`<span class="ca-tag lead" title="From Leads">Lead</span>`:''}${e.hot?'<span class="ca-tag hotl">almost booked</span>':''}${e.pr==='high'&&!e.hot?'<span class="ca-tag" style="color:var(--red);border-color:#FFC9D0">High</span>':''}${guessBtn}</div>${meta.length?`<div class="ca-l2">${meta.join('')}</div>`:''}</div>
-    <div class="ca-acts">${acts}</div>${pop}</div>`;
-}
-function caPopHtml(e, kind, guess){
-  const t=todayIso();
-  if(kind==='move'){
-    const days=caWeekdayDays(7);
-    if(guess && guess.day && !days.some(d=>d.k===guess.day)) days.push({k:guess.day,t:caShort(guess.day)});
-    const cur=e.day; const ct=e.time||'';
-    return `<div class="ca-pop"><div class="row"><span class="lbl">Day</span>${days.map(d=>`<button type="button" data-mday="${d.k}" class="${cur===d.k?'on':''}">${d.t}${guess&&guess.day===d.k?' ·  guessed':''}</button>`).join('')}<input type="date" data-mdate value="${esc(cur||'')}" title="Any other day"></div>
-      <div class="row"><span class="lbl">Time</span><button type="button" data-mtime="" class="${!ct?'on':''}">Any time</button>${['10:00','11:00','12:00','13:00','15:00','16:00','17:00','18:00','19:00'].map(x=>`<button type="button" data-mtime="${x}" class="${ct===x?'on':''}">${x}</button>`).join('')}<input type="time" data-mtimein value="${esc(ct)}" step="300"><button type="button" data-mrel="60">in 1 hour</button></div>
-      <div class="row"><button type="button" class="pri" data-msave>${IC.check}Save</button><button type="button" class="x" data-pclose>Close</button></div></div>`;
-  }
-  if(kind==='msg'){
-    const how=caOpen.how||(e.how==='email'?'email':'sms'); const txt=caOpen.text!=null?caOpen.text:caText(e, how);
-    const tel=caTel(e.phone);
-    return `<div class="ca-pop"><div class="row"><span class="lbl">Message to ${esc(e.name)}</span><button type="button" data-mhow="sms" class="${how!=='email'?'on':''}">SMS / Viber</button><button type="button" data-mhow="email" class="${how==='email'?'on':''}">E-mail</button></div>
-      <textarea data-mtext>${esc(txt)}</textarea>
-      <div class="row">${how==='email'
-        ? `<input type="email" data-memail placeholder="their e-mail" value="${esc(e.email)}" style="flex:1 1 200px"><a class="b pri" data-msend="mail" href="#">${IC.mail}Open e-mail</a>`
-        : `${tel?`<a class="b pri" data-msend="sms" href="#">${IC.message}Send SMS</a><button type="button" data-msend="viber">Copy + open Viber</button>`:'<span class="hint">No phone on this one — add it with ✎ to send an SMS</span>'}`}
-        <button type="button" data-mcopy>Copy text</button><button type="button" data-mtpl title="Use this wording every time from now on">Save as my text</button><button type="button" data-mreset title="Back to the original wording">Reset</button><button type="button" class="x" data-pclose>Close</button></div>
-      <div class="hint">After sending, tap «Sent» on the row to tick it off. The link in the text is your booking page (${esc((state.meta.caTpl&&state.meta.caTpl.link)||CA_BOOK_LINK)}).</div></div>`;
-  }
-  if(kind==='edit'){
-    const isLead=e.src==='lead';
-    return `<div class="ca-pop"><div class="row">${isLead?`<b style="font-size:13px">${esc(e.name)}</b><span class="hint">· from Leads — name and phone are edited there</span>`:`<input data-ename value="${esc(e.name)}" placeholder="Name" style="flex:1 1 220px">`}
-        ${isLead?'':`<input data-ephone value="${esc(e.phone)}" placeholder="Phone" style="width:140px"><input data-eemail value="${esc(e.email)}" placeholder="E-mail (optional)" style="width:200px">`}</div>
-      <div class="row"><input data-enote value="${esc(e.note)}" placeholder="Note — what to say / what they said" style="flex:1 1 300px"></div>
-      <div class="row"><span class="lbl">How</span>${Object.keys(CA_HOW).map(h=>`<button type="button" data-ehow="${h}" class="${e.how===h?'on':''}">${IC[CA_HOW[h][1]]}${CA_HOW[h][0]}</button>`).join('')}
-        ${isLead?'':`<span class="lbl" style="margin-left:8px">Priority</span>${['high','medium',''].map(p=>`<button type="button" data-epr="${p}" class="${(e.pr||'')===p?'on':''}">${p?CB_PR[p][0]:'None'}</button>`).join('')}`}</div>
-      <div class="row"><button type="button" class="pri" data-esave>${IC.check}Save</button><a class="b" href="${esc(caGcalHref(e))}" target="_blank" rel="noopener" title="Opens Google Calendar with this callback filled in — save it and your phone rings at that time">${IC.calendar}Reminder on my phone</a>${isLead?`<button type="button" data-eopenlead>Open in Leads</button>`:''}<button type="button" class="del" data-edel>${IC.trash}Remove</button><button type="button" class="x" data-pclose>Close</button></div></div>`;
-  }
-  return '';
-}
-function caWireRow(row, e){
-  const act=(a,ev)=>{
-    if(a==='dial'){ return; }                                  /* the tel: link does the work */
-    ev && ev.preventDefault();
-    if(a==='done') return caDoneEntry(e);
-    if(a==='undone'){ if(e.src==='cb'){ e.it.done=false; e.it.doneAt=null; save(); cbRefresh(); } return; }
-    if(a==='del') return caRemove(e);
-    if(a==='book') return caOutcome(e,'g');
-    if(a==='no') return caOutcome(e,'r');
-    if(a==='na') return caNoAnswer(e);
-    if(a==='sent'){ if(e.src==='lead'){ ldOutcome(e.l,'y'); cbRefresh(); return; } return caDoneEntry(e,'sent'); }
-    if(a==='setguess'){ const g=caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))); if(g.day){ if(e.src==='cb' && g.how && !e.it.how) e.it.how=g.how; caSetDay(e, g.day, g.time||e.time); } return; }
-    if(a==='move'||a==='msg'||a==='edit'){ caOpen= (caOpen.id===e.key && caOpen.kind===a)? {id:'',kind:''} : {id:e.key, kind:a}; renderCaAgenda();
-      const r=document.querySelector('.ca-it[data-k="'+CSS.escape(e.key)+'"] .ca-pop'); if(r){ try{ r.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(x){} const f=r.querySelector('textarea,input[data-ename],input[data-enote]'); if(f && a!=='move') f.focus({preventScroll:true}); } return; }
-  };
-  row.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('click',ev=>act(b.dataset.a,ev)));
-  const pop=row.querySelector('.ca-pop'); if(!pop) return;
-  const close=()=>{ caOpen={id:'',kind:''}; renderCaAgenda(); };
-  pop.querySelectorAll('[data-pclose]').forEach(b=>b.addEventListener('click',close));
-  if(caOpen.kind==='move'){
-    const P={day:e.day||'', time:e.time||''};
-    const mark=()=>{ pop.querySelectorAll('[data-mday]').forEach(b=>b.classList.toggle('on',b.dataset.mday===P.day)); pop.querySelectorAll('[data-mtime]').forEach(b=>b.classList.toggle('on',b.dataset.mtime===P.time)); pop.querySelector('[data-mdate]').value=P.day; pop.querySelector('[data-mtimein]').value=P.time; };
-    pop.querySelectorAll('[data-mday]').forEach(b=>b.addEventListener('click',()=>{ P.day=b.dataset.mday; if(!pop.dataset.touchedTime && P.day!==e.day){ caSetDay(e,P.day,P.time); return; } mark(); }));
-    pop.querySelectorAll('[data-mtime]').forEach(b=>b.addEventListener('click',()=>{ P.time=b.dataset.mtime; pop.dataset.touchedTime=1; if(!P.day) P.day=todayIso(); mark(); }));
-    pop.querySelector('[data-mdate]').addEventListener('change',ev=>{ P.day=ev.target.value; mark(); });
-    pop.querySelector('[data-mtimein]').addEventListener('change',ev=>{ P.time=ev.target.value; pop.dataset.touchedTime=1; if(!P.day) P.day=todayIso(); mark(); });
-    pop.querySelector('[data-mrel]').addEventListener('click',()=>{ const d=new Date(Date.now()+3600e3); d.setMinutes(Math.ceil(d.getMinutes()/5)*5,0,0); caSetDay(e, isoDate(d), pad(d.getHours())+':'+pad(d.getMinutes())); });
-    pop.querySelector('[data-msave]').addEventListener('click',()=>{ if(!P.day){ toast('Pick a day'); return; } caSetDay(e,P.day,P.time); });
-  }
-  if(caOpen.kind==='msg'){
-    const ta=pop.querySelector('[data-mtext]'); ta.addEventListener('input',()=>{ caOpen.text=ta.value; });
-    pop.querySelectorAll('[data-mhow]').forEach(b=>b.addEventListener('click',()=>{ caOpen.how=b.dataset.mhow; caOpen.text=null; renderCaAgenda(); }));
-    pop.querySelector('[data-mcopy]').addEventListener('click',()=>caCopy(ta.value,'Text copied'));
-    pop.querySelector('[data-mtpl]').addEventListener('click',()=>{ ensureMeta(); state.meta.caTpl ||= {}; const how=caOpen.how||(e.how==='email'?'email':'sms');
-      state.meta.caTpl[how==='email'?'email':'sms']=ta.value.replace((state.meta.caTpl.link)||CA_BOOK_LINK,'{link}'); save(); toast('Saved — this '+(how==='email'?'e-mail':'SMS')+' text is used for every callback from now on'); });
-    pop.querySelector('[data-mreset]').addEventListener('click',()=>{ ensureMeta(); const how=caOpen.how||(e.how==='email'?'email':'sms'); if(state.meta.caTpl) delete state.meta.caTpl[how==='email'?'email':'sms']; caOpen.text=null; save(); renderCaAgenda(); });
-    pop.querySelectorAll('[data-msend]').forEach(b=>b.addEventListener('click',ev=>{ ev.preventDefault(); const k=b.dataset.msend; const txt=ta.value;
-      if(k==='sms') location.href=caSmsHref(e.phone, txt);
-      else if(k==='viber'){ caCopy(txt,'Text copied — paste it in Viber'); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(caTel(e.phone)); },250); }
-      else { const em=pop.querySelector('[data-memail]').value.trim(); if(em && e.src==='cb' && em!==e.it.email){ e.it.email=em; save(); } location.href=caMailHref(em, txt); }
-    }));
-  }
-  if(caOpen.kind==='edit'){
-    const E={how:e.how, pr:e.pr||''};
-    pop.querySelectorAll('[data-ehow]').forEach(b=>b.addEventListener('click',()=>{ E.how=b.dataset.ehow; pop.querySelectorAll('[data-ehow]').forEach(x=>x.classList.toggle('on',x===b)); }));
-    pop.querySelectorAll('[data-epr]').forEach(b=>b.addEventListener('click',()=>{ E.pr=b.dataset.epr; pop.querySelectorAll('[data-epr]').forEach(x=>x.classList.toggle('on',x===b)); }));
-    const sv=()=>{ const note=pop.querySelector('[data-enote]').value.trim();
-      if(e.src==='lead'){ e.l.cb={...e.l.cb, how:E.how}; if(note) e.l.memo=note; else delete e.l.memo; e.l.updated=Date.now(); }
-      else { const it=e.it; const nm=pop.querySelector('[data-ename]').value.trim(); if(nm) it.name=nm; it.phone=pop.querySelector('[data-ephone]').value.trim(); it.email=pop.querySelector('[data-eemail]').value.trim(); it.note=note; it.how=E.how; if(E.pr) it.pr=E.pr; else delete it.pr; it.updated=Date.now(); }
-      caOpen={id:'',kind:''}; save(); cbRefresh(); try{ if(e.src==='lead') renderLeads(); }catch(x){} toast('Saved — '+e.name); };
-    pop.querySelector('[data-esave]').addEventListener('click',sv);
-    pop.querySelectorAll('input').forEach(i=>i.addEventListener('keydown',ev=>{ if(ev.key==='Enter') sv(); if(ev.key==='Escape') close(); }));
-    pop.querySelector('[data-edel]').addEventListener('click',()=>{ caOpen={id:'',kind:''}; caRemove(e); });
-    const ol=pop.querySelector('[data-eopenlead]'); if(ol) ol.addEventListener('click',()=>{ caOpen={id:'',kind:''}; ensureLeads(); state.meta.ld.focus=e.l.id; ldFilter.list=''; ldCallMode=true; switchView('leads'); renderLeads(); window.scrollTo({top:0}); });
-  }
+  const main = e.how==='call'
+      ? (tel?`<a class="cw-go call" href="tel:${esc(tel)}" data-a="dial" title="Call ${esc(e.phone)}">${IC.phone}Call</a>`:`<button type="button" class="cw-go call" data-a="open" title="No phone yet — open the card to add it">+ phone</button>`)
+      : `<button type="button" class="cw-go ${e.how}" data-a="msg">${IC[H[1]]}${H[0]}</button>`;
+  const outs = e.done ? `<button type="button" class="cw-ib" data-a="undone" title="Put it back">${IC.undo}</button>`
+      : e.how==='call'
+        ? `<button type="button" class="cw-ib ok" data-a="book" title="Booked — they said yes">${IC.check}</button><button type="button" class="cw-ib no" data-a="no" title="No — not interested">${IC.x}</button><button type="button" class="cw-ib na" data-a="na" title="No answer — moves to the next working day">${IC.hourglass}</button>`
+        : `<button type="button" class="cw-ib ok wide" data-a="sent" title="Sent — tick it off">${IC.check}Sent</button>`;
+  return `<div class="${cls}" data-k="${esc(e.key)}"${e.done?'':' draggable="true"'}>
+    <div class="cw-r1">${when}<span class="ca-how ${e.how}">${IC[H[1]]}${H[0]}</span>${e.src==='lead'?'<span class="cw-lead">Lead</span>':''}${e.tries.length?`<span class="cw-tr" title="No answer on ${esc(e.tries.map(fmtDay).join(', '))}">${IC.hourglass}${e.tries.length}</span>`:''}</div>
+    <div class="cw-nm">${esc(e.name)}</div>
+    ${e.note && e.note!==e.name?`<div class="cw-nt">${esc(e.note)}</div>`:''}
+    ${e.phone?`<div class="cw-ph">${esc(ldFmtPhone(String(e.phone).replace(/\s+/g,'')))}</div>`:''}
+    ${g.day?`<button type="button" class="cw-guess" data-a="setguess" title="Put it on this day">${IC.calendar}${esc(caDayName(g.day))}${g.time?' '+esc(g.time):''}?</button>`:''}
+    <div class="cw-acts">${e.done?'':main}${outs}</div></div>`;
 }
 function renderCaAgenda(){
   const el=$('#caAgenda'); if(!el || !state) return;
-  const g=caGroups(); const t=todayIso();
-  const blocks=[];
-  const grp=(key,cls,title,sub,items,extra)=>{ if(!items.length && key!=='today') return;
-    blocks.push(`<div class="ca-g ${cls}" data-g="${key}"><div class="ca-gh">${title}<span class="n">${items.length}</span>${sub?`<small>${sub}</small>`:''}${extra||''}</div>${items.length?items.map(caItemHtml).join(''):'<div class="ca-empty">Nothing planned for today yet — add one above, or move someone here.</div>'}</div>`); };
-  const td=g.today; const tdCall=td.filter(e=>e.how==='call').length, tdTxt=td.length-tdCall;
-  grp('today','today',IC.clock+' Today · '+caDayName(t).replace('Today','')+' '+esc(caShort(t)),td.length?(tdCall+' to call'+(tdTxt?' · '+tdTxt+' to text / e-mail':'')):'',td);
-  Object.keys(g.days).sort().forEach(k=>grp('d'+k,'',IC.calendar+' '+esc(caDayName(k)), '', g.days[k]));
-  Object.keys(g.later).sort().forEach(k=>grp('m'+k,'',IC.calendar+' Later · '+esc(fmtMonth(k)),'',g.later[k]));
-  const guessN=g.nod.filter(e=>e.src==='cb' && caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))).day).length;
-  grp('nod','nod',IC.hourglass+' No day yet','give each one a day so it shows up on that day',g.nod, guessN?`<button type="button" class="ca-gact" data-guessall>Set the ${guessN} days read from the text</button>`:'');
-  /* 9 Oct 2026 (Angelo): Overdue sits at the bottom, right after «No day yet» — Today comes first */
-  grp('over','over',IC.flag+' Overdue','should have happened already — call, move or tick',g.over);
-  if(g.done.length) blocks.push(`<div class="ca-g done" data-g="done"><div class="ca-gh" data-donetoggle>${IC.check2} Done · last 7 days<span class="n">${g.done.length}</span><small>${caDoneOpen?'click to hide':'click to show'}</small></div>${caDoneOpen?g.done.map(caItemHtml).join(''):''}</div>`);
-  el.innerHTML=blocks.join('') || '<div class="ca-empty">No callbacks. Add one above — or from Leads with «Call back».</div>';
-  const map={}; caEntries(true).forEach(e=>map[e.key]=e);
-  el.querySelectorAll('.ca-it').forEach(r=>{ const e=map[r.dataset.k]; if(e) caWireRow(r,e); });
-  const dt=el.querySelector('[data-donetoggle]'); if(dt) dt.addEventListener('click',()=>{ caDoneOpen=!caDoneOpen; renderCaAgenda(); });
+  const t=todayIso(); const all=caEntries(true); const open=all.filter(e=>!e.done);
+  const mon=caMonday(caWeekOff); const days=[0,1,2,3,4,5,6].map(i=>caAddDays(mon,i));
+  const late=open.filter(caLate).sort((a,b)=>String(a.day||a.month).localeCompare(String(b.day||b.month))||caCmpDay(a,b));
+  const nod=open.filter(e=>!e.day && !caLate(e) && !(e.month && e.month>t.slice(0,7))).sort((a,b)=>caPrRank(a)-caPrRank(b)||a.created-b.created);
+  const doneByDay={}; all.filter(e=>e.done && e.doneAt).forEach(e=>{ (doneByDay[isoDate(new Date(e.doneAt))] ||= []).push(e); });
+  const after=open.filter(e=>(e.day && e.day>days[6]) || (!e.day && e.month && e.month>t.slice(0,7))).length;
+  const guessN=nod.filter(e=>caGuessOf(e).day).length;
+  let h='';
+  /* Angelo, 9 Oct 2026: today first — «No day yet» and «Overdue» sit under the week */
+  let lateHtml='';
+  if(late.length){
+    lateHtml+=`<div class="cw-trays below">`;
+    lateHtml+=`<section class="cw-tray over"><div class="cw-th">${IC.flag} Overdue <span class="n">${late.length}</span><small>call, move to a day, or tick</small></div><div class="cw-tl">${late.map(e=>caCardHtml(e,'late')).join('')}</div></section>`;
+    lateHtml+=`</div>`;
+  }
+  const nodHtml= !nod.length? '' : `<div class="cw-trays below"><section class="cw-tray nod" data-drop=""><div class="cw-th">${IC.hourglass} No day yet <span class="n">${nod.length}</span><small>drag onto a day, or tap the day shown on the card</small>${guessN?`<button type="button" class="cw-guessall" data-guessall>Put ${guessN===nod.length?'all '+guessN:guessN} on the day written in their text</button>`:''}</div><div class="cw-tl">${nod.map(e=>caCardHtml(e,'nod')).join('')}</div></section></div>`;
+  if(!caMobDay || !days.includes(caMobDay)) caMobDay= days.includes(t)? t : days[0];
+  h+=`<div class="cw-mtabs">${days.map(d=>{ const n=open.filter(e=>e.day===d).length; const dd=new Date(d+'T12:00'); return `<button type="button" data-mday="${d}" class="${d===caMobDay?'on':''}${d===t?' today':''}"><span>${DOW[caDowIdx(d)]}</span><b>${dd.getDate()}</b><i>${n||''}</i></button>`; }).join('')}</div>`;
+  h+=`<div class="cw-week">`+days.map(d=>{
+    const items=open.filter(e=>e.day===d).sort(caCmpDay); const dn=(doneByDay[d]||[]);
+    const dd=new Date(d+'T12:00'); const isT=d===t, past=d<t, wk=caDowIdx(d)>4 && !items.length;
+    return `<section class="cw-day${isT?' today':''}${past?' past':''}${wk?' wkend':''}${d===caMobDay?' mob':''}" data-drop="${d}">
+      <div class="cw-dh"><div class="cw-dn">${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][caDowIdx(d)]}${isT?'<em>Today</em>':''}</div><div class="cw-dd">${dd.getDate()} ${MONTHS[dd.getMonth()].slice(0,3)}</div><div class="cw-dc">${items.length?items.length+(items.length===1?' to do':' to do'):(dn.length?'all done':'—')}${dn.length?` · <span class="ok">${dn.length} done</span>`:''}</div></div>
+      <div class="cw-dl">${items.map(e=>caCardHtml(e,'day')).join('')}${!items.length?`<div class="cw-empty">${past?'':'Nothing yet'}</div>`:''}</div>
+    </section>`; }).join('')+`</div>`;
+  if(after) h+=`<button type="button" class="cw-more" data-wk="1">${after} more after ${esc(caShort(days[6]))} → see the next 7 days</button>`;
+  h+=nodHtml+lateHtml;
+  el.innerHTML=h;
+  const map={}; all.forEach(e=>map[e.key]=e);
+  el.querySelectorAll('.cw-card').forEach(c=>{ const e=map[c.dataset.k]; if(!e) return;
+    c.addEventListener('click',ev=>{ const b=ev.target.closest('[data-a]'); if(b){ caAct(e,b.dataset.a,ev); return; } if(ev.target.closest('a')) return; caModal(e.key); });
+    c.addEventListener('dragstart',ev=>{ try{ ev.dataTransfer.setData('text/plain',e.key); ev.dataTransfer.effectAllowed='move'; }catch(x){} c.classList.add('drag'); document.body.classList.add('cw-dragging'); });
+    c.addEventListener('dragend',()=>{ c.classList.remove('drag'); document.body.classList.remove('cw-dragging'); el.querySelectorAll('.dropover').forEach(x=>x.classList.remove('dropover')); });
+  });
+  el.querySelectorAll('[data-drop]').forEach(z=>{
+    z.addEventListener('dragover',ev=>{ ev.preventDefault(); z.classList.add('dropover'); });
+    z.addEventListener('dragleave',ev=>{ if(!z.contains(ev.relatedTarget)) z.classList.remove('dropover'); });
+    z.addEventListener('drop',ev=>{ ev.preventDefault(); z.classList.remove('dropover'); let k=''; try{ k=ev.dataTransfer.getData('text/plain'); }catch(x){} const e=map[k]; if(!e) return;
+      const d=z.dataset.drop; if(d) { if(d!==e.day) caSetDay(e,d,e.time); }
+      else if(e.src==='cb' && e.day){ e.it.day=''; e.it.time=''; e.it.updated=Date.now(); save(); cbRefresh(); toast(e.name+' → no day yet'); } });
+  });
+  el.querySelectorAll('[data-mday]').forEach(b=>b.addEventListener('click',()=>{ caMobDay=b.dataset.mday; renderCaAgenda(); }));
+  const mo=el.querySelector('.cw-more'); if(mo) mo.addEventListener('click',()=>{ caWeekOff++; caMobDay=''; renderCaTop(); renderCaAgenda(); window.scrollTo({top:($('#caTop').getBoundingClientRect().top+scrollY-90), behavior:'smooth'}); });
   const ga=el.querySelector('[data-guessall]'); if(ga) ga.addEventListener('click',()=>{
-    const done=[]; g.nod.forEach(e=>{ if(e.src!=='cb') return; const gs=caGuess(e.name+' · '+e.note, isoDate(new Date(e.created||Date.now()))); if(!gs.day) return;
+    const done=[]; nod.forEach(e=>{ const gs=caGuessOf(e); if(!gs.day) return;
       done.push([e.it,{day:e.it.day,time:e.it.time,month:e.it.month,how:e.it.how}]); e.it.day=gs.day; e.it.month=gs.day.slice(0,7); if(gs.time && !e.it.time) e.it.time=gs.time; if(gs.how && !e.it.how) e.it.how=gs.how; e.it.updated=Date.now(); });
-    save(); cbRefresh(); toastUndo(done.length+' callbacks got their day', ()=>{ done.forEach(([it,p])=>{ ['day','time','month','how'].forEach(k=>{ if(p[k]==null) delete it[k]; else it[k]=p[k]; }); }); save(); cbRefresh(); }); });
+    save(); cbRefresh(); toastUndo(done.length+' callbacks put on their day', ()=>{ done.forEach(([it,p])=>{ ['day','time','month','how'].forEach(k=>{ if(p[k]==null) delete it[k]; else it[k]=p[k]; }); }); save(); cbRefresh(); }); });
+}
+/* the one-tap buttons on a card */
+function caAct(e, a, ev){
+  if(a==='dial') return;                                   /* the tel: link dials */
+  if(ev) ev.preventDefault(), ev.stopPropagation();
+  if(a==='open') return caModal(e.key);
+  if(a==='msg') return caModal(e.key, 'msg');
+  if(a==='done') return caDoneEntry(e);
+  if(a==='undone'){ if(e.src==='cb'){ e.it.done=false; e.it.doneAt=null; save(); cbRefresh(); } return; }
+  if(a==='book') return caOutcome(e,'g');
+  if(a==='no') return caOutcome(e,'r');
+  if(a==='na') return caNoAnswer(e);
+  if(a==='sent'){ if(e.src==='lead'){ ldOutcome(e.l,'y'); cbRefresh(); return; } return caDoneEntry(e,'sent'); }
+  if(a==='setguess'){ const g=caGuessOf(e); if(g.day){ if(g.how && !e.it.how) e.it.how=g.how; caSetDay(e, g.day, g.time||e.time); } }
+}
+
+/* ---------- the card window: everything about one callback, big and clear ---------- */
+function caModalEl(){
+  let ov=$('#caOv'); if(ov) return ov;
+  ov=document.createElement('div'); ov.id='caOv'; ov.className='ca-ov'; ov.innerHTML='<div class="ca-md" role="dialog" aria-modal="true"></div>';
+  document.body.appendChild(ov);
+  ov.addEventListener('click',ev=>{ if(ev.target===ov) caModalClose(); });
+  document.addEventListener('keydown',ev=>{ if(ev.key==='Escape' && ov.classList.contains('open')) caModalClose(); });
+  return ov;
+}
+function caModalClose(){ const ov=$('#caOv'); if(ov) ov.classList.remove('open'); caOpen={id:'',kind:''}; }
+function caModal(key, focus){
+  const e=caFind(key); if(!e){ caModalClose(); return; }
+  const ov=caModalEl(); const md=ov.querySelector('.ca-md');
+  caOpen={id:key, kind:'modal'};
+  const t=todayIso(); const H=CA_HOW[e.how]; const tel=caTel(e.phone); const isLead=e.src==='lead';
+  const P={day:e.day||'', time:e.time||'', how:e.how, pr:e.pr||'', msgHow:(e.how==='email'?'email':'sms')};
+  const g=caGuessOf(e);
+  const wk=[]; { let d=t; for(let i=0;i<14;i++){ if(i===0||caDowIdx(d)<5||d===e.day||d===g.day) wk.push(d); d=caAddDays(d,1); } }
+  const prCls=()=>e.hot?'hot':P.pr==='high'?'pr-high':P.pr==='medium'?'pr-med':'';
+  const draw=()=>{
+    const txt=caText(e, P.msgHow);
+    md.className='ca-md '+prCls();
+    md.innerHTML=`<div class="cm-h"><div class="cm-hl"><span class="ca-how ${P.how}">${IC[CA_HOW[P.how][1]]}${CA_HOW[P.how][0]}</span>${isLead?'<span class="cw-lead">Lead</span>':''}
+        <span class="cm-when">${e.day?esc(caDayName(e.day))+(e.day!==t&&e.day!==caAddDays(t,1)?'':' · '+esc(caShort(e.day).split(' ')[1]))+(e.time?' · '+esc(e.time):' · any time'):'No day yet'}</span></div>
+        <button type="button" class="cm-x" data-close aria-label="Close">${IC.x}</button></div>
+      ${isLead?`<div class="cm-name">${esc(e.name)}</div>${e.sub?`<div class="cm-sub">${esc(e.sub)}</div>`:''}`:`<textarea class="cm-name-in" data-f="name" rows="${e.name.length>48?2:1}" placeholder="Name">${esc(e.name)}</textarea>`}
+      <div class="cm-contact">${tel?`<a class="cm-big call" href="tel:${esc(tel)}">${IC.phone}Call ${esc(ldFmtPhone(String(e.phone).replace(/\s+/g,'')))}</a>`:''}
+        ${isLead?'':`<input data-f="phone" value="${esc(e.phone)}" placeholder="Phone" class="cm-in">`}<input data-f="email" value="${esc(e.email)}" placeholder="E-mail (optional)" class="cm-in"${isLead?' disabled':''}></div>
+      <textarea class="cm-note" data-f="note" placeholder="Note — what they said, what to say">${esc(e.note&&e.note!==e.name?e.note:'')}</textarea>
+      ${e.tries.length?`<div class="cm-tries">${IC.hourglass} No answer on ${esc(e.tries.map(fmtDay).join(', '))}</div>`:''}
+      <div class="cm-sec"><div class="cm-l">Priority</div><div class="cm-chips">
+        <button type="button" data-pr="high" class="prh${P.pr==='high'?' on':''}">High · red</button><button type="button" data-pr="medium" class="prm${P.pr==='medium'?' on':''}">Medium · yellow</button><button type="button" data-pr="" class="${!P.pr?' on':''}">Normal</button></div></div>
+      <div class="cm-sec"><div class="cm-l">How</div><div class="cm-chips">${Object.keys(CA_HOW).map(k=>`<button type="button" data-how="${k}" class="${P.how===k?'on':''}">${IC[CA_HOW[k][1]]}${CA_HOW[k][0]}</button>`).join('')}</div></div>
+      <div class="cm-sec"><div class="cm-l">Day</div><div class="cm-chips">${wk.map(d=>`<button type="button" data-day="${d}" class="${P.day===d?'on':''}${g.day===d?' gs':''}">${d===t?'Today':d===caAddDays(t,1)?'Tomorrow':esc(caShort(d))}</button>`).join('')}<input type="date" data-f="date" value="${esc(P.day)}" class="cm-in sm"></div></div>
+      <div class="cm-sec"><div class="cm-l">Time</div><div class="cm-chips"><button type="button" data-time="" class="${!P.time?'on':''}">Any time</button>${['10:00','11:00','12:00','13:00','15:00','16:00','17:00','18:00','19:00'].map(x=>`<button type="button" data-time="${x}" class="${P.time===x?'on':''}">${x}</button>`).join('')}<input type="time" data-f="time" value="${esc(P.time)}" step="300" class="cm-in sm"></div></div>
+      <div class="cm-sec msg${focus==='msg'?' open':''}"><div class="cm-l">Message <button type="button" class="cm-lnk" data-togmsg>${focus==='msg'?'hide':'show the ready SMS / e-mail text'}</button></div>
+        <div class="cm-msg"><div class="cm-chips"><button type="button" data-mhow="sms" class="${P.msgHow==='sms'?'on':''}">SMS / Viber</button><button type="button" data-mhow="email" class="${P.msgHow==='email'?'on':''}">E-mail</button></div>
+        <textarea data-mtext>${esc(txt)}</textarea>
+        <div class="cm-chips">${P.msgHow==='email'?`<button type="button" class="pri" data-send="mail">${IC.mail}Open e-mail</button>`:(tel?`<button type="button" class="pri" data-send="sms">${IC.message}Send SMS</button><button type="button" data-send="viber">Copy + open Viber</button>`:'<span class="cm-hint">Add a phone above to send an SMS</span>')}<button type="button" data-mcopy>Copy text</button><button type="button" data-mtpl>Save as my text</button><button type="button" data-mreset>Reset</button></div></div></div>
+      <div class="cm-foot">
+        ${e.done?`<button type="button" data-do="undone">${IC.undo}Put it back</button>`:(P.how==='call'?`<button type="button" class="ok" data-do="book">${IC.check}Booked</button><button type="button" class="no" data-do="no">${IC.x}No</button><button type="button" class="na" data-do="na">${IC.hourglass}No answer</button>`:`<button type="button" class="ok" data-do="sent">${IC.check}Sent</button>`)+`<button type="button" data-do="done" title="Tick it off without logging anything">${IC.check2}Done</button>`}
+        <span class="sp"></span>
+        <a href="${esc(caGcalHref({...e, day:P.day||e.day, time:P.time}))}" target="_blank" rel="noopener" class="cm-sm" title="Opens Google Calendar with it filled in — your phone rings at that time">${IC.calendar}Phone reminder</a>
+        ${isLead?'<button type="button" class="cm-sm" data-do="lead">Open in Leads</button>':''}
+        <button type="button" class="cm-sm del" data-do="del">${IC.trash}Remove</button>
+        <button type="button" class="cm-save" data-save>Save</button></div>`;
+    const q=s=>md.querySelector(s);
+    const nmIn=q('textarea.cm-name-in'); if(nmIn){ const fit=()=>{ nmIn.style.height='auto'; nmIn.style.height=nmIn.scrollHeight+2+'px'; }; requestAnimationFrame(fit); nmIn.addEventListener('input',fit); nmIn.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ ev.preventDefault(); } }); }
+    const keep=()=>{ md.querySelectorAll('[data-f]').forEach(i=>{ P['f_'+i.dataset.f]=i.value; }); P.mtext=q('[data-mtext]').value; };
+    const redraw=()=>{ keep(); const f={}; Object.keys(P).forEach(k=>{ if(k.startsWith('f_')) f[k.slice(2)]=P[k]; }); draw(); Object.keys(f).forEach(k=>{ const i=q('[data-f="'+k+'"]'); if(i && k!=='date' && k!=='time') i.value=f[k]; }); if(P.mtext!=null && !P.resetMsg) q('[data-mtext]').value=P.mtext; P.resetMsg=false; if(md.dataset.msg==='1') q('.cm-sec.msg').classList.add('open'); };
+    md.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',caModalClose));
+    md.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{ P.pr=b.dataset.pr; redraw(); }));
+    md.querySelectorAll('[data-how]').forEach(b=>b.addEventListener('click',()=>{ P.how=b.dataset.how; if(P.how!=='call'){ P.msgHow=P.how==='email'?'email':'sms'; P.mtext=null; P.resetMsg=true; } redraw(); }));
+    md.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{ P.day=b.dataset.day; redraw(); }));
+    md.querySelectorAll('[data-time]').forEach(b=>b.addEventListener('click',()=>{ P.time=b.dataset.time; if(!P.day) P.day=t; redraw(); }));
+    q('[data-f="date"]').addEventListener('change',ev=>{ P.day=ev.target.value; redraw(); });
+    q('[data-f="time"]').addEventListener('change',ev=>{ P.time=ev.target.value; if(!P.day) P.day=t; redraw(); });
+    q('[data-togmsg]').addEventListener('click',()=>{ const s=q('.cm-sec.msg'); s.classList.toggle('open'); md.dataset.msg=s.classList.contains('open')?'1':''; q('[data-togmsg]').textContent=s.classList.contains('open')?'hide':'show the ready SMS / e-mail text'; });
+    md.querySelectorAll('[data-mhow]').forEach(b=>b.addEventListener('click',()=>{ P.msgHow=b.dataset.mhow; P.resetMsg=true; md.dataset.msg='1'; redraw(); }));
+    q('[data-mcopy]').addEventListener('click',()=>caCopy(q('[data-mtext]').value,'Text copied'));
+    q('[data-mtpl]').addEventListener('click',()=>{ ensureMeta(); state.meta.caTpl ||= {}; state.meta.caTpl[P.msgHow]=q('[data-mtext]').value.replace((state.meta.caTpl.link)||CA_BOOK_LINK,'{link}'); save(); toast('Saved — this '+(P.msgHow==='email'?'e-mail':'SMS')+' text is used every time from now on'); });
+    q('[data-mreset]').addEventListener('click',()=>{ ensureMeta(); if(state.meta.caTpl) delete state.meta.caTpl[P.msgHow]; save(); P.resetMsg=true; md.dataset.msg='1'; redraw(); });
+    md.querySelectorAll('[data-send]').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.send, txt=q('[data-mtext]').value; const ph=(q('[data-f="phone"]')||{}).value||e.phone; const em=q('[data-f="email"]').value.trim();
+      if(k==='sms') location.href=caSmsHref(ph, txt);
+      else if(k==='viber'){ caCopy(txt,'Text copied — paste it in Viber'); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(caTel(ph)); },250); }
+      else location.href=caMailHref(em, txt); }));
+    /* Save = name, phone, e-mail, note, priority, how, day, time */
+    const saveAll=(silent)=>{ const v=k=>{ const i=q('[data-f="'+k+'"]'); return i?i.value.trim():''; };
+      if(isLead){ const l=e.l; l.cb={...l.cb, day:P.day||l.cb.day, time:P.time, how:P.how}; if(P.how==='call') delete l.cb.how; if(P.pr) l.cb.pr=P.pr; else delete l.cb.pr; const nt=v('note'); if(nt) l.memo=nt; else delete l.memo; l.updated=Date.now(); }
+      else { const it=e.it; const nm=v('name'); if(nm) it.name=nm; it.phone=v('phone'); it.email=v('email'); it.note=v('note'); it.how=P.how; it.day=P.day; it.time=P.time; if(P.day) it.month=P.day.slice(0,7); if(P.pr) it.pr=P.pr; else delete it.pr; it.updated=Date.now(); }
+      save(); cbRefresh(); try{ if(isLead) renderLeads(); }catch(x){} if(!silent) toast('Saved — '+(isLead?e.name:(v('name')||e.name))+(P.day?' · '+caDayName(P.day)+(P.time?' '+P.time:''):'')); };
+    q('[data-save]').addEventListener('click',()=>{ saveAll(); caModalClose(); });
+    md.querySelectorAll('[data-do]').forEach(b=>b.addEventListener('click',()=>{ const a=b.dataset.do;
+      if(a==='del'){ caModalClose(); return caRemove(e); }
+      if(a==='lead'){ caModalClose(); ensureLeads(); state.meta.ld.focus=e.l.id; ldFilter.list=''; ldCallMode=true; switchView('leads'); renderLeads(); window.scrollTo({top:0}); return; }
+      saveAll(true); const fresh=caFind(key)||e; caModalClose(); caAct(fresh, a); }));
+    md.querySelectorAll('input:not([type=date]):not([type=time])').forEach(i=>i.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ saveAll(); caModalClose(); } }));
+  };
+  md.dataset.msg= focus==='msg'?'1':'';
+  draw();
+  ov.classList.add('open');
+  setTimeout(()=>{ const f= focus==='msg'? md.querySelector('[data-mtext]') : null; if(f) f.focus({preventScroll:true}); },60);
 }
 
 /* ---------- the quick «＋ New callback» form — the same one sits on Callbacks and on Leads ---------- */
@@ -11405,7 +11486,7 @@ function openDay(){
   body.querySelectorAll('[data-updone]').forEach(b=>b.addEventListener('click',()=>{ const [cid,id]=b.dataset.updone.split('|'); upDone(cid,id); b.closest('.day-row').classList.add('done'); b.remove(); }));
   body.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',()=>{ fuDone(b.dataset.fudone); b.closest('.day-row').classList.add('done'); b.remove(); }));
   body.querySelectorAll('[data-cbsms]').forEach(b=>b.addEventListener('click',()=>{ const e=caFind(b.dataset.cbsms); if(e) location.href=caSmsHref(e.phone, caText(e,'sms')); }));
-  body.querySelectorAll('[data-cbk]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); switchView('callbacks'); setTimeout(()=>{ const r=document.querySelector('.ca-it[data-k="'+CSS.escape(b.dataset.cbk)+'"]'); if(r) r.scrollIntoView({block:'center'}); },60); }));
+  body.querySelectorAll('[data-cbk]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); switchView('callbacks'); setTimeout(()=>caModal(b.dataset.cbk),80); }));
   $('#dayOverlay').classList.add('open'); setTimeout(()=>{ const ok=$('#dayOk'); if(ok) ok.focus(); },60);
 }
 function closeDay(){ const ov=$('#dayOverlay'); if(!ov||!ov.classList.contains('open')) return; ov.classList.remove('open'); ensureMeta(); if(state.meta.daySeen!==todayIso()){ state.meta.daySeen=todayIso(); save(); } }
