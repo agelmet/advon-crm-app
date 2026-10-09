@@ -2595,6 +2595,13 @@ body[data-view=home] .gm-bar{display:none;}
 .gm-lv .bar{height:6px; border-radius:99px; background:var(--line); overflow:hidden; margin-top:auto;}
 .gm-lv .bar i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#2F7FE0,#35C7E9); transition:width .5s cubic-bezier(.2,.8,.2,1);}
 .gm-lv .cc{font-size:10.5px; color:var(--muted); font-weight:600;}
+/* 9 Oct 2026 — tap a booked name to fix it */
+.gm-lv .nm-ed{display:flex; align-items:center; gap:4px; width:100%; padding:0; margin:0; border:0; background:none; text-align:left; cursor:text; font:inherit; font-size:11.5px; font-weight:700; color:var(--ink);}
+.gm-lv .nm-ed span{overflow:hidden; white-space:normal; line-height:1.25; min-width:0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow-wrap:anywhere;}
+.gm-lv .nm:has(.nm-ed){white-space:normal;}
+.gm-lv .nm-ed svg{flex:none; width:11px; height:11px; color:var(--muted); opacity:.45; transition:opacity .2s, color .2s;}
+@media (hover:hover){ .gm-lv .nm-ed svg{opacity:0;} .gm-lv:hover .nm-ed svg{opacity:.7;} .gm-lv .nm-ed:hover svg{opacity:1; color:var(--brand);} }
+.gm-lv .nm-in{width:100%; box-sizing:border-box; font:700 12px/1.2 'Inter',sans-serif; color:var(--ink); background:var(--card); border:1.5px solid var(--brand); border-radius:7px; padding:4px 6px; outline:none; min-width:0;}
 .gm-mvday{position:absolute; top:8px; right:8px; border:1px solid var(--line); background:var(--card); color:var(--muted); font:700 10.5px/1 'Inter',sans-serif; padding:5px 7px; border-radius:99px; cursor:pointer;}
 .gm-mvday:hover{color:var(--brand); border-color:var(--brand);}
 .gm-lv.next{border:1.5px solid var(--brand); background:var(--blue-soft); box-shadow:0 6px 18px rgba(47,127,224,.14);}
@@ -9541,6 +9548,7 @@ function renderGoalBar(p){
 /* ---- the big card on Home ---- */
 function renderGoalCard(p){
   const el=$('#gmCard'); if(!el) return;
+  if(el.querySelector('.nm-in')) return;   /* he is fixing a name — don't wipe what he types */
   el.classList.toggle('done', p.done); el.classList.toggle('rest', !p.work && !p.calls);
   const g=p.g;
   const top=`<div class="gm-top">
@@ -9562,7 +9570,7 @@ function renderGoalCard(p){
     const f= won? 1 : next? Math.min(1, seg/Ci) : 0;
     track+=`<div class="gm-lv${won?(bonus?' bonus':' won'):next?(due?' next due':' next'):''}">
       <div class="t"><span class="ic">${won?GM_CHECK:(i+1)}</span>${bonus?'Bonus':'Meeting'}</div>
-      <div class="nm">${won? esc(p.t.names[i]||'Booked') : next? (due?'a yes is due':'next up') : ''}</div>
+      ${won && p.t.ids[i]? `<div class="nm"><button type="button" class="nm-ed" data-gm="rename" data-id="${esc(p.t.ids[i])}" title="${esc(p.t.names[i]||'')} — tap to fix the name"><span>${esc(p.t.names[i]||'Booked')}</span>${GM_EDIT}</button></div>` : `<div class="nm">${won? esc(p.t.names[i]||'Booked') : next? (due?'a yes is due':'next up') : ''}</div>`}
       <div class="bar"><i style="width:${(f*100).toFixed(0)}%"></i></div>
       <div class="cc">${won?'booked ✓': next? (due? seg+' calls · any call now' : seg+' / '+Ci+' calls') : '~'+Ci+' calls'}</div></div>`;
   }
@@ -9650,6 +9658,38 @@ function gmOpenEdit(){ const g=gmCfg(); gmDraft={meet:g.meet, cpm:g.cpm, close:g
   if(curView!=='home') switchView('home'); renderGoalCard(gmProgress()); const c=$('#gmCard'); if(c) c.scrollIntoView({block:'nearest', behavior:'smooth'}); }
 function gmSaveEdit(){ if(!gmDraft) return; const g=gmCfg(); Object.assign(g, gmDraft); gmEditing=false; gmDraft=null; save(); renderAll();
   toast('Goal saved — '+g.meet+' meetings ≈ '+gmCallsTarget(g)+' calls a day'); }
+/* ---- fix a booked name right on the card (9 Oct 2026) ----
+   The new name goes to the Quick Log entry AND to everything tied to it: the Board card
+   (log.clientId), the lead it came from (lead.logId) and an online-booking card that carries the old name. */
+function gmRenameApply(id, name){
+  const l=(state.logs||[]).find(x=>x && x.id===id); if(!l) return false;
+  const old=String(l.name||'').trim(); name=String(name||'').replace(/\s+/g,' ').trim();
+  if(!name || name===old) return false;
+  const was=[];   /* for Undo */
+  const put=(o)=>{ was.push([o, o.name]); o.name=name; o.updated=Date.now(); };
+  put(l);
+  const same=n=>String(n||'').trim().toLowerCase()===old.toLowerCase();
+  const seen=new Set();
+  if(l.clientId){ const c=state.clients.find(x=>x.id===l.clientId); if(c && same(c.name)){ put(c); seen.add(c); } }
+  (state.clients||[]).forEach(c=>{ if(seen.has(c) || isTrashed(c) || !same(c.name)) return;
+    if(c.fromLog===l.id || (c.stage==='booked' && (c.fromBooking || (c.created||0)>=Date.now()-60*864e5))){ put(c); seen.add(c); } });
+  (state.leads||[]).forEach(x=>{ if(x && (x.logId===l.id || x.id===l.leadId) && same(x.name)) put(x); });
+  save(); renderAll();
+  toastUndo(old+' → '+name, ()=>{ was.forEach(([o,n])=>{ o.name=n; o.updated=Date.now(); }); save(); renderAll(); });
+  return true;
+}
+function gmRename(btn){
+  const id=btn.dataset.id, l=(state.logs||[]).find(x=>x && x.id===id); if(!l) return;
+  const box=btn.parentNode, inp=document.createElement('input');
+  inp.className='nm-in'; inp.value=l.name||''; inp.setAttribute('aria-label','Name'); inp.spellcheck=false;
+  box.replaceChildren(inp); inp.focus(); inp.select();
+  let done=false;
+  const finish=(keep)=>{ if(done) return; done=true; const v=inp.value; inp.remove();
+    if(!(keep && gmRenameApply(id, v))) renderGoal(); };
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); finish(true); } else if(e.key==='Escape'){ e.preventDefault(); finish(false); } });
+  inp.addEventListener('blur',()=>finish(true));
+  inp.addEventListener('click',e=>e.stopPropagation());
+}
 /* ---- actions ---- */
 function gmStart(){
   switchView('leads');
@@ -9669,6 +9709,7 @@ document.addEventListener('click',e=>{
   else if(a==='edit') gmOpenEdit();
   else if(a==='day') gmOpenDay(b.dataset.k);
   else if(a==='mvprev') gmMovePrev(b.dataset.id);
+  else if(a==='rename') gmRename(b);
   else if(a==='wk-prev'){ gmWeekOff--; renderGoal(); }
   else if(a==='wk-next'){ if(gmWeekOff<0){ gmWeekOff++; renderGoal(); } }
   else if(a==='wk-now'){ gmWeekOff=0; renderGoal(); }
@@ -9753,6 +9794,15 @@ function fixTraki20261007(){
     l.date='2026-10-07'; l.updated=Date.now(); ch=true; });
   return ch;
 }
+/* 9 Oct 2026: the Zoho booking of 13 Oct came in as just «Salakou» — her real name is Σαλάκου Γεωργία. Only touches that exact name. */
+function fixSalakou20261009(){
+  let ch=false; const NEW='Σαλάκου Γεωργία';
+  const hit=n=>String(n||'').trim().toLowerCase()==='salakou';
+  (state.logs||[]).forEach(l=>{ if(l && hit(l.name)){ l.name=NEW; l.updated=Date.now(); ch=true; } });
+  (state.clients||[]).forEach(c=>{ if(c && hit(c.name)){ c.name=NEW; c.updated=Date.now(); ch=true; } });
+  (state.leads||[]).forEach(x=>{ if(x && hit(x.name)){ x.name=NEW; x.updated=Date.now(); ch=true; } });
+  return ch;
+}
 /* every Booked card carries €130 that he can edit; it only counts as money once the card leaves Booked (8 Oct 2026) */
 const BOOKED_VALUE=130;
 function applyBookedDefault(){
@@ -9764,6 +9814,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   if(!state) return;
   try{ if(applyBookedDefault()) setTimeout(save,0); }catch(e){}
   try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
+  try{ if(fixSalakou20261009()) setTimeout(save,0); }catch(e){}
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
 }
 
