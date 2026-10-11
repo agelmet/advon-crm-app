@@ -2195,6 +2195,23 @@ body.dark .ch-pill.on{background:var(--brand);}
 .ch-menu .sep{height:1px; background:var(--line); margin:5px 8px;}
 .ch-menu i{width:18px; text-align:center; font-style:normal;}
 #chPin.on{background:#FFF3D6; color:#B7791F;}
+.ch-sug{padding:8px 10px!important;}
+.ch-sug .sg-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.ch-sug .sg-row .sg-h{white-space:nowrap;}
+.ch-sug .sg-row .sg-h small{margin-left:6px;}
+.ch-sug .sg-row .sg-b{margin:0 0 0 auto; flex-wrap:nowrap;}
+.ch-sug #sgShow{border-radius:10px; padding:7px 11px; font-size:12px; font-weight:800; border:1px solid #D9CEFF; background:var(--surface); color:var(--violet);}
+.ch-msg.sugmsg .ch-bub.ch-sugbub{background:#F7F4FF; color:var(--ink); border:1.5px dashed #A58BFF; box-shadow:0 6px 18px rgba(109,77,245,.12); max-width:min(80%,700px);}
+.ch-sugbub .sgb-h{display:flex; align-items:center; gap:8px; font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--violet); margin:0 0 6px; white-space:normal;}
+.ch-sugbub .sgb-h small{margin-left:auto; font-weight:600; text-transform:none; letter-spacing:0; color:var(--muted);}
+.ch-sugbub .sgb-d{margin:0 0 8px; font-size:12px; line-height:1.45; white-space:normal; color:var(--muted); background:var(--surface); border:1px solid #E4DBFF; border-radius:10px; padding:6px 10px;}
+.ch-sugbub .sgb-d summary{cursor:pointer; font-weight:800; color:var(--violet);}
+.ch-sugbub .sgb-d p{margin:6px 0 0;} .ch-sugbub .sgb-d b{color:var(--ink);}
+.ch-sugbub .sgb-d ul{margin:6px 0 0; padding-left:18px; color:var(--ink); font-weight:600;}
+.ch-sugbub .sgb-t a{color:var(--brand);}
+.ch-msg.sugmsg.flash .ch-bub{animation:sgflash 1.2s ease;}
+@keyframes sgflash{0%,100%{box-shadow:0 6px 18px rgba(109,77,245,.12);}40%{box-shadow:0 0 0 5px rgba(109,77,245,.35);}}
+@media(max-width:900px){ .ch-sug .sg-row .sg-b{margin-left:0; width:100%;} .ch-sug .sg-row .sg-b .no{margin-left:auto;} .ch-msg.sugmsg .ch-bub.ch-sugbub{max-width:92%;} }
 .ch-sug .sg-ask{font-size:12px; color:var(--muted); font-weight:600; margin:6px 0 0; line-height:1.45; white-space:pre-wrap; border-left:3px solid var(--line); padding-left:9px;}
 .ch-sug .sg-steps{margin:6px 0 0; padding-left:18px; font-size:12px; font-weight:600; color:var(--ink); line-height:1.5;}
 .ch-badge{background:var(--red); color:#fff; border-radius:999px; min-width:20px; height:20px; font-size:11px; font-weight:800; display:grid; place-items:center; padding:0 6px;}
@@ -3086,6 +3103,16 @@ body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
   .cq-seg[data-cqday]::-webkit-scrollbar{display:none;}
   .cq-r .w-ph{flex:1 1 120px;}
   .cq-r .cq-date{flex:1 1 130px;} .cq-r .cq-time{flex:1 1 100px;}
+}
+/* chat thread on phones (11 Oct 2026): header buttons in one swipeable row, no hint line */
+@media(max-width:900px){
+  .ch-head{flex-wrap:wrap; row-gap:8px; padding:8px 12px;}
+  .ch-head .info{min-width:0; flex:1 1 140px;}
+  .ch-head .acts{order:9; flex:0 0 100%; max-width:none; flex-wrap:nowrap; justify-content:flex-start; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:2px;}
+  .ch-head .acts::-webkit-scrollbar{display:none;}
+  .ch-head .acts > *{flex:0 0 auto;}
+  .ch-hint{display:none;}
+  .ch-sug .sg-row .sg-h small{display:none;}
 }
 </style>
 </head>
@@ -11274,10 +11301,16 @@ function renderChatThread(keep){
     out.push(`<div class="ch-msg ${me?'me':'them'}${m.from==='claude'?' claude':''}${prev&&prev.from!==m.from?' gap':''}"><div class="ch-bub${m.state?' '+m.state:''}${m.deleted?' gone':''}">${inner}</div></div>`);
     prev=m;
   });
+  { const sg=t.suggest; if(sg && sg.text && !t.archived){
+      const steps=Array.isArray(sg.steps)?sg.steps:[];
+      const det=(sg.asked||sg.plan||steps.length||sg.draft)?`<details class="sgb-d"><summary>What ${esc(t.name.split(' ')[0])} asked · what was done${steps.length?' ('+steps.length+')':''}</summary>${sg.asked?`<p><b>Asked:</b> ${esc(sg.asked)}</p>`:''}${sg.plan?`<p><b>${sg.mode==='intend'?'What I intend to do':'What was done'}:</b> ${esc(sg.plan)}</p>`:''}${steps.length?`<ul>${steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${sg.draft?`<p><b>Check it:</b> <a href="${esc(sg.draft)}" target="_blank" rel="noopener">${esc(String(sg.draft).replace(/^https?:\/\//,''))} ↗</a></p>`:''}</details>`:'';
+      out.push(`<div class="ch-day"><span>Not sent yet</span></div><div class="ch-msg me sugmsg" id="chSugMsg"><div class="ch-bub ch-sugbub"><div class="sgb-h">✦ Claude's reply — waiting for you<small>${esc(chWhen(sg.at||''))}</small></div>${det}<div class="sgb-t">${chLinkify(sg.text)}</div></div></div>`);
+  } }
   { const keepVal=(()=>{ const i=$('#chMailIn'); return i&&document.activeElement===i?i.value:null; })(); feed.innerHTML=out.join(''); const i=$('#chMailIn'); if(i&&keepVal!=null){ i.value=keepVal; i.focus(); i.setSelectionRange(keepVal.length,keepVal.length); } }
   feed.querySelectorAll('[data-start]').forEach(b=>b.addEventListener('click',()=>chStart(t,b.dataset.start)));
   { const sv=$('#chMailSave'), inp=$('#chMailIn'); if(sv&&inp){ const go=async()=>{ const em=inp.value.trim(); if(!chMailOk(em)){ toast('That does not look like an e-mail'); inp.focus(); return; } sv.disabled=true; try{ await Chats.meta(t.slug,{email:em}); const c=chClientFor(t); if(c&&!c.email){ c.email=em; save(); } chNeedMail.delete(t.slug); toast('E-mail saved — alerts and reminders are on for '+t.name); }catch(e){ sv.disabled=false; toast('Could not save'); } }; sv.addEventListener('click',go); inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } }); } }
   if(!keep || nearBottom) feed.scrollTop=feed.scrollHeight;
+  if(!keep){ const sm=$('#chSugMsg'); if(sm) feed.scrollTop=Math.max(0, feed.scrollTop + sm.getBoundingClientRect().top - feed.getBoundingClientRect().top - Math.round(feed.clientHeight*0.45)); }
   feed.querySelectorAll('.ch-pics img[data-path]').forEach(async im=>{ if(im.getAttribute('src')) return; try{ const u=await Chats.fileUrl(im.dataset.path); if(u) im.src=u; }catch(e){} });
   const n=$('#chNotify'); if(n) n.textContent=Chats.notify?(Chats.notify.email?'E-mail alerts on':'E-mail alerts off — add RESEND_API_KEY in Netlify')+(Chats.notify.telegram?' · Telegram on':''):'';
 }
@@ -11288,13 +11321,8 @@ function renderChatSuggest(t){
   const s=t&&t.suggest; if(!s || !s.text){ box.hidden=true; box.innerHTML=''; return; }
   box.hidden=false;
   const stName=s.stage&&(CH_STAGES.find(x=>x[0]===s.stage)||[])[1];
-  box.innerHTML=`<div class="sg-h">✦ Claude prepared this reply<small>${esc(chWhen(s.at||''))}</small></div>
-    ${s.asked?`<p class="sg-ask"><b>${esc(t.name)} asked:</b> ${esc(s.asked)}</p>`:''}
-    ${s.plan?`<p class="sg-plan"><b>${s.mode==='intend'?'What I intend to do':'What was done'}:</b> ${esc(s.plan)}</p>`:''}
-    ${Array.isArray(s.steps)&&s.steps.length?`<ul class="sg-steps">${s.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
-    ${s.draft?`<p class="sg-plan"><b>Check it:</b> <a href="${esc(s.draft)}" target="_blank" rel="noopener">${esc(String(s.draft).replace(/^https?:\/\//,''))} ↗</a></p>`:''}
-    <div class="sg-t">${chLinkify(s.text)}</div>
-    <div class="sg-b"><button class="go" id="sgSend">Send it${stName&&s.stage!==chStage(t)?' · stage → '+esc(stName):''}</button><button id="sgEdit">Edit first</button><button class="no" id="sgNo">Dismiss</button></div>`;
+  box.innerHTML=`<div class="sg-row"><span class="sg-h">✦ Reply ready<small>${esc(chWhen(s.at||''))}</small></span><button id="sgShow" title="Scroll to Claude's reply in the chat">↑ Read it</button><span class="sg-b"><button class="go" id="sgSend">Send it${stName&&s.stage!==chStage(t)?' · stage → '+esc(stName):''}</button><button id="sgEdit">Edit first</button><button class="no" id="sgNo">Dismiss</button></span></div>`;
+  $('#sgShow').addEventListener('click',()=>{ const sm=$('#chSugMsg'), feed=$('#chFeed'); if(sm&&feed){ feed.scrollTo({top:feed.scrollTop+sm.getBoundingClientRect().top-feed.getBoundingClientRect().top-12, behavior:'smooth'}); sm.classList.remove('flash'); void sm.offsetWidth; sm.classList.add('flash'); } });
   $('#sgEdit').addEventListener('click',()=>{ chLastTpl=null; const tx=$('#chTxt'); tx.value=s.text; tx.dispatchEvent(new Event('input')); tx.focus(); box.hidden=true; });
   $('#sgSend').addEventListener('click',async()=>{ const tx=$('#chTxt'); if(tx.value.trim() && !confirm('There is text in the box already. Replace it with Claude\'s reply and send?')) return; $('#sgSend').disabled=true; tx.value=s.text; const slug=t.slug, stage=s.stage, done=!!s.done; await Chats.send(); if(stage && stage!==chStage(t)){ try{ await Chats.meta(slug,{stage}); }catch(e){} } else if(done && t.ready){ try{ await Chats.meta(slug,{ready:null}); }catch(e){} } });
   $('#sgNo').addEventListener('click',async()=>{ box.hidden=true; try{ await Chats.meta(t.slug,{suggest:null}); toast('Suggestion dismissed'); }catch(e){ toast('Could not dismiss'); } });
