@@ -1688,6 +1688,47 @@ body.dark .day-row button{background:var(--surface);}
   .magenda{display:block;}
 }
 
+
+/* ===== Calendar meeting → Callbacks (Angelo, 12 Oct 2026) ===== */
+.meet .m2cb{position:absolute; right:5px; bottom:5px; display:none; align-items:center; gap:4px; height:24px; padding:0 9px 0 7px; border-radius:999px;
+  border:1px solid color-mix(in srgb,var(--violet) 30%,transparent); background:var(--surface); color:var(--violet); font:800 10.5px/1 'Inter',sans-serif;
+  box-shadow:0 2px 10px rgba(24,49,92,.14); cursor:pointer; white-space:nowrap; z-index:2;}
+.meet .m2cb svg{width:12px; height:12px; flex:none;}
+.meet .m2cb:hover{background:var(--violet); color:#fff; border-color:var(--violet);}
+.mcell .meet.mini .m2cb{right:3px; bottom:auto; top:50%; transform:translateY(-50%); width:22px; height:22px; padding:0; justify-content:center;}
+.mcell .meet.mini .m2cb span{display:none;}
+@media (hover:hover){ .meet:hover .m2cb, .meet:focus-within .m2cb{display:flex;} }
+@media (hover:none){ .day-col .meet .m2cb{display:flex; position:static; margin-top:6px; width:max-content;} }
+.mag-day .meet{grid-template-columns:auto 1fr auto auto;}
+.mag-day .meet .m2cb{display:flex; position:static; height:30px; padding:0 11px 0 9px; font-size:12px;}
+.m2pop{position:fixed; z-index:180; width:350px; background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow-lg); padding:14px 14px 12px; color:var(--ink);}
+.m2pop.mid{left:50% !important; top:50% !important; transform:translate(-50%,-50%);}
+.m2pop.sheet{left:8px !important; right:8px; bottom:calc(8px + env(safe-area-inset-bottom)); top:auto !important; width:auto; border-radius:20px;}
+.m2-h{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+.m2-ic{flex:none; width:34px; height:34px; border-radius:11px; display:grid; place-items:center; background:var(--violet-soft); color:var(--violet);}
+.m2-ic svg{width:17px; height:17px;}
+.m2-h > div{flex:1; min-width:0;}
+.m2-h b{display:block; font-family:'Sora',sans-serif; font-size:14.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.m2-h small{display:block; color:var(--muted); font-size:12px; font-weight:600; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.m2-x{flex:none; width:30px; height:30px; border-radius:9px; border:0; background:transparent; color:var(--muted); font-size:15px; cursor:pointer;}
+.m2-x:hover{background:var(--bg); color:var(--ink);}
+.m2-l{font:800 10.5px/1 'Inter',sans-serif; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:2px 2px 7px;}
+.m2-chips{display:flex; flex-wrap:wrap; gap:6px;}
+.m2-chips button, .m2-pick{display:inline-flex; align-items:center; gap:5px; padding:7px 11px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--ink);
+  font:700 12.5px/1.1 'Inter',sans-serif; cursor:pointer; position:relative;}
+.m2-chips button.on, .m2-pick.on{background:var(--violet); border-color:var(--violet); color:#fff;}
+.m2-pick input{position:absolute; inset:0; opacity:0; cursor:pointer; width:100%;}
+.m2-row{display:flex; align-items:center; gap:8px; margin-top:10px;}
+.m2-row .m2-chips{flex:1;}
+.m2-row input[type=time]{flex:none; width:96px; padding:6px 8px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--ink); font:700 12.5px 'Inter',sans-serif;}
+.m2-note{width:100%; margin-top:10px; padding:9px 11px; border-radius:11px; border:1px solid var(--line); background:var(--bg); color:var(--ink); font:600 13px 'Inter',sans-serif; box-sizing:border-box;}
+.m2-note:focus, .m2-row input:focus{outline:2px solid color-mix(in srgb,var(--violet) 45%,transparent); outline-offset:1px;}
+.m2-hint{margin:10px 2px 0; font-size:11.5px; line-height:1.45; color:var(--muted);}
+.m2-hint b{color:var(--ink);}
+.m2-ft{display:flex; justify-content:flex-end; gap:8px; margin-top:12px;}
+.m2-ft .m2-go{background:var(--violet); border-color:var(--violet); color:#fff;}
+@media (max-width:700px){ .m2-chips button, .m2-pick{padding:10px 13px; font-size:13.5px;} .m2-note{font-size:16px;} }
+
 /* ---------- LEADS — call mode (13 Sept 2026) ---------- */
 .ld-banner{background:linear-gradient(120deg,#10141F 10%,#0E2A45 55%,#2F7FE0 140%); color:#fff; border-radius:var(--radius); padding:20px 26px; margin-bottom:16px; display:grid; grid-template-columns:1.5fr repeat(5,1fr); gap:16px 20px; align-items:start; box-shadow:var(--shadow-lg);}
 .ld-banner .cell{min-width:0;}
@@ -5149,6 +5190,88 @@ function openCalPop(c, anchor){
   const snd=d.querySelector('.b-snd'); if(snd) snd.addEventListener('click',()=>{ window.open(mnGmail(c),'_blank','noopener'); closeCalPop(); });
   const cl=d.querySelector('.b-clear'); if(cl) cl.addEventListener('click',()=>go(''));
 }
+
+/* ================= Calendar meeting → Callbacks (Angelo, 12 Oct 2026) =================
+   «a quick option in Calendar on the meetings to move them to Callbacks, removing them from the meetings,
+   without counting them there». The small «☎ Callbacks» button on a meeting (shows on hover; always on the phone list),
+   or «→ Callbacks» in the «How did it go?» window, opens one small box: which day to call back (Today · Tomorrow ·
+   the next weekdays · any date), Call / SMS / E-mail, an optional time and line → «Move to Callbacks». It then:
+     • puts a callback in Callbacks on that day (name, phone, e-mail, and the old meeting slot in its note);
+     • takes the meeting off the Calendar and out of every meeting count — a card still in «Booked» with nothing paid
+       comes off the Board (it was only a booking, its notes go into the callback); a card that has moved on
+       (Thinking, Need info…) stays where it is, only its meeting date goes;
+     • turns its Quick Log «Booked» entry into «SMS sent» with the note «→ Callbacks», so the call still counts as a call
+       but no longer as a booked meeting (Today's mission and the month statistics follow).
+   One Undo puts everything back. */
+let m2=null;
+function m2Close(){ const p=document.querySelector('.m2pop'); if(p) p.remove(); m2=null; }
+function m2Links(c){ return (state.logs||[]).filter(l=>l && l.type==='g' && (l.clientId===c.id || (c.fromLog && l.id===c.fromLog))); }
+const m2DropsCard=c=>c.stage==='booked' && !cpaid(c);
+function m2Open(id, anchor){
+  const c=state && state.clients.find(x=>x.id===id); if(!c) return;
+  m2Close(); try{ closeCalPop(); }catch(e){}
+  m2={id, day:caNextWork(todayIso()), time:'', how:'call', note:''};
+  const d=document.createElement('div'); d.className='m2pop'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','Move to Callbacks');
+  document.body.appendChild(d);
+  m2Render(d);
+  if(window.innerWidth<=700) d.classList.add('sheet');
+  else if(!anchor) d.classList.add('mid');
+  else { const r=anchor.getBoundingClientRect(), w=d.offsetWidth, h=d.offsetHeight;
+    d.style.left=Math.max(10, Math.min(window.innerWidth-w-10, r.left-w/2+r.width/2))+'px';
+    d.style.top=(r.bottom+8+h>window.innerHeight ? Math.max(10, r.top-h-8) : r.bottom+8)+'px'; }
+  /* clicks inside never reach the «click outside closes it» listener (the chips re-draw themselves) */
+  d.addEventListener('click',e=>{ e.stopPropagation(); const t=e.target.closest('[data-m2day],[data-m2how],[data-m2x],[data-m2go]'); if(!t) return;
+    if(t.dataset.m2x!=null){ m2Close(); return; }
+    if(t.dataset.m2go!=null){ m2Apply(); return; }
+    if(t.dataset.m2day){ m2.day=t.dataset.m2day; m2Render(d); }
+    else if(t.dataset.m2how){ m2.how=t.dataset.m2how; m2Render(d); } });
+  d.addEventListener('change',e=>{ const t=e.target;
+    if(t.matches('[data-m2pick]') && t.value){ m2.day=t.value; m2Render(d); }
+    else if(t.matches('[data-m2time]')){ m2.time=t.value||''; m2Render(d); } });
+  d.addEventListener('input',e=>{ if(e.target.matches('[data-m2note]')) m2.note=e.target.value; });
+  d.addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.matches('[data-m2note]')){ e.preventDefault(); m2Apply(); } });
+  setTimeout(()=>{ const n=d.querySelector('[data-m2note]'); if(n && !('ontouchstart' in window)) n.focus(); },40);
+}
+function m2Render(d){
+  const c=m2 && state.clients.find(x=>x.id===m2.id); if(!c){ m2Close(); return; }
+  const days=caWeekdayDays(5), picked=!days.some(x=>x.k===m2.day);
+  const when=c.day? (caDayName(c.day)+(c.time?' · '+c.time:'')) : '';
+  const drop=m2DropsCard(c), st=(stageById(c.stage)||{name:c.stage}).name;
+  const focusNote=document.activeElement && document.activeElement.matches && document.activeElement.matches('[data-m2note]');
+  d.innerHTML=`<div class="m2-h"><span class="m2-ic">${IC.phone}</span><div><b>${esc(c.name)}</b><small>${when?'Meeting '+esc(when):'No meeting date'}</small></div><button type="button" class="m2-x" data-m2x aria-label="Close">✕</button></div>
+    <div class="m2-l">Call back on</div>
+    <div class="m2-chips">${days.map(x=>`<button type="button" data-m2day="${x.k}" class="${m2.day===x.k?'on':''}">${x.t}</button>`).join('')}<label class="m2-pick${picked?' on':''}">${picked?esc(caShort(m2.day)):'Pick a day'}<input type="date" data-m2pick value="${picked?m2.day:''}" min="${todayIso()}" aria-label="Pick a day"></label></div>
+    <div class="m2-row"><div class="m2-chips">${Object.keys(CA_HOW).map(h=>`<button type="button" data-m2how="${h}" class="${m2.how===h?'on':''}">${CA_HOW[h][0]}</button>`).join('')}</div><input type="time" data-m2time value="${esc(m2.time)}" title="Time (optional)" aria-label="Time (optional)"></div>
+    <input class="m2-note" data-m2note type="text" autocomplete="off" placeholder="What did they say? (optional)" value="${esc(m2.note)}">
+    <p class="m2-hint">Leaves the Calendar and is <b>not counted as a meeting</b>${drop?' · its «Booked» card comes off the Board':' · the card stays on the Board in «'+esc(st)+'», only the meeting date goes'}. You can undo it right after.</p>
+    <div class="m2-ft"><button type="button" class="btn btn-ghost btn-sm" data-m2x>Cancel</button><button type="button" class="btn m2-go" data-m2go>Move to Callbacks · ${esc(caDayName(m2.day))}${m2.time?' '+esc(m2.time):''}</button></div>`;
+  if(focusNote){ const n=d.querySelector('[data-m2note]'); n.focus(); n.setSelectionRange(n.value.length,n.value.length); }
+}
+function m2Apply(){
+  if(!m2) return;
+  const c=state.clients.find(x=>x.id===m2.id); if(!c){ m2Close(); return; }
+  const pick={...m2}; const when=c.day? (fmtDay(c.day)+(c.time?' '+c.time:'')) : '';
+  const ci=state.clients.indexOf(c), snapC=JSON.parse(JSON.stringify(c)), drop=m2DropsCard(c);
+  const logs=m2Links(c), snapL=logs.map(l=>({...l}));
+  const old=drop? String(c.notes||'').trim().slice(0,400) : '';
+  const note=[pick.note.trim(), when?'Meeting was '+when+' → callback':'', old].filter(Boolean).join(' · ');
+  const r=caAdd({name:c.name, phone:c.phone||'', email:c.email||'', note, day:pick.day, time:pick.time, how:pick.how});
+  if(!r || !r.it){ toast('Could not add the callback'); return; }
+  r.it.fromMeet=c.id;
+  logs.forEach(l=>{ l.type='y'; l.note=['→ Callbacks '+caShort(pick.day), l.note].filter(Boolean).join(' · '); if(drop) l.clientId=null; l.updated=Date.now(); });
+  if(drop) state.clients.splice(ci,1);
+  else { c.cbMoved={day:c.day||'', time:c.time||'', at:Date.now()}; c.day=''; c.time='';
+    c.notes=[c.notes, 'Ραντεβού '+when+' → Callbacks '+caShort(pick.day)].filter(Boolean).join('\n'); c.updated=Date.now(); }
+  m2Close(); save(); renderAll();
+  toastUndo(c.name+' → Callbacks · '+caDayName(pick.day)+(drop?' · off the Calendar and the Board':' · off the Calendar'), ()=>{
+    const pi=(state.prio||[]).indexOf(r.it); if(pi>=0) state.prio.splice(pi,1);
+    logs.forEach((l,i)=>{ Object.keys(l).forEach(k=>{ if(!(k in snapL[i])) delete l[k]; }); Object.assign(l, snapL[i]); });
+    if(drop){ if(!state.clients.some(x=>x.id===snapC.id)) state.clients.splice(Math.min(ci,state.clients.length),0,snapC); }
+    else { const cc=state.clients.find(x=>x.id===snapC.id); if(cc){ Object.keys(cc).forEach(k=>{ if(!(k in snapC)) delete cc[k]; }); Object.assign(cc, snapC); } }
+    save(); renderAll(); }, 8);
+}
+document.addEventListener('click',e=>{ if(m2 && !e.target.closest('.m2pop') && !e.target.closest('.m2cb') && !e.target.closest('#mqToCb')) m2Close(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && m2) m2Close(); });
 /* ================= After the meeting — «How did it go?» in 20 seconds (8 Oct 2026) =================
    Angelo's Google Meet calls last ~15 minutes and he forgets who said what. 15 minutes after a
    meeting's start time the CRM opens one small window by itself (or pings the computer if the tab is
@@ -5298,9 +5421,11 @@ function mqRender(){
       <button type="button" class="mq-link" id="mqLater" title="Ask me again in 20 minutes">Later</button>
       ${mqSlot(c)&&!mqLogged(c)?'<button type="button" class="mq-link" id="mqSkip" title="Not a real meeting — never ask about it">Skip</button>':''}
       <button type="button" class="mq-link" id="mqCard">Open the card</button>
+      ${c.day?'<button type="button" class="mq-link" id="mqToCb" title="Call them back another day instead — off the Calendar, not counted as a meeting">→ Callbacks</button>':''}
       ${('Notification' in window && Notification.permission==='default')?'<button type="button" class="mq-link mq-bell" id="mqBell" title="So the CRM can ping you when a meeting ends, even if this tab is in the background">🔔 Ping me after meetings</button>':''}
     </div>
     <button type="button" class="btn btn-brand mq-save" id="mqSave" ${o?'':'disabled'}>${o?('Save'+(o==='yes'?' · €'+((+c.value>0)?c.value:MQ_YES_VALUE):'')+(rd?' · remind '+mqDayLbl(rd):'')):'Pick how it went'}${more&&o?` <small>then ${more} more</small>`:''}</button>`;
+  const tcb=$('#mqToCb'); if(tcb) tcb.addEventListener('click',()=>{ const id=c.id; mqClose(); m2Open(id); });
   mqWire();
 }
 function mqRenderPick(body, foot){
@@ -5733,11 +5858,12 @@ function meetHtml(c){
     ${c.time?`<div class="mt">${esc(c.time)}</div>`:''}
     <div class="mn">${esc(c.name)}</div>
     ${cval(c)?`<div class="mv">${fmtMoney(cval(c))}</div>`:''}
+    <button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button>
   </div>`;
 }
 function meetMini(c){
   const o=meetOut(c);
-  return `<div class="meet mini${o?' o-'+o:''}" data-id="${c.id}" title="${esc((c.time?c.time+' · ':'')+c.name)}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${esc(c.name)}</span></div>`;
+  return `<div class="meet mini${o?' o-'+o:''}" data-id="${c.id}" title="${esc((c.time?c.time+' · ':'')+c.name)}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${esc(c.name)}</span><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button></div>`;
 }
 function renderCalendar(){
   const body=$('#calBody');
@@ -5785,6 +5911,7 @@ function renderCalendar(){
       (agenda.length? agenda.map(a=>`<div class="mag-day${a.iso===todayIso()?' today':''}"><div class="mag-dh"><b>${DOW[(a.d.getDay()+6)%7]} ${a.d.getDate()}</b><span>${a.items.length} meeting${a.items.length===1?'':'s'}</span></div>${a.items.map(meetHtml).join('')}</div>`).join('') : '<div class="empty-note">No meetings this month yet.</div>')+'</div>';
     body.innerHTML=html;
   }
+  body.querySelectorAll('.m2cb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); m2Open(b.dataset.m2, b); }));
   body.querySelectorAll('.meet').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(c) mqOpen(c.id); }));
   body.querySelectorAll('.day-add').forEach(el=>el.addEventListener('click',()=>openModal(null, el.dataset.day)));
   body.querySelectorAll('.mcell').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.meet')) return; openModal(null, el.dataset.day); }));
