@@ -1490,6 +1490,24 @@ body.dark .bk-act button,body.dark .bk-tag{background:var(--surface);}
 /* ---------- Modal ---------- */
 .overlay{position:fixed; inset:0; background:rgba(10,18,34,.5); backdrop-filter:blur(3px); display:none; place-items:center; z-index:100; padding:20px;}
 .overlay.open{display:grid;}
+/* «In the bank» → who paid, how much, when (12 Oct 2026) */
+#statEarnedPill{cursor:pointer;}
+@media (hover:hover){#statEarnedPill:hover{transform:translateY(-1px); box-shadow:0 12px 26px rgba(16,20,31,.42);}}
+.bank-modal{width:min(560px,100%); max-height:86vh; display:flex; flex-direction:column;}
+.bank-body{overflow:auto; padding:4px 22px 20px;}
+.bank-tot{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 14px;}
+.bank-tot span{font-size:12.5px; font-weight:600; padding:5px 10px; border-radius:999px; background:#EEF2F7; color:#1B2A44;}
+.bank-tot span b{font-weight:800;}
+.bank-tot .t-new{background:#E3F6EC; color:#0F6B43;} .bank-tot .t-ren{background:#E6EEFB; color:#1D4ED8;} .bank-tot .t-sub{background:#F3ECFB; color:#6D28D9;}
+.bank-h{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#6B7488; font-weight:700; margin:16px 0 6px; display:flex; justify-content:space-between;}
+.bank-row{display:grid; grid-template-columns:1fr auto; gap:2px 12px; align-items:center; padding:10px 12px; border-radius:12px; border:1px solid #E7EBF2; margin-bottom:6px; background:#fff; cursor:pointer; width:100%; text-align:left; font:inherit; color:inherit;}
+@media (hover:hover){.bank-row:hover{border-color:#B9C6DA; background:#F8FAFD;}}
+.bank-row .n{font-weight:700; font-size:14.5px; color:#10141F; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.bank-row .a{font-weight:800; font-size:15px; color:#0F6B43; text-align:right; white-space:nowrap;}
+.bank-row .d{font-size:12.5px; color:#6B7488; grid-column:1/-1;}
+.bank-row .d i{font-style:normal; background:#F1F3F7; border-radius:6px; padding:1px 6px; margin-left:6px; color:#3B4558;}
+.bank-empty{color:#6B7488; font-size:14px; padding:18px 0;}
+
 /* «Today» — once a day, the first time the CRM opens (23 Sept 2026) */
 .day-modal{max-width:560px; max-height:88vh; display:flex; flex-direction:column;}
 .day-modal .modal-head{padding:22px 24px 4px; align-items:flex-start;}
@@ -3744,6 +3762,12 @@ body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
     <div class="modal-body" id="bkupBody"></div>
   </div>
 </div>
+<div class="overlay" id="bankOverlay">
+  <div class="modal bank-modal" role="dialog" aria-modal="true" aria-labelledby="bankTitle">
+    <div class="modal-head"><div><h3 id="bankTitle">In the bank</h3><small id="bankSub"></small></div><button class="modal-close" id="bankClose" title="Close">✕</button></div>
+    <div class="bank-body" id="bankBody"></div>
+  </div>
+</div>
 <div class="ch-menu" id="chMenu"></div>
 <div class="overlay" id="dayOverlay">
   <div class="modal day-modal" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
@@ -4797,6 +4821,75 @@ $('#statTargetPill').addEventListener('click',()=>editMonthTarget(curMonth));
 $('#statNewPill').addEventListener('click',()=>switchView('remaining'));
 $('#statCountPill').addEventListener('click',()=>switchView('board'));
 $('#statRiskPill').addEventListener('click',()=>switchView('remaining'));
+/* ---------- «In the bank» → who paid, how much and when (Angelo, 12 Oct 2026) ----------
+   Clicking the pill lists, for the month on screen (any month, past or future), every payment
+   that makes up the figure: new websites (each deposit with its date + the rest on the day the
+   card reached «Paid»), renewals (the day «Renewed» was pressed) and monthly subscriptions (the
+   day the month box was ticked — recorded from 12 Oct 2026 on; older ticks show only the month).
+   The rows add up exactly to earnedForMonth(), the same function the pill shows. */
+function bankDate(d){
+  if(!d) return '';
+  const dt = typeof d==='number' ? new Date(d) : new Date(String(d).length<=10 ? d+'T12:00:00' : d);
+  if(isNaN(dt)) return '';
+  return dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+function bankRows(key){
+  const rows=[];
+  state.clients.filter(c=>c.month===key).forEach(c=>{
+    const paid=cpaid(c); if(!(paid>0)) return;
+    const pays=cpays(c).slice().sort((a,b)=>(a.date||'')<(b.date||'')?-1:1);
+    let left=paid;
+    pays.forEach((x,i)=>{
+      const amt=Math.min(left, +x.amount||0); if(!(amt>0)) return; left-=amt;
+      rows.push({kind:'new', id:c.id, name:c.name, amount:amt, when:x.date, sort:x.date||'',
+        note:(x.note|| (pays.length>1?'payment '+(i+1):'payment'))});
+    });
+    if(left>0.004){
+      const when=c.stageAt||c.updated||null;
+      rows.push({kind:'new', id:c.id, name:c.name, amount:left, when, sort:when?isoDate(new Date(when)):key+'-00',
+        note: pays.length? 'rest — paid in full' : 'paid in full'});
+    }
+  });
+  renewalHistory().forEach(({r,h})=>{
+    if((h.at||'').slice(0,7)!==key || !(+h.value>0)) return;
+    rows.push({kind:'ren', name:r.name, amount:+h.value, when:h.at, sort:h.at, note:'renewal'+(h.due?' · was due '+bankDate(h.due):'')});
+  });
+  (state.subs||[]).forEach(s=>{
+    if(!(s.paid && s.paid[key]) || !(+s.value>0)) return;
+    const on=s.paidOn && s.paidOn[key];
+    rows.push({kind:'sub', id:s.id, name:s.name, amount:+s.value, when:on||null, sort:on||key+'-00', note:'monthly'});
+  });
+  return rows.sort((a,b)=>a.sort<b.sort?1:a.sort>b.sort?-1:0);
+}
+function openBank(key){
+  key=key||curMonth;
+  const e=earnedForMonth(key), rows=bankRows(key);
+  $('#bankTitle').textContent='In the bank · '+fmtMonth(key);
+  $('#bankSub').textContent=fmtMoney2(e.total)+' received · '+rows.length+' payment'+(rows.length===1?'':'s');
+  const grp=(kind,label,sum)=>{
+    const rs=rows.filter(x=>x.kind===kind); if(!rs.length) return '';
+    return `<div class="bank-h"><span>${label}</span><span>${fmtMoney2(sum)}</span></div>`+rs.map(x=>
+      `<button type="button" class="bank-row" data-k="${x.kind}" data-id="${esc(x.id||'')}"><span class="n">${esc(x.name||'—')}</span><span class="a">${fmtMoney2(x.amount)}</span><span class="d">${x.when?bankDate(x.when):'date not recorded · '+fmtMonth(key)}<i>${esc(x.note)}</i></span></button>`).join('');
+  };
+  $('#bankBody').innerHTML = rows.length
+    ? `<div class="bank-tot"><span class="t-new">New websites <b>${fmtMoney2(e.new)}</b></span><span class="t-ren">Renewals <b>${fmtMoney2(e.renew)}</b></span><span class="t-sub">Monthly <b>${fmtMoney2(e.subs)}</b></span></div>`
+      + grp('new','New websites',e.new) + grp('ren','Renewals',e.renew) + grp('sub','Monthly subscriptions',e.subs)
+    : `<div class="bank-empty">Nothing received in ${fmtMonth(key)} yet.</div>`;
+  $('#bankOverlay').classList.add('open');
+}
+function closeBank(){ $('#bankOverlay').classList.remove('open'); }
+$('#statEarnedPill').addEventListener('click',()=>openBank(curMonth));
+$('#bankClose').addEventListener('click',closeBank);
+$('#bankOverlay').addEventListener('click',e=>{
+  if(e.target.id==='bankOverlay'){ closeBank(); return; }
+  const r=e.target.closest('.bank-row'); if(!r) return;
+  closeBank();
+  if(r.dataset.k==='new' && r.dataset.id) openModal(r.dataset.id);
+  else if(r.dataset.k==='ren') openRenewalsMonth(curMonth);
+  else { subYear=+curMonth.slice(0,4); switchView('monthly'); }
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#bankOverlay').classList.contains('open')) closeBank(); });
+
 
 /* ---------- board ---------- */
 function dropHandlers(el, stageId){
@@ -7833,7 +7926,7 @@ function renderMonthly(){
       ${cells}<div class="sub-tot">${fmtMoney2(paidCount*(+s.value||0))}</div><button class="item-x" title="Remove">${IC.x}</button>`;
     row.querySelectorAll('.sub-cell').forEach(cell=>cell.addEventListener('click',()=>{
       const k=cell.dataset.k;
-      if(s.paid[k]) delete s.paid[k]; else s.paid[k]=true;
+      if(s.paid[k]){ delete s.paid[k]; if(s.paidOn) delete s.paidOn[k]; } else { s.paid[k]=true; if(!s.paidOn||typeof s.paidOn!=='object') s.paidOn={}; s.paidOn[k]=todayIso(); }
       save(); renderAll();
     }));
     row.querySelector('.sub-price').addEventListener('click',e=>{
