@@ -2506,6 +2506,13 @@ body.dark .ch-sug{background:linear-gradient(135deg,#1E1A33,#15202F); border-col
 .ch-wait.sug{background:var(--violet-soft); color:var(--violet);}
 .ch-wait.never{background:var(--bg); color:var(--muted); border:1px dashed var(--line);}
 .ch-wait.ready{background:var(--green-soft); color:var(--deep); border:1px solid rgba(11,158,92,.25);}
+.ch-wait.mail{background:#FFF4DC; color:#8A5A00; border:1px solid rgba(183,121,31,.3);}
+.ch-mailflag{display:grid; gap:6px; margin:8px 0 0; padding:10px 12px; border-radius:12px; background:#FFF6E2; border:1.5px solid rgba(183,121,31,.28); color:#5C4A12; font-size:12.5px; line-height:1.4; white-space:normal; max-width:620px;}
+.ch-mailflag b{font-size:13px; color:#3D2E05; white-space:normal; overflow:visible; text-overflow:clip;} .ch-mailflag b small{font-weight:600; opacity:.75; margin-left:4px;}
+.ch-mailflag .mf-btns{display:flex; gap:8px; flex-wrap:wrap;}
+.ch-mailflag .mf-btns a,.ch-mailflag .mf-btns button{height:32px; padding:0 12px; border-radius:9px; font-size:12.5px; font-weight:800; display:inline-flex; align-items:center; text-decoration:none; background:#fff; color:#8A5A00; border:1px solid rgba(183,121,31,.35);}
+.ch-mailflag .mf-btns #chMailGot{background:#0B9E5C; color:#fff; border-color:#0B9E5C;}
+.ch-mailflag.got{background:var(--green-soft); border-color:rgba(11,158,92,.25); color:var(--deep);} .ch-mailflag.got b{color:var(--deep);}
 .ch-ready{display:inline-flex; align-items:center; gap:8px; white-space:nowrap; margin:6px 0 0; padding:5px 6px 5px 10px; border-radius:10px; background:var(--green-soft); color:var(--deep); font-size:12px; font-weight:800;}
 .ch-ready small{font-weight:600; opacity:.8;}
 .ch-ready button{height:24px; padding:0 9px; border-radius:7px; background:#fff; color:var(--deep); font-size:11.5px; font-weight:800; border:1px solid rgba(11,158,92,.3);}
@@ -2956,6 +2963,7 @@ body.dark .mn-mail b{color:#10141F;}
 .mq-saln{flex:1; min-width:0; padding:9px 12px; font-size:14px;}
 .mq-msg{width:100%; min-height:330px; resize:vertical; padding:14px 16px; border-radius:14px; border:1.5px solid var(--line); background:var(--bg); color:var(--ink); font:14px/1.55 inherit; font-family:inherit; outline:none; white-space:pre-wrap;}
 .mq-msg:focus{border-color:var(--brand); background:var(--surface);}
+.mq-chatline{margin:8px 2px 0; font-size:12.5px; color:var(--muted); line-height:1.4;}
 @media (max-width:640px){ .mq-msg{min-height:300px; font-size:14px;} }
 .calpop .b-log{color:var(--brand); font-weight:800;}
 @media (max-width:640px){
@@ -5587,11 +5595,13 @@ function mqMsgText(c, e, sal){
   const tags=e.tags||[], ext=e.ext||[];
   const extLine= ext.length ? 'Για '+grList(ext.map(x=>MQ_EXTRA_GR[x]||x))+' που συζητήσαμε, θα σας ενημερώσω '+grMonthWhen(e.extDay)+'.' : '';
   const L=[];
+  const chatUrl=(e.out==='yes')?mqChatLink(c):'';
   if(e.out==='yes' && e.next==='building'){
     L.push(hi+' σας και πάλι '+who+', σας στέλνω σε συνέχεια της επικοινωνίας μας.');
     L.push('Ξεκινάμε ήδη από σήμερα-αύριο να κατασκευάζουμε την ιστοσελίδα σας. Όπως συζητήσαμε και στη συνάντησή μας, από εσάς τα έχουμε όλα όσα χρειαζόμαστε.');
     L.push('Γράφουμε τα κείμενα και στήνουμε όλη τη σελίδα σας, σας στέλνουμε μια ολοκληρωμένη, καλή πρώτη εικόνα σε 5-10 ημέρες και μας λέτε ό,τι αλλαγές θα θέλατε να κάνουμε, ώστε να γίνει ακριβώς όπως την έχετε στο μυαλό σας!');
     L.push('Αν θέλετε, μπορείτε να μας στείλετε και κάποια κατεύθυνση που θα θέλατε να ακολουθήσουμε, αλλιώς μπορείτε να το αφήσετε πάνω μας!');
+    if(chatUrl) L.push('Σας φτιάξαμε και μια προσωπική σελίδα συνομιλίας για την ιστοσελίδα σας, όπου θα βλέπετε σε ποιο στάδιο βρίσκεται και θα μας στέλνετε ό,τι θέλετε:\n'+chatUrl);
     if(extLine) L.push(extLine);
     L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
     L.push('Ευχαριστώ πολύ και χάρηκα!');
@@ -5602,12 +5612,14 @@ function mqMsgText(c, e, sal){
     if(tags.includes('Texts / info')) want.push('όποια κείμενα ή πληροφορίες θέλετε να υπάρχουν');
     if(tags.includes('Directions / ideas')) want.push('όποιες οδηγίες ή ιδέες έχετε για το πώς τη φαντάζεστε');
     if(tags.includes('Own domain')) want.push('το όνομα (domain) που ήδη έχετε');
-    L.push(hi+' σας και πάλι '+who+', σας στέλνω σε συνέχεια της επικοινωνίας μας.');
-    L.push('Ξεκινάμε ήδη από σήμερα-αύριο να κατασκευάζουμε την ιστοσελίδα σας σαν δομή κώδικα.');
+    /* Angelo's own wording (13 Oct 2026): «…σας στέλνω σε συνέχεια της επικοινωνίας μας, / ξεκινάμε ήδη από σήμερα-αύριο…» */
+    L.push(hi+' σας και πάλι '+who+', σας στέλνω σε συνέχεια της επικοινωνίας μας,\n\nξεκινάμε ήδη από σήμερα-αύριο να κατασκευάζουμε την ιστοσελίδα σας σαν δομή κώδικα.');
+    const wantTxt=(want.length===2 && want[0]==='φωτογραφίες σας' && want[1]==='λογότυπο ή κάρτα αν έχετε') ? 'φωτογραφίες σας + λογότυπο ή κάρτα αν έχετε' : grList(want);
     if(tags.includes('doctoranytime profile')) L.push('Τα στοιχεία σας από το doctoranytime τα έχουμε ήδη, οπότε όπως είπαμε και στη συνάντησή μας, από εσάς χρειαζόμαστε μόνο '+grList(want.length?want:['φωτογραφίες σας'])+', αν μπορείτε στο email παρακάτω, για να έχουν καλή ανάλυση:');
-    else L.push('Όπως είπαμε και στη συνάντησή μας, από εσάς χρειαζόμαστε μόνο '+grList(want)+', αν μπορείτε στο email παρακάτω, για να έχουν καλή ανάλυση:');
+    else L.push('Όπως είπαμε και στη συνάντησή μας, από εσάς χρειαζόμαστε μόνο '+wantTxt+', αν μπορείτε στο email παρακάτω, για να έχουν καλή ανάλυση, εδώ:');
     L.push('advonmd@gmail.com');
-    L.push('Ό,τι άλλο θέλετε, εννοείται ότι μπορείτε να μας το στείλετε, από οδηγίες κ.λπ., και να επικοινωνήσουμε ξανά αν θέλετε.');
+    L.push('Ό,τι άλλο θέλετε, εννοείται, μπορείτε να τα στείλετε, από οδηγίες κ.λπ.');
+    if(chatUrl) L.push('Μπορείτε επίσης να μας τα στείλετε από την προσωπική σας σελίδα συνομιλίας, όπου θα βλέπετε και σε ποιο στάδιο βρίσκεται η ιστοσελίδα σας:\n'+chatUrl);
     if(extLine) L.push(extLine);
     L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
     L.push('Ευχαριστώ πολύ και χάρηκα!');
@@ -5630,6 +5642,26 @@ function mqMsgText(c, e, sal){
   } else return '';
   return L.join('\n\n')+'\n\n'+MQ_SIGN;
 }
+/* the client's chat link for the «Yes» message (13 Oct 2026) — the Board creates the chat when the card lands in Need info / Building */
+function mqChatLink(c){ try{ const t=chThreadFor(c); return t&&t.code&&!t.demo ? chLink(t) : ''; }catch(e){ return ''; } }
+/* when Angelo copies / sends the «Yes» message, an EMPTY chat gets its welcome (+ «what we need») so the link opens on something —
+   stored QUIETLY (the server sends no «new message» e-mail: Angelo's own message already carries the link). Only on a server that knows «quiet». */
+async function mqSeedChat(c, e){
+  try{
+    const t=chThreadFor(c); if(!t || t.demo || (t.n||0)>0 || !(Chats.caps||[]).includes('quiet') || mqSeeded.has(t.slug)) return;
+    mqSeeded.add(t.slug);
+    const dat=(e.tags||[]).includes('doctoranytime profile'), building=e.next==='building';
+    const texts=[CH_WELCOME]; if(!building) texts.push(dat?CH_YLIKO_DAT:CH_YLIKO_PLAIN);
+    if(!building && !!t.dat!==dat) await Chats.meta(t.slug,{dat});
+    for(const [i,x] of texts.entries()){
+      const r=await fetch(CHAT_URL+'?t='+encodeURIComponent(t.slug),{method:'POST', headers:{...Chats.hdr(),'Content-Type':'application/json'}, body:JSON.stringify({text:x, quiet:true, cid:'mq'+Date.now().toString(36)+i})});
+      const p=await r.json().catch(()=>({})); if(!r.ok||!p.ok) throw new Error(p.error||'could not send');
+    }
+    Chats.head=null; await Chats.pull(false);
+    toast(c.name+' · the welcome is waiting in their chat (no e-mail sent)', true);
+  }catch(err){ toast('Could not put the welcome in '+c.name+'\'s chat — open it in Chats'); }
+}
+const mqSeeded=new Set();
 function mqLastEntry(c){ const l=(c.mlog||[]); return l.length ? l[l.length-1] : null; }
 function mqOpenMsg(id){
   const c=state.clients.find(x=>x.id===id); if(!c) return;
@@ -5650,22 +5682,35 @@ function mqRenderMsg(body, foot){
       <button type="button" class="mq-chip${mq.sal.t==='κα'?' on':''}" data-salt="κα">κα</button>
       <button type="button" class="mq-chip${mq.sal.t==='κ.'?' on':''}" data-salt="κ.">κ.</button>
       <input id="mqSalN" class="mq-note mq-saln" value="${esc(mq.sal.n)}" placeholder="Surname" autocomplete="off"></div>
-    <textarea id="mqMsg" class="mq-msg" spellcheck="false">${esc(mq.text)}</textarea>`;
+    <textarea id="mqMsg" class="mq-msg" spellcheck="false">${esc(mq.text)}</textarea>${e.out==='yes'?'<div class="mq-chatline" id="mqChatLine"></div>':''}`;
+  const chatLine=()=>{ const el=$('#mqChatLine'); if(!el) return; const u=mqChatLink(c), th=chThreadFor(c);
+    if(u) el.innerHTML='💬 Their chat link is in the message.'+(th&&!(th.n>0)&&(Chats.caps||[]).includes('quiet')?' When you copy it, the welcome + «what we need» go into their chat too — no e-mail from us.':'');
+    else if(mq&&mq.chatWait) el.innerHTML='⏳ Creating their chat — the link is added to the message in a moment…';
+    else el.innerHTML='No chat link yet — the message goes without it (Chats creates one when the card is in Need info).'; };
+  if(e.out==='yes' && !mqChatLink(c) && !mq.chatPoll){
+    mq.chatWait=true; let n=0; const myMq=mq;
+    const iv=setInterval(()=>{ n++;
+      if(mq!==myMq || !$('#mqMsg')){ clearInterval(iv); return; }
+      if(n===3 && typeof chAutoCreate==='function') { try{ chAutoCreate(); }catch(_){} }
+      if(mqChatLink(c) || n>=25){ clearInterval(iv); mq.chatWait=false; if(mqChatLink(c)) regen(); chatLine(); }
+    },1000); mq.chatPoll=iv;
+  }
   const phone=String(c.viber||c.phone||'').replace(/[^\d+]/g,'');
   const vib=phone ? (phone.startsWith('+')?phone:(phone.startsWith('30')?'+'+phone:'+30'+phone)) : '';
   foot.innerHTML=`<div class="mq-foot-l"><button type="button" class="mq-link" id="mqMsgDone">Done</button>${c.email?`<button type="button" class="mq-link" id="mqMsgMail">E-mail it</button>`:''}${vib?`<button type="button" class="mq-link" id="mqMsgViber">Copy + open Viber</button>`:''}</div>
     <button type="button" class="btn btn-brand mq-save" id="mqMsgCopy">Copy message</button>`;
-  const regen=()=>{ const ee=mqLastEntry(c)||{}; if(!mq.edited){ mq.text=mqMsgText(c,ee,mq.sal); $('#mqMsg').value=mq.text; } else { const old=$('#mqMsg').value; $('#mqMsg').value=old.replace(/^(Καλημέρα|Καλησπέρα)( σας)?( και πάλι)? [^,\n]*,/, (m0,a,b,cc)=>a+(b||'')+(cc||'')+' '+(mq.sal.t+' '+mq.sal.n).trim()+','); mq.text=$('#mqMsg').value; } };
+  function regen(){ const ee=mqLastEntry(c)||{}; if(!mq.edited){ mq.text=mqMsgText(c,ee,mq.sal); $('#mqMsg').value=mq.text; } else if(mqChatLink(c) && !$('#mqMsg').value.includes(mqChatLink(c))){ const v=$('#mqMsg').value, at=v.lastIndexOf('Είμαστε στη διάθεσή σας'); const add=(ee.next==='building'?'Σας φτιάξαμε και μια προσωπική σελίδα συνομιλίας για την ιστοσελίδα σας, όπου θα βλέπετε σε ποιο στάδιο βρίσκεται και θα μας στέλνετε ό,τι θέλετε:\n':'Μπορείτε επίσης να μας τα στείλετε από την προσωπική σας σελίδα συνομιλίας, όπου θα βλέπετε και σε ποιο στάδιο βρίσκεται η ιστοσελίδα σας:\n')+mqChatLink(c)+'\n\n'; $('#mqMsg').value=at>=0?v.slice(0,at)+add+v.slice(at):v+'\n\n'+add; mq.text=$('#mqMsg').value; } else { const old=$('#mqMsg').value; $('#mqMsg').value=old.replace(/^(Καλημέρα|Καλησπέρα)( σας)?( και πάλι)? [^,\n]*,/, (m0,a,b,cc)=>a+(b||'')+(cc||'')+' '+(mq.sal.t+' '+mq.sal.n).trim()+','); mq.text=$('#mqMsg').value; } }
+  chatLine();
   const keepSal=()=>{ c.salut={t:mq.sal.t, n:mq.sal.n}; c.updated=Date.now(); save(); };
   body.querySelectorAll('[data-salt]').forEach(b=>b.addEventListener('click',()=>{ mq.sal.t=b.dataset.salt; body.querySelectorAll('[data-salt]').forEach(x=>x.classList.toggle('on',x===b)); regen(); keepSal(); }));
   const sn=$('#mqSalN'); sn.addEventListener('input',()=>{ mq.sal.n=sn.value.trim(); regen(); }); sn.addEventListener('change',keepSal);
   const ta=$('#mqMsg'); ta.addEventListener('input',()=>{ mq.text=ta.value; mq.edited=true; });
-  const copy=()=>{ const t=$('#mqMsg').value; const ok=()=>toast('Copied — paste it to '+c.name);
+  const copy=()=>{ const t=$('#mqMsg').value; const ok=()=>toast('Copied — paste it to '+c.name); if(e.out==='yes' && mqChatLink(c) && t.includes(mqChatLink(c))) mqSeedChat(c,e);
     if(navigator.clipboard && window.isSecureContext!==false) return navigator.clipboard.writeText(t).then(ok).catch(()=>{ ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){} });
     ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){} return Promise.resolve(); };
   $('#mqMsgCopy').addEventListener('click',()=>{ copy(); const b=$('#mqMsgCopy'); b.textContent='Copied ✓'; setTimeout(()=>{ if(b.isConnected) b.textContent='Copy message'; },1600); });
   const v=$('#mqMsgViber'); if(v) v.addEventListener('click',()=>{ copy(); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(vib); },250); });
-  const m=$('#mqMsgMail'); if(m) m.addEventListener('click',()=>{ location.href='mailto:'+encodeURIComponent(c.email)+'?subject='+encodeURIComponent('Η ιστοσελίδα σας — Advon Media')+'&body='+encodeURIComponent($('#mqMsg').value); });
+  const m=$('#mqMsgMail'); if(m) m.addEventListener('click',()=>{ if(e.out==='yes' && mqChatLink(c) && $('#mqMsg').value.includes(mqChatLink(c))) mqSeedChat(c,e); location.href='mailto:'+encodeURIComponent(c.email)+'?subject='+encodeURIComponent('Η ιστοσελίδα σας — Advon Media')+'&body='+encodeURIComponent($('#mqMsg').value); });
   $('#mqMsgDone').addEventListener('click',()=>{ $('#mqOverlay').classList.remove('open'); mq=null; const next=mqPending()[0]; if(next) setTimeout(()=>mqOpen(next.id),350); else mqTick(true); });
 }
 function fuDone(id){
@@ -11141,18 +11186,18 @@ const CHAT_URL=API_BASE+'/api/chat';
 const CH_STAGES=[['yliko','Material'],['draft','First draft'],['changes','Changes'],['live','Live']];
 const chStage=t=>t&&t.stage==='payment'?'changes':(t&&t.stage)||'yliko';
 const CH_STAGE_MSG={draft:1, changes:4, live:5};   /* stage → CH_QUICK index offered after a stage change */
-const CH_READY_EN={build:['✅ Ready to build','pressed «Ξεκινήστε την ιστοσελίδα μου» — build the first draft'],changes:['✏️ Ready for changes','pressed «Έστειλα όλες τις αλλαγές» — do every change, then reply'],live:['🚀 Wants to go live','pressed «Όλα καλά — πάμε live» — the domain is in the message: buy + connect it, then «Domain connected»']};
+const CH_READY_EN={email:['📧 Sent by e-mail','pressed «Τα έστειλα όλα με email» — check advonmd@gmail.com, give the files to Claude, then «✓ Sent to Claude»'],build:['✅ Ready to build','pressed «Ξεκινήστε την ιστοσελίδα μου» — build the first draft'],changes:['✏️ Ready for changes','pressed «Έστειλα όλες τις αλλαγές» — do every change, then reply'],live:['🚀 Wants to go live','pressed «Όλα καλά — πάμε live» — the domain is in the message: buy + connect it, then «Domain connected»']};
 let CH_WELCOME='Καλώς ήρθατε! 👋\n\nΑυτή είναι η προσωπική σας σελίδα επικοινωνίας με την ομάδα μας για την ιστοσελίδα σας: εδώ μας στέλνετε φωτογραφίες, αλλαγές και ερωτήσεις, κι εδώ σας απαντάμε. Κρατήστε τον σύνδεσμο — είναι δικός σας και δεν αλλάζει.\n\n📊 Πάνω-πάνω βλέπετε πάντα σε ποιο στάδιο βρισκόμαστε και τι χρειαζόμαστε από εσάς σε αυτό το στάδιο. Στόχος μας: να χρειάζεται όσο το δυνατόν λιγότερος χρόνος από τη δική σας πλευρά — εμείς φτιάχνουμε, εσείς ελέγχετε.\n\n👉 Σε κάθε στάδιο υπάρχει ένα κουμπί («Ξεκινήστε την ιστοσελίδα μου», «Έστειλα όλες τις αλλαγές», «Πάμε live»). Πατήστε το όταν τελειώσετε — έτσι ξέρουμε ότι μπορούμε να προχωρήσουμε.';
-let CH_YLIKO_DAT='Στάδιο 1 · Υλικό 📷\n\nΤα στοιχεία σας τα αντλούμε από το προφίλ σας στο doctoranytime — δεν χρειάζεται να γράψετε τίποτα.\n\nΧρειαζόμαστε ιδανικά μόνο τις φωτογραφίες σας σε καλή ανάλυση: εσάς, τον χώρο σας και το λογότυπο ή την κάρτα σας, αν υπάρχει. Στείλτε τα εδώ, στη συνομιλία.\n\nΜόλις τις στείλετε, πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️';
-let CH_YLIKO_PLAIN='Στάδιο 1 · Υλικό 📷\n\nΣτείλτε μας εδώ ό,τι έχετε εύκολα — τίποτα δεν είναι υποχρεωτικό και τα κείμενα τα γράφουμε εμείς:\n\n1. Φωτογραφίες: εσείς, ο χώρος σας, το λογότυπο αν υπάρχει\n2. Δυο λόγια για εσάς (και σε bullet points)\n3. Οι υπηρεσίες σας\n4. Τηλέφωνο, διεύθυνση, ωράριο\n\nΈχετε προφίλ online (doctoranytime, Google, Facebook); Στείλτε μας τον σύνδεσμο.\n\nΜετά πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️';
+let CH_YLIKO_DAT='Στάδιο 1 · Υλικό 📷\n\nΤα στοιχεία σας τα αντλούμε από το προφίλ σας στο doctoranytime — δεν χρειάζεται να γράψετε τίποτα.\n\nΧρειαζόμαστε ιδανικά μόνο τις φωτογραφίες σας σε καλή ανάλυση: εσάς, τον χώρο σας και το λογότυπο ή την κάρτα σας, αν υπάρχει. Στείλτε τα εδώ, στη συνομιλία.\n\nΜόλις τις στείλετε, πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️\n\n📧 Τα στείλατε ήδη με email; Πατήστε «Τα έστειλα όλα με email».';
+let CH_YLIKO_PLAIN='Στάδιο 1 · Υλικό 📷\n\nΣτείλτε μας εδώ ό,τι έχετε εύκολα — τίποτα δεν είναι υποχρεωτικό και τα κείμενα τα γράφουμε εμείς:\n\n1. Φωτογραφίες: εσείς, ο χώρος σας, το λογότυπο αν υπάρχει\n2. Δυο λόγια για εσάς (και σε bullet points)\n3. Οι υπηρεσίες σας\n4. Τηλέφωνο, διεύθυνση, ωράριο\n\nΈχετε προφίλ online (doctoranytime, Google, Facebook); Στείλτε μας τον σύνδεσμο.\n\nΜετά πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️\n\n📧 Τα στείλατε ήδη με email; Πατήστε «Τα έστειλα όλα με email».';
 const CH_YLIKO=CH_YLIKO_PLAIN;
 /* the message Angelo sends from the «Domain connected» button (stage → Live); {domain} = the connected domain */
 const CH_DOMAIN_LIVE='Συνδέθηκε και το domain name με την ιστοσελίδα σας, οπότε μπορείτε πλέον να τη βλέπετε εδώ: {domain}\n\nΘα μας βοηθούσε πάρα πολύ αν μπορούσατε να μας αφήσετε μια πολύ σύντομη αξιολόγηση (αν θέλετε και με το επώνυμο-επάγγελμά σας στο τέλος).\n\nΓια την αξιολόγηση μπορείτε να μπείτε εδώ:\n\nhttps://g.co/kgs/wXBAZWP\n\nΚαι αν έχετε άλλους γνωστούς ελεύθερους επαγγελματίες ή ανθρώπους με μικρές επιχειρήσεις που μπορεί να ενδιαφέρονταν με τις ίδιες συνθήκες, μπορείτε να τους στείλετε τα στοιχεία μου.\n\nΕυχαριστούμε πολύ για την άψογη συνεργασία 🙏\nΣτη διάθεσή σας για ό,τι χρειαστείτε';
 const CH_QUICK=[
   ['Received','Έλαβα, ευχαριστώ πολύ! Θα το δω και θα σας ενημερώσω μέσα στην ημέρα.'],
-  ['First draft · plain (hosting + domain)','Καλησπέρα σας {name},\n\nεργαστήκαμε με τη δική σας ιστοσελίδα και οι 4 μας, και καταφέραμε μόλις να ολοκληρώσουμε την κατασκευή μιας καλής πρώτης εικόνας της ιστοσελίδας σας. Μπορείτε να τη δείτε εδώ:\n{site}\n\nΑνοίξτε την και από υπολογιστή, να δείτε πώς φαίνεται κι εκεί.\n\n✏️ Αν θέλετε οποιαδήποτε αλλαγή — μικρή ή μεγάλη — γράψτε τη μας εδώ, αριθμημένα (1., 2., 3.), όσο πιο συγκεκριμένα γίνεται: οι αλλαγές είναι απεριόριστες μέχρι τη δημοσίευση. Μόλις τις στείλετε όλες, πατήστε «Έστειλα όλες τις αλλαγές» και τις κάνουμε μέσα σε 24 ώρες. Παραδείγματα: [Οδηγός αλλαγών](#odigos)\n\n🚀 Αν είναι ήδη όπως τη θέλετε, πατήστε «Όλα καλά — πάμε live» και γράψτε μας το domain που θα θέλατε (π.χ. epitheto-epaggelma.gr).\n\nΓια τη μεταφορά (για τη φιλοξενία και το domain name μαζί, για 365 ημέρες που μετράνε από τη μέρα που θα ολοκληρώσουμε), που γίνεται κατά την παράδοση του πρώτου draft: 130€ + 24% ΦΠΑ (31,20€) = 161,20€, με κατάθεση στην Alpha Bank:\nIBAN: GR7301401630163002002013569\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΜόλις γίνει η κατάθεση, αγοράζουμε αμέσως και το domain name που θα μας πείτε.\n\nΕυχαριστούμε πολύ!'],
-  ['First draft · with contact form','Καλησπέρα σας {name},\n\nεργαστήκαμε με τη δική σας ιστοσελίδα και οι 4 μας, και καταφέραμε μόλις να ολοκληρώσουμε την κατασκευή μιας καλής πρώτης εικόνας της ιστοσελίδας σας. Μπορείτε να τη δείτε εδώ:\n{site}\n\nΑνοίξτε την και από υπολογιστή, να δείτε πώς φαίνεται κι εκεί.\n\n✏️ Αν θέλετε οποιαδήποτε αλλαγή — μικρή ή μεγάλη — γράψτε τη μας εδώ, αριθμημένα (1., 2., 3.), όσο πιο συγκεκριμένα γίνεται: οι αλλαγές είναι απεριόριστες μέχρι τη δημοσίευση. Μόλις τις στείλετε όλες, πατήστε «Έστειλα όλες τις αλλαγές» και τις κάνουμε μέσα σε 24 ώρες. Παραδείγματα: [Οδηγός αλλαγών](#odigos)\n\n🚀 Αν είναι ήδη όπως τη θέλετε, πατήστε «Όλα καλά — πάμε live» και γράψτε μας το domain που θα θέλατε (π.χ. epitheto-epaggelma.gr).\n\nΓια τη μεταφορά (για τη φιλοξενία και το domain name μαζί, για 365 ημέρες που μετράνε από τη μέρα που θα ολοκληρώσουμε, συν τη ΦΟΡΜΑ επικοινωνίας που φτιάξαμε και συνδέσαμε με το e-mail σας), που γίνεται κατά την παράδοση του πρώτου draft: 180€ + 24% ΦΠΑ (43,20€) = 223,20€, με κατάθεση στην Alpha Bank:\nIBAN: GR7301401630163002002013569\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΜόλις γίνει η κατάθεση, αγοράζουμε αμέσως και το domain name που θα μας πείτε.\n\nΕυχαριστούμε πολύ!'],
-  ['First draft · with articles section','Καλησπέρα σας {name},\n\nεργαστήκαμε με τη δική σας ιστοσελίδα και οι 4 μας, και καταφέραμε μόλις να ολοκληρώσουμε την κατασκευή μιας καλής πρώτης εικόνας της ιστοσελίδας σας. Μπορείτε να τη δείτε εδώ:\n{site}\n\nΑνοίξτε την και από υπολογιστή, να δείτε πώς φαίνεται κι εκεί.\n\n✏️ Αν θέλετε οποιαδήποτε αλλαγή — μικρή ή μεγάλη — γράψτε τη μας εδώ, αριθμημένα (1., 2., 3.), όσο πιο συγκεκριμένα γίνεται: οι αλλαγές είναι απεριόριστες μέχρι τη δημοσίευση. Μόλις τις στείλετε όλες, πατήστε «Έστειλα όλες τις αλλαγές» και τις κάνουμε μέσα σε 24 ώρες. Παραδείγματα: [Οδηγός αλλαγών](#odigos)\n\n🚀 Αν είναι ήδη όπως τη θέλετε, πατήστε «Όλα καλά — πάμε live» και γράψτε μας το domain που θα θέλατε (π.χ. epitheto-epaggelma.gr).\n\nΓια τη μεταφορά (για τη φιλοξενία και το domain name μαζί, για 365 ημέρες που μετράνε από τη μέρα που θα ολοκληρώσουμε, συν τη σύνδεση με την ενότητα άρθρων που θα ελέγχετε εσείς), που γίνεται κατά την παράδοση του πρώτου draft: 200€ + 24% ΦΠΑ (48,00€) = 248,00€, με κατάθεση στην Alpha Bank:\nIBAN: GR7301401630163002002013569\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΓια τα άρθρα θα σας εξηγήσουμε στο τέλος πώς θα τα γράφετε εσείς — είναι πολύ εύκολο από τη δική σας πλευρά.\n\nΜόλις γίνει η κατάθεση, αγοράζουμε αμέσως και το domain name που θα μας πείτε.\n\nΕυχαριστούμε πολύ!'],
+  ['First draft · plain (hosting + domain)',"{hi} σας {sal},\n\nεργαστήκαμε με τη δική σας ιστοσελίδα και οι 4 μας, και καταφέραμε μόλις να ολοκληρώσουμε την κατασκευή μιας καλής πρώτης εικόνας της ιστοσελίδας σας και μπορείτε να τη δείτε εδώ:\n{site}\n\nΜπορείτε επίσης να την ανοίξετε και από υπολογιστή να δείτε πώς φαίνεται και εκεί.\n\nΠείτε μας εννοείται για τυχόν αλλαγές που θα θέλατε να κάνουμε, ώστε να προχωρήσουμε σιγά σιγά να την ανεβάσουμε και πείτε μας ποιο domain name θέλετε να σας αγοράσουμε για να το συνδέσουμε στην ιστοσελίδα σας όταν ολοκληρώσουμε. (domain name πχ www.{domain_ex})\n\nΓια τη μεταφορά που γίνεται κατά την παράδοση του πρώτου draft: 130€ + 24% ΦΠΑ (31,20€) = 161,20€, με κατάθεση στην Alpha Bank:\nIBAN: GR7301401630163002002013569. Για το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΕυχαριστούμε πολύ!"],
+  ['First draft · with contact form',"{hi} σας {sal},\n\nεργαστήκαμε με τη δική σας ιστοσελίδα και οι 4 μας, και καταφέραμε μόλις να ολοκληρώσουμε την κατασκευή μιας καλής πρώτης εικόνας της ιστοσελίδας σας και μπορείτε να τη δείτε εδώ:\n{site}\n\nΜπορείτε επίσης να την ανοίξετε και από υπολογιστή να δείτε πώς φαίνεται και εκεί.\n\nΠείτε μας εννοείται για τυχόν αλλαγές που θα θέλατε να κάνουμε, ώστε να προχωρήσουμε σιγά σιγά να την ανεβάσουμε και πείτε μας ποιο domain name θέλετε να σας αγοράσουμε για να το συνδέσουμε στην ιστοσελίδα σας όταν ολοκληρώσουμε. (domain name πχ www.{domain_ex})\n\nΓια τη μεταφορά (συν τη ΦΟΡΜΑ επικοινωνίας που φτιάξαμε και συνδέσαμε με το e-mail σας) που γίνεται κατά την παράδοση του πρώτου draft: 180€ + 24% ΦΠΑ (43,20€) = 223,20€, με κατάθεση στην Alpha Bank:\nIBAN: GR7301401630163002002013569. Για το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΕυχαριστούμε πολύ!"],
+  ['First draft · with articles section',"{hi} σας {sal},\n\nεργαστήκαμε με τη δική σας ιστοσελίδα και οι 4 μας, και καταφέραμε μόλις να ολοκληρώσουμε την κατασκευή μιας καλής πρώτης εικόνας της ιστοσελίδας σας και μπορείτε να τη δείτε εδώ:\n{site}\n\nΜπορείτε επίσης να την ανοίξετε και από υπολογιστή να δείτε πώς φαίνεται και εκεί.\n\nΠείτε μας εννοείται για τυχόν αλλαγές που θα θέλατε να κάνουμε, ώστε να προχωρήσουμε σιγά σιγά να την ανεβάσουμε και πείτε μας ποιο domain name θέλετε να σας αγοράσουμε για να το συνδέσουμε στην ιστοσελίδα σας όταν ολοκληρώσουμε. (domain name πχ www.{domain_ex})\n\nΓια τη μεταφορά (συν τη σύνδεση με την ενότητα άρθρων που θα ελέγχετε εσείς) που γίνεται κατά την παράδοση του πρώτου draft: 200€ + 24% ΦΠΑ (48,00€) = 248,00€, με κατάθεση στην Alpha Bank:\nIBAN: GR7301401630163002002013569. Για το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΓια τα άρθρα θα σας εξηγήσουμε στο τέλος πώς θα τα γράφετε εσείς — είναι πολύ εύκολο από τη δική σας πλευρά.\n\nΕυχαριστούμε πολύ!"],
   ['Changes done · check + two buttons','Καλησπέρα σας {name},\n\nοι αλλαγές σας έγιναν:\n1. \n2. \n\nΔείτε τα εδώ: {site}\n(Αν δεν φαίνονται αμέσως, κάντε ανανέωση της σελίδας.)\n\nΕλέγξτε, παρακαλώ, όλη την ιστοσελίδα μια φορά — από την αρχή μέχρι το τέλος, και από κινητό — και μετά πατήστε ένα από τα δύο κουμπιά:\n\n✏️ Έχω κι άλλες αλλαγές → γράψτε τις εδώ και πατήστε «Έστειλα όλες τις αλλαγές».\n\n🚀 Όλα καλά → πατήστε «Όλα καλά — πάμε live» και γράψτε μας το domain που θα θέλατε (π.χ. epitheto-epaggelma.gr). Το ελέγχουμε, το αγοράζουμε και η ιστοσελίδα σας είναι online σε 1–2 ημέρες.'],
   ['Domain connected · review ask',CH_DOMAIN_LIVE],
   ['Ask for the domain','Τέλεια, χαίρομαι που σας αρέσει! Για να τη δημοσιεύσουμε χρειαζόμαστε το όνομα της σελίδας (domain). Προτείνουμε κάτι απλό και επαγγελματικό, όπως epitheto-epaggelma.gr ή onoma-epitheto.gr — ή ό,τι άλλο θέλετε. Στείλτε μου το όνομα που θέλετε και ελέγχω αμέσως ότι είναι διαθέσιμο.'],
@@ -11184,7 +11229,7 @@ const Chats={ list:[], head:null, cur:null, msgs:[], thread:null, thead:null, ca
       if(!res.ok || !p.ok){ this.state='error'; this.err=(p&&p.error)||('the server answered '+res.status); }
       else if(!p.same){
         const before=new Map(this.list.map(t=>[t.slug,t.unreadAdmin||0]));
-        this.list=Array.isArray(p.threads)?p.threads:[]; this.head=p.head; this.notify=p.notify||null; this.online=p.onlineSlugs||[]; this.state='ok'; this.err=''; this.lastAt=Date.now();
+        this.list=Array.isArray(p.threads)?p.threads:[]; this.head=p.head; this.notify=p.notify||null; this.caps=Array.isArray(p.caps)?p.caps:(this.caps||[]); this.online=p.onlineSlugs||[]; this.state='ok'; this.err=''; this.lastAt=Date.now();
         const fresh=this.list.filter(t=>(t.unreadAdmin||0)>(before.get(t.slug)||0) && before.size);
         if(fresh.length && typeof Reminders!=='undefined' && Date.now()-Reminders.lastAt>20000) setTimeout(()=>Reminders.pull(false),4000);
         if(fresh.length){ toast('💬 '+fresh.map(t=>t.name).join(', ')+' wrote to you', true); if(this.cur && fresh.some(t=>t.slug===this.cur)) this.pullThread(true); }
@@ -11309,7 +11354,7 @@ const Chats={ list:[], head:null, cur:null, msgs:[], thread:null, thead:null, ca
     }catch(e){ if(m&&keep){ m.deleted=false; m.text=keep.text; m.files=keep.files; renderChats(); } toast('Could not delete'); }
   },
   async meta(slug, data){
-    if(window.DEMO_CHATS){ const t=this.list.find(x=>x.slug===slug); if(t){ const st=t.stage; Object.assign(t,data); delete t.unread; if(data.pin && typeof t.ord!=='number') t.ord=this.list.filter(x=>x.pin).length; if(data.pin===false) delete t.ord; if(data.suggest===null) delete t.suggest; if(data.ready===null || (data.stage && data.stage!==st)) delete t.ready; } renderChats(); return {ok:true, thread:t, link:'https://advonmedia.com/c/'+(t&&t.code)}; }
+    if(window.DEMO_CHATS){ const t=this.list.find(x=>x.slug===slug); if(t){ const st=t.stage; Object.assign(t,data); delete t.unread; if(data.pin && typeof t.ord!=='number') t.ord=this.list.filter(x=>x.pin).length; if(data.pin===false) delete t.ord; if(data.suggest===null) delete t.suggest; if('readyGot' in data){ if(t.ready){ if(data.readyGot) t.ready.got=new Date().toISOString(); else delete t.ready.got; } delete t.readyGot; } if(data.ready===null || (data.stage && data.stage!==st)) delete t.ready; } renderChats(); return {ok:true, thread:t, link:'https://advonmedia.com/c/'+(t&&t.code)}; }
     const r=await fetch(CHAT_URL+'?t='+encodeURIComponent(slug)+'&meta=1',{method:'POST', headers:{...this.hdr(),'Content-Type':'application/json'}, body:JSON.stringify(data)});
     const p=await r.json().catch(()=>({})); if(!r.ok||!p.ok) throw new Error(p.error||'could not save');
     const i=this.list.findIndex(t=>t.slug===slug); if(i>=0) this.list[i]=p.thread; if(this.cur===slug) this.thread=p.thread; this.head=null; renderChats(); if('stage' in data){ try{ chSyncBoard(); }catch(e){} } return p;
@@ -11430,6 +11475,14 @@ function chSyncBoard(){
 const chUnread=()=>Chats.list.filter(t=>!t.archived && !t.demo).reduce((n,t)=>n+((t.unreadAdmin||0)>0?1:0),0);
 const chWaiting=()=>Chats.list.filter(t=>!t.archived && !t.demo && t.lastFrom==='client');
 const chLink=t=>'https://advonmedia.com/c/'+t.code;
+/* «📧 Τα έστειλα όλα με email» (13 Oct 2026): the material is in advonmd@gmail.com, which Claude cannot read. Angelo checks it,
+   gives the files to Claude, taps «✓ Sent to Claude» — until then the server reminds HIM once a day (never the client). */
+const chGmail=t=>'https://mail.google.com/mail/?authuser=advonmd@gmail.com#search/'+encodeURIComponent(t.email?'from:'+t.email:'"'+String(t.name||'').trim()+'"');
+function chMailFlagHtml(t){
+  const r=t.ready||{};
+  if(r.got) return `<div class="ch-mailflag got"><b>📧 E-mailed material · with Claude since ${esc(chWhen(r.got))}</b><span>The first draft is on its way. Reminders are off.</span><div class="mf-btns"><button id="chMailUndo" type="button">Not yet — remind me</button><button id="chReadyDone" type="button" title="Take the flag off">done ✓</button></div></div>`;
+  return `<div class="ch-mailflag"><b>📧 Material sent by e-mail <small>${esc(chWhen(r.at))}</small></b><span>It is in advonmd@gmail.com. 1. Open Gmail and find it · 2. Give the files to Claude («build ${esc(t.name)}») · 3. Tap «Sent to Claude». Until then you get a reminder every day — the client gets none.</span><div class="mf-btns"><a href="${esc(chGmail(t))}" target="_blank" rel="noopener">Open Gmail ↗</a><button id="chMailGot" type="button">✓ Sent to Claude</button></div></div>`;
+}
 const chSite=t=>t&&t.site?(/^https?:/.test(t.site)?t.site:'https://'+t.site):'';
 const CH_COLORS=['#2F7FE0','#7C5CFC','#0EC673','#FF8A00','#F45B9A','#35C7E9','#FF6B57','#B8860B'];
 function chColor(name){ let h=0; for(const ch of String(name||'')) h=(h*31+ch.charCodeAt(0))>>>0; return CH_COLORS[h%CH_COLORS.length]; }
@@ -11437,7 +11490,26 @@ function chInitials(name){ const p=String(name||'?').trim().split(/\s+/); return
 const chIsImg=n=>/\.(jpe?g|png|webp|gif|bmp)$/i.test(String(n||''));
 const chKind=n=>{ const e=(String(n).split('.').pop()||'').toLowerCase(); return e==='pdf'?'pdf':/^docx?$|^rtf$|^txt$/.test(e)?'doc':/^xlsx?$|^csv$/.test(e)?'xls':/^zip$/.test(e)?'zip':''; };
 const chKb=n=>n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
-const chFill=(txt,t)=>String(txt).replace(/\{site\}/g, (t&&t.site)?chSite(t):'…').replace(/\{domain\}/g, (t&&t.site)?String(t.site).replace(/^https?:\/\//,'').replace(/\/$/,''):'…').replace(/\{name\}/g, (t&&t.name)?String(t.name).split(' ')[0]:'');
+/* {hi} Καλημέρα/Καλησπέρα · {sal} «κα Παπαλυμπέρη» / «κ. Κοσμίδη» (surname, like the post-meeting message) · {domain_ex} «kosmidis-psychologos.gr» (13 Oct 2026) */
+function chSalFor(t){ try{ const c=chClientFor(t); const sl=mqGuessSal(c||{name:t&&t.name}); return (sl.t+' '+sl.n).trim(); }catch(e){ return ''; } }
+const CH_PROF=[[/ορθοδοντ|orthodont/,'orthodontikos'],[/παιδοδοντ/,'paidodontiatros'],[/οδοντ|dentist|dental/,'odontiatros'],[/παιδοψυχ/,'paidopsychologos'],[/ψυχιατρ|psychiatr/,'psychiatros'],[/ψυχολογ|psycholog/,'psychologos'],[/ψυχοθεραπ|psychotherap/,'psychotherapeia'],[/παιδιατρ|paediatr|pediatr/,'paidiatros'],[/παθολογ/,'pathologos'],[/καρδιολογ|cardio/,'kardiologos'],[/γυναικολογ|μαιευτηρ/,'gynaikologos'],[/δερματολογ|dermato/,'dermatologos'],[/οφθαλμ|ophthalm/,'ofthalmiatros'],[/ωρλ|ωτορινο/,'orl'],[/ουρολογ|urolog/,'ourologos'],[/ορθοπαιδ|orthopa/,'orthopaidikos'],[/χειρουργ|surgeon/,'cheirourgos'],[/νευρολογ|neurolog/,'neurologos'],[/ενδοκρινολογ/,'endokrinologos'],[/γαστρεντερολογ/,'gastrenterologos'],[/πνευμονολογ/,'pnevmonologos'],[/αλλεργιολογ/,'allergiologos'],[/διαιτολογ|διατροφολογ|dietit|nutrition/,'diaitologos'],[/φυσικοθεραπ|physio/,'fysikotherapeia'],[/λογοθεραπ/,'logotherapeia'],[/εργοθεραπ/,'ergotherapeia'],[/μαια\b/,'maia'],[/κτηνιατρ|vet\b/,'ktiniatros'],[/δικηγορ|lawyer/,'dikigoros'],[/συμβολαιογραφ/,'symvolaiografos'],[/λογιστ|accountant/,'logistis'],[/αρχιτεκτ|architect/,'architektonas'],[/κομμωτ|hair/,'kommotirio'],[/αισθητικ/,'aisthitiki']];
+const chPlain=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function chTranslit(w){
+  let x=chPlain(w).replace(/ς/g,'σ');
+  if(!/[α-ω]/.test(x)) return x.replace(/[^a-z0-9]+/g,'');
+  x=x.replace(/([αε])υ(?=[θκξπστφχψ]|$)/g,(m,v)=>(v==='α'?'a':'e')+'f').replace(/([αε])υ/g,(m,v)=>(v==='α'?'a':'e')+'v');
+  [['ου','ou'],['αι','ai'],['ει','ei'],['οι','oi'],['μπ','mp'],['ντ','nt'],['γκ','gk'],['γγ','ng'],['τσ','ts'],['τζ','tz']].forEach(([a,b])=>{ x=x.split(a).join(b); });
+  const M={α:'a',β:'v',γ:'g',δ:'d',ε:'e',ζ:'z',η:'i',θ:'th',ι:'i',κ:'k',λ:'l',μ:'m',ν:'n',ξ:'x',ο:'o',π:'p',ρ:'r',σ:'s',τ:'t',υ:'y',φ:'f',χ:'ch',ψ:'ps',ω:'o'};
+  return x.split('').map(ch=>M[ch]??ch).join('').replace(/[^a-z0-9]+/g,'');
+}
+function chProfFor(c,t){
+  const lead=c&&Array.isArray(state.leads)?(state.leads.find(l=>l&&l.clientId===c.id)||(()=>{ const p=String(c.phone||'').replace(/\D/g,'').slice(-9); return p.length===9?state.leads.find(l=>l&&String(l.phone||'').replace(/\D/g,'').slice(-9)===p):null; })()):null;
+  const src=[c&&c.name, lead&&lead.spec, t&&t.name, c&&c.notes].map(chPlain);
+  for(const x of src){ if(!x) continue; const hit=CH_PROF.find(([re])=>re.test(x)); if(hit) return hit[1]; }
+  return '';
+}
+function chDomainEx(t){ try{ const c=chClientFor(t); const sur=chTranslit(mqSurname((c&&c.name)||(t&&t.name)||'').n); const prof=chProfFor(c,t); return (sur||'eponymo')+'-'+(prof||'epaggelma')+'.gr'; }catch(e){ return 'eponymo-epaggelma.gr'; } }
+const chFill=(txt,t)=>String(txt).replace(/\{hi\}/g, new Date().getHours()<12?'Καλημέρα':'Καλησπέρα').replace(/\{sal\}/g, ()=>chSalFor(t)).replace(/\{domain_ex\}/g, ()=>chDomainEx(t)).replace(/\{site\}/g, (t&&t.site)?chSite(t):((t&&t.draft)||cDraftUrl(chClientFor(t))||'…')).replace(/\{domain\}/g, (t&&t.site)?String(t.site).replace(/^https?:\/\//,'').replace(/\/$/,''):'…').replace(/\{name\}/g, (t&&t.name)?String(t.name).split(' ')[0]:'');
 /* the domain the client asked for in their «πάμε live» message (first numbered line), if any */
 function chDomainAsked(msgs){ for(const m of (msgs||[]).slice().reverse()){ if(m.from!=='client'||m.deleted) continue; const x=(m.text||'').match(/(?:^|\n)\s*1\.\s*([a-z0-9][a-z0-9.-]*\.[a-z]{2,})/i)||(m.text||'').match(/Domain[^:\n]*:\s*([a-z0-9][a-z0-9.-]*\.[a-z]{2,})/i); if(x) return x[1].toLowerCase(); } return ''; }
 const chLinkify=t=>{
@@ -11471,6 +11543,7 @@ function chWaitChip(t){
   if(t.archived) return '';
   if(t.suggest && t.suggest.text) return '<span class="ch-wait sug" title="Claude prepared a reply — open the chat to send it">reply ready</span>';
   if(t.ready && t.ready.manual) return '<span class="ch-wait" title="Being built — the Board put the card in Building">building</span>';
+  if(t.ready && t.ready.kind==='email') return t.ready.got ? '<span class="ch-wait ready" title="You gave the e-mailed material to Claude — the first draft is coming">with Claude</span>' : '<span class="ch-wait mail" title="They e-mailed their material to advonmd@gmail.com — check it and give it to Claude">📧 check e-mail</span>';
   if(t.ready && CH_READY_EN[t.ready.kind]) return '<span class="ch-wait ready" title="'+esc(CH_READY_EN[t.ready.kind][1])+'">'+esc(CH_READY_EN[t.ready.kind][0].replace(/^\S+\s/,''))+'</span>';
   if(t.lastFrom!=='client' && !t.clientSeenAt && t.n && (Date.now()-Date.parse(t.createdAt||t.lastAt))/36e5>=20) return '<span class="ch-wait never" title="The client has never opened the link — send it again on Viber">link not opened</span>';
   if(t.lastFrom==='client'){ const h=(Date.now()-Date.parse(t.lastAt))/36e5; const lbl=h<1?'waiting '+Math.max(1,Math.round(h*60))+' min':h<48?'waiting '+Math.round(h)+' h':'waiting '+Math.round(h/24)+' d'; return `<span class="ch-wait${h>24?' late':''}">${lbl}</span>`; }
@@ -11552,7 +11625,7 @@ function renderChatThread(keep){
   const client=chClientFor(t);
   head.innerHTML=`<button class="ch-back" id="chBack" title="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
     <div class="ch-av${Chats.online.includes(t.slug)?' online':''}" style="background:${chColor(t.name)}">${esc(chInitials(t.name))}<i></i></div>
-    <div class="info"><b>${esc(t.name)}${t.archived?' <span class="ch-stage">archived</span>':''}${t.demo?'<span class="ch-demo" title="Sandbox: answers by itself, no alerts, invisible to the agent">🧪 demo</span>':''}</b><small>${t.phone?`<a href="tel:${esc(t.phone)}">${esc(t.phone)}</a>`:''}${t.email?`<a href="mailto:${esc(t.email)}">${esc(t.email)}</a>`:''}${t.site?`<a href="${esc(chSite(t))}" target="_blank" rel="noopener">${esc(t.site.replace(/^https?:\/\//,''))} ↗</a>`:''}${Chats.online.includes(t.slug)?'<span style="color:var(--deep)">● online now</span>':''}${!t.email&&!t.archived&&!t.demo?'<button class="ch-nomail" id="chNoMail" title="Without an e-mail the client is never told that you answered, and gets no reminders. They are asked for it on their page — or add it here.">⚠ no e-mail · no alerts</button>':''}${!t.clientSeenAt&&t.n&&!t.archived?'<span style="color:var(--muted)">link not opened yet</span>':''}</small>${t.ready&&CH_READY_EN[t.ready.kind]?`<div class="ch-ready" title="${esc(t.ready.manual?'The Board put this card in Building — the client page says «we got it, the draft is coming»; the agent will not build it':CH_READY_EN[t.ready.kind][1])}">${esc(t.ready.manual?'🔧 Building (from the Board)':CH_READY_EN[t.ready.kind][0])}<small>${esc(chWhen(t.ready.at))}</small><button id="chReadyDone" title="The work is done — take the flag off (it also goes off by itself when the stage moves on)">done ✓</button></div>`:''}</div>
+    <div class="info"><b>${esc(t.name)}${t.archived?' <span class="ch-stage">archived</span>':''}${t.demo?'<span class="ch-demo" title="Sandbox: answers by itself, no alerts, invisible to the agent">🧪 demo</span>':''}</b><small>${t.phone?`<a href="tel:${esc(t.phone)}">${esc(t.phone)}</a>`:''}${t.email?`<a href="mailto:${esc(t.email)}">${esc(t.email)}</a>`:''}${t.site?`<a href="${esc(chSite(t))}" target="_blank" rel="noopener">${esc(t.site.replace(/^https?:\/\//,''))} ↗</a>`:''}${Chats.online.includes(t.slug)?'<span style="color:var(--deep)">● online now</span>':''}${!t.email&&!t.archived&&!t.demo?'<button class="ch-nomail" id="chNoMail" title="Without an e-mail the client is never told that you answered, and gets no reminders. They are asked for it on their page — or add it here.">⚠ no e-mail · no alerts</button>':''}${!t.clientSeenAt&&t.n&&!t.archived?'<span style="color:var(--muted)">link not opened yet</span>':''}</small>${t.ready&&t.ready.kind==='email'?chMailFlagHtml(t):t.ready&&CH_READY_EN[t.ready.kind]?`<div class="ch-ready" title="${esc(t.ready.manual?'The Board put this card in Building — the client page says «we got it, the draft is coming»; the agent will not build it':CH_READY_EN[t.ready.kind][1])}">${esc(t.ready.manual?'🔧 Building (from the Board)':CH_READY_EN[t.ready.kind][0])}<small>${esc(chWhen(t.ready.at))}</small><button id="chReadyDone" title="The work is done — take the flag off (it also goes off by itself when the stage moves on)">done ✓</button></div>`:''}</div>
     <div class="acts">
       ${t.demo?`<select class="ch-demosel" id="chDemoReset" title="Wipe this test chat and start it again at a stage — the client page shows that stage's intro and answers at once"><option value="">↺ Restart at…</option><option value="yliko">Υλικό</option><option value="yliko-dat">Υλικό · doctoranytime</option><option value="draft">Πρώτο draft</option><option value="changes">Αλλαγές</option><option value="live">Live</option></select>`:''}
       <select id="chStage" title="Where this client is — the client sees it as a progress bar">${CH_STAGES.map(s=>`<option value="${s[0]}"${chStage(t)===s[0]?' selected':''}>${s[1]}</option>`).join('')}</select>
@@ -11578,6 +11651,8 @@ function renderChatThread(keep){
   { const d=$('#chDat'); if(d) d.addEventListener('click',async()=>{ try{ await Chats.meta(t.slug,{dat:!t.dat}); toast(!t.dat?'doctoranytime profile — the client page now asks only for photos':'doctoranytime off — the page asks for the basics again'); }catch(e){ toast('Could not save'); } }); }
   { const f=$('#chForm'); if(f) f.addEventListener('click',async()=>{ try{ await Chats.meta(t.slug,{form:!t.form}); toast(!t.form?'Contact form ticked — the client page stops offering it':'Contact form off — the page offers it again (50€)'); }catch(e){ toast('Could not save'); } }); }
   { const r=$('#chReadyDone'); if(r) r.addEventListener('click',async()=>{ try{ await Chats.meta(t.slug,{ready:null}); toast('Flag removed'); }catch(e){ toast('Could not save'); } }); }
+  { const g=$('#chMailGot'); if(g) g.addEventListener('click',async()=>{ g.disabled=true; try{ await Chats.meta(t.slug,{readyGot:true}); toast(t.name+' · marked «sent to Claude» — the reminders stop', true); }catch(e){ g.disabled=false; toast('Could not save'); } }); }
+  { const u=$('#chMailUndo'); if(u) u.addEventListener('click',async()=>{ try{ await Chats.meta(t.slug,{readyGot:false}); toast('Back to «waiting in your e-mail»'); }catch(e){ toast('Could not save'); } }); }
   { const lv=$('#chLive'); if(lv) lv.addEventListener('click',()=>chDomainConnected(t)); }
   { const dr=$('#chDemoReset'); if(dr) dr.addEventListener('change',async e=>{ const v=e.target.value; if(!v) return; e.target.value=''; const st=v==='yliko-dat'?'yliko':v; if(!confirm('Restart the test chat at «'+((CH_STAGES.find(s=>s[0]===st)||['',st])[1])+'»? Everything in it is wiped and the stage\'s intro is sent again.')) return; try{ await Chats.reset(t.slug,{stage:st, dat:v==='yliko-dat'}); toast('Test chat restarted — open the client link to play'); }catch(err){ toast(err.message||'Could not restart'); } }); }
   $('#chCopy').addEventListener('click',()=>chShowLink(t));
