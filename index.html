@@ -5651,7 +5651,7 @@ async function mqSeedChat(c, e){
     const t=chThreadFor(c); if(!t || t.demo || (t.n||0)>0 || !(Chats.caps||[]).includes('quiet') || mqSeeded.has(t.slug)) return;
     mqSeeded.add(t.slug);
     const dat=(e.tags||[]).includes('doctoranytime profile'), building=e.next==='building';
-    const texts=[CH_WELCOME]; if(!building) texts.push(dat?CH_YLIKO_DAT:CH_YLIKO_PLAIN);
+    const texts=[CH_WELCOME]; if(!building) texts.push(chYl(dat?CH_YLIKO_DAT:CH_YLIKO_PLAIN));
     if(!building && !!t.dat!==dat) await Chats.meta(t.slug,{dat});
     for(const [i,x] of texts.entries()){
       const r=await fetch(CHAT_URL+'?t='+encodeURIComponent(t.slug),{method:'POST', headers:{...Chats.hdr(),'Content-Type':'application/json'}, body:JSON.stringify({text:x, quiet:true, cid:'mq'+Date.now().toString(36)+i})});
@@ -11188,9 +11188,11 @@ const chStage=t=>t&&t.stage==='payment'?'changes':(t&&t.stage)||'yliko';
 const CH_STAGE_MSG={draft:1, changes:4, live:5};   /* stage → CH_QUICK index offered after a stage change */
 const CH_READY_EN={email:['📧 Sent by e-mail','pressed «Τα έστειλα όλα με email» — check advonmd@gmail.com, give the files to Claude, then «✓ Sent to Claude»'],build:['✅ Ready to build','pressed «Ξεκινήστε την ιστοσελίδα μου» — build the first draft'],changes:['✏️ Ready for changes','pressed «Έστειλα όλες τις αλλαγές» — do every change, then reply'],live:['🚀 Wants to go live','pressed «Όλα καλά — πάμε live» — the domain is in the message: buy + connect it, then «Domain connected»']};
 let CH_WELCOME='Καλώς ήρθατε! 👋\n\nΑυτή είναι η προσωπική σας σελίδα επικοινωνίας με την ομάδα μας για την ιστοσελίδα σας: εδώ μας στέλνετε φωτογραφίες, αλλαγές και ερωτήσεις, κι εδώ σας απαντάμε. Κρατήστε τον σύνδεσμο — είναι δικός σας και δεν αλλάζει.\n\n📊 Πάνω-πάνω βλέπετε πάντα σε ποιο στάδιο βρισκόμαστε και τι χρειαζόμαστε από εσάς σε αυτό το στάδιο. Στόχος μας: να χρειάζεται όσο το δυνατόν λιγότερος χρόνος από τη δική σας πλευρά — εμείς φτιάχνουμε, εσείς ελέγχετε.\n\n👉 Σε κάθε στάδιο υπάρχει ένα κουμπί («Ξεκινήστε την ιστοσελίδα μου», «Έστειλα όλες τις αλλαγές», «Πάμε live»). Πατήστε το όταν τελειώσετε — έτσι ξέρουμε ότι μπορούμε να προχωρήσουμε.';
-let CH_YLIKO_DAT='Στάδιο 1 · Υλικό 📷\n\nΤα στοιχεία σας τα αντλούμε από το προφίλ σας στο doctoranytime — δεν χρειάζεται να γράψετε τίποτα.\n\nΧρειαζόμαστε ιδανικά μόνο τις φωτογραφίες σας σε καλή ανάλυση: εσάς, τον χώρο σας και το λογότυπο ή την κάρτα σας, αν υπάρχει. Στείλτε τα εδώ, στη συνομιλία.\n\nΜόλις τις στείλετε, πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️\n\n📧 Τα στείλατε ήδη με email; Πατήστε «Τα έστειλα όλα με email».';
-let CH_YLIKO_PLAIN='Στάδιο 1 · Υλικό 📷\n\nΣτείλτε μας εδώ ό,τι έχετε εύκολα — τίποτα δεν είναι υποχρεωτικό και τα κείμενα τα γράφουμε εμείς:\n\n1. Φωτογραφίες: εσείς, ο χώρος σας, το λογότυπο αν υπάρχει\n2. Δυο λόγια για εσάς (και σε bullet points)\n3. Οι υπηρεσίες σας\n4. Τηλέφωνο, διεύθυνση, ωράριο\n\nΈχετε προφίλ online (doctoranytime, Google, Facebook); Στείλτε μας τον σύνδεσμο.\n\nΜετά πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️\n\n📧 Τα στείλατε ήδη με email; Πατήστε «Τα έστειλα όλα με email».';
+let CH_YLIKO_DAT='Στάδιο 1 · Υλικό 📷\n\nΤα στοιχεία σας τα αντλούμε από το προφίλ σας στο doctoranytime — δεν χρειάζεται να γράψετε τίποτα.\n\nΧρειαζόμαστε ιδανικά μόνο τις φωτογραφίες σας σε καλή ανάλυση: εσάς, τον χώρο σας και το λογότυπο ή την κάρτα σας, αν υπάρχει. Στείλτε τα εδώ, στη συνομιλία.\n\nΜόλις τις στείλετε, πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️';
+let CH_YLIKO_PLAIN='Στάδιο 1 · Υλικό 📷\n\nΣτείλτε μας εδώ ό,τι έχετε εύκολα — τίποτα δεν είναι υποχρεωτικό και τα κείμενα τα γράφουμε εμείς:\n\n1. Φωτογραφίες: εσείς, ο χώρος σας, το λογότυπο αν υπάρχει\n2. Δυο λόγια για εσάς (και σε bullet points)\n3. Οι υπηρεσίες σας\n4. Τηλέφωνο, διεύθυνση, ωράριο\n\nΈχετε προφίλ online (doctoranytime, Google, Facebook); Στείλτε μας τον σύνδεσμο.\n\nΜετά πατήστε «Ξεκινήστε την ιστοσελίδα μου» — το πρώτο draft έρχεται σε 4–10 ημέρες. ⏱️';
 const CH_YLIKO=CH_YLIKO_PLAIN;
+/* the Υλικό message mentions the «📧 Τα έστειλα όλα με email» button only once the client page has it (server caps 'email') */
+const chYl=x=>((Chats.caps||[]).includes('email') && !/με email/.test(x)) ? x+'\n\n📧 Τα στείλατε ήδη με email; Πατήστε «Τα έστειλα όλα με email».' : x;
 /* the message Angelo sends from the «Domain connected» button (stage → Live); {domain} = the connected domain */
 const CH_DOMAIN_LIVE='Συνδέθηκε και το domain name με την ιστοσελίδα σας, οπότε μπορείτε πλέον να τη βλέπετε εδώ: {domain}\n\nΘα μας βοηθούσε πάρα πολύ αν μπορούσατε να μας αφήσετε μια πολύ σύντομη αξιολόγηση (αν θέλετε και με το επώνυμο-επάγγελμά σας στο τέλος).\n\nΓια την αξιολόγηση μπορείτε να μπείτε εδώ:\n\nhttps://g.co/kgs/wXBAZWP\n\nΚαι αν έχετε άλλους γνωστούς ελεύθερους επαγγελματίες ή ανθρώπους με μικρές επιχειρήσεις που μπορεί να ενδιαφέρονταν με τις ίδιες συνθήκες, μπορείτε να τους στείλετε τα στοιχεία μου.\n\nΕυχαριστούμε πολύ για την άψογη συνεργασία 🙏\nΣτη διάθεσή σας για ό,τι χρειαστείτε';
 const CH_QUICK=[
@@ -12015,7 +12017,7 @@ function renderHomeReminders(){
 (function remWire(){ const n=$('#remNew'), r=$('#remRefresh'); if(n) n.addEventListener('click',()=>{ Reminders.newOpen=!Reminders.newOpen; renderHomeReminders(); if(Reminders.newOpen) setTimeout(()=>{ const e=$('#rmNewName'); if(e) e.focus(); },40); }); if(r) r.addEventListener('click',()=>Reminders.pull(true)); })();
 /* the first messages of a chat, with one tap: welcome (+ the Υλικό message, plain or doctoranytime) */
 async function chStart(t, kind){
-  const texts=[CH_WELCOME]; if(kind==='plain') texts.push(CH_YLIKO_PLAIN); if(kind==='dat') texts.push(CH_YLIKO_DAT);
+  const texts=[CH_WELCOME]; if(kind==='plain') texts.push(chYl(CH_YLIKO_PLAIN)); if(kind==='dat') texts.push(chYl(CH_YLIKO_DAT));
   document.querySelectorAll('[data-start]').forEach(b=>b.disabled=true);
   try{
     if(kind==='dat'||kind==='plain'){ if(!!t.dat!==(kind==='dat')) await Chats.meta(t.slug,{dat:kind==='dat'}); }
