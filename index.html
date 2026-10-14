@@ -5127,8 +5127,8 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#bankOverlay'
    The month is split into its weeks (Mon–Sun; a stub of fewer than 3 working days joins the week
    next to it, so October 2026 = 4 weeks: 1–11, 12–18, 19–25, 26–31). Each week ends on a checkpoint
    = goal × weeks done ÷ weeks; inside the current week the pace moves with the working days.
-   c.wonAt = when a card first left Booked/Thinking (stamped by goalStampWon; cards that were already
-   past it on 14 Oct 2026 get the day of their «Yes» meeting log, else their meeting day, else created). */
+   c.wonAt = the day the client said yes: their «Yes» meeting log, else the meeting day, else the day the card
+   was made (goalStampWon). It is dropped if the card goes back to Booked/Thinking. */
 const GOAL_PRICE_FALLBACK=130;
 function ensureNewTargets(){ ensureTargets(); if(!state.targets.newMonthly || typeof state.targets.newMonthly!=='object') state.targets.newMonthly={}; }
 function newGoal(key){ ensureNewTargets(); const v=state.targets.newMonthly[key]; return v!=null && v!=='' ? (+v||0) : 0; }
@@ -5143,12 +5143,14 @@ function goalStampWon(){
   ensureMeta(); ensureNewTargets();
   let ch=false;
   if(!state.targets.newSeed){ if(state.targets.newMonthly['2026-10']==null) state.targets.newMonthly['2026-10']=5000; state.targets.newSeed=true; ch=true; }
-  const first=!state.meta.wonInit;
+  /* 14 Oct 2026: the first version stamped «today» on cards that arrived through a sync — put those back on their meeting day */
+  const fixFrom=Date.parse('2026-10-14T00:00:00+03:00'), fixTo=Date.parse('2026-10-14T16:00:00+03:00');
+  if(!state.meta.wonFix1){ state.clients.forEach(c=>{ if(c.wonAt>=fixFrom && c.wonAt<=fixTo){ c.wonAt=goalWonGuess(c); } }); state.meta.wonFix1=1; ch=true; }
   state.clients.forEach(c=>{
-    if(goalWorking(c)){ if(!c.wonAt){ c.wonAt= first ? goalWonGuess(c) : Date.now(); ch=true; } }
+    /* the day of the «Yes» = the «Yes» meeting log, else the meeting day, else the day the card was made */
+    if(goalWorking(c)){ if(!c.wonAt){ c.wonAt=Math.min(Date.now(), goalWonGuess(c)); ch=true; } }
     else if((c.stage==='booked'||c.stage==='thinking') && c.wonAt){ delete c.wonAt; ch=true; }
   });
-  if(first){ state.meta.wonInit=Date.now(); ch=true; }
   return ch;
 }
 /* the weeks of a month: [{from,to,work}] in day numbers */
