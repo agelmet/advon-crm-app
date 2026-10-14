@@ -1185,6 +1185,43 @@ body.dark .exp-row .item-x:hover{background:rgba(255,255,255,.1);}
 .card .c-remind.due, .card .c-remind.none{background:var(--red); color:#fff; border-color:var(--red);}
 .card .c-remind input{position:absolute; inset:0; width:100%; height:100%; opacity:0; border:0; padding:0; cursor:pointer;}
 @media (hover:hover){ .card .c-remind:hover{filter:brightness(.96);} }
+/* Later · Αργότερα (14 Oct 2026) */
+.card .c-remind.later{background:var(--blue-soft); color:#1F5FAE; border-color:color-mix(in srgb, var(--blue) 30%, transparent);}
+.card .c-said{margin:6px 0 2px; font-size:12px; line-height:1.4; font-style:italic; color:var(--muted);
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+.card .c-trow{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:7px;}
+.card .c-trow .c-waiting{margin-top:0;}
+.card .c-latbtn{display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); background:var(--surface);
+  color:var(--ink); font:inherit; font-size:11.5px; font-weight:700; border-radius:7px; padding:3px 9px; cursor:pointer;}
+.card .c-latbtn svg{width:13px; height:13px;}
+@media (hover:hover){ .card .c-latbtn:hover{border-color:var(--blue); color:var(--blue);} }
+.think-tray .think-later{color:#1F5FAE; font-weight:700;}
+.think-tray .later-head{display:none; align-items:center; gap:8px; flex-wrap:wrap; margin:6px 18px 0; padding-top:12px;
+  border-top:1px dashed var(--line); font-size:13px; color:#1F5FAE;}
+.think-tray.open .later-head{display:flex;}
+.think-tray .later-head svg{width:15px; height:15px;}
+.think-tray .later-head .count{background:var(--blue-soft); color:#1F5FAE; border-radius:8px; padding:1px 8px; font-weight:800; font-size:12px;}
+.think-tray .later-head span:last-child{color:var(--muted); font-size:12px;}
+.think-tray .later-body .card{opacity:.93;}
+.later-pop{position:fixed; z-index:9000; background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  box-shadow:var(--shadow-lg); padding:14px; font-size:13px; color:var(--ink);}
+.later-pop .lp-h{display:flex; align-items:center; gap:7px; font-size:14px; color:#1F5FAE;}
+.later-pop .lp-h svg{width:16px; height:16px;}
+.later-pop .lp-x{margin-left:auto; border:0; background:none; font-size:20px; line-height:1; color:var(--muted); cursor:pointer;}
+.later-pop .lp-sub{color:var(--muted); margin:6px 0 10px; line-height:1.4;}
+.later-pop .lp-chips{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.later-pop .lp-chips button,.later-pop .lp-pick{position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:1px;
+  border:1px solid var(--line); background:var(--bg); border-radius:10px; padding:7px 10px; font:inherit; font-weight:700; cursor:pointer; color:var(--ink);}
+.later-pop .lp-chips small{font-weight:600; color:var(--muted); font-size:11px;}
+.later-pop .lp-chips button.on{border-color:var(--blue); background:var(--blue-soft); color:#1F5FAE;}
+.later-pop .lp-pick{grid-column:1 / -1; flex-direction:row; align-items:center; justify-content:center;}
+.later-pop .lp-pick input{position:absolute; inset:0; opacity:0; width:100%; height:100%; border:0; cursor:pointer;}
+.later-pop textarea{width:100%; box-sizing:border-box; margin-top:10px; min-height:62px; resize:vertical; border:1px solid var(--line);
+  border-radius:10px; padding:8px 10px; font:inherit; font-size:12.5px; background:var(--surface); color:var(--ink);}
+.later-pop .lp-f{display:flex; align-items:center; gap:10px; margin-top:10px;}
+.later-pop .lp-day{color:#1F5FAE; font-weight:700;}
+.later-pop .lp-ok{margin-left:auto; border:0; background:var(--blue); color:#fff; font:inherit; font-weight:800; border-radius:9px; padding:8px 16px; cursor:pointer;}
+.later-pop .lp-ok:disabled{opacity:.4; cursor:default;}
 .home-row .hr-days{margin-left:auto; font-size:11px; font-weight:700; font-variant-numeric:tabular-nums;
   background:var(--bg); color:var(--muted); border-radius:7px; padding:2px 8px;}
 .home-row .hr-days.over{background:var(--red-soft); color:var(--red);}
@@ -5062,20 +5099,90 @@ function thinkSeed1014(){
   });
   if(ch) save();
 }
+/* «Later · Αργότερα» (Angelo, 14 Oct 2026 — Πέττα: «θα συνεργαστούμε σίγουρα στο κοντινό μέλλον»):
+   a Thinking card can be parked as LATER = a warm lead who said «not now, later». It keeps the stage
+   'thinking' (so money / Home / brief logic is unchanged), gets c.later {said, at} + a check-back
+   reminder (c.fu), sits in its own quiet group at the bottom of the Thinking tray WHATEVER its month,
+   never counts as «to chase now», and comes back to the top in red on its check-back day (also on
+   Home → After meetings and in the morning brief, through c.fu). */
+const isLater = c => c.stage==='thinking' && !!c.later && !isTrashed(c);
+function laterDue(c){ const d=thinkRemDay(c); return !d || d<=todayIso(); }
+function laterPark(c, day, said){
+  c.later={said:String(said||'').trim(), at:Date.now()};
+  c.fu={day, what:'Ξανά επικοινωνία — είπε «αργότερα»', st:'thinking', out:'think', at:Date.now()};
+  if(c.prio==='high') c.prio='';
+  c.thinkAck=1; c.updated=Date.now(); save(); renderAll();
+  toast(c.name+' → Later · check back '+mqDateLbl(day));
+}
+function laterUnpark(c){
+  const was={later:c.later, fu:c.fu}; delete c.later; c.updated=Date.now(); save(); renderAll();
+  toastUndo(c.name+' → back to Thinking', ()=>{ c.later=was.later; c.fu=was.fu; save(); renderAll(); });
+}
+function laterSheet(c, anchor){
+  document.querySelectorAll('.later-pop').forEach(x=>x.remove());
+  const opts=[['1 month',30],['2 months',61],['3 months',91],['6 months',182]];
+  const d0=thinkRemDay(c);
+  const pop=document.createElement('div'); pop.className='later-pop';
+  pop.innerHTML=`<div class="lp-h">${IC.hourglass||''} <b>Later · Αργότερα</b><button class="lp-x" aria-label="Close">×</button></div>
+    <div class="lp-sub">${esc(c.name)} said «not now, later». When should we contact them again?</div>
+    <div class="lp-chips">${opts.map(([l,n])=>`<button data-n="${n}">${l}<small>${esc(mqDateLbl(mqWeekday(mqIso(n))))}</small></button>`).join('')}
+      <label class="lp-pick">Pick a date<input type="date" value="${(c.later&&d0)||''}"></label></div>
+    <textarea placeholder="What they said (optional) — e.g. «θα συνεργαστούμε μόλις είμαι πιο διαθέσιμη»">${esc((c.later&&c.later.said)||'')}</textarea>
+    <div class="lp-f"><span class="lp-day"></span><button class="lp-ok" disabled>Save</button></div>`;
+  document.body.appendChild(pop);
+  let day=(c.later&&d0)||'';
+  const show=()=>{ pop.querySelector('.lp-day').textContent = day ? 'Check back: '+mqDateLbl(day) : 'Choose when'; pop.querySelector('.lp-ok').disabled=!day;
+    pop.querySelectorAll('.lp-chips button').forEach(b=>b.classList.toggle('on', mqWeekday(mqIso(+b.dataset.n))===day)); };
+  pop.querySelectorAll('.lp-chips button').forEach(b=>b.addEventListener('click',()=>{ day=mqWeekday(mqIso(+b.dataset.n)); show(); }));
+  const di=pop.querySelector('input[type=date]');
+  di.addEventListener('change',()=>{ if(di.value){ day=di.value; show(); } });
+  pop.querySelector('.lp-pick').addEventListener('click',e=>{ if(e.target===di) return; e.preventDefault(); try{ di.showPicker(); }catch(err){ di.focus(); } });
+  const close=()=>{ pop.remove(); document.removeEventListener('pointerdown',outside,true); };
+  const outside=e=>{ if(!pop.contains(e.target)) close(); };
+  setTimeout(()=>document.addEventListener('pointerdown',outside,true),0);
+  pop.querySelector('.lp-x').addEventListener('click',close);
+  pop.querySelector('.lp-ok').addEventListener('click',()=>{ const said=pop.querySelector('textarea').value; close(); laterPark(c, day, said); });
+  /* place it under the button, kept on screen */
+  const r=anchor.getBoundingClientRect(), W=Math.min(340, innerWidth-24);
+  pop.style.width=W+'px';
+  pop.style.left=Math.max(12, Math.min(r.left, innerWidth-W-12))+'px';
+  const h=pop.offsetHeight; let top=r.bottom+6; if(top+h>innerHeight-12) top=Math.max(12, r.top-h-6);
+  pop.style.top=top+'px';
+  show();
+}
+/* one-time: Πέττα said «σίγουρα στο κοντινό μέλλον» → Later, check back Mon 7 Dec (Angelo, 14 Oct 2026) */
+function laterSeed1014(){
+  const nm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  let ch=false;
+  state.clients.forEach(c=>{
+    if(c.seedL1014 || c.stage!=='thinking' || isTrashed(c) || c.later) return;
+    if(/πεττα|petta/.test(nm(c.name))){
+      c.later={said:'σε ευχαριστώ πολύ Άγγελε για τη κατανόηση και την διαθεσιμότητα. Θα συνεργαστούμε σίγουρα στο κοντινό μέλλον μόλις είμαι κ εγώ χρονικά πιο διαθέσιμη κ εσείς φυσικά', at:Date.now()};
+      c.fu={day:'2026-12-07', what:'Ξανά επικοινωνία — είπε «αργότερα»', st:'thinking', out:'think', at:Date.now()};
+      if(c.prio==='high') c.prio=''; c.thinkAck=1; c.seedL1014=1; c.updated=Date.now(); ch=true;
+    }
+  });
+  if(ch) save();
+}
 function renderThinkTray(){
   const st=stageById('thinking');
   try{ thinkSeed1014(); }catch(e){}
+  try{ laterSeed1014(); }catch(e){}
   const t=todayIso();
-  const items=state.clients.filter(c=>c.month===curMonth && c.stage==='thinking' && !isTrashed(c)).sort(thinkSort);
+  const all=state.clients.filter(c=>c.stage==='thinking' && !isTrashed(c));
+  /* active = this month's Thinking + any Later whose check-back day has come; quiet = Later, not yet */
+  const items=all.filter(c=> c.later ? laterDue(c) : c.month===curMonth).sort(thinkSort);
+  const quiet=all.filter(c=> c.later && !laterDue(c)).sort((a,b)=>thinkRemDay(a).localeCompare(thinkRemDay(b)));
   const el=$('#thinkTray'); if(!el) return;
   const noDate=items.filter(c=>!thinkRemDay(c)).length;
   const dueDated=items.filter(c=>{ const d=thinkRemDay(c); return d && d<=t; }).length;
   const chase=noDate+dueDated;
   el.classList.toggle('open', thinkOpen);
   el.classList.toggle('has-due', chase>0);
+  const lat = quiet.length ? ` <span class="think-later">· ${quiet.length} later</span>` : '';
   const sumTxt = chase
-    ? `<b class="think-due">${chase} to chase now${noDate?' · '+noDate+' without a date':''}${dueDated?' · '+dueDated+' date reached':''}</b>`
-    : (items.length?'everyone has a reminder date — drag a card back into the board when they say yes':'');
+    ? `<b class="think-due">${chase} to chase now${noDate?' · '+noDate+' without a date':''}${dueDated?' · '+dueDated+' date reached':''}</b>${lat}`
+    : (items.length?'everyone has a reminder date — drag a card back into the board when they say yes':'')+lat;
   el.innerHTML=`
     <div class="lost-head">
       <span class="ico">${IC.clock||IC.flag}</span>
@@ -5084,20 +5191,24 @@ function renderThinkTray(){
       <span class="lost-sum">${sumTxt}</span>
       <span class="chev">${IC.chevRight}</span>
     </div>
-    <div class="lost-body">${items.length?'':'<div class="lost-empty">Nobody is sitting on a decision this month.</div>'}</div>`;
+    <div class="lost-body">${items.length||quiet.length?'':'<div class="lost-empty">Nobody is sitting on a decision this month.</div>'}</div>
+    ${quiet.length?`<div class="later-head">${IC.hourglass||''} <b>Later · Αργότερα</b> <span class="count">${quiet.length}</span><span>said «not now, later» — they come back to the top, in red, on their check-back day</span></div><div class="lost-body later-body"></div>`:''}`;
   el.querySelector('.lost-head').addEventListener('click',()=>{ thinkOpen=!thinkOpen; renderThinkTray(); });
   const body=el.querySelector('.lost-body');
-  items.forEach(c=>{
+  const build=(c, quietCard)=>{
     const card=cardEl(c,st);
     const rd=thinkRemDay(c);
-    /* the red «remind» pill, first thing under the name */
     const pill=document.createElement('label');
-    pill.className='c-remind'+(rd ? (rd<=t?' due':'') : ' none');
     let txt;
-    if(!rd) txt=`<span class="cr-k">No date</span><b>Chase soon</b><span class="cr-s">· tap to set</span>`;
-    else { const n=Math.round((Date.parse(rd+'T12:00')-Date.parse(t+'T12:00'))/864e5);
+    if(quietCard){
+      pill.className='c-remind later';
+      const n=Math.round((Date.parse(rd+'T12:00')-Date.parse(t+'T12:00'))/864e5);
+      txt=`<span class="cr-k">Later · check back</span><b>${esc(mqDateLbl(rd))}</b><span class="cr-s">· in ${n} days</span>`;
+    } else if(!rd){ pill.className='c-remind none'; txt=`<span class="cr-k">No date</span><b>Chase soon</b><span class="cr-s">· tap to set</span>`; }
+    else { pill.className='c-remind'+(rd<=t?' due':'');
+      const n=Math.round((Date.parse(rd+'T12:00')-Date.parse(t+'T12:00'))/864e5);
       const rel = n<0 ? (-n===1?'1 day late':(-n)+' days late') : n===0 ? 'today' : n===1 ? 'tomorrow' : 'in '+n+' days';
-      txt=`<span class="cr-k">Remind</span><b>${esc(mqDateLbl(rd))}</b><span class="cr-s">· ${rel}</span>`; }
+      txt=`<span class="cr-k">${c.later?'Check back':'Remind'}</span><b>${esc(mqDateLbl(rd))}</b><span class="cr-s">· ${rel}</span>`; }
     pill.innerHTML=`${IC.clock||''}${txt}<input type="date" value="${rd||''}" aria-label="Reminder date for ${esc(c.name)}">`;
     pill.title = rd ? 'Reminder: '+(c.fu.what||'')+' — tap to change' : 'No reminder date yet — tap to set one';
     const inp=pill.querySelector('input');
@@ -5106,14 +5217,34 @@ function renderThinkTray(){
     inp.addEventListener('change',()=>thinkSetDay(c, inp.value));
     const nameRow=card.querySelector('.c-name');
     if(nameRow) nameRow.insertAdjacentElement('afterend', pill); else card.prepend(pill);
+    if(c.later && c.later.said){
+      const q=document.createElement('div'); q.className='c-said'; q.textContent='«'+c.later.said+'»'; q.title=c.later.said;
+      pill.insertAdjacentElement('afterend', q);
+    }
+    const row=document.createElement('div'); row.className='c-trow';
     const d=thinkDays(c);
-    const tag=document.createElement('div');
-    tag.className='c-waiting';
-    tag.textContent = d===0 ? 'today' : d===1 ? '1 day waiting' : d+' days waiting';
-    card.appendChild(tag);
-    body.appendChild(card);
-  });
+    const tag=document.createElement('div'); tag.className='c-waiting';
+    tag.textContent = c.later ? 'parked '+fmtDay(isoDate(new Date(c.later.at))) : (d===0 ? 'today' : d===1 ? '1 day waiting' : d+' days waiting');
+    row.appendChild(tag);
+    const btn=document.createElement('button'); btn.type='button'; btn.className='c-latbtn';
+    btn.innerHTML = c.later ? `${IC.undo||'↩'} Back to Thinking` : `${IC.hourglass||''} Later…`;
+    btn.title = c.later ? 'They are ready to talk again — back to the active Thinking list' : '«Not now, later» — park them and pick when to contact them again';
+    ['mousedown','pointerdown','dragstart'].forEach(ev=>btn.addEventListener(ev,e=>e.stopPropagation()));
+    btn.addEventListener('click',e=>{ e.stopPropagation(); if(c.later && quietCard) laterUnpark(c); else laterSheet(c, btn); });
+    row.appendChild(btn);
+    if(c.later && !quietCard){ /* due Later card: offer both */
+      btn.innerHTML=`${IC.hourglass||''} Later again…`;
+      const b2=document.createElement('button'); b2.type='button'; b2.className='c-latbtn'; b2.innerHTML=`${IC.undo||'↩'} Active`;
+      b2.title='Back to the normal Thinking list'; ['mousedown','pointerdown','dragstart'].forEach(ev=>b2.addEventListener(ev,e=>e.stopPropagation()));
+      b2.addEventListener('click',e=>{ e.stopPropagation(); laterUnpark(c); }); row.appendChild(b2);
+    }
+    card.appendChild(row);
+    return card;
+  };
+  items.forEach(c=>body.appendChild(build(c,false)));
   dropHandlers(body,'thinking');
+  const lb=el.querySelector('.later-body');
+  if(lb) quiet.forEach(c=>lb.appendChild(build(c,true)));
 }
 let lostOpen=false;
 function renderLostTray(){
