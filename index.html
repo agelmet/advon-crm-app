@@ -2365,6 +2365,55 @@ body[data-view="calendar"] .stat-pills.mx{grid-template-columns:1fr 1.35fr 1.15f
 .mx-need.one{grid-template-columns:1fr;}
 .mx-unset{font-size:12px; font-weight:700; color:var(--brand); margin-top:8px;}
 /* facts row */
+/* ===== MONEY COLOURS v3 (14 Oct 2026, Angelo) — one colour per figure: In the bank = GREEN, New money = BLUE, Total generated = VIOLET.
+   Inside every bar: solid = already in the bank, stripes = agreed / to collect, grey stripes = Booked / Thinking (not counted).
+   New money shows ONE track for this week: a slot per client — green ✓ = won this week, orange = still needed by Sunday. ===== */
+.stat-pills.mx .mx-card{overflow:hidden;}
+.stat-pills.mx .mx-card::before{content:''; position:absolute; left:0; right:0; top:0; height:4px; background:var(--mxc,#C9D2E3);}
+.stat-pills.mx .mx-card.mx-bank{--mxc:#0EB86A; --mxs:#E6FAF0; background:linear-gradient(180deg,#F1FCF6 0,#fff 64%) !important; border-color:#CDEFDD !important;}
+.stat-pills.mx .mx-card.mx-new{--mxc:#2F7FE0; --mxs:#E8F1FD; background:linear-gradient(180deg,#F2F7FE 0,#fff 64%); border-color:#D3E3F8;}
+.stat-pills.mx .mx-card.mx-gen{--mxc:#7C5CFC; --mxs:#F0ECFF; background:linear-gradient(180deg,#F6F3FF 0,#fff 64%); border-color:#E1D9FD;}
+.stat-pills.mx .mx-card .mx-k{color:var(--mxc);}
+.stat-pills.mx .mx-card .mx-k .mx-n{color:var(--muted);}
+.stat-pills.mx .mx-card .mx-big{color:var(--mxc);}
+.stat-pills.mx .mx-bank .mx-big{color:#0B9E5C;}
+.stat-pills.mx .mx-card .mx-big small{color:var(--muted);}
+.stat-pills.mx .mx-card .mx-big .mx-pct{background:var(--mxs); color:var(--mxc);}
+.stat-pills.mx .mx-bank .mx-bar .g{background:#0B9E5C;} .stat-pills.mx .mx-bank .mx-bar .b{background:#35C98A;} .stat-pills.mx .mx-bank .mx-bar .vi{background:#9BE6C3;}
+.stat-pills.mx .mx-bank .mx-legend .g i{background:#0B9E5C;} .stat-pills.mx .mx-bank .mx-legend .b i{background:#35C98A;} .stat-pills.mx .mx-bank .mx-legend .vi i{background:#9BE6C3;}
+.stat-pills.mx .mx-bank .mx-if > div{background:#F1FCF6; border-color:#CDEFDD;}
+/* the two «to collect» stripes */
+.mx-bar .nb{background:#2F7FE0;}
+.mx-bar .ns{background:repeating-linear-gradient(135deg,#7FB2F0 0 4px,#C9DDF8 4px 8px);}
+.mx-legend .nb i{background:#2F7FE0;} .mx-legend .ns i{background:repeating-linear-gradient(135deg,#7FB2F0 0 2px,#C9DDF8 2px 4px);}
+.stat-pills.mx .mx-gen .mx-bar .g{background:#0EB86A;}
+.stat-pills.mx .mx-gen .mx-legend .g i{background:#0EB86A;}
+.stat-pills.mx .mx-gen .mx-if > div{background:#F6F3FF; border-color:#E1D9FD;}
+/* new money — simple lines */
+.mx-new .mx-bar{height:12px; margin-top:12px;}
+.mx-new .mx-legend{margin-top:8px;}
+.mx-new .mx-legend .wt{color:#98A2B6; font-weight:600;}
+.mx-new .mx-legend .owed{cursor:pointer;}
+@media (hover:hover){.mx-new .mx-legend .owed:hover b{text-decoration:underline;}}
+/* THIS WEEK — one track, a slot per client */
+.mx-wk{margin-top:13px; padding:11px 12px 12px; border-radius:14px; background:#FFF8EE; border:1px solid #FFE1BC;}
+.mx-wk.done{background:#EEFBF4; border-color:#C7EED9;}
+.mx-wk-h{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+.mx-wk-h .t{font-size:10.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#B35F00;}
+.mx-wk.done .mx-wk-h .t{color:#0B7A47;}
+.mx-wk-h .v{margin-left:auto; font-family:'Sora'; font-weight:800; font-size:15px; color:var(--ink); font-variant-numeric:tabular-nums; white-space:nowrap;}
+.mx-wk-h .v small{font-family:'Inter',system-ui,sans-serif; font-size:12px; font-weight:700; color:var(--muted);}
+.mx-slots{display:flex; gap:5px; margin-top:9px;}
+.mx-slots i{flex:1 1 0; min-width:0; height:24px; border-radius:7px; display:grid; place-items:center; font-style:normal; font-size:11.5px; font-weight:800; font-variant-numeric:tabular-nums;}
+.mx-slots i.w{background:#12B76A; color:#fff;}
+.mx-slots i.r{background:#FF9A1F; color:#fff; box-shadow:inset 0 -2px 0 rgba(0,0,0,.08);}
+.mx-slots i.more{flex:0 0 auto; padding:0 8px; background:#FFE7C7; color:#B35F00;}
+.mx-wk-f{display:flex; justify-content:space-between; gap:8px; margin-top:7px; font-size:12px; font-weight:700; color:var(--muted);}
+.mx-wk-f .w{color:#0B7A47;} .mx-wk-f .r{color:#C26A00;}
+.mx-goalrow{margin-top:10px; padding-top:9px; border-top:1px dashed var(--line); display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:12px; color:var(--muted); font-weight:600;}
+.mx-goalrow b{font-family:'Sora'; font-size:14px; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums;}
+.mx-goalrow b small{font-family:'Inter',system-ui,sans-serif; font-size:12px; color:var(--muted); font-weight:700;}
+@media (max-width:640px){ .mx-slots i{height:22px; font-size:10.5px;} .mx-slots{gap:4px;} }
 .stat-pills.mx .mx-facts{grid-column:1 / -1; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px; align-self:auto; width:100%;}
 .stat-pills.mx .mx-facts .mini{display:flex; flex-direction:row; align-items:center; gap:10px; min-width:0; width:auto; padding:9px 13px 9px 12px; border-radius:14px; text-align:left; background:#fff; border:1px solid var(--line); box-shadow:0 1px 2px rgba(24,49,92,.04);}
 .stat-pills.mx .mx-facts .mini::before{content:''; width:8px; height:8px; border-radius:50%; flex:none; background:var(--brand);}
@@ -5380,34 +5429,41 @@ function renderGoalPill(m){
       <div class="mx-unset">Tap to set a goal for new money →</div>`;
   } else {
     pill.classList.remove('unset');
-    /* the bar = the whole goal; green = paid, red stripes = agreed but owed, grey = booked/thinking (not counted) */
-    const bar=`<div class="mx-bar">${seg('g',Math.min(newPaid,g.goal),g.goal)}${seg('r',Math.max(0,Math.min(g.done,g.goal)-newPaid),g.goal)}${seg('gh',Math.max(0,Math.min(g.done+soonNew,g.goal)-Math.min(g.done,g.goal)),g.goal)}</div>`;
-    /* week checkpoints under the bar; «today» marker = where you should be right now */
-    const ticks=g.W.map((w,i)=>{ const x=Math.min(100,g.cp(i)/g.goal*100), done=g.done>=g.cp(i), now=i===g.wi;
-      const lbl= i===g.N-1 ? `W${i+1}<em> · ${fmtMoney(g.cp(i))}</em> goal` : now ? `W${i+1}<em> · ${fmtMoney(g.cp(i))}</em> by Sun ${w.to}` : `W${i+1}`;
-      return `<span class="${done?'done':(now?'now':'')}${g.N===1?' one':''}" style="left:${x.toFixed(1)}%">${lbl}${done?' ✓':''}</span>`; }).join('');
-    const pace = g.wi>=0 && g.wi<g.N && g.st!=='won' ? `<b class="mx-pace" style="left:${Math.min(100,g.pace/g.goal*100).toFixed(1)}%"></b>` : '';
-    /* the two questions: by Sunday, and for the whole goal */
-    let need='';
-    if(g.st==='won') need=`<div class="mx-need one"><div><div class="l">Goal reached</div><div class="vv">${fmtMoney(Math.round(g.done-g.goal))} over <small>every client from here is extra</small></div></div></div>`;
-    else if(g.st==='missed') need=`<div class="mx-need one"><div><div class="l">${goalMonthShort(key)} ended</div><div class="vv">${fmtMoney(Math.round(g.goal-g.done))} short <small>${progPct(g.done,g.goal)}% of the goal</small></div></div></div>`;
-    else if(g.st==='soon') need=`<div class="mx-need one"><div><div class="l">The plan</div><div class="vv">${fmtMoney(Math.round(g.per))} a week <small>≈ ${cl(g.clientsPerWeek)} a week · ${g.N} weeks</small></div></div></div>`;
-    else { const w=g.W[g.wi];
-      const wk = g.needWeek>0 ? `<div><div class="l">By Sunday ${w.to}</div><div class="vv">${fmtMoney(Math.round(g.needWeek))} more <small>≈ ${cl(g.clientsWeek)}</small></div></div>`
-        : `<div><div class="l">This week</div><div class="vv ok">Checkpoint done ✓ ${g.wi<g.N-1?`<small>next ${fmtMoney(g.cp(g.wi+1))}</small>`:''}</div></div>`;
-      need=`<div class="mx-need">${wk}<div><div class="l">To reach the goal</div><div class="vv">${fmtMoney(Math.round(g.needAll))} <small>≈ ${cl(g.clientsAll)}</small></div></div></div>`; }
+    /* ONE month bar: solid blue = paid, blue stripes = agreed but still to collect, grey = Booked / Thinking (not counted) */
+    const bar=`<div class="mx-bar">${seg('nb',Math.min(newPaid,g.goal),g.goal)}${seg('ns',Math.max(0,Math.min(g.done,g.goal)-newPaid),g.goal)}${seg('gh',Math.max(0,Math.min(g.done+soonNew,g.goal)-Math.min(g.done,g.goal)),g.goal)}</div>`;
+    const legend=`<div class="mx-legend"><span class="nb" title="New websites already paid"><i></i><b>${fmtMoney(newPaid)}</b> paid</span><span class="ns owed" id="statNewPill" title="Agreed work still unpaid — click for Remaining"><i></i><b>${fmtMoney(newOwed)}</b> to collect${m.collectN?' · '+m.collectN:''}</span>${soonNew?`<span class="wt" title="Not agreed yet: ${fmtMoney(m.pot.booked)} booked · ${fmtMoney(m.pot.think)} thinking — not counted">+${fmtMoney(soonNew)} in Booked / Thinking</span>`:''}</div>`;
+    /* THIS WEEK — one track: a slot per client (green ✓ = won this week, orange = still needed by Sunday) */
+    let wk='';
+    if(g.wi>=0 && g.wi<g.N && g.st!=='won'){
+      const w=g.W[g.wi];
+      const wonN=g.rows.filter(r=>!r.kept && r.day>=w.from && r.day<=w.to).length;
+      const need=g.needWeek>0 ? g.clientsWeek : 0;
+      const MAX=12; let shownW=wonN, shownR=need, more=0;
+      if(wonN+need>MAX){ shownR=Math.min(need, MAX); shownW=Math.max(0, MAX-shownR); more=(wonN-shownW)+(need-shownR); }
+      let slots=''; for(let i=0;i<shownW;i++) slots+='<i class="w">✓</i>';
+      for(let i=0;i<shownR;i++) slots+=`<i class="r">${i+1}</i>`;
+      if(more>0) slots+=`<i class="more">+${more}</i>`;
+      const head = need>0
+        ? `<div class="mx-wk-h"><span class="t">This week · until Sun ${w.to}</span><span class="v">${cl(need)} to go <small>· ${fmtMoney(Math.round(g.needWeek))}</small></span></div>`
+        : `<div class="mx-wk-h"><span class="t">This week · until Sun ${w.to}</span><span class="v">Done ✓ ${g.wi<g.N-1?`<small>next ${fmtMoney(g.cp(g.wi+1))}</small>`:''}</span></div>`;
+      const foot=`<div class="mx-wk-f"><span class="w">${wonN} won this week</span><span class="r">${need>0?need+' still needed':'week checkpoint reached'}</span></div>`;
+      wk=`<div class="mx-wk${need>0?'':' done'}">${head}${slots?`<div class="mx-slots">${slots}</div>`:''}${foot}</div>`;
+    }
+    let row='';
+    if(g.st==='won') row=`<div class="mx-goalrow"><span>Goal reached — every client from here is extra</span><b>+${fmtMoney(Math.round(g.done-g.goal))}</b></div>`;
+    else if(g.st==='missed') row=`<div class="mx-goalrow"><span>${goalMonthShort(key)} ended short</span><b>${fmtMoney(Math.round(g.goal-g.done))}</b></div>`;
+    else if(g.st==='soon') row=`<div class="mx-goalrow"><span>The plan · ${g.N} weeks</span><b>${fmtMoney(Math.round(g.per))} a week <small>≈ ${cl(g.clientsPerWeek)}</small></b></div>`;
+    else row=`<div class="mx-goalrow"><span>To reach ${fmtMoney(g.goal)}</span><b>${fmtMoney(Math.round(g.needAll))} <small>≈ ${cl(g.clientsAll)}</small></b></div>`;
     pill.innerHTML=`<div class="mx-k">New money ${chip}</div>
       <div class="mx-big">${fmtMoney(Math.round(g.done))}<small>/ ${fmtMoney(g.goal)} goal</small><span class="mx-pct${g.st==='won'?' won':''}">${progPct(g.done,g.goal)}%</span></div>
-      ${split}
-      <div class="mx-track">${pace}${bar}<div class="mx-ticks">${ticks}</div></div>
-      ${need}`;
+      ${bar}${legend}${wk}${row}`;
   }
   pill.title='Click to open the goal — weeks, what you still need and where the money comes from';
   /* ---- 3 · TOTAL GENERATED ---- */
   const gen=$('#mxGenPill');
   if(gen){
     const tot=m.generated, T=mt.value>0 ? Math.round(mt.value) : 0, base=T||Math.max(tot+soonNew,1);
-    const bar=`<div class="mx-bar">${seg('g',earned.new,base)}${seg('b',earned.renew,base)}${seg('vi',earned.subs,base)}${seg('r',Math.min(m.collect,Math.max(0,base-earned.total)),base)}${seg('gh',Math.min(soonNew,Math.max(0,base-tot)),base)}</div>`;
+    const bar=`<div class="mx-bar">${seg('g',earned.total,base)}${seg('ns',Math.min(m.collect,Math.max(0,base-earned.total)),base)}${seg('gh',Math.min(soonNew,Math.max(0,base-tot)),base)}</div>`;
     const withPot=tot+soonNew;
     const sub = T ? `${tot>=T?`<b>${fmtMoney(tot-T)} over the goal</b>`:`${fmtMoney(T-tot)} to go`} · <b>${fmtMoney(earned.total)}</b> already real, <b>${fmtMoney(m.collect)}</b> agreed`
                   : `<b>${fmtMoney(earned.total)}</b> already real, <b>${fmtMoney(m.collect)}</b> agreed`;
@@ -5418,7 +5474,7 @@ function renderGoalPill(m){
       <div class="mx-big">${fmtMoney(tot)}${T?`<small>/ ${fmtMoney(T)}</small><span class="mx-pct${tot>=T?' won':''}">${progPct(tot,T)}%</span>`:''}</div>
       <div class="mx-sub">${sub}</div>
       ${bar}
-      <div class="mx-legend"><span class="g"><i></i><b>${fmtMoney(earned.total)}</b> in the bank</span><span class="r"><i></i><b>${fmtMoney(m.collect)}</b> to collect</span>${soonNew?`<span class="gh"><i></i><b>${fmtMoney(soonNew)}</b> not counted yet</span>`:''}</div>
+      <div class="mx-legend"><span class="g"><i></i><b>${fmtMoney(earned.total)}</b> in the bank</span><span class="ns"><i></i><b>${fmtMoney(m.collect)}</b> to collect</span>${soonNew?`<span class="gh"><i></i><b>${fmtMoney(soonNew)}</b> not counted yet</span>`:''}</div>
       <div class="mx-if">${ifl}</div>
       <div class="mx-foot"><span>New websites <b>${fmtMoney(newPaid+newOwed)}</b> · renewals <b>${fmtMoney(earned.renew)}</b> · monthly <b>${fmtMoney(earned.subs)}</b></span></div>`;
     gen.title=fmtMoney(tot)+' generated in '+fmtMonth(key)+' = '+fmtMoney(earned.total)+' in the bank + '+fmtMoney(m.collect)+' still to collect'+(T?' · goal '+fmtMoney(T):'')+'. Click to open the goal window.';
