@@ -1558,6 +1558,115 @@ body.dark .bk-act button,body.dark .bk-tag{background:var(--surface);}
 .bank-row .d i{font-style:normal; background:#F1F3F7; border-radius:6px; padding:1px 6px; margin-left:6px; color:#3B4558;}
 .bank-empty{color:#6B7488; font-size:14px; padding:18px 0;}
 
+/* «Generated» → GOAL card + goal window (Angelo, 14 Oct 2026) — new-money goal split into the month's weeks */
+.stat-pill.goal-pill{text-align:left; justify-content:flex-start; gap:0; padding:10px 14px 11px; cursor:pointer; background:#fff; position:relative; overflow:hidden; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;}
+@media (hover:hover){.stat-pill.goal-pill:hover{transform:translateY(-1px); border-color:#BFD4F2; box-shadow:0 12px 26px rgba(16,20,31,.10);}}
+.stat-pill.goal-pill:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
+.gq-top{display:flex; align-items:center; gap:8px;}
+.gq-k{font-size:10.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); white-space:nowrap;}
+.gq-chip{margin-left:auto; font-size:10.5px; font-weight:800; letter-spacing:.02em; padding:3px 8px; border-radius:999px; white-space:nowrap; background:#EEF2F7; color:#3B4558;}
+.gq-chip.s-ahead,.gq-chip.s-won{background:#DDF7EA; color:#0B7A47;}
+.gq-chip.s-ontrack{background:#E3EEFD; color:#1D5FC0;}
+.gq-chip.s-close{background:#FFF3CC; color:#8A6500;}
+.gq-chip.s-behind,.gq-chip.s-missed{background:#FFE6E1; color:#C2402D;}
+.gq-main{display:flex; align-items:baseline; gap:6px; margin-top:4px; flex-wrap:wrap;}
+.gq-num{font-family:'Sora'; font-weight:800; font-size:22px; letter-spacing:-.02em; color:var(--ink); font-variant-numeric:tabular-nums;}
+.gq-of{font-size:12px; font-weight:700; color:var(--muted);}
+.gq-pct{margin-left:auto; font-family:'Sora'; font-weight:800; font-size:13px; color:var(--ink); opacity:.75;}
+/* the week track: one segment per week, like levels */
+.gq-track{display:flex; gap:4px; margin-top:7px;}
+.gq-seg{position:relative; flex:1 1 0; height:9px; border-radius:99px; background:var(--bg); overflow:hidden;}
+.gq-seg > u{position:absolute; left:0; top:0; bottom:0; background:repeating-linear-gradient(135deg,#C9D4E6 0 4px,#E2E9F4 4px 8px); border-radius:99px;}
+.gq-seg > i{position:absolute; left:0; top:0; bottom:0; border-radius:99px; background:linear-gradient(90deg,#16C77A,#0B9E5C);}
+.gq-seg.now{box-shadow:0 0 0 2px #fff, 0 0 0 3.5px var(--brand);}
+.gq-seg > b{position:absolute; top:-2px; bottom:-2px; width:2px; margin-left:-1px; background:var(--ink); border-radius:2px; opacity:.55;}
+.gq-week{font-size:11.5px; font-weight:600; color:var(--muted); margin-top:7px; line-height:1.35;}
+.gq-week b{color:var(--ink); font-weight:800;}
+.gq-week .ok{color:#0B7A47; font-weight:800;}
+.gq-total{display:flex; align-items:center; gap:7px; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line); font-size:11px; font-weight:700; color:var(--muted); white-space:nowrap;}
+.gq-total b{color:var(--ink); font-family:'Sora'; font-weight:800; font-size:12px;}
+.gq-total .gq-mini{flex:1 1 auto; height:4px; border-radius:99px; background:var(--bg); overflow:hidden; min-width:30px;}
+.gq-total .gq-mini i{display:block; height:100%; border-radius:99px; background:var(--brand);}
+.gq-unset{font-size:12px; font-weight:700; color:var(--brand); margin-top:4px;}
+body.dark .stat-pill.goal-pill{background:var(--surface);}
+body.dark .gq-seg.now{box-shadow:0 0 0 2px var(--surface), 0 0 0 3.5px var(--brand);}
+
+/* the goal window */
+.modal.goal-modal{width:min(660px,100%); max-width:660px; max-height:90vh; display:flex; flex-direction:column;}
+.goal-modal .modal-head h3{font-size:19px;} .goal-modal .modal-head small{display:block; font-size:12.5px; font-weight:600; color:var(--muted); margin-top:2px;}
+.goal-body{overflow:auto; padding:12px 22px 22px;}
+.gw-hero{border-radius:18px; padding:18px 18px 16px; background:linear-gradient(135deg,#0F1A2E,#1B3A6B); color:#fff; position:relative; overflow:hidden;}
+.gw-hero.s-ahead,.gw-hero.s-won{background:linear-gradient(135deg,#0B3B27,#0E7A4A);}
+.gw-hero.s-close{background:linear-gradient(135deg,#3A2C05,#8A6500);}
+.gw-hero.s-behind,.gw-hero.s-missed{background:linear-gradient(135deg,#3A0F0A,#A3361F);}
+.gw-hero .gw-row1{display:flex; align-items:center; gap:10px;}
+.gw-hero .gw-lbl{font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; opacity:.75;}
+.gw-hero .gw-chip{margin-left:auto; font-size:12px; font-weight:800; padding:4px 11px; border-radius:999px; background:rgba(255,255,255,.16); color:#fff; white-space:nowrap;}
+.gw-big{display:flex; align-items:baseline; gap:8px; margin-top:6px; flex-wrap:wrap;}
+.gw-big b{font-family:'Sora'; font-weight:800; font-size:38px; letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums;}
+.gw-big span{font-size:14px; font-weight:700; opacity:.78;}
+.gw-big em{margin-left:auto; font-style:normal; font-family:'Sora'; font-weight:800; font-size:20px; opacity:.9;}
+.gw-track{display:flex; gap:6px; margin-top:16px;}
+.gw-seg{flex:1 1 0; min-width:0;}
+.gw-bar{position:relative; height:14px; border-radius:99px; background:rgba(255,255,255,.14); overflow:hidden;}
+.gw-bar > u{position:absolute; left:0; top:0; bottom:0; background:repeating-linear-gradient(135deg,rgba(255,255,255,.28) 0 5px,rgba(255,255,255,.12) 5px 10px); border-radius:99px;}
+.gw-bar > i{position:absolute; left:0; top:0; bottom:0; border-radius:99px; background:linear-gradient(90deg,#4FE3A1,#16C77A); box-shadow:0 0 12px rgba(79,227,161,.45);}
+.gw-bar > b{position:absolute; top:0; bottom:0; width:3px; margin-left:-1.5px; background:#fff; border-radius:2px;}
+.gw-seg.now .gw-bar{box-shadow:0 0 0 2px rgba(255,255,255,.9);}
+.gw-seg .gw-wk{font-size:11px; font-weight:800; margin-top:7px; opacity:.92; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.gw-seg .gw-cp{font-size:11px; font-weight:600; opacity:.7; white-space:nowrap;}
+.gw-seg.now .gw-wk::after{content:' · now'; color:#9FD0FF;}
+.gw-msg{margin-top:14px; padding:13px 15px; border-radius:14px; background:#F4F7FC; border:1px solid #E1E8F3; font-size:14px; line-height:1.5; color:var(--ink);}
+.gw-msg b{font-weight:800;}
+.gw-msg .gw-big2{display:block; font-size:16px; margin-bottom:3px;}
+.gw-msg p{margin:5px 0 0;}
+.gw-msg .gw-note{color:#5B6475; font-size:13px;}
+.gw-weeks{display:grid; grid-template-columns:repeat(var(--n,4),minmax(0,1fr)); gap:8px; margin-top:14px;}
+.gw-wcard{border:1px solid var(--line); border-radius:14px; padding:10px 11px; background:#fff; min-width:0;}
+.gw-wcard .t{font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);}
+.gw-wcard .d{font-size:11.5px; font-weight:600; color:var(--muted); margin-top:1px;}
+.gw-wcard .v{font-family:'Sora'; font-weight:800; font-size:17px; margin-top:6px; color:var(--ink);}
+.gw-wcard .s{font-size:11.5px; font-weight:700; margin-top:2px;}
+.gw-wcard.hit{border-color:#BFEBD4; background:#F2FCF7;} .gw-wcard.hit .s{color:#0B7A47;}
+.gw-wcard.miss{border-color:#FFD3CB; background:#FFF6F4;} .gw-wcard.miss .s{color:#C2402D;}
+.gw-wcard.now{border-color:#9DC3F5; background:#F3F8FF; box-shadow:0 0 0 2px #DCEAFE;} .gw-wcard.now .s{color:#1D5FC0;}
+.gw-wcard.next .s{color:var(--muted);}
+.gw-h{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#6B7488; font-weight:800; margin:20px 0 8px; display:flex; justify-content:space-between; gap:10px;}
+.gw-h span:last-child{color:var(--ink);}
+.gw-goals{display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end;}
+.gw-goals label{font-size:11.5px; font-weight:700; color:var(--muted); display:flex; flex-direction:column; gap:4px;}
+.gw-goals input{border:1px solid var(--line); border-radius:10px; padding:9px 11px; font-size:15px; font-weight:700; font-family:'Sora'; width:100%; min-width:0;}
+.gw-goals button{border-radius:10px; padding:10px 16px; font-weight:800; background:var(--ink); color:#fff; white-space:nowrap;}
+.gw-tot{border:1px solid var(--line); border-radius:14px; padding:12px 14px;}
+.gw-tot .r1{display:flex; align-items:baseline; gap:8px;}
+.gw-tot .r1 b{font-family:'Sora'; font-weight:800; font-size:20px;}
+.gw-tot .r1 span{font-size:12.5px; font-weight:700; color:var(--muted);}
+.gw-tot .r1 em{margin-left:auto; font-style:normal; font-weight:800; font-size:13px;}
+.gw-tot .bar{height:8px; border-radius:99px; background:var(--bg); overflow:hidden; margin-top:8px; display:flex;}
+.gw-tot .bar i{display:block; height:100%;}
+.gw-tot .bar .n{background:#16C77A;} .gw-tot .bar .r{background:#3D8BF0;} .gw-tot .bar .m{background:#8B5CF6;}
+.gw-tot .chips{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;}
+.gw-tot .chips span{font-size:12px; font-weight:700; padding:3px 9px; border-radius:999px;}
+.gw-tot .chips .n{background:#E3F6EC; color:#0F6B43;} .gw-tot .chips .r{background:#E6EEFB; color:#1D4ED8;} .gw-tot .chips .m{background:#F3ECFB; color:#6D28D9;}
+.gw-row{display:grid; grid-template-columns:1fr auto; gap:2px 12px; align-items:center; padding:9px 12px; border-radius:12px; border:1px solid #E7EBF2; margin-bottom:6px; background:#fff; cursor:pointer; width:100%; text-align:left; font:inherit; color:inherit;}
+@media (hover:hover){.gw-row:hover{border-color:#B9C6DA; background:#F8FAFD;}}
+.gw-row .n{font-weight:700; font-size:14px; color:#10141F; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.gw-row .a{font-weight:800; font-size:14.5px; text-align:right; white-space:nowrap;}
+.gw-row .d{font-size:12px; color:#6B7488; grid-column:1/-1; display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+.gw-row .d i{font-style:normal; border-radius:6px; padding:1px 7px; font-weight:700; font-size:11.5px;}
+.gw-row.paid .a{color:#0F6B43;} .gw-row.owed .a{color:#C2402D;} .gw-row.ren .a{color:#1D4ED8;} .gw-row.sub .a{color:#6D28D9;}
+.gw-row.gw-pot{opacity:.62; border-style:dashed;} .gw-row.gw-pot .a{color:#5B6475;}
+.gw-potlist > summary{cursor:pointer; list-style:none;} .gw-potlist > summary::-webkit-details-marker{display:none;}
+.gw-potlist > summary span:first-child{text-decoration:underline dotted; text-underline-offset:3px;}
+.gw-empty{color:#6B7488; font-size:13.5px; padding:6px 2px 10px;}
+@media (max-width:640px){
+  .modal.goal-modal{max-height:94vh;} .goal-body{padding:10px 14px 18px;}
+  .gw-big b{font-size:32px;}
+  .gw-weeks{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .gw-seg .gw-cp{display:none;} .gw-seg.now .gw-wk::after{content:'';}
+  .gw-goals{grid-template-columns:1fr 1fr;} .gw-goals button{grid-column:1/-1;}
+}
+
 /* «Today» — once a day, the first time the CRM opens (23 Sept 2026) */
 .day-modal{max-width:560px; max-height:88vh; display:flex; flex-direction:column;}
 .day-modal .modal-head{padding:22px 24px 4px; align-items:flex-start;}
@@ -3385,12 +3494,7 @@ body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
       <div class="newsplit"><span class="ns paid" id="statNewPaid">€0</span><span class="ns owed" id="statNewOwed">€0</span></div>
       <div class="tgt-meta" id="statRemMeta"></div>
     </div>
-    <div class="stat-pill target-pill gen-pill" id="statTargetPill">
-      <div class="k">Generated <span class="tgt-meta" id="statTargetMeta"></span></div>
-      <div class="v"><span id="statGen">€0</span><span class="gpot" id="statPot"></span></div>
-      <div class="tgt-bar"><u id="statTargetGhost"></u><i id="statTargetBar"></i></div>
-      <div class="tgt-meta" id="statTargetSub">tap to set a target</div>
-    </div>
+    <div class="stat-pill target-pill gen-pill goal-pill" id="statTargetPill" role="button" tabindex="0" aria-label="Goal of the month — open"></div>
     <div class="mini-pills">
       <button class="mini" id="statCountPill" title="Clients booked in this month (work under €120 counts as another service, not a website)"><span class="mk">Clients</span><span class="mv" id="statCount">0</span></button>
       <button class="mini" id="statRenewPill" title="Renewals paid this month — click to open Renewals"><span class="mk">Renewals <i id="statRenewMeta"></i></span><span class="mv" id="statRenew">€0</span></button>
@@ -3901,6 +4005,12 @@ body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
   <div class="modal">
     <div class="modal-head"><h3 id="bkupTitle">Backup</h3><button class="modal-close" id="bkupClose" title="Close">✕</button></div>
     <div class="modal-body" id="bkupBody"></div>
+  </div>
+</div>
+<div class="overlay" id="goalOverlay">
+  <div class="modal goal-modal" role="dialog" aria-modal="true" aria-labelledby="goalTitle">
+    <div class="modal-head"><div><h3 id="goalTitle">Goal</h3><small id="goalSub"></small></div><button class="modal-close" id="goalClose" title="Close">✕</button></div>
+    <div class="goal-body" id="goalBody"></div>
   </div>
 </div>
 <div class="overlay" id="bankOverlay">
@@ -4918,11 +5028,6 @@ function renderStats(){
   $('#statNewOwed').textContent=fmtMoney(newOwed);
   $('#statRemMeta').textContent= m.collectN? m.collectN+(m.collectN===1?' client still owes':' clients still owe') : 'everything collected';
   $('#statNewPill').title=fmtMoney(newSum)+' of new website work in '+fmtMonth(curMonth)+' — '+fmtMoney(newPaid)+' already paid, '+fmtMoney(newOwed)+' still to collect. Click for Remaining.';
-  /* generated + potential */
-  $('#statGen').textContent=fmtMoney(m.generated);
-  const pot=$('#statPot');
-  pot.textContent= m.pot.total? '+'+fmtMoney(m.pot.total) : '';
-  pot.title= m.pot.total? 'Potential, not counted yet: '+fmtMoney(m.pot.booked)+' booked · '+fmtMoney(m.pot.think)+' thinking · '+fmtMoney(m.pot.risk)+' in the trash' : '';
   /* the two small money boxes + costs + risk */
   const subsN=state.subs.filter(s=>s.paid && s.paid[curMonth]).length;
   $('#statSubs').textContent=fmtMoney(earned.subs);
@@ -4939,26 +5044,10 @@ function renderStats(){
   $('#statRisk').textContent=fmtMoney(m.pot.risk);
   $('#statRiskMeta').textContent= m.riskN? m.riskN+' in trash' : '';
   $('#statRiskPill').classList.toggle('off', !m.pot.risk);
-  /* target — solid bar = generated, ghost = with the potential added */
-  const mt=monthTarget(curMonth);
-  const pill=$('#statTargetPill'), bar=$('#statTargetBar'), ghost=$('#statTargetGhost');
-  if(mt.value>0){
-    const pct=progPct(m.generated,mt.value), pctAll=progPct(m.withPotential,mt.value);
-    pill.classList.remove('unset');
-    $('#statTargetMeta').textContent=pct+'%';
-    bar.className=progClass(pct); bar.style.width=Math.min(100,pct)+'%';
-    ghost.style.width=Math.min(100,pctAll)+'%';
-    $('#statTargetSub').innerHTML='of '+fmtMoney(Math.round(mt.value))+(m.pot.total?' · <b>'+pctAll+'%</b> with the potential':'');
-    pill.title=fmtMoney(m.generated)+' generated of '+fmtMoney(Math.round(mt.value))+' target'+(m.pot.total?' · '+fmtMoney(m.pot.total)+' more is possible':'')+' — click to change the target';
-  } else {
-    pill.classList.add('unset');
-    $('#statTargetMeta').textContent='';
-    bar.className=''; bar.style.width='0%'; ghost.style.width='0%';
-    $('#statTargetSub').textContent='tap to set a target';
-    pill.title='Click to set this month\u2019s target';
-  }
+  /* GOAL card (14 Oct 2026) — new-money goal in weeks + the total */
+  renderGoalPill(m);
 }
-$('#statTargetPill').addEventListener('click',()=>editMonthTarget(curMonth));
+
 $('#statNewPill').addEventListener('click',()=>switchView('remaining'));
 $('#statCountPill').addEventListener('click',()=>switchView('board'));
 $('#statRiskPill').addEventListener('click',()=>switchView('remaining'));
@@ -5030,6 +5119,263 @@ $('#bankOverlay').addEventListener('click',e=>{
   else { subYear=+curMonth.slice(0,4); switchView('monthly'); }
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#bankOverlay').classList.contains('open')) closeBank(); });
+
+/* ---------- GOAL — the month as a game (Angelo, 14 Oct 2026) ----------
+   Two goals per month: NEW money (new websites — the game) in state.targets.newMonthly[key],
+   and the TOTAL generated (new + renewals + monthly) in state.targets.monthly[key] as before.
+   «New money» here is exactly the figure of the «New money this month» pill (paid + still to collect).
+   The month is split into its weeks (Mon–Sun; a stub of fewer than 3 working days joins the week
+   next to it, so October 2026 = 4 weeks: 1–11, 12–18, 19–25, 26–31). Each week ends on a checkpoint
+   = goal × weeks done ÷ weeks; inside the current week the pace moves with the working days.
+   c.wonAt = when a card first left Booked/Thinking (stamped by goalStampWon; cards that were already
+   past it on 14 Oct 2026 get the day of their «Yes» meeting log, else their meeting day, else created). */
+const GOAL_PRICE_FALLBACK=130;
+function ensureNewTargets(){ ensureTargets(); if(!state.targets.newMonthly || typeof state.targets.newMonthly!=='object') state.targets.newMonthly={}; }
+function newGoal(key){ ensureNewTargets(); const v=state.targets.newMonthly[key]; return v!=null && v!=='' ? (+v||0) : 0; }
+const goalWorking = c => !c.trashed && c.stage!=='lost' && c.stage!=='booked' && c.stage!=='thinking';
+function goalWonGuess(c){
+  const yes=(c.mlog||[]).filter(l=>l && l.out==='yes' && l.at).pop(); if(yes) return +yes.at;
+  if(c.day){ const t=Date.parse(c.day+'T12:00'); if(!isNaN(t)) return t; }
+  return +c.created || +c.stageAt || Date.now();
+}
+function goalStampWon(){
+  if(!state || !Array.isArray(state.clients)) return false;
+  ensureMeta(); ensureNewTargets();
+  let ch=false;
+  if(!state.targets.newSeed){ if(state.targets.newMonthly['2026-10']==null) state.targets.newMonthly['2026-10']=5000; state.targets.newSeed=true; ch=true; }
+  const first=!state.meta.wonInit;
+  state.clients.forEach(c=>{
+    if(goalWorking(c)){ if(!c.wonAt){ c.wonAt= first ? goalWonGuess(c) : Date.now(); ch=true; } }
+    else if((c.stage==='booked'||c.stage==='thinking') && c.wonAt){ delete c.wonAt; ch=true; }
+  });
+  if(first){ state.meta.wonInit=Date.now(); ch=true; }
+  return ch;
+}
+/* the weeks of a month: [{from,to,work}] in day numbers */
+function goalWeeks(key){
+  const [y,m]=key.split('-').map(Number), last=new Date(y,m,0).getDate();
+  const W=[]; let cur=null;
+  for(let d=1; d<=last; d++){
+    const dow=(new Date(y,m-1,d).getDay()+6)%7;   /* 0 = Monday */
+    if(!cur || dow===0){ cur={from:d,to:d,work:0}; W.push(cur); }
+    cur.to=d; if(dow<5) cur.work++;
+  }
+  if(W.length>1 && W[0].work<3){ W[1].from=W[0].from; W[1].work+=W[0].work; W.shift(); }
+  if(W.length>1 && W[W.length-1].work<3){ const l=W.pop(), p=W[W.length-1]; p.to=l.to; p.work+=l.work; }
+  return W;
+}
+/* every euro behind the month's money, with the day it was won */
+function goalRows(key){
+  const [y,m]=key.split('-').map(Number), last=new Date(y,m,0).getDate();
+  const dayOf=t=>{ if(!t) return 1; const d=new Date(t); if(isNaN(d)) return 1;
+    const k=d.getFullYear()+'-'+pad(d.getMonth()+1); if(k<key) return 1; if(k>key) return last; return d.getDate(); };
+  const rows=[], pot=[];
+  state.clients.filter(c=>c.month===key).forEach(c=>{
+    if(goalWorking(c)){
+      const when=c.wonAt||goalWonGuess(c), paid=cpaid(c), owed=cowed(c);
+      rows.push({c, when, day:dayOf(when), amount:cval(c), paid, owed, kind: owed>0.004 ? 'owed' : 'paid'});
+    } else {
+      const paid=cpaid(c);
+      if(paid>0){ const p=cpays(c).slice().sort((a,b)=>(a.date||'')<(b.date||'')?-1:1)[0]; const when=p&&p.date?Date.parse(p.date+'T12:00'):(c.stageAt||c.created);
+        rows.push({c, when, day:dayOf(when), amount:paid, paid, owed:0, kind:'paid', kept:true}); }
+      if(!c.trashed && (c.stage==='booked'||c.stage==='thinking') && cowed(c)>0) pot.push({c, amount:cowed(c)});
+    }
+  });
+  rows.sort((a,b)=>(b.when||0)-(a.when||0));
+  pot.sort((a,b)=>(a.c.day||'9')<(b.c.day||'9')?-1:1);
+  return {rows, pot};
+}
+function goalPrice(key){
+  const vals=state.clients.filter(c=>c.month===key && goalWorking(c) && cval(c)>=SITE_MIN).map(cval);
+  if(vals.length<3){ /* not enough this month — look at the previous two as well */
+    const [y,m]=key.split('-').map(Number);
+    for(let back=1; back<=2; back++){ const d=new Date(y,m-1-back,1), k=d.getFullYear()+'-'+pad(d.getMonth()+1);
+      state.clients.filter(c=>c.month===k && goalWorking(c) && cval(c)>=SITE_MIN).forEach(c=>vals.push(cval(c))); }
+  }
+  if(!vals.length) return GOAL_PRICE_FALLBACK;
+  return Math.max(SITE_MIN, Math.round(vals.reduce((a,b)=>a+b,0)/vals.length/5)*5);
+}
+function goalPlan(key){
+  const goal=newGoal(key), W=goalWeeks(key), N=W.length, per=goal/N;
+  const {rows,pot}=goalRows(key);
+  const done=rows.reduce((a,r)=>a+r.amount,0), potSum=pot.reduce((a,r)=>a+r.amount,0);
+  const now=new Date(), nowKey=todayIso().slice(0,7), today=now.getDate();
+  const [y,m]=key.split('-').map(Number);
+  let wi, frac=0;
+  if(key<nowKey){ wi=N; } else if(key>nowKey){ wi=-1; }
+  else { wi=W.findIndex(w=>today>=w.from && today<=w.to); if(wi<0) wi=N-1;
+    const w=W[wi]; let passed=0; for(let d=w.from; d<=today; d++){ const dow=(new Date(y,m-1,d).getDay()+6)%7; if(dow<5) passed++; }
+    frac = w.work ? Math.min(1,passed/w.work) : 1; }
+  const cp=i=>Math.round(per*(i+1));
+  const pace = wi>=N ? goal : wi<0 ? 0 : per*wi + per*frac;
+  /* won per week + cumulative at each week's end */
+  const wk=W.map(()=>0); rows.forEach(r=>{ const i=W.findIndex(w=>r.day>=w.from && r.day<=w.to); wk[i<0?0:i]+=r.amount; });
+  let run=0; const cum=wk.map(v=>run+=v);
+  let st='unset';
+  if(goal>0){
+    if(done>=goal) st='won';
+    else if(wi>=N) st='missed';
+    else if(wi<0) st='soon';
+    else if(done>=cp(wi)) st='ahead';
+    else if(done>=pace-0.5) st='ontrack';
+    else if(done>=pace*0.85) st='close';
+    else st='behind';
+  }
+  const price=goalPrice(key);
+  const cpNow = wi>=0 && wi<N ? cp(wi) : goal;
+  const needWeek=Math.max(0, cpNow-done), needAll=Math.max(0, goal-done);
+  return {key, goal, W, N, per, wi, frac, pace, cp, done, rows, pot, potSum, wk, cum, st, price,
+    needWeek, needAll, clientsWeek:Math.ceil(needWeek/price), clientsAll:Math.ceil(needAll/price),
+    clientsPerWeek:Math.ceil(per/price), weeksAfter: wi>=0 && wi<N ? N-1-wi : 0};
+}
+const GOAL_ST={won:'Goal reached', ahead:'Ahead', ontrack:'On track', close:'A bit behind', behind:'Behind', missed:'Missed', soon:'Starts soon', unset:'No goal yet'};
+const goalMonthShort=key=>MONTHS[+key.slice(5,7)-1];
+function goalDayLbl(key,d){ const [y,m]=key.split('-').map(Number), t=new Date(y,m-1,d); return t.toLocaleDateString('en-GB',{weekday:'long'})+' '+d+' '+t.toLocaleDateString('en-GB',{month:'short'}); }
+function goalRange(key,w){ const mo=new Date(+key.slice(0,4), +key.slice(5,7)-1, 1).toLocaleDateString('en-GB',{month:'short'}); return w.from+'–'+w.to+' '+mo; }
+function goalSegs(g, cls){
+  /* one segment per week: green = money won, stripes = still possible (Booked/Thinking), line = where you should be today */
+  return g.W.map((w,i)=>{
+    const lo=g.per*i, f=v=>Math.max(0,Math.min(1,(v-lo)/g.per))*100;
+    const fill=f(g.done), ghost=f(g.done+g.potSum);
+    const pace = i===g.wi && g.st!=='won' ? `<b style="left:${f(g.pace).toFixed(1)}%"></b>` : '';
+    return cls==='gq'
+      ? `<span class="gq-seg${i===g.wi?' now':''}"><u style="width:${ghost.toFixed(1)}%"></u><i style="width:${fill.toFixed(1)}%"></i>${pace}</span>`
+      : `<div class="gw-seg${i===g.wi?' now':''}"><div class="gw-bar"><u style="width:${ghost.toFixed(1)}%"></u><i style="width:${fill.toFixed(1)}%"></i>${pace}</div><div class="gw-wk">Week ${i+1}</div><div class="gw-cp">${fmtMoney(g.cp(i))} by ${w.to} ${goalMonthShort(g.key).slice(0,3)}</div></div>`;
+  }).join('');
+}
+function goalWeekLine(g){
+  if(g.st==='won') return `<span class="ok">Done ✓</span> · ${fmtMoney(Math.round(g.done-g.goal))} over the goal`;
+  if(g.st==='missed') return `Ended ${fmtMoney(Math.round(g.goal-g.done))} short`;
+  if(g.st==='soon') return `${g.N} weeks · ${fmtMoney(Math.round(g.per))} a week ≈ ${g.clientsPerWeek} clients`;
+  const w=g.W[g.wi];
+  if(g.needWeek<=0) return `Week ${g.wi+1} of ${g.N} · <span class="ok">checkpoint done ✓</span> · next ${fmtMoney(g.cp(Math.min(g.N-1,g.wi+1)))}`;
+  return `Week ${g.wi+1} of ${g.N} · <b>${fmtMoney(Math.round(g.needWeek))}</b> more by Sun ${w.to} ≈ <b>${g.clientsWeek} client${g.clientsWeek===1?'':'s'}</b>`;
+}
+function renderGoalPill(m){
+  const pill=$('#statTargetPill'); if(!pill) return;
+  const key=curMonth, g=goalPlan(key), mt=monthTarget(key), tot=m.generated;
+  const totLine = mt.value>0
+    ? `<div class="gq-total"><span>Total</span><b>${fmtMoney(tot)}</b><span>/ ${fmtMoney(Math.round(mt.value))}</span><span class="gq-mini"><i style="width:${Math.min(100,progPct(tot,mt.value))}%"></i></span><span>${progPct(tot,mt.value)}%</span></div>`
+    : `<div class="gq-total"><span>Total generated</span><b>${fmtMoney(tot)}</b>${m.pot.total?`<span>+${fmtMoney(m.pot.total)} possible</span>`:''}</div>`;
+  if(!g.goal){
+    pill.classList.add('unset');
+    pill.innerHTML=`<div class="gq-top"><span class="gq-k">Goal · ${goalMonthShort(key)}</span><span class="gq-chip">No goal yet</span></div>
+      <div class="gq-main"><span class="gq-num">${fmtMoney(Math.round(g.done))}</span><span class="gq-of">new money</span></div>
+      <div class="gq-unset">Tap to set a goal for new money →</div>${totLine}`;
+  } else {
+    pill.classList.remove('unset');
+    pill.innerHTML=`<div class="gq-top"><span class="gq-k">Goal · ${goalMonthShort(key)}</span><span class="gq-chip s-${g.st}">${GOAL_ST[g.st]}</span></div>
+      <div class="gq-main"><span class="gq-num">${fmtMoney(Math.round(g.done))}</span><span class="gq-of">/ ${fmtMoney(g.goal)} new</span><span class="gq-pct">${progPct(g.done,g.goal)}%</span></div>
+      <div class="gq-track">${goalSegs(g,'gq')}</div>
+      <div class="gq-week">${goalWeekLine(g)}</div>${totLine}`;
+  }
+  pill.title='Click to open the goal — weeks, what you still need and where the money comes from';
+  const ov=$('#goalOverlay'); if(ov && ov.classList.contains('open') && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('#goalBody input'))) openGoalWin(key, true);
+}
+function goalMsg(g){
+  const mon=goalMonthShort(g.key), cl=n=>n+' client'+(n===1?'':'s');
+  if(!g.goal) return `<b class="gw-big2">Set a goal for new money below.</b><p>Then this window shows, week by week, how much you need and how many clients that is.</p>`;
+  if(g.st==='won') return `<b class="gw-big2">Goal reached — ${fmtMoney(Math.round(g.done-g.goal))} over.</b><p>Every client from here on is extra for ${mon}.</p>`;
+  if(g.st==='missed') return `<b class="gw-big2">${mon} ended ${fmtMoney(Math.round(g.goal-g.done))} short (${progPct(g.done,g.goal)}%).</b>`;
+  if(g.st==='soon') return `<b class="gw-big2">${g.N} weeks in ${mon}: ${fmtMoney(Math.round(g.per))} a week ≈ ${cl(g.clientsPerWeek)} a week.</b>`;
+  const w=g.W[g.wi], sun=goalDayLbl(g.key,w.to);
+  const diff=Math.round(g.done-g.pace);
+  const paceTxt = diff>=0 ? `You are <b>${fmtMoney(diff)} ahead</b> of where you should be today (${fmtMoney(Math.round(g.pace))}).` : `You are <b>${fmtMoney(-diff)} behind</b> where you should be today (${fmtMoney(Math.round(g.pace))}).`;
+  let h='';
+  if(g.needWeek>0){
+    h+=`<b class="gw-big2">By ${sun} you need ${fmtMoney(g.cp(g.wi))} → ${fmtMoney(Math.round(g.needWeek))} more ≈ ${cl(g.clientsWeek)}.</b>`;
+    h+=`<p>${paceTxt}</p>`;
+    if(g.weeksAfter>0) h+=`<p>Hit that and you have <b>${g.weeksAfter} more week${g.weeksAfter===1?'':'s'}</b> for the other ${fmtMoney(Math.round(g.goal-g.cp(g.wi)))} — ${fmtMoney(Math.round(g.per))} a week ≈ ${cl(g.clientsPerWeek)} a week.</p>`;
+  } else {
+    h+=`<b class="gw-big2">This week's checkpoint (${fmtMoney(g.cp(g.wi))}) is done ✓</b>`;
+    h+=`<p>${paceTxt}</p>`;
+    if(g.wi<g.N-1) h+=`<p>Next checkpoint: <b>${fmtMoney(g.cp(g.wi+1))}</b> by ${goalDayLbl(g.key,g.W[g.wi+1].to)} — ${fmtMoney(Math.max(0,Math.round(g.cp(g.wi+1)-g.done)))} more.</p>`;
+  }
+  h+=`<p>For the whole goal: <b>${fmtMoney(Math.round(g.needAll))} left ≈ ${cl(g.clientsAll)}</b> <span class="gw-note">(at ~${fmtMoney(g.price)} a client, your average)</span></p>`;
+  if(g.potSum>0){ const n=g.pot.length, cover=Math.min(n, Math.max(g.clientsWeek,0));
+    h+=`<p class="gw-note">${fmtMoney(Math.round(g.potSum))} is waiting in Booked / Thinking (${n} ${n===1?'person':'people'}, not counted)${g.needWeek>0 && cover?` — closing ${cover} of them would cover this week`:''}.</p>`; }
+  return h;
+}
+function openGoalWin(key, keepScroll){
+  key=key||curMonth;
+  const g=goalPlan(key), m=monthMoney(key), mt=monthTarget(key);
+  const mon=fmtMonth(key);
+  $('#goalTitle').textContent='Goal · '+mon;
+  $('#goalSub').textContent= g.wi>=0 && g.wi<g.N && key===todayIso().slice(0,7)
+    ? `Week ${g.wi+1} of ${g.N} · ${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})}`
+    : `${g.N} weeks`;
+  /* weeks */
+  const wcards=g.W.map((w,i)=>{
+    let cls='next', s='';
+    const won=g.wk[i], cum=g.cum[i];
+    if(!g.goal){ cls = i===g.wi?'now':(i<g.wi?'':'next'); s= i<=g.wi ? fmtMoney(Math.round(won))+' won' : 'coming'; }
+    else if(i<g.wi){ cls= cum>=g.cp(i)?'hit':'miss'; s= cum>=g.cp(i) ? '✓ reached '+fmtMoney(g.cp(i)) : '✗ '+fmtMoney(Math.round(g.cp(i)-cum))+' short of '+fmtMoney(g.cp(i)); }
+    else if(i===g.wi){ cls= g.done>=g.cp(i)?'hit':'now'; s= g.done>=g.cp(i) ? '✓ reached '+fmtMoney(g.cp(i)) : 'goal '+fmtMoney(g.cp(i))+' by Sun'; }
+    else { s='goal '+fmtMoney(g.cp(i)); }
+    return `<div class="gw-wcard ${cls}"><div class="t">Week ${i+1}${i===g.wi?' · now':''}</div><div class="d">${goalRange(key,w)}</div><div class="v">${i>g.wi&&g.wi>=0?'—':fmtMoney(Math.round(won))}</div><div class="s">${s}</div></div>`;
+  }).join('');
+  /* where it comes from */
+  const stg=c=>{ const s=stageById(c.stage); return `<i style="background:${s.cs};color:${s.hex}">${esc(s.name)}</i>`; };
+  const wkOf=day=>{ const i=g.W.findIndex(w=>day>=w.from && day<=w.to); return i<0?1:i+1; };
+  const row=(r,cls)=>`<button type="button" class="gw-row ${cls}" data-id="${esc(r.c.id)}"><span class="n">${esc(r.c.name||'—')}</span><span class="a">${fmtMoney2(r.amount)}</span><span class="d">${stg(r.c)}<span>won ${bankDate(r.when)} · week ${wkOf(r.day)}</span>${cls==='owed'&&r.paid>0?`<span>· ${fmtMoney2(r.paid)} paid, ${fmtMoney2(r.owed)} to come</span>`:''}${r.kept?'<span>· deposit kept</span>':''}</span></button>`;
+  const paid=g.rows.filter(r=>r.kind==='paid'), owed=g.rows.filter(r=>r.kind==='owed');
+  const sum=a=>a.reduce((x,r)=>x+r.amount,0);
+  const extra=bankRows(key).filter(x=>x.kind==='ren'||x.kind==='sub');
+  const xrow=x=>`<button type="button" class="gw-row ${x.kind}" data-k="${x.kind}" data-id="${esc(x.id||'')}"><span class="n">${esc(x.name||'—')}</span><span class="a">${fmtMoney2(x.amount)}</span><span class="d"><span>${x.when?bankDate(x.when):'date not recorded'} · ${esc(x.note)}</span></span></button>`;
+  const totPct=mt.value>0?progPct(m.generated,mt.value):0, tw=v=>m.generated>0 && mt.value>0 ? Math.min(100,v/Math.max(mt.value,m.generated)*100) : 0;
+  const e=m.earned, newSum=m.generated-e.renew-e.subs;
+  $('#goalBody').innerHTML=`
+    <div class="gw-hero s-${g.st}">
+      <div class="gw-row1"><span class="gw-lbl">New money · ${esc(mon)}</span><span class="gw-chip">${GOAL_ST[g.st]}</span></div>
+      <div class="gw-big"><b>${fmtMoney(Math.round(g.done))}</b><span>${g.goal?'of '+fmtMoney(g.goal):'no goal yet'}</span>${g.goal?`<em>${progPct(g.done,g.goal)}%</em>`:''}</div>
+      ${g.goal?`<div class="gw-track">${goalSegs(g,'gw')}</div>`:''}
+    </div>
+    <div class="gw-msg">${goalMsg(g)}</div>
+    <div class="gw-weeks" style="--n:${g.N}">${wcards}</div>
+    <div class="gw-h"><span>Goals for ${esc(mon)}</span></div>
+    <div class="gw-goals">
+      <label>New money goal (€)<input type="number" inputmode="numeric" min="0" step="50" id="goalNewIn" value="${g.goal||''}" placeholder="e.g. 5000"></label>
+      <label>Total goal (€) · new + renewals + monthly<input type="number" inputmode="numeric" min="0" step="50" id="goalTotIn" value="${mt.value||''}" placeholder="e.g. 6000"></label>
+      <button type="button" id="goalSave">Save</button>
+    </div>
+    <div class="gw-h"><span>Total generated</span><span>${fmtMoney(m.generated)}${mt.value?' / '+fmtMoney(Math.round(mt.value))+' · '+totPct+'%':''}</span></div>
+    <div class="gw-tot">
+      <div class="bar"><i class="n" style="width:${tw(newSum)}%"></i><i class="r" style="width:${tw(e.renew)}%"></i><i class="m" style="width:${tw(e.subs)}%"></i></div>
+      <div class="chips"><span class="n">New ${fmtMoney(Math.round(newSum))}</span><span class="r">Renewals ${fmtMoney(Math.round(e.renew))}</span><span class="m">Monthly ${fmtMoney(Math.round(e.subs))}</span>${m.pot.total?`<span style="background:#EEF2F7;color:#5B6475">+${fmtMoney(m.pot.total)} possible</span>`:''}</div>
+    </div>
+    <div class="gw-h"><span>Where the new money comes from</span><span>${fmtMoney2(g.done)}</span></div>
+    ${paid.length?`<div class="gw-h" style="margin-top:6px"><span>Paid</span><span>${fmtMoney2(sum(paid))}</span></div>`+paid.map(r=>row(r,'paid')).join(''):''}
+    ${owed.length?`<div class="gw-h" style="margin-top:10px"><span>Agreed · still to collect</span><span>${fmtMoney2(sum(owed))}</span></div>`+owed.map(r=>row(r,'owed')).join(''):''}
+    ${!g.rows.length?`<div class="gw-empty">No new clients in ${esc(mon)} yet.</div>`:''}
+    ${g.pot.length?`<details class="gw-potlist"><summary class="gw-h" style="margin-top:10px"><span>Not agreed yet · not counted · ${g.pot.length} — tap to see</span><span>+${fmtMoney2(g.potSum)}</span></summary>`+g.pot.map(p=>`<button type="button" class="gw-row gw-pot" data-id="${esc(p.c.id)}"><span class="n">${esc(p.c.name||'—')}</span><span class="a">+${fmtMoney2(p.amount)}</span><span class="d">${stg(p.c)}${p.c.day?`<span>meeting ${esc(fmtDay(p.c.day))}</span>`:''}</span></button>`).join('')+'</details>':''}
+    ${extra.length?`<div class="gw-h"><span>The rest of the total · renewals + monthly</span><span>${fmtMoney2(e.renew+e.subs)}</span></div>`+extra.map(xrow).join(''):''}
+  `;
+  const ov=$('#goalOverlay');
+  if(!keepScroll){ ov.classList.add('open'); $('#goalBody').scrollTop=0; }
+  $('#goalSave').onclick=()=>{
+    ensureNewTargets();
+    const rd=id=>{ const t=String($(id).value||'').trim(); if(t==='') return null; const n=Math.round(parseFloat(t.replace(',','.'))); return isNaN(n)||n<0 ? NaN : n; };
+    const nv=rd('#goalNewIn'), tv=rd('#goalTotIn');
+    if(Number.isNaN(nv)||Number.isNaN(tv)){ toast('Enter a number, e.g. 5000'); return; }
+    if(nv==null) delete state.targets.newMonthly[key]; else state.targets.newMonthly[key]=nv;
+    if(tv==null) delete state.targets.monthly[key]; else state.targets.monthly[key]=tv;
+    state.targets.updated=Date.now();
+    save(); renderAll(); toast('Goals saved for '+fmtMonth(key));
+  };
+}
+function closeGoalWin(){ $('#goalOverlay').classList.remove('open'); }
+$('#statTargetPill').addEventListener('click',()=>openGoalWin(curMonth));
+$('#statTargetPill').addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openGoalWin(curMonth); } });
+$('#goalClose').addEventListener('click',closeGoalWin);
+$('#goalOverlay').addEventListener('click',e=>{
+  if(e.target.id==='goalOverlay'){ closeGoalWin(); return; }
+  const r=e.target.closest('.gw-row'); if(!r) return;
+  closeGoalWin();
+  if(r.dataset.k==='ren') openRenewalsMonth(curMonth);
+  else if(r.dataset.k==='sub'){ subYear=+curMonth.slice(0,4); switchView('monthly'); }
+  else if(r.dataset.id) openModal(r.dataset.id);
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#goalOverlay').classList.contains('open')) closeGoalWin(); });
 
 
 /* ---------- board ---------- */
@@ -10613,6 +10959,7 @@ function applyBookedDefault(){
 function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e){}
   if(!state) return;
   try{ if(applyBookedDefault()) setTimeout(save,0); }catch(e){}
+  try{ if(goalStampWon()) setTimeout(save,0); }catch(e){ console.warn('goal stamp',e); }
   try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
   try{ if(fixSalakou20261009()) setTimeout(save,0); }catch(e){}
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
