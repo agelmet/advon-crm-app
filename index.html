@@ -7041,7 +7041,9 @@ function monthLogStats(key){
   const workingDays= ov!=null? ov : daysWith;
   const meetClients=state.clients.filter(c=>c.month===key && statClient(c) && cval(c)>=SITE_MIN);  /* every client had a booked meeting (under €120 = another service) */
   const converted=meetClients.filter(c=>PAYING_STAGES.includes(c.stage)).length;  /* lost ⇒ not counted */
-  const revenue=meetClients.filter(c=>notLost(c) && c.stage!=='booked').reduce((a,c)=>a+(+c.value||0),0);  /* clients counted since the restart, lost excluded */
+  /* 14 Oct 2026 (Angelo): «New revenue generated» = exactly the «New money» figure of the month (new websites that said yes —
+     paid + still to collect; Booked, Thinking and Lost left out), then ÷ working days */
+  const revenue=goalPlan(key).done;
   return { calls:cold.length, booked:logs.filter(l=>l.type==='g').length, sms:logs.filter(l=>l.type==='y').length, nos:logs.filter(l=>l.type==='r').length,
     coldBooked, callConv: cold.length? coldBooked/cold.length : 0,
     daysWith, workingDays, avgCalls: workingDays? cold.length/workingDays : 0,
@@ -7072,8 +7074,8 @@ function monthStatsHtml(m,key){
     <div class="qs-pill"><div class="k">${IC.check2} Meeting → client</div><div class="v">${meetConv}%</div><div class="sub">${m.converted}/${m.meetClients} paid · lost = fail</div><div class="tgt-bar"><i class="${progClass(meetConv)}" style="width:${Math.min(100,meetConv)}%"></i></div></div>
     <div class="qs-pill" id="wdOverride" style="cursor:pointer" title="Click to override the working-day count"><div class="k">${IC.calendar} Working days</div><div class="v">${m.workingDays}${wdIsOverride?' *':''}</div><div class="sub">${wdIsOverride?'manual · auto '+m.daysWith:'auto from logs'} · edit ${IC.edit}</div></div>
     <div class="qs-pill"><div class="k">${IC.phone} Avg calls / day</div><div class="v">${m.avgCalls.toFixed(1)}</div><div class="sub">over ${m.workingDays} working day${m.workingDays===1?'':'s'}</div></div>
-    <div class="qs-pill"><div class="k">${IC.euro} Revenue generated</div><div class="v">${fmtMoney(Math.round(m.revenue))}</div><div class="sub">clients since the restart · lost excluded</div></div>
-    <div class="qs-pill"><div class="k">${IC.euro} Avg € / working day</div><div class="v">${fmtMoney(Math.round(m.avgRevPerDay))}</div><div class="sub">generated ÷ working days</div></div>
+    <div class="qs-pill"><div class="k">${IC.euro} New revenue generated</div><div class="v">${fmtMoney(Math.round(m.revenue))}</div><div class="sub">new money this month · same as «New money»</div></div>
+    <div class="qs-pill"><div class="k">${IC.euro} Avg € / working day</div><div class="v">${fmtMoney(Math.round(m.avgRevPerDay))}</div><div class="sub">new money ÷ working days</div></div>
   </div>`;
 }
 function yearStatsHtml(y,year){
@@ -7102,8 +7104,8 @@ function yearStatsHtml(y,year){
     <div class="qs-pill"><div class="k">${IC.check2} Meeting → client</div><div class="v">${meetConv}%</div><div class="sub">${y.converted}/${y.meetClients} paid · lost = fail</div><div class="tgt-bar"><i class="${progClass(meetConv)}" style="width:${Math.min(100,meetConv)}%"></i></div></div>
     <div class="qs-pill"><div class="k">${IC.calendar} Working days</div><div class="v">${y.workingDays}</div><div class="sub">summed from the months</div></div>
     <div class="qs-pill"><div class="k">${IC.phone} Avg calls / day</div><div class="v">${y.avgCalls.toFixed(1)}</div><div class="sub">over ${y.workingDays} working day${y.workingDays===1?'':'s'}</div></div>
-    <div class="qs-pill"><div class="k">${IC.euro} Revenue generated</div><div class="v">${fmtMoney(Math.round(y.revenue))}</div><div class="sub">clients since the restart · lost excluded</div></div>
-    <div class="qs-pill"><div class="k">${IC.euro} Avg € / working day</div><div class="v">${fmtMoney(Math.round(y.avgRevPerDay))}</div><div class="sub">generated ÷ working days</div></div>
+    <div class="qs-pill"><div class="k">${IC.euro} New revenue generated</div><div class="v">${fmtMoney(Math.round(y.revenue))}</div><div class="sub">new money, all months added up</div></div>
+    <div class="qs-pill"><div class="k">${IC.euro} Avg € / working day</div><div class="v">${fmtMoney(Math.round(y.avgRevPerDay))}</div><div class="sub">new money ÷ working days</div></div>
   </div>
   <div class="qlc-wrap"><div class="qlc-title">${IC.bars} Cold calls by month · ${year}</div><div class="qlc-grid">${bars}</div></div>`;
 }
