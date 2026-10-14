@@ -8081,7 +8081,19 @@ $('#rnName').addEventListener('keydown',e=>{if(e.key==='Enter')$('#rnAdd').click
 /* ---------- Remaining — every unpaid client, month by month, plus the Trash ---------- */
 /* closest to the money first: Waiting payment sits on top, a fresh booking at the bottom */
 const REM_STAGE_RANK={pay:0,changes:1,review:2,building:3,needinfo:4,booked:5,thinking:6};
-const remFlag=c=> (c.remFlag && REM_FLAGS[c.remFlag]) ? c.remFlag : '';
+/* The colour follows the Board by itself (Angelo, 14 Oct 2026):
+   said yes = Need info · Building · Draft·Review · Making changes · Waiting payment (the New money) → GREEN,
+   Thinking → ORANGE (most likely lost, not counted). Tapping a dot still overrides it for that client,
+   but only while the card stays in that stage — move it on the Board and the automatic colour is back.
+   An old red (set before this rule, no stage stamp) is kept. */
+const REM_AUTO_GREEN=['needinfo','building','review','changes','pay'];
+const remAutoFlag=c=> c.stage==='thinking' ? 'orange' : (REM_AUTO_GREEN.includes(c.stage) ? 'green' : '');
+const remFlag=c=>{
+  const m=c.remFlag;
+  if(m && c.remFlagStage===c.stage && (m==='none' || REM_FLAGS[m])) return m==='none' ? '' : m;
+  if(m==='red' && !c.remFlagStage) return 'red';
+  return remAutoFlag(c);
+};
 /* money you have given up on: orange (most likely lost) + red (about to trash).
    It stays visible on the list, but it is NOT counted in any "still to collect" figure —
    same as the Trash. Only green + uncoloured clients count as money you are still chasing. */
@@ -8102,11 +8114,12 @@ function remAgeDays(c){
 }
 function setRemFlag(id, flag){
   const c=state.clients.find(x=>x.id===id); if(!c) return;
-  if(remFlag(c)===flag){ delete c.remFlag; }
-  else { c.remFlag=flag; }
+  const cleared = remFlag(c)===flag;
+  c.remFlag = cleared ? 'none' : flag; c.remFlagStage = c.stage;
+  if(!cleared && flag===remAutoFlag(c)){ delete c.remFlag; delete c.remFlagStage; }   /* back to the automatic colour */
   c.updated=Date.now();
   save(); renderAll();
-  toast(flag && c.remFlag ? c.name+' · '+REM_FLAGS[flag].name : c.name+' · colour cleared');
+  toast(cleared ? c.name+' · colour cleared' : c.name+' · '+REM_FLAGS[flag].name);
 }
 function markPaidFromRemaining(id){
   const c=state.clients.find(x=>x.id===id); if(!c) return;
@@ -8199,7 +8212,7 @@ function renderRemaining(){
     <span class="rl-item"><i class="rem-dot green on"></i> Green — about to pay</span>
     <span class="rl-item"><i class="rem-dot orange on"></i> Orange — most likely lost</span>
     <span class="rl-item"><i class="rem-dot red on"></i> Red — about to be trashed</span>
-    <span class="rl-hint">Tap a dot to colour a client · tap again to clear · <b>orange and red money is not counted</b> in “Still to collect” · <b>Paid</b> collects it · ${IC.trash} moves it to the Trash</span>`;
+    <span class="rl-hint"><b>Automatic:</b> said yes on the Board (Need info → Waiting payment) = green · Thinking = orange · tap a dot to change one client, tap again to clear · <b>orange and red money is not counted</b> in “Still to collect” · <b>Paid</b> collects it · ${IC.trash} moves it to the Trash</span>`;
   /* months */
   const wrap=$('#remMonths'); wrap.innerHTML='';
   if(!keys.length){
@@ -10550,7 +10563,7 @@ function cashForecast(){
   const win={30:at(30),60:at(60),90:at(90)};
   const out={30:{sum:0,lines:{}},60:{sum:0,lines:{}},90:{sum:0,lines:{}}};
   const add=(w,key,label,amount,count)=>{ amount=Math.round(amount); const o=out[w]; o.sum+=amount; const L=o.lines[key]||(o.lines[key]={label,n:0,v:0}); L.n+=count; L.v+=amount; };
-  const ok=c=>isUnpaid(c) && c.stage!=='thinking' && !(c.remFlag==='orange'||c.remFlag==='red');
+  const ok=c=>isUnpaid(c) && c.stage!=='thinking' && !isGivenUp(c);
   state.clients.filter(ok).forEach(c=>{
     const v=cowed(c); if(!v) return;
     if(c.stage==='pay'){ [30,60,90].forEach(w=>add(w,'pay','waiting payment',v,1)); }
@@ -10585,14 +10598,14 @@ const Brief={ lastAt:0, lastHash:'', busy:false,
     const stName=id=>(STAGES.find(s=>s.id===id)||{}).name||id;
     const since=c=>c.stageAt||c.updated||c.created||0;
     const cl=state.clients.filter(c=>notLost(c) && !isTrashed(c));
-    const row=c=>({name:c.name, stage:stName(c.stage), value:cowed(c), total:cval(c), paidSoFar:cpaid(c), days:this.daysSince(since(c)), flag:c.remFlag||'', phone:c.phone||'', month:c.month||''});
-    const unpaid=cl.filter(c=>c.stage==='pay' && !(c.remFlag==='orange'||c.remFlag==='red')).map(row).sort((a,b)=>b.value-a.value);
+    const row=c=>({name:c.name, stage:stName(c.stage), value:cowed(c), total:cval(c), paidSoFar:cpaid(c), days:this.daysSince(since(c)), flag:remFlag(c), phone:c.phone||'', month:c.month||''});
+    const unpaid=cl.filter(c=>c.stage==='pay' && !isGivenUp(c)).map(row).sort((a,b)=>b.value-a.value);
     const materials=cl.filter(c=>c.stage==='needinfo').map(row).sort((a,b)=>b.days-a.days);
     const feedback=cl.filter(c=>c.stage==='review').map(row).sort((a,b)=>b.days-a.days);
     const changes=cl.filter(c=>c.stage==='changes').map(row);
     const building=cl.filter(c=>c.stage==='building').map(row);
     const thinking=cl.filter(c=>isThinking(c)).map(c=>({...row(c), name:c.name+(fuOpen(c)?' (remind '+fmtDay(c.fu.day)+(c.fu.what?': '+c.fu.what:'')+')':''), days:thinkDays(c)})).sort((a,b)=>b.days-a.days);
-    const flagged=cl.filter(c=>isUnpaid(c) && (c.remFlag==='orange'||c.remFlag==='red')).map(row);
+    const flagged=cl.filter(c=>isUnpaid(c) && isGivenUp(c)).map(row);
     const meetings=cl.filter(c=>c.day && c.day>=t && c.day<=in7).sort((a,b)=>(a.day+(a.time||''))<(b.day+(b.time||''))?-1:1).map(c=>({name:c.name, day:c.day, time:c.time||'', phone:c.phone||'', stage:stName(c.stage), value:cval(c)}));
     const ren=liveRenewals().filter(r=>r.date && r.date<=in14).sort((a,b)=>a.date<b.date?-1:1).map(r=>({name:r.name, date:r.date, value:+r.value||0, overdue:r.date<t}));
     const subsDue=(state.subs||[]).filter(s=>s.renewDay && !(s.paid&&s.paid[curMonth])).map(s=>({name:s.name, value:+s.value||0, day:s.renewDay}));
@@ -10604,7 +10617,7 @@ const Brief={ lastAt:0, lastHash:'', busy:false,
     const ydLeads={booked:0,sms:0,no:0,noanswer:0}; state.leads.forEach(l=>{ if(l.doneAt && isoDate(new Date(l.doneAt))===yd){ if(l.status==='g') ydLeads.booked++; else if(l.status==='y') ydLeads.sms++; else if(l.status==='r') ydLeads.no++; } if(l.tries.includes(yd)) ydLeads.noanswer++; });
     const ydStats=dayStats(yd,true); const mStats=monthLogStats(curMonth);
     const earned=earnedForMonth(curMonth); const target=monthTarget(curMonth).value;
-    const toCollect=cl.filter(c=>isUnpaid(c) && c.stage!=='thinking' && !(c.remFlag==='orange'||c.remFlag==='red')).reduce((a,c)=>a+cowed(c),0);
+    const toCollect=cl.filter(c=>isUnpaid(c) && c.stage!=='thinking' && !isGivenUp(c)).reduce((a,c)=>a+cowed(c),0);
     const followups=state.clients.filter(c=>fuOpen(c) && c.fu.day<=t).map(c=>({name:c.name, phone:c.phone||'', day:c.fu.day, what:c.fu.what, stage:stName(c.stage), overdue:c.fu.day<t}));
     const extras=upsList().filter(x=>x.u.day<=t).map(({c,u})=>({name:c.name, phone:c.phone||'', day:u.day, what:u.what.join(', '), note:u.note||'', overdue:u.day<t}));
     let cbToday=[]; try{ cbToday=caEntries().filter(caDue).sort(caCmpDay).map(e=>({name:e.name, day:e.day||'', time:e.time||'', how:e.how, phone:e.phone||'', note:e.note&&e.note!==e.name?e.note:'', overdue:!!(e.day&&e.day<t), lead:e.src==='lead'})); }catch(e){}
