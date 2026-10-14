@@ -5145,7 +5145,7 @@ function goalStampWon(){
   if(!state.targets.newSeed){ if(state.targets.newMonthly['2026-10']==null) state.targets.newMonthly['2026-10']=5000; state.targets.newSeed=true; ch=true; }
   /* 14 Oct 2026: the first version stamped «today» on cards that arrived through a sync — put those back on their meeting day */
   const fixFrom=Date.parse('2026-10-14T00:00:00+03:00'), fixTo=Date.parse('2026-10-14T16:00:00+03:00');
-  if(!state.meta.wonFix1){ state.clients.forEach(c=>{ if(c.wonAt>=fixFrom && c.wonAt<=fixTo){ c.wonAt=goalWonGuess(c); } }); state.meta.wonFix1=1; ch=true; }
+  state.clients.forEach(c=>{ if(c.wonAt>=fixFrom && c.wonAt<=fixTo){ const g=Math.min(Date.now(), goalWonGuess(c)); if(Math.abs(g-c.wonAt)>6e4){ c.wonAt=g; ch=true; } } });
   state.clients.forEach(c=>{
     /* the day of the «Yes» = the «Yes» meeting log, else the meeting day, else the day the card was made */
     if(goalWorking(c)){ if(!c.wonAt){ c.wonAt=Math.min(Date.now(), goalWonGuess(c)); ch=true; } }
