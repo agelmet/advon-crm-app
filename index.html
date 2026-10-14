@@ -2300,6 +2300,100 @@ body.dark .tab.tab-meta:not(.active){color:#ff7ab8;}
 .sync-modal-body p{margin:0 0 12px;font-size:14px;line-height:1.55;}
 .sync-modal-body ol{margin:0 0 12px 18px;font-size:14px;line-height:1.6;}
 @media(max-width:860px){.sync-pill span:not(.sync-dot){display:none;} .sync-pill{padding:0 9px;}}
+
+/* ===== MONEY STRIP v2 (14 Oct 2026) — three cards: in the bank → new money (goal) → total generated, then the small facts ===== */
+.strip{align-items:center;}
+.stat-pills.mx{display:grid !important; grid-template-columns:1fr 1.35fr 1.15fr; gap:14px; width:100%; flex:1 1 100%; margin-left:0; justify-content:stretch; align-items:stretch;}
+body[data-view="calendar"] .stat-pills.mx{grid-template-columns:1fr 1.35fr 1.15fr;}
+.stat-pills.mx .mx-card{max-width:none !important; flex:none; min-width:0; text-align:left; align-items:stretch; justify-content:flex-start; gap:0;
+  background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px 18px 14px; box-shadow:var(--shadow); color:var(--ink); cursor:pointer; position:relative;}
+.stat-pills.mx .mx-card.earned-pill{background:#fff; border:1px solid var(--line); box-shadow:var(--shadow);}
+@media (hover:hover){.stat-pills.mx .mx-card:hover{transform:translateY(-1px); border-color:#BFD4F2; box-shadow:0 12px 28px rgba(24,49,92,.12);} #statEarnedPill:hover{box-shadow:0 12px 28px rgba(24,49,92,.12);}}
+.stat-pills.mx .mx-card:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
+.mx-k{display:flex; align-items:center; gap:8px; font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); min-width:0;}
+.mx-k .mx-n{margin-left:auto; font-weight:600; letter-spacing:0; text-transform:none; font-size:11.5px; color:var(--muted); white-space:nowrap;}
+.mx-big{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; margin:8px 0 1px; font-family:'Sora'; font-weight:800; font-size:34px; line-height:1; letter-spacing:-.025em; color:var(--ink); font-variant-numeric:tabular-nums;}
+.mx-big small{font-family:'Inter',system-ui,sans-serif; font-size:14px; font-weight:700; color:var(--muted); letter-spacing:0;}
+.mx-big .mx-pct{font-family:'Inter',system-ui,sans-serif; font-size:12px; font-weight:800; padding:4px 8px; border-radius:999px; background:var(--blue-soft); color:var(--brand); letter-spacing:0;}
+.mx-big .mx-pct.won{background:#DDF7EA; color:#0B7A47;}
+.mx-sub{font-size:12px; color:var(--muted); margin-top:3px; font-weight:500; line-height:1.35;}
+.mx-sub b{color:var(--ink); font-weight:800;}
+.mx-chip{margin-left:auto; display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:800; letter-spacing:.02em; padding:4px 9px; border-radius:999px; text-transform:none; white-space:nowrap; background:#EEF2F8; color:var(--muted); max-width:100%; overflow:hidden; text-overflow:ellipsis;}
+.mx-chip.s-ahead,.mx-chip.s-won{background:#DDF7EA; color:#0B7A47;}
+.mx-chip.s-ontrack{background:#E3EEFD; color:#1D5FC0;}
+.mx-chip.s-close{background:#FFF3CC; color:#8A6500;}
+.mx-chip.s-behind,.mx-chip.s-missed{background:#FFE6E1; color:#C2402D;}
+.mx-bar{display:flex; height:11px; border-radius:999px; overflow:hidden; background:#EEF2F8; margin-top:12px; position:relative;}
+.mx-bar i{display:block; height:100%; flex:none; min-width:0;}
+.mx-bar .g{background:var(--green);} .mx-bar .b{background:#3D8BF0;} .mx-bar .vi{background:#8B5CF6;}
+.mx-bar .r{background:repeating-linear-gradient(135deg,#FF7A86 0 4px,#FFB3BA 4px 8px);}
+.mx-bar .gh{background:repeating-linear-gradient(135deg,#D8DEEA 0 3px,transparent 3px 7px);}
+.mx-legend{display:flex; gap:12px; flex-wrap:wrap; margin-top:9px; font-size:12px; color:var(--muted); justify-content:flex-start;}
+.mx-legend span{display:inline-flex; align-items:center; gap:6px; white-space:nowrap;}
+.mx-legend b{color:var(--ink); font-weight:800; font-variant-numeric:tabular-nums;}
+.mx-legend i{width:9px; height:9px; border-radius:3px; display:inline-block; flex:none;}
+.mx-legend .g i{background:var(--green);} .mx-legend .b i{background:#3D8BF0;} .mx-legend .vi i{background:#8B5CF6;} .mx-legend .r i{background:#FF7A86;} .mx-legend .gh i{background:#D8DEEA;}
+.stat-pills.mx .earned-split .es{font-size:12px; font-weight:600; padding:0; border-radius:0; color:var(--muted); background:none;}
+.mx-if{margin-top:auto; padding-top:12px;}
+.mx-if > div,.mx-need > div{background:#F7F9FD; border:1px solid var(--line); border-radius:12px; padding:8px 11px; min-width:0;}
+.mx-if .l,.mx-need .l{font-size:10px; color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:.06em;}
+.mx-if .vv,.mx-need .vv{font-family:'Sora'; font-weight:800; font-size:16px; line-height:1.25; margin-top:2px; color:var(--ink); font-variant-numeric:tabular-nums;}
+.mx-if .vv small,.mx-need .vv small{font-family:'Inter',system-ui,sans-serif; font-size:12px; font-weight:600; color:var(--muted);}
+.mx-if .vv.ok{color:#0B7A47;}
+.mx-foot{margin-top:10px; padding-top:9px; border-top:1px dashed var(--line); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; font-size:12px; color:var(--muted); font-weight:500;}
+.mx-foot b{color:var(--ink); font-weight:800; font-variant-numeric:tabular-nums;}
+.mx-foot .net{color:#0B7A47; font-weight:800;} .mx-foot .net.neg{color:var(--coral);}
+/* goal card */
+.mx-split{display:flex; gap:7px; margin-top:9px; flex-wrap:wrap;}
+.mx-split span{font-size:12px; font-weight:800; padding:4px 10px; border-radius:999px; white-space:nowrap; font-variant-numeric:tabular-nums;}
+.mx-split .paid{background:#DDF7EA; color:#0B7A47;}
+.mx-split .owed{background:var(--red-soft); color:#C0303D; cursor:pointer;}
+@media (hover:hover){.mx-split .owed:hover{background:#FFD9DD;}}
+.mx-split .pot{background:#F1F3F8; color:var(--muted); font-weight:600;}
+.mx-track{position:relative; margin-top:14px; padding-top:14px;}
+.mx-track .mx-bar{margin-top:0; height:13px;}
+.mx-ticks{position:relative; height:16px; margin-top:5px; font-size:10.5px; color:var(--muted); font-weight:600;}
+.mx-ticks span{position:absolute; top:0; transform:translateX(-50%); white-space:nowrap;}
+.mx-ticks span::before{content:''; position:absolute; left:50%; top:-11px; width:1px; height:7px; background:#C9D2E3;}
+.mx-ticks span:last-child{transform:translateX(-100%);} .mx-ticks span:last-child::before{left:auto; right:0;}
+.mx-ticks span:first-child.one{transform:none;}
+.mx-ticks span.done{color:#0B7A47; font-weight:800;}
+.mx-ticks span.now{color:var(--ink); font-weight:800;}
+.mx-pace{position:absolute; top:10px; width:2px; height:21px; margin-left:-1px; background:var(--ink); border-radius:2px; opacity:.8;}
+.mx-pace::after{content:'today'; position:absolute; top:-13px; left:50%; transform:translateX(-50%); font-size:9.5px; font-weight:800; color:var(--ink); white-space:nowrap; letter-spacing:.02em;}
+.mx-need{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px;}
+.mx-need.one{grid-template-columns:1fr;}
+.mx-unset{font-size:12px; font-weight:700; color:var(--brand); margin-top:8px;}
+/* facts row */
+.stat-pills.mx .mx-facts{grid-column:1 / -1; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px; align-self:auto; width:100%;}
+.stat-pills.mx .mx-facts .mini{display:flex; flex-direction:row; align-items:center; gap:10px; min-width:0; width:auto; padding:9px 13px 9px 12px; border-radius:14px; text-align:left; background:#fff; border:1px solid var(--line); box-shadow:0 1px 2px rgba(24,49,92,.04);}
+.stat-pills.mx .mx-facts .mini::before{content:''; width:8px; height:8px; border-radius:50%; flex:none; background:var(--brand);}
+.stat-pills.mx .mx-facts #statCountPill::before{background:var(--green);} .stat-pills.mx .mx-facts #statRenewPill::before{background:#3D8BF0;} .stat-pills.mx .mx-facts #statSubsPill::before{background:#8B5CF6;}
+.stat-pills.mx .mx-facts #statExpPill::before{background:var(--coral);} .stat-pills.mx .mx-facts #statRiskPill::before{background:var(--orange);}
+.stat-pills.mx .mx-facts .mini .mk{display:flex; flex-direction:column; gap:2px; font-size:11px; letter-spacing:.02em; text-transform:none; font-weight:700; color:var(--muted); min-width:0; order:1;}
+.stat-pills.mx .mx-facts .mini .mk i{font-size:10.5px; color:#9AA6BC; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.stat-pills.mx .mx-facts .mini .mk i:empty{display:none;}
+.stat-pills.mx .mx-facts .mini .mv{margin-left:auto; font-size:17px; order:2;}
+.stat-pills.mx .mx-facts .mini.meet-pill{display:flex;}
+.stat-pills.mx .mx-facts .mini.meet-pill .mv{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.stat-pills.mx .mx-facts .mini.risk.off{opacity:.5;}
+@media(max-width:1100px){
+  .stat-pills.mx{grid-template-columns:1fr 1fr; gap:12px;}
+  .stat-pills.mx .mx-new{grid-column:1 / -1;}
+  .stat-pills.mx .mx-facts{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media(max-width:700px){
+  .stat-pills.mx{grid-template-columns:1fr; gap:10px;}
+  .stat-pills.mx .mx-card{padding:14px 15px 12px;}
+  .stat-pills.mx .mx-bank{grid-column:auto; order:1 !important;} .stat-pills.mx .mx-new{grid-column:auto; order:2 !important;} .stat-pills.mx .mx-gen{grid-column:auto; order:3 !important;}
+  .stat-pills.mx .mx-facts{display:grid !important; grid-template-columns:1fr 1fr; gap:8px; overflow:visible; order:4;}
+  .stat-pills.mx .mx-facts .mini{min-width:0; flex:none;}
+  .mx-big{font-size:30px;}
+  .mx-ticks em{display:none;}
+  .mx-need .vv,.mx-if .vv{font-size:15px;}
+  .mx-k .mx-n{display:none;}
+}
+.mx-ticks em{font-style:normal;}
 </style>
 <style>
 /* ---------- Sept 2026 polish: calmer surfaces, clearer hierarchy, friendlier touch targets.
@@ -3486,23 +3580,30 @@ body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
     <button id="nextM" aria-label="Next month">›</button>
   </div>
   <button class="today-btn" id="todayBtn">Today</button>
-  <div class="stat-pills">
-    <div class="stat-pill meet-pill" id="statMeetPill"><div class="k">Meetings this month</div><div class="v" id="statMeet">0</div><div class="tgt-meta" id="statMeetMeta"></div></div>
-    <div class="stat-pill new-pill" id="statNewPill">
-      <div class="k">New money this month</div>
-      <div class="v"><span id="statNewTotal">€0</span><span class="gpot" id="statNewPot"></span></div>
-      <div class="newsplit"><span class="ns paid" id="statNewPaid">€0</span><span class="ns owed" id="statNewOwed">€0</span></div>
-      <div class="tgt-meta" id="statRemMeta"></div>
+  <div class="stat-pills mx">
+    <!-- 1 · IN THE BANK — the only real money -->
+    <div class="stat-pill mx-card mx-bank earned-pill" id="statEarnedPill" role="button" tabindex="0" aria-label="In the bank — who paid">
+      <div class="mx-k">In the bank <span class="mx-n">received so far</span></div>
+      <div class="mx-big"><span id="statEarned">€0</span></div>
+      <div class="mx-sub">money that actually came in this month</div>
+      <div class="mx-bar" id="mxBankBar"></div>
+      <div class="mx-legend earned-split" id="statEarnedSplit"></div>
+      <div class="mx-if" id="mxBankIf"></div>
+      <div class="mx-foot" id="mxBankFoot"></div>
     </div>
-    <div class="stat-pill target-pill gen-pill goal-pill" id="statTargetPill" role="button" tabindex="0" aria-label="Goal of the month — open"></div>
-    <div class="mini-pills">
-      <button class="mini" id="statCountPill" title="Clients booked in this month (work under €120 counts as another service, not a website)"><span class="mk">Clients</span><span class="mv" id="statCount">0</span></button>
+    <!-- 2 · NEW MONEY — the goal card (tap = goal window; the red pill = Remaining) -->
+    <div class="stat-pill mx-card mx-new target-pill gen-pill goal-pill" id="statTargetPill" role="button" tabindex="0" aria-label="Goal of the month — open"></div>
+    <!-- 3 · TOTAL GENERATED — in the bank + to collect -->
+    <div class="stat-pill mx-card mx-gen" id="mxGenPill" role="button" tabindex="0" aria-label="Total generated — open the goal window"></div>
+    <!-- the small facts -->
+    <div class="mini-pills mx-facts">
+      <button class="mini meet-pill" id="statMeetPill" title="Meetings booked in this month — click to open the Calendar"><span class="mk">Meetings <i id="statMeetMeta"></i></span><span class="mv" id="statMeet">0</span></button>
+      <button class="mini" id="statCountPill" title="Clients booked in this month (work under €120 counts as another service, not a website)"><span class="mk">Clients <i>this month</i></span><span class="mv" id="statCount">0</span></button>
       <button class="mini" id="statRenewPill" title="Renewals paid this month — click to open Renewals"><span class="mk">Renewals <i id="statRenewMeta"></i></span><span class="mv" id="statRenew">€0</span></button>
       <button class="mini" id="statSubsPill" title="Monthly subscriptions ticked as paid — click to open Monthly"><span class="mk">Monthly <i id="statSubsMeta"></i></span><span class="mv" id="statSubs">€0</span></button>
       <button class="mini" id="statExpPill" title="Costs this month — click to open Expenses"><span class="mk">Costs <i class="exp-net" id="statExpMeta"></i></span><span class="mv" id="statExp">€0</span></button>
       <button class="mini risk" id="statRiskPill" title="Money that may never come — trashed clients"><span class="mk">At risk <i id="statRiskMeta"></i></span><span class="mv" id="statRisk">€0</span></button>
     </div>
-    <div class="stat-pill earned-pill" id="statEarnedPill"><div class="k">In the bank</div><div class="v" id="statEarned">€0</div><div class="earned-split" id="statEarnedSplit"></div></div>
   </div>
 </div>
 
@@ -5012,43 +5113,42 @@ function monthMoney(key){
 }
 function renderStats(){
   $('#monthLabel').textContent=fmtMonth(curMonth);
-  const m=monthMoney(curMonth), earned=m.earned;
+  const m=monthMoney(curMonth), earned=m.earned, key=curMonth;
   $('#statCount').textContent=m.n;
-  /* in the bank */
+  const seg=(cls,v,tot)=>{ const w=tot>0 ? Math.max(0,Math.min(100,v/tot*100)) : 0; return w>0.01 ? `<i class="${cls}" style="width:${w.toFixed(2)}%"></i>` : ''; };
+  /* ---- 1 · IN THE BANK: what really came in, split new / renewals / monthly, what it becomes if the owed money arrives, costs ---- */
   $('#statEarned').textContent=fmtMoney(earned.total);
-  $('#statEarnedSplit').innerHTML=`<span class="es new" title="New websites paid">${fmtMoney(earned.new)}</span><span class="es ren" title="Renewals paid">${fmtMoney(earned.renew)}</span><span class="es sub" title="Monthly subscriptions paid">${fmtMoney(earned.subs)}</span>`;
-  $('#statEarnedPill').title=fmtMoney(earned.total)+' already received in '+fmtMonth(curMonth)+' — '+fmtMoney(earned.new)+' new websites + '+fmtMoney(earned.renew)+' renewals + '+fmtMoney(earned.subs)+' monthly';
-  /* new money this month — what they already paid (green) + what they still owe (red), summed on top */
-  const newPaid=earned.new, newOwed=m.collect, newSum=newPaid+newOwed;
-  $('#statNewTotal').textContent=fmtMoney(newSum);
-  const soonNew=m.pot.booked+m.pot.think;
-  const np=$('#statNewPot'); np.textContent= soonNew? '+'+fmtMoney(soonNew) : '';
-  np.title= soonNew? 'Not agreed yet: '+fmtMoney(m.pot.booked)+' booked · '+fmtMoney(m.pot.think)+' thinking' : '';
-  $('#statNewPaid').textContent=fmtMoney(newPaid);
-  $('#statNewOwed').textContent=fmtMoney(newOwed);
-  $('#statRemMeta').textContent= m.collectN? m.collectN+(m.collectN===1?' client still owes':' clients still owe') : 'everything collected';
-  $('#statNewPill').title=fmtMoney(newSum)+' of new website work in '+fmtMonth(curMonth)+' — '+fmtMoney(newPaid)+' already paid, '+fmtMoney(newOwed)+' still to collect. Click for Remaining.';
-  /* the two small money boxes + costs + risk */
-  const subsN=state.subs.filter(s=>s.paid && s.paid[curMonth]).length;
+  $('#mxBankBar').innerHTML= earned.total>0 ? seg('g',earned.new,earned.total)+seg('b',earned.renew,earned.total)+seg('vi',earned.subs,earned.total) : '';
+  $('#statEarnedSplit').innerHTML=`<span class="g es new" title="New websites paid"><i></i><b>${fmtMoney(earned.new)}</b> new sites</span><span class="b es ren" title="Renewals paid"><i></i><b>${fmtMoney(earned.renew)}</b> renewals</span><span class="vi es sub" title="Monthly subscriptions paid"><i></i><b>${fmtMoney(earned.subs)}</b> monthly</span>`;
+  $('#mxBankIf').innerHTML= m.collect>0
+    ? `<div><div class="l">If the ${m.collectN} who owe pay</div><div class="vv">${fmtMoney(earned.total+m.collect)} in the bank <small>+${fmtMoney(m.collect)}</small></div></div>`
+    : `<div><div class="l">Still to collect</div><div class="vv ok">Nothing — everything agreed is in ✓</div></div>`;
+  const mExpS=expensesForMonth(key), mNetS=earned.total-mExpS;
+  $('#mxBankFoot').innerHTML=`<span>Costs <b>${fmtMoney(Math.round(mExpS))}</b></span><span>Left after costs <span class="net${mNetS<0?' neg':''}">${mNetS>=0?'+':'−'}${fmtMoney(Math.abs(Math.round(mNetS)))}</span></span>`;
+  $('#statEarnedPill').title=fmtMoney(earned.total)+' already received in '+fmtMonth(key)+' — '+fmtMoney(earned.new)+' new websites + '+fmtMoney(earned.renew)+' renewals + '+fmtMoney(earned.subs)+' monthly. Click to see who paid.';
+  /* ---- the small facts ---- */
+  const subsN=state.subs.filter(s=>s.paid && s.paid[key]).length;
   $('#statSubs').textContent=fmtMoney(earned.subs);
   $('#statSubsMeta').textContent= subsN? subsN+' paid' : '';
-  const rnPaidN=renewalHistory().filter(x=>(x.h.at||'').slice(0,7)===curMonth).length;
-  const rnDueM=liveRenewals().filter(r=>r.date && r.date.slice(0,7)===curMonth);
+  const rnPaidN=renewalHistory().filter(x=>(x.h.at||'').slice(0,7)===key).length;
+  const rnDueM=liveRenewals().filter(r=>r.date && r.date.slice(0,7)===key);
   $('#statRenew').textContent=fmtMoney(earned.renew);
   $('#statRenewMeta').textContent= rnPaidN? rnPaidN+' paid' : (rnDueM.length? rnDueM.length+' due' : '');
-  const mExpS=expensesForMonth(curMonth), mNetS=earned.total-mExpS;
   $('#statExp').textContent=fmtMoney(Math.round(mExpS));
   $('#statExpMeta').textContent=(mNetS>=0?'+':'−')+fmtMoney(Math.abs(Math.round(mNetS)))+' net';
   $('#statExpMeta').style.color= mNetS>=0 ? 'var(--deep)' : 'var(--coral)';
-  $('#statExpPill').title=fmtMoney(Math.round(mExpS))+' costs in '+fmtMonth(curMonth)+' · '+fmtMoney(Math.round(mNetS))+' left after costs';
+  $('#statExpPill').title=fmtMoney(Math.round(mExpS))+' costs in '+fmtMonth(key)+' · '+fmtMoney(Math.round(mNetS))+' left after costs';
   $('#statRisk').textContent=fmtMoney(m.pot.risk);
-  $('#statRiskMeta').textContent= m.riskN? m.riskN+' in trash' : '';
+  $('#statRiskMeta').textContent= m.riskN? m.riskN+' in trash' : 'nothing in trash';
   $('#statRiskPill').classList.toggle('off', !m.pot.risk);
-  /* GOAL card (14 Oct 2026) — new-money goal in weeks + the total */
+  /* ---- 2 · NEW MONEY (the goal card) + 3 · TOTAL GENERATED ---- */
   renderGoalPill(m);
 }
 
-$('#statNewPill').addEventListener('click',()=>switchView('remaining'));
+document.addEventListener('click',e=>{ const t=e.target.closest && e.target.closest('#statNewPill'); if(t){ e.stopPropagation(); switchView('remaining'); } }, true);
+document.addEventListener('click',e=>{ if(e.target.closest && e.target.closest('#mxGenPill')) openGoalWin(curMonth); });
+document.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ') && e.target.id==='mxGenPill'){ e.preventDefault(); openGoalWin(curMonth); } });
+document.addEventListener('click',e=>{ if(e.target.closest && e.target.closest('#statMeetPill')) switchView('calendar'); });
 $('#statCountPill').addEventListener('click',()=>switchView('board'));
 $('#statRiskPill').addEventListener('click',()=>switchView('remaining'));
 /* ---------- «In the bank» → who paid, how much and when (Angelo, 12 Oct 2026) ----------
@@ -5109,6 +5209,7 @@ function openBank(key){
 }
 function closeBank(){ $('#bankOverlay').classList.remove('open'); }
 $('#statEarnedPill').addEventListener('click',()=>openBank(curMonth));
+$('#statEarnedPill').addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openBank(curMonth); } });
 $('#bankClose').addEventListener('click',closeBank);
 $('#bankOverlay').addEventListener('click',e=>{
   if(e.target.id==='bankOverlay'){ closeBank(); return; }
@@ -5255,23 +5356,73 @@ function goalWeekLine(g){
 }
 function renderGoalPill(m){
   const pill=$('#statTargetPill'); if(!pill) return;
-  const key=curMonth, g=goalPlan(key), mt=monthTarget(key), tot=m.generated;
-  const totLine = mt.value>0
-    ? `<div class="gq-total"><span>Total</span><b>${fmtMoney(tot)}</b><span>/ ${fmtMoney(Math.round(mt.value))}</span><span class="gq-mini"><i style="width:${Math.min(100,progPct(tot,mt.value))}%"></i></span><span>${progPct(tot,mt.value)}%</span></div>`
-    : `<div class="gq-total"><span>Total generated</span><b>${fmtMoney(tot)}</b>${m.pot.total?`<span>+${fmtMoney(m.pot.total)} possible</span>`:''}</div>`;
+  const key=curMonth, g=goalPlan(key), mt=monthTarget(key), earned=m.earned;
+  const newPaid=earned.new, newOwed=m.collect, soonNew=m.pot.booked+m.pot.think;
+  const cl=n=>n+' client'+(n===1?'':'s');
+  const seg=(cls,v,tot)=>{ const w=tot>0 ? Math.max(0,Math.min(100,v/tot*100)) : 0; return w>0.01 ? `<i class="${cls}" style="width:${w.toFixed(2)}%"></i>` : ''; };
+  const split=`<div class="mx-split"><span class="paid" title="New websites already paid">${fmtMoney(newPaid)} paid</span><span class="owed" id="statNewPill" title="Agreed work still unpaid — click for Remaining">${fmtMoney(newOwed)} to collect${m.collectN?' · '+m.collectN+(m.collectN===1?' client':' clients'):''}</span>${soonNew?`<span class="pot" title="Not agreed yet: ${fmtMoney(m.pot.booked)} booked · ${fmtMoney(m.pot.think)} thinking">+${fmtMoney(soonNew)} waiting in Booked / Thinking</span>`:''}</div>`;
+  /* status chip */
+  let chip='';
+  if(!g.goal) chip='<span class="mx-chip">No goal yet</span>';
+  else { const diff=Math.round(g.done-g.pace);
+    const extra = g.st==='won' ? ' · '+fmtMoney(Math.round(g.done-g.goal))+' over'
+      : g.st==='missed' ? ' · '+fmtMoney(Math.round(g.goal-g.done))+' short'
+      : g.st==='soon' ? ''
+      : g.st==='ahead' ? ' · +'+fmtMoney(diff)
+      : g.st==='ontrack' ? ''
+      : ' · −'+fmtMoney(-diff);
+    chip=`<span class="mx-chip s-${g.st}">${GOAL_ST[g.st]}${extra}</span>`; }
   if(!g.goal){
     pill.classList.add('unset');
-    pill.innerHTML=`<div class="gq-top"><span class="gq-k">Goal · ${goalMonthShort(key)}</span><span class="gq-chip">No goal yet</span></div>
-      <div class="gq-main"><span class="gq-num">${fmtMoney(Math.round(g.done))}</span><span class="gq-of">new money</span></div>
-      <div class="gq-unset">Tap to set a goal for new money →</div>${totLine}`;
+    pill.innerHTML=`<div class="mx-k">New money ${chip}</div>
+      <div class="mx-big">${fmtMoney(Math.round(g.done))}<small>new websites this month</small></div>
+      ${split}
+      <div class="mx-unset">Tap to set a goal for new money →</div>`;
   } else {
     pill.classList.remove('unset');
-    pill.innerHTML=`<div class="gq-top"><span class="gq-k">Goal · ${goalMonthShort(key)}</span><span class="gq-chip s-${g.st}">${GOAL_ST[g.st]}</span></div>
-      <div class="gq-main"><span class="gq-num">${fmtMoney(Math.round(g.done))}</span><span class="gq-of">/ ${fmtMoney(g.goal)} new</span><span class="gq-pct">${progPct(g.done,g.goal)}%</span></div>
-      <div class="gq-track">${goalSegs(g,'gq')}</div>
-      <div class="gq-week">${goalWeekLine(g)}</div>${totLine}`;
+    /* the bar = the whole goal; green = paid, red stripes = agreed but owed, grey = booked/thinking (not counted) */
+    const bar=`<div class="mx-bar">${seg('g',Math.min(newPaid,g.goal),g.goal)}${seg('r',Math.max(0,Math.min(g.done,g.goal)-newPaid),g.goal)}${seg('gh',Math.max(0,Math.min(g.done+soonNew,g.goal)-Math.min(g.done,g.goal)),g.goal)}</div>`;
+    /* week checkpoints under the bar; «today» marker = where you should be right now */
+    const ticks=g.W.map((w,i)=>{ const x=Math.min(100,g.cp(i)/g.goal*100), done=g.done>=g.cp(i), now=i===g.wi;
+      const lbl= i===g.N-1 ? `W${i+1}<em> · ${fmtMoney(g.cp(i))}</em> goal` : now ? `W${i+1}<em> · ${fmtMoney(g.cp(i))}</em> by Sun ${w.to}` : `W${i+1}`;
+      return `<span class="${done?'done':(now?'now':'')}${g.N===1?' one':''}" style="left:${x.toFixed(1)}%">${lbl}${done?' ✓':''}</span>`; }).join('');
+    const pace = g.wi>=0 && g.wi<g.N && g.st!=='won' ? `<b class="mx-pace" style="left:${Math.min(100,g.pace/g.goal*100).toFixed(1)}%"></b>` : '';
+    /* the two questions: by Sunday, and for the whole goal */
+    let need='';
+    if(g.st==='won') need=`<div class="mx-need one"><div><div class="l">Goal reached</div><div class="vv">${fmtMoney(Math.round(g.done-g.goal))} over <small>every client from here is extra</small></div></div></div>`;
+    else if(g.st==='missed') need=`<div class="mx-need one"><div><div class="l">${goalMonthShort(key)} ended</div><div class="vv">${fmtMoney(Math.round(g.goal-g.done))} short <small>${progPct(g.done,g.goal)}% of the goal</small></div></div></div>`;
+    else if(g.st==='soon') need=`<div class="mx-need one"><div><div class="l">The plan</div><div class="vv">${fmtMoney(Math.round(g.per))} a week <small>≈ ${cl(g.clientsPerWeek)} a week · ${g.N} weeks</small></div></div></div>`;
+    else { const w=g.W[g.wi];
+      const wk = g.needWeek>0 ? `<div><div class="l">By Sunday ${w.to}</div><div class="vv">${fmtMoney(Math.round(g.needWeek))} more <small>≈ ${cl(g.clientsWeek)}</small></div></div>`
+        : `<div><div class="l">This week</div><div class="vv ok">Checkpoint done ✓ ${g.wi<g.N-1?`<small>next ${fmtMoney(g.cp(g.wi+1))}</small>`:''}</div></div>`;
+      need=`<div class="mx-need">${wk}<div><div class="l">To reach the goal</div><div class="vv">${fmtMoney(Math.round(g.needAll))} <small>≈ ${cl(g.clientsAll)}</small></div></div></div>`; }
+    pill.innerHTML=`<div class="mx-k">New money ${chip}</div>
+      <div class="mx-big">${fmtMoney(Math.round(g.done))}<small>/ ${fmtMoney(g.goal)} goal</small><span class="mx-pct${g.st==='won'?' won':''}">${progPct(g.done,g.goal)}%</span></div>
+      ${split}
+      <div class="mx-track">${pace}${bar}<div class="mx-ticks">${ticks}</div></div>
+      ${need}`;
   }
   pill.title='Click to open the goal — weeks, what you still need and where the money comes from';
+  /* ---- 3 · TOTAL GENERATED ---- */
+  const gen=$('#mxGenPill');
+  if(gen){
+    const tot=m.generated, T=mt.value>0 ? Math.round(mt.value) : 0, base=T||Math.max(tot+soonNew,1);
+    const bar=`<div class="mx-bar">${seg('g',earned.new,base)}${seg('b',earned.renew,base)}${seg('vi',earned.subs,base)}${seg('r',Math.min(m.collect,Math.max(0,base-earned.total)),base)}${seg('gh',Math.min(soonNew,Math.max(0,base-tot)),base)}</div>`;
+    const withPot=tot+soonNew;
+    const sub = T ? `${tot>=T?`<b>${fmtMoney(tot-T)} over the goal</b>`:`${fmtMoney(T-tot)} to go`} · <b>${fmtMoney(earned.total)}</b> already real, <b>${fmtMoney(m.collect)}</b> agreed`
+                  : `<b>${fmtMoney(earned.total)}</b> already real, <b>${fmtMoney(m.collect)}</b> agreed`;
+    const ifl = soonNew>0
+      ? `<div><div class="l">If Booked / Thinking close too</div><div class="vv">${fmtMoney(withPot)} ${T?`<small>= ${progPct(withPot,T)}% of the goal</small>`:''}</div></div>`
+      : `<div><div class="l">Nothing waiting</div><div class="vv"><small>No one in Booked / Thinking for ${goalMonthShort(key)}</small></div></div>`;
+    gen.innerHTML=`<div class="mx-k">Total generated <span class="mx-n">in the bank + to collect</span></div>
+      <div class="mx-big">${fmtMoney(tot)}${T?`<small>/ ${fmtMoney(T)}</small><span class="mx-pct${tot>=T?' won':''}">${progPct(tot,T)}%</span>`:''}</div>
+      <div class="mx-sub">${sub}</div>
+      ${bar}
+      <div class="mx-legend"><span class="g"><i></i><b>${fmtMoney(earned.total)}</b> in the bank</span><span class="r"><i></i><b>${fmtMoney(m.collect)}</b> to collect</span>${soonNew?`<span class="gh"><i></i><b>${fmtMoney(soonNew)}</b> not counted yet</span>`:''}</div>
+      <div class="mx-if">${ifl}</div>
+      <div class="mx-foot"><span>New websites <b>${fmtMoney(newPaid+newOwed)}</b> · renewals <b>${fmtMoney(earned.renew)}</b> · monthly <b>${fmtMoney(earned.subs)}</b></span></div>`;
+    gen.title=fmtMoney(tot)+' generated in '+fmtMonth(key)+' = '+fmtMoney(earned.total)+' in the bank + '+fmtMoney(m.collect)+' still to collect'+(T?' · goal '+fmtMoney(T):'')+'. Click to open the goal window.';
+  }
   const ov=$('#goalOverlay'); if(ov && ov.classList.contains('open') && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('#goalBody input'))) openGoalWin(key, true);
 }
 function goalMsg(g){
