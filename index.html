@@ -1981,6 +1981,17 @@ body.ld-dragging{user-select:none; -webkit-user-select:none; cursor:grabbing;}
 .ld-cbday .it .m{font-size:11px; opacity:.8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px;}
 .ld-cbday .it a{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#fff; color:var(--brand); flex-shrink:0;}
 .ld-cbday .it a .ic{width:15px; height:15px;}
+/* delete a call-back from anywhere it shows (Angelo, 14 Oct 2026) */
+.ld-cbday .it .del{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; margin-left:-2px; border:0; border-radius:8px; background:transparent; color:inherit; opacity:.55; cursor:pointer; flex-shrink:0; padding:0;}
+.ld-cbday .it .del .ic{width:14px; height:14px;}
+.ld-cbday .it .del:hover{opacity:1; background:rgba(0,0,0,.08);}
+.ld-cbday .it.due .del:hover{background:rgba(255,255,255,.22);}
+.cw-del{margin-left:auto; flex-shrink:0; width:24px; height:24px; display:inline-grid; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--muted); padding:0; cursor:pointer; opacity:.7;}
+.cw-del .ic{width:14px; height:14px;}
+@media(hover:hover){.cw-del:hover{color:var(--red); background:var(--red-soft,#FDECEC); opacity:1;}}
+.day-row button.del{padding:6px 8px; color:var(--muted);}
+.day-row button.del .ic{width:13px; height:13px; display:block;}
+.day-row button.del:hover{color:var(--red); border-color:var(--red);}
 .ld-edit .row .sep{width:1px; height:22px; background:var(--line); margin:0 2px;}
 .day-row .tm.due{color:var(--red);}
 .ld-focus .f-foot .np{color:#8A6400; background:var(--yellow-soft); display:inline-flex; align-items:center; gap:5px;}
@@ -6928,9 +6939,9 @@ function caOutcome(e, type){
   cbOutcome(e.it, e.list, type);
 }
 function caRemove(e){
-  if(e.src==='lead'){ const prev={...e.l.cb}; delete e.l.cb; save(); cbRefresh(); try{ renderLeads(); }catch(x){} toastUndo('Callback removed — '+e.name+' (still in Leads)', ()=>{ e.l.cb=prev; save(); cbRefresh(); }); return; }
+  if(e.src==='lead'){ const prev={...e.l.cb}; delete e.l.cb; save(); cbRefresh(); try{ renderLeads(); }catch(x){} toastUndo('Callback deleted — '+e.name+' (still in Leads)', ()=>{ e.l.cb=prev; save(); cbRefresh(); try{ renderLeads(); }catch(x){} }); return; }
   const arr=state[e.list]; const i=arr.indexOf(e.it); if(i<0) return; arr.splice(i,1); save(); cbRefresh();
-  toastUndo('Removed — '+e.name, ()=>{ arr.splice(i,0,e.it); save(); cbRefresh(); });
+  toastUndo('Callback deleted — '+e.name, ()=>{ arr.splice(i,0,e.it); save(); cbRefresh(); });
 }
 function caAdd(o){
   const name=String(o.name||'').trim(); if(!name) return null;
@@ -7015,7 +7026,7 @@ function caCardHtml(e, ctx){
         ? `<button type="button" class="cw-ib ok" data-a="book" title="Booked — they said yes">${IC.check}</button><button type="button" class="cw-ib no" data-a="no" title="No — not interested">${IC.x}</button><button type="button" class="cw-ib na" data-a="na" title="No answer — moves to the next working day">${IC.hourglass}</button>`
         : `<button type="button" class="cw-ib ok wide" data-a="sent" title="Sent — tick it off">${IC.check}Sent</button>`;
   return `<div class="${cls}" data-k="${esc(e.key)}"${e.done?'':' draggable="true"'}>
-    <div class="cw-r1">${when}<span class="ca-how ${e.how}">${IC[H[1]]}${H[0]}</span>${e.src==='lead'?'<span class="cw-lead">Lead</span>':''}${e.tries.length?`<span class="cw-tr" title="No answer on ${esc(e.tries.map(fmtDay).join(', '))}">${IC.hourglass}${e.tries.length}</span>`:''}</div>
+    <div class="cw-r1">${when}<span class="ca-how ${e.how}">${IC[H[1]]}${H[0]}</span>${e.src==='lead'?'<span class="cw-lead">Lead</span>':''}${e.tries.length?`<span class="cw-tr" title="No answer on ${esc(e.tries.map(fmtDay).join(', '))}">${IC.hourglass}${e.tries.length}</span>`:''}<button type="button" class="cw-del" data-a="del" title="Delete this call-back${e.src==='lead'?' (the lead stays in Leads)':''}" aria-label="Delete">${IC.trash}</button></div>
     <div class="cw-nm">${esc(e.name)}</div>
     ${e.note && e.note!==e.name?`<div class="cw-nt">${esc(e.note)}</div>`:''}
     ${e.phone?`<div class="cw-ph">${esc(ldFmtPhone(String(e.phone).replace(/\s+/g,'')))}</div>`:''}
@@ -7084,6 +7095,7 @@ function caAct(e, a, ev){
   if(a==='dial') return;                                   /* the tel: link dials */
   if(ev) ev.preventDefault(), ev.stopPropagation();
   if(a==='open') return caModal(e.key);
+  if(a==='del') return caRemove(e);
   if(a==='msg') return caModal(e.key, 'msg');
   if(a==='done') return caDoneEntry(e);
   if(a==='revive') return caSetDay(e, todayIso(), '');
@@ -9644,9 +9656,10 @@ function renderLdCbDay(){
   let own=[]; try{ own=caEntries().filter(e=>e.src==='cb' && caDue(e)).sort(caCmpDay); }catch(e){}
   el.classList.toggle('on', !!(list.length+own.length));
   if(!list.length && !own.length){ el.innerHTML=''; return; }
-  el.innerHTML=`<div class="h">${IC.clock} Call-backs today · ${list.length+own.length} <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted)">· tap to open</span></div><div class="list">${own.map(e=>`<div class="it${e.day<t||caIsNow(e)?' due':''}" data-cbown="1" title="${esc(e.note||'')}"><span class="t">${e.day&&e.day<t?esc(fmtDay(e.day)):esc(e.time||'—')}</span><div style="min-width:0"><div class="n">${esc(e.name)}</div><div class="m"><span class="hw">${CA_HOW[e.how][0]}</span>${e.note?' · '+esc(e.note):''}</div></div>${e.phone?`<a href="tel:${esc(caTel(e.phone))}" title="Call ${esc(e.phone)}" data-tel>${IC.phone}</a>`:''}</div>`).join('')}${list.map(l=>{ const d=ldCbDue(l);
-    return `<div class="it${d?' due':''}${l.hot?' hot':''}" data-cbgo="${esc(l.id)}" title="${esc(l.memo||'')}"><span class="t">${l.cb.day<t?esc(fmtDay(l.cb.day)):esc(l.cb.time||'—')}</span><div style="min-width:0"><div class="n">${esc(l.name)}</div>${l.memo?`<div class="m">${esc(l.memo)}</div>`:''}</div>${l.phone?`<a href="tel:+30${esc(l.phone)}" title="Call ${esc(ldFmtPhone(l.phone))}" data-tel>${IC.phone}</a>`:''}</div>`; }).join('')}</div>`;
+  el.innerHTML=`<div class="h">${IC.clock} Call-backs today · ${list.length+own.length} <span style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted)">· tap to open</span></div><div class="list">${own.map(e=>`<div class="it${e.day<t||caIsNow(e)?' due':''}" data-cbown="1" title="${esc(e.note||'')}"><span class="t">${e.day&&e.day<t?esc(fmtDay(e.day)):esc(e.time||'—')}</span><div style="min-width:0"><div class="n">${esc(e.name)}</div><div class="m"><span class="hw">${CA_HOW[e.how][0]}</span>${e.note?' · '+esc(e.note):''}</div></div>${e.phone?`<a href="tel:${esc(caTel(e.phone))}" title="Call ${esc(e.phone)}" data-tel>${IC.phone}</a>`:''}<button type="button" class="del" data-cbdel="${esc(e.key)}" title="Delete this call-back" aria-label="Delete call-back for ${esc(e.name)}">${IC.trash}</button></div>`).join('')}${list.map(l=>{ const d=ldCbDue(l);
+    return `<div class="it${d?' due':''}${l.hot?' hot':''}" data-cbgo="${esc(l.id)}" title="${esc(l.memo||'')}"><span class="t">${l.cb.day<t?esc(fmtDay(l.cb.day)):esc(l.cb.time||'—')}</span><div style="min-width:0"><div class="n">${esc(l.name)}</div>${l.memo?`<div class="m">${esc(l.memo)}</div>`:''}</div>${l.phone?`<a href="tel:+30${esc(l.phone)}" title="Call ${esc(ldFmtPhone(l.phone))}" data-tel>${IC.phone}</a>`:''}<button type="button" class="del" data-cbdel="lead:${esc(l.id)}" title="Delete this call-back (the lead stays in Leads)" aria-label="Delete call-back for ${esc(l.name)}">${IC.trash}</button></div>`; }).join('')}</div>`;
   el.querySelectorAll('[data-tel]').forEach(a=>a.addEventListener('click',e=>e.stopPropagation()));
+  el.querySelectorAll('[data-cbdel]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const e=caFind(b.dataset.cbdel); if(e){ caRemove(e); try{ renderLdCbDay(); }catch(x){} } }));
   el.querySelectorAll('[data-cbown]').forEach(it=>it.addEventListener('click',()=>{ switchView('callbacks'); window.scrollTo({top:0}); }));
   el.querySelectorAll('[data-cbgo]').forEach(it=>it.addEventListener('click',()=>{ ensureLeads(); state.meta.ld.focus=it.dataset.cbgo; ldFilter.list=''; state.meta.ld.list=''; ldCallMode=true; renderLeads(); window.scrollTo({top:0, behavior:'smooth'}); }));
 }
@@ -12216,7 +12229,7 @@ function openDay(){
   if(fus.length) h+=`<div class="day-h rem">🤝 Follow up after the meeting · ${fus.length}</div>`+fus.map(c=>`<div class="day-row${c.fu.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(c.fu.what)}${c.fu.day<today?`<small>was due ${esc(mqDayLbl(c.fu.day))}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button data-fuup="${c.id}">Update</button><button class="go" data-fudone="${c.id}">✓ Done</button></div>`).join('');
   if(ups.length) h+=`<div class="day-h rem">➕ Extras to bring up · ${ups.length}</div>`+ups.map(({c,u})=>`<div class="day-row${u.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(u.what.join(', '))}${u.note?`<small>«${esc(u.note)}»</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button class="go" data-updone="${c.id}|${u.id}">✓ Done</button></div>`).join('');
   if(meet.length) h+=`<div class="day-h meet">📅 Meetings today · ${meet.length}</div>`+meet.map(c=>`<div class="day-row"><span class="tm">${esc(c.time||'—')}</span><div class="tx"><b>${esc(c.name)}</b>${c.phone?`<small>${esc(c.phone)}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(String(c.phone).replace(/\s+/g,''))}'">Call</button>`:''}<button data-open="${esc(c.id)}">Open</button></div>`).join('');
-  if(cbs.length) h+=`<div class="day-h meet">📞 Callbacks today · ${cbs.length}</div>`+cbs.map(e=>`<div class="day-row${e.day&&e.day<today?' over':''}"><span class="tm">${esc(e.day&&e.day<today?fmtDay(e.day):(e.time||'today'))}</span><div class="tx"><b>${esc(e.name)}</b> · ${CA_HOW[e.how][0]}${e.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${e.note&&e.note!==e.name?`<small>${esc(e.note)}</small>`:''}</div>${e.phone?(e.how==='sms'?`<button data-cbsms="${esc(e.key)}">SMS</button>`:`<button onclick="location.href='tel:${esc(caTel(e.phone))}'">Call</button>`):''}<button class="go" data-cbk="${esc(e.key)}">Open</button></div>`).join('');
+  if(cbs.length) h+=`<div class="day-h meet">📞 Callbacks today · ${cbs.length}</div>`+cbs.map(e=>`<div class="day-row${e.day&&e.day<today?' over':''}"><span class="tm">${esc(e.day&&e.day<today?fmtDay(e.day):(e.time||'today'))}</span><div class="tx"><b>${esc(e.name)}</b> · ${CA_HOW[e.how][0]}${e.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${e.note&&e.note!==e.name?`<small>${esc(e.note)}</small>`:''}</div>${e.phone?(e.how==='sms'?`<button data-cbsms="${esc(e.key)}">SMS</button>`:`<button onclick="location.href='tel:${esc(caTel(e.phone))}'">Call</button>`):''}<button class="go" data-cbk="${esc(e.key)}">Open</button><button class="del" data-cbdel="${esc(e.key)}" title="Delete this call-back" aria-label="Delete">${IC.trash}</button></div>`).join('');
   if(asap.length) h+=`<div class="day-h asap">🚩 Do ASAP · ${asap.length}</div>`+asap.map((t,i)=>`<div class="day-row${t.hot?' hot':''}" data-a="${esc(t.id)}"><div class="tx">${t.hot?'🔥 ':''}${esc(t.text)}</div><button class="go" data-adone="${esc(t.id)}">✓ Done</button></div>`).join('');
   if(!n) h='<div class="home-empty">Nothing to remind, no meetings, nothing in Do ASAP. Enjoy the day.</div>';
   try{ if(gmWorkday()) h=gmDayBlock()+h; }catch(e){}
@@ -12229,6 +12242,7 @@ function openDay(){
   body.querySelectorAll('[data-updone]').forEach(b=>b.addEventListener('click',()=>{ const [cid,id]=b.dataset.updone.split('|'); upDone(cid,id); b.closest('.day-row').classList.add('done'); b.remove(); }));
   body.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',()=>{ fuDone(b.dataset.fudone); b.closest('.day-row').classList.add('done'); b.remove(); }));
   body.querySelectorAll('[data-cbsms]').forEach(b=>b.addEventListener('click',()=>{ const e=caFind(b.dataset.cbsms); if(e) location.href=caSmsHref(e.phone, caText(e,'sms')); }));
+  body.querySelectorAll('[data-cbdel]').forEach(b=>b.addEventListener('click',()=>{ const e=caFind(b.dataset.cbdel); if(!e) return; caRemove(e); try{ renderLeads(); }catch(x){} const r=b.closest('.day-row'); r.classList.add('done'); r.querySelectorAll('button').forEach(x=>x.remove()); }));
   body.querySelectorAll('[data-cbk]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); switchView('callbacks'); setTimeout(()=>caModal(b.dataset.cbk),80); }));
   $('#dayOverlay').classList.add('open'); setTimeout(()=>{ const ok=$('#dayOk'); if(ok) ok.focus(); },60);
 }
