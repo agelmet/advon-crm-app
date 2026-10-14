@@ -1172,6 +1172,19 @@ body.dark .exp-row .item-x:hover{background:rgba(255,255,255,.1);}
 .card .c-waiting{margin-top:7px; font-size:11px; font-weight:600; color:var(--muted);
   background:var(--bg); border-radius:7px; padding:3px 8px; display:inline-block;}
 .card .c-waiting.over{background:var(--red-soft); color:var(--red);}
+/* Thinking tray — red reminder date pill (14 Oct 2026) */
+.card .c-remind{position:relative; display:flex; align-items:center; gap:7px; margin:7px 0 2px; padding:6px 10px;
+  border-radius:9px; background:var(--red-soft); color:var(--red); font-size:12.5px; font-weight:600; cursor:pointer;
+  border:1.5px solid color-mix(in srgb, var(--red) 35%, transparent); width:max-content; max-width:100%;}
+.card .c-remind svg{width:14px; height:14px; flex:none;}
+.card .c-remind > span, .card .c-remind > b{white-space:nowrap;}
+.card .c-remind{flex-wrap:wrap; row-gap:2px;}
+.card .c-remind b{font-size:14px; font-weight:800; letter-spacing:.01em;}
+.card .c-remind .cr-k{text-transform:uppercase; font-size:10px; letter-spacing:.08em; font-weight:800; opacity:.85;}
+.card .c-remind .cr-s{font-size:11px; font-weight:600; opacity:.8;}
+.card .c-remind.due, .card .c-remind.none{background:var(--red); color:#fff; border-color:var(--red);}
+.card .c-remind input{position:absolute; inset:0; width:100%; height:100%; opacity:0; border:0; padding:0; cursor:pointer;}
+@media (hover:hover){ .card .c-remind:hover{filter:brightness(.96);} }
 .home-row .hr-days{margin-left:auto; font-size:11px; font-weight:700; font-variant-numeric:tabular-nums;
   background:var(--bg); color:var(--muted); border-radius:7px; padding:2px 8px;}
 .home-row .hr-days.over{background:var(--red-soft); color:var(--red);}
@@ -5019,20 +5032,56 @@ function renderBoard(){
   renderLostTray();
 }
 let thinkOpen=false;
+/* Thinking tray (Angelo, 14 Oct 2026): every card shows its «remind them» date in red;
+   cards with NO date come first (= chase soon), then the dated ones, earliest first.
+   Tap the red pill to set / change the date (stored as the card's follow-up c.fu). */
+function thinkRemDay(c){ return fuOpen(c) ? c.fu.day : ''; }
+function thinkSort(a,b){
+  const da=thinkRemDay(a), db=thinkRemDay(b);
+  if(!da && !db) return thinkDays(b)-thinkDays(a);
+  if(!da) return -1; if(!db) return 1;
+  return da.localeCompare(db) || thinkDays(b)-thinkDays(a);
+}
+function thinkSetDay(c, v){
+  if(v){ const what=(fuOpen(c)&&c.fu.what)||'Follow up — still thinking';
+    c.fu={day:v, what, st:c.stage, out:(c.fu&&c.fu.out)||'think', at:Date.now()}; }
+  else delete c.fu;
+  c.updated=Date.now(); save(); renderAll();
+  toast(c.name+(v?' · remind '+mqDateLbl(v):' · no date — goes to the top'));
+}
+/* one-time: Φόλλα is for the end of October (Angelo, 14 Oct 2026) */
+function thinkSeed1014(){
+  const nm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  let ch=false;
+  state.clients.forEach(c=>{
+    if(c.seed1014 || c.stage!=='thinking' || isTrashed(c)) return;
+    if(/φολλα|folla/.test(nm(c.name))){
+      c.fu={day:'2026-10-30', what:'Τέλος Οκτωβρίου — να της ξαναμιλήσουμε', st:'thinking', out:'think', at:Date.now()};
+      if(c.prio==='high') c.prio=''; c.seed1014=1; c.updated=Date.now(); ch=true;
+    }
+  });
+  if(ch) save();
+}
 function renderThinkTray(){
   const st=stageById('thinking');
-  const items=state.clients.filter(c=>c.month===curMonth && c.stage==='thinking' && !isTrashed(c))
-    .sort((a,b)=>thinkDays(b)-thinkDays(a));
+  try{ thinkSeed1014(); }catch(e){}
+  const t=todayIso();
+  const items=state.clients.filter(c=>c.month===curMonth && c.stage==='thinking' && !isTrashed(c)).sort(thinkSort);
   const el=$('#thinkTray'); if(!el) return;
-  const due=items.filter(thinkOverdue).length;
+  const noDate=items.filter(c=>!thinkRemDay(c)).length;
+  const dueDated=items.filter(c=>{ const d=thinkRemDay(c); return d && d<=t; }).length;
+  const chase=noDate+dueDated;
   el.classList.toggle('open', thinkOpen);
-  el.classList.toggle('has-due', due>0);
+  el.classList.toggle('has-due', chase>0);
+  const sumTxt = chase
+    ? `<b class="think-due">${chase} to chase now${noDate?' · '+noDate+' without a date':''}${dueDated?' · '+dueDated+' date reached':''}</b>`
+    : (items.length?'everyone has a reminder date — drag a card back into the board when they say yes':'');
   el.innerHTML=`
     <div class="lost-head">
       <span class="ico">${IC.clock||IC.flag}</span>
       <span class="name">Thinking · Το σκέφτεται</span>
       <span class="count">${items.length}</span>
-      <span class="lost-sum">${due? `<b class="think-due">${due} need chasing — ${THINK_DAYS}+ days</b>` : (items.length?'drag a card back into the board when they say yes':'')}</span>
+      <span class="lost-sum">${sumTxt}</span>
       <span class="chev">${IC.chevRight}</span>
     </div>
     <div class="lost-body">${items.length?'':'<div class="lost-empty">Nobody is sitting on a decision this month.</div>'}</div>`;
@@ -5040,9 +5089,26 @@ function renderThinkTray(){
   const body=el.querySelector('.lost-body');
   items.forEach(c=>{
     const card=cardEl(c,st);
-    const d=thinkDays(c), over=d>=THINK_DAYS;
+    const rd=thinkRemDay(c);
+    /* the red «remind» pill, first thing under the name */
+    const pill=document.createElement('label');
+    pill.className='c-remind'+(rd ? (rd<=t?' due':'') : ' none');
+    let txt;
+    if(!rd) txt=`<span class="cr-k">No date</span><b>Chase soon</b><span class="cr-s">· tap to set</span>`;
+    else { const n=Math.round((Date.parse(rd+'T12:00')-Date.parse(t+'T12:00'))/864e5);
+      const rel = n<0 ? (-n===1?'1 day late':(-n)+' days late') : n===0 ? 'today' : n===1 ? 'tomorrow' : 'in '+n+' days';
+      txt=`<span class="cr-k">Remind</span><b>${esc(mqDateLbl(rd))}</b><span class="cr-s">· ${rel}</span>`; }
+    pill.innerHTML=`${IC.clock||''}${txt}<input type="date" value="${rd||''}" aria-label="Reminder date for ${esc(c.name)}">`;
+    pill.title = rd ? 'Reminder: '+(c.fu.what||'')+' — tap to change' : 'No reminder date yet — tap to set one';
+    const inp=pill.querySelector('input');
+    ['click','mousedown','pointerdown','dragstart'].forEach(ev=>pill.addEventListener(ev,e=>e.stopPropagation()));
+    pill.addEventListener('click',e=>{ e.preventDefault(); try{ inp.showPicker(); }catch(err){ inp.focus(); } });
+    inp.addEventListener('change',()=>thinkSetDay(c, inp.value));
+    const nameRow=card.querySelector('.c-name');
+    if(nameRow) nameRow.insertAdjacentElement('afterend', pill); else card.prepend(pill);
+    const d=thinkDays(c);
     const tag=document.createElement('div');
-    tag.className='c-waiting'+(over?' over':'');
+    tag.className='c-waiting';
     tag.textContent = d===0 ? 'today' : d===1 ? '1 day waiting' : d+' days waiting';
     card.appendChild(tag);
     body.appendChild(card);
