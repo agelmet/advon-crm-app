@@ -7028,31 +7028,27 @@ function wsOpen(){ try{ return localStorage.getItem('crm.wsOpen')==='1'; }catch(
 function wsSetOpen(v){ try{ localStorage.setItem('crm.wsOpen', v?'1':'0'); }catch(e){} }
 function wsData(){ ensureMeta(); const d=state.meta.wealthSplit; return (d && Array.isArray(d.groups)) ? d : null; }
 function wsGroupSum(g){ return (g.items||[]).reduce((t,i)=>t+(+i.a||0),0); }
-function wsGroupTotal(g){ return typeof g.t==='number' ? g.t : wsGroupSum(g); }
+function wsGroupTotal(g){ return wsGroupSum(g); }
 function wsAccounts(d){ return d.groups.reduce((t,g)=>t+wsGroupTotal(g),0); }
 function wsBodyHtml(x){
   const d=wsData();
   if(wsEditing) return wsEditorHtml(d);
-  if(!d) return `<div class="fw-asof">No breakdown yet</div><div class="fw-btns"><button class="fw-btn pri" data-fw="edit">Add my balances</button><button class="fw-btn" data-fw="base">Change starting amount</button></div>`;
+  if(!d) return `<div class="fw-asof">No breakdown yet</div><div class="fw-btns"><button class="fw-btn pri" data-fw="edit">Add my balances</button></div>`;
   const m=v=>fmtMoney2(Math.round(v));
-  const acc=wsAccounts(d), earned=+(d.earned&&d.earned.a)||0, base=+x.w.base||0, since=x.gained;
-  const diff=Math.round(base-acc-earned);
+  const acc=wsAccounts(d), earned=+(d.earned&&d.earned.a)||0, sumAll=acc+earned;
   const grp=d.groups.map(g=>{ const sum=wsGroupSum(g), tot=wsGroupTotal(g);
-    return `<div class="fw-grp"><div class="fw-r h"><span class="n">${esc(g.h)}${Math.round(sum)!==Math.round(tot)?`<small>the lines below add up to ${m(sum)}</small>`:''}</span><span class="a">${m(tot)}</span></div>
+    return `<div class="fw-grp"><div class="fw-r h"><span class="n">${esc(g.h)}</span><span class="a">${m(tot)}</span></div>
       ${(g.items||[]).map(i=>`<div class="fw-r i"><span class="n">${esc(i.n)}${i.sub?`<small>${esc(i.sub)}</small>`:''}</span><span class="a">${m(i.a)}</span></div>`).join('')}</div>`; }).join('');
   const nm=d.notMine&&(+d.notMine.a)?d.notMine:null;
   return `<div class="fw-asof">Where it is · latest update <b>${d.asOf?fmtDate(d.asOf):'—'}</b></div>
     ${grp}
     <div class="fw-sum">
       <div class="fw-r"><span class="n">In the accounts<small>${d.groups.map(g=>esc(g.h.replace(/:\s*$/,''))).join(' + ')}</small></span><span class="a">${m(acc)}</span></div>
-      ${earned?`<div class="fw-r"><span class="n">${esc(d.earned.n||'Earned')}</span><span class="a g">+ ${m(earned)}</span></div>`:''}
-      ${diff?`<div class="fw-r"><span class="n">Not matched to an account<small>starting amount − the lines above</small></span><span class="a ${diff<0?'neg':'g'}">${diff<0?'− ':'+ '}${m(Math.abs(diff))}</span></div>`:''}
-      <div class="fw-r"><span class="n">= Starting amount<small>on ${fmtDate(x.w.since)}</small></span><span class="a">${m(base)}</span></div>
-      <div class="fw-r"><span class="n">Since ${fmtDate(x.w.since)}<small>money received − expenses (not in the accounts above yet)</small></span><span class="a ${since<0?'neg':'g'}">${since<0?'− ':'+ '}${m(Math.abs(since))}</span></div>
-      <div class="fw-r t"><span class="n">= Total profit</span><span class="a">${m(x.total)}</span></div>
+      ${earned?`<div class="fw-r"><span class="n">${esc(d.earned.n||'Earned')}</span><span class="a ${earned<0?'neg':'g'}">${earned<0?'− ':'+ '}${m(Math.abs(earned))}</span></div>`:''}
+      <div class="fw-r t"><span class="n">= Total</span><span class="a">${m(sumAll)}</span></div>
     </div>
-    ${nm?`<div class="fw-note">Inside the ${m(acc)}: <b>${m(nm.a)} ${esc(nm.n)}</b><br>Total profit without it: <b>${m(x.total-(+nm.a))}</b></div>`:''}
-    <div class="fw-btns"><button class="fw-btn" data-fw="edit">Update balances</button><button class="fw-btn" data-fw="base">Change starting amount</button></div>`;
+    ${nm?`<div class="fw-note">Inside the ${m(acc)}: <b>${m(nm.a)} ${esc(nm.n)}</b><br>Total without it: <b>${m(sumAll-(+nm.a))}</b></div>`:''}
+    <div class="fw-btns"><button class="fw-btn" data-fw="edit">Update balances</button></div>`;
 }
 function wsEditorHtml(d){
   d=d||{asOf:todayIso(), groups:[{h:'Accounts:', items:[{n:'',a:0}]}], earned:{n:'',a:0}, notMine:{n:'',a:0}};
@@ -7081,7 +7077,7 @@ function wsReadEditor(card){
   d.groups=d.groups.filter(Boolean).map((g,gi)=>{ g.items=g.items.filter(i=>i&&(i.n||i.a));
     const og=old&&old.groups[gi];   // keep the note's own group total / sub-notes only while that group is unchanged
     if(og && JSON.stringify(og.items.map(i=>[i.n,+i.a]))===JSON.stringify(g.items.map(i=>[i.n,+i.a]))){
-      if(typeof og.t==='number') g.t=og.t; g.items.forEach((i,k)=>{ if(og.items[k]&&og.items[k].sub) i.sub=og.items[k].sub; }); }
+      g.items.forEach((i,k)=>{ if(og.items[k]&&og.items[k].sub) i.sub=og.items[k].sub; }); }
     return g; }).filter(g=>g.h||g.items.length);
   return d;
 }
