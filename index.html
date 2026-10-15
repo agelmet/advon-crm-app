@@ -7100,6 +7100,25 @@ function wsAction(act, el, e){
     const body=card.querySelector('.fw-body'); body.innerHTML=wsEditorHtml(d); return;
   }
 }
+/* One-time fill from a private link: crm.advonmedia.com/#where=<base64url JSON>. The hash never leaves the browser
+   (not sent to any server); it is applied once the CRM is unlocked and synced, saved into the encrypted state, then removed. */
+(function wsFromHash(){
+  const m=/^#where=([A-Za-z0-9_-]+)$/.exec(location.hash||''); if(!m) return;
+  let tries=0; const t=setInterval(()=>{
+    if(++tries>600){ clearInterval(t); return; }
+    if(!state || !state.meta || document.body.classList.contains('locked')) return;
+    if(tries<5) return;
+    clearInterval(t);
+    setTimeout(()=>{ try{
+      const b=m[1].replace(/-/g,'+').replace(/_/g,'/'); const d=JSON.parse(decodeURIComponent(escape(atob(b))));
+      if(!d || !Array.isArray(d.groups)) throw new Error('bad');
+      ensureMeta(); if(state.meta.wealthSplit) state.meta.wealthSplitPrev=state.meta.wealthSplit;
+      state.meta.wealthSplit=d; wsSetOpen(true); save(); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+      switchView('year'); renderAll(); setTimeout(()=>{ const c=$('#finWealth'); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); },300);
+      toast('Breakdown added to Total profit');
+    }catch(e){ console.warn('where link',e); toast('That breakdown link could not be read'); } },4000);
+  },1000);
+})();
 function wsRedraw(){ const card=$('#finWealth'), x=wealthNow(); if(card&&x) card.querySelector('.fw-body').innerHTML=wsBodyHtml(x); }
 /* The yearly call/revenue statistics — relocated here from Quick Log. */
 function renderYearStats(){
