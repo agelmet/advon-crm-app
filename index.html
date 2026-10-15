@@ -477,7 +477,7 @@ body.dark .ycard .m-earned b{color:#3BE38F;}
 .fin-wealth .k .ic{width:14px; height:14px;}
 .fin-wealth .v{font-family:'Sora'; font-weight:800; font-size:30px; letter-spacing:-.03em; font-variant-numeric:tabular-nums; margin-top:4px; color:#6FF0AE;}
 .fin-wealth .sub{font-size:11.5px; color:rgba(255,255,255,.72); font-weight:600; margin-top:4px; line-height:1.45;}
-.fin-wealth .sub b{color:#6FF0AE;} .fin-wealth .sub b.neg{color:#FFB39F;}
+.fin-wealth .sub b{color:#6FF0AE; white-space:nowrap;} .fin-wealth .sub b.neg{color:#FFB39F;}
 /* 15 Oct 2026 — Total profit opens up: where the money is */
 .fin-wealth{cursor:default;} .fin-wealth:hover{transform:none;}
 .fin-wealth .fw-top{cursor:pointer; position:relative; padding-right:34px;}
@@ -521,7 +521,8 @@ body.dark .ycard .m-earned b{color:#3BE38F;}
 .fw-exp .dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:1px;}
 .fw-exp .dot.g{background:#6FF0AE;} .fw-exp .dot.b{background:#5AA9FF;}
 .fw-exp .fw-r .n small{padding-left:15px;}
-.fw-exp .a.g{color:#6FF0AE;} .fw-exp .a.b{color:#7DBBFF;}
+.fw-exp .a.g{color:#6FF0AE;} .fw-exp .a.b{color:#7DBBFF;} .fw-exp small b.bl{color:#7DBBFF;}
+.fw-sum .fw-r .a.g{color:#6FF0AE;}
 .fw-exp .fw-r.t{font-weight:800; color:#fff; border-top:1px solid rgba(255,255,255,.2); margin-top:2px; padding-top:7px;}
 .fw-sum .fw-r.t0 .a{font-size:17px; color:#6FF0AE;} .fw-sum .fw-r.t0{font-weight:800; color:#fff;}
 .fw-ed .er{display:flex; gap:6px; align-items:center; margin:5px 0;}
@@ -7000,8 +7001,8 @@ function renderYearFinance(yGenerated, yExp, yNet, rTotal, pots){
         ${(()=>{ const x=wealthNow(); if(!x) return ''; const g=Math.round(x.gained); return `<div class="fin-wealth${wsOpen()?' open':''}" id="finWealth">
           <div class="fw-top" data-fw="toggle" title="Click to see where it is">
           <div class="k">${IC.wallet} Total profit</div>
-          ${(()=>{ const d=wsData(); if(d) return `<div class="v">${fmtMoney2(Math.round(wsAccounts(d)))}</div>
-          <div class="sub">the sum of your accounts · latest update ${d.asOf?fmtDate(d.asOf):'—'}${(()=>{ const e=wsExpected(d); return e.total?` · <b>+${fmtMoney2(Math.round(e.total))}</b> expected`:''; })()}</div>`;
+          ${(()=>{ const d=wsData(); if(d){ const t=wsTotal(d); return `<div class="v">${fmtMoney2(Math.round(t.total))}</div>
+          <div class="sub">${fmtMoney2(Math.round(t.acc))} in your accounts on ${d.asOf?fmtDate(d.asOf):'—'} · <b class="${t.since<0?'neg':''}">${t.since<0?'−':'+'}${fmtMoney2(Math.abs(Math.round(t.since)))}</b> since then · only money actually received, minus expenses</div>`; }
           return `<div class="v">${fmtMoney2(Math.round(x.total))}</div>
           <div class="sub">started at ${fmtMoney2(x.w.base)} on ${fmtDate(x.w.since)} · <b class="${g<0?'neg':''}">${g<0?'−':'+'}${fmtMoney2(Math.abs(g))}</b> since then · only money actually received, minus expenses</div>`; })()}
           <span class="fw-hint">Where it is ›</span>
@@ -7041,11 +7042,16 @@ let wsEditing=false;
 function wsOpen(){ try{ return localStorage.getItem('crm.wsOpen')==='1'; }catch(e){ return false; } }
 function wsSetOpen(v){ try{ localStorage.setItem('crm.wsOpen', v?'1':'0'); }catch(e){} }
 function wsData(){ ensureMeta(); const d=state.meta.wealthSplit; return (d && Array.isArray(d.groups)) ? d : null; }
+/* Total = the accounts on the update day + real profit since (money received − expenses), like the old Total profit.
+   anchor = realProfitToDate() at the moment the balances were saved; set once for older data. */
+function wsAnchor(d){ if(typeof d.anchor!=='number'){ d.anchor=realProfitToDate(); try{ save(); }catch(e){} } return d.anchor; }
+function wsTotal(d){ const acc=wsAccounts(d); const since=Math.round((realProfitToDate()-wsAnchor(d))*100)/100; return {acc, since, total:acc+since}; }
 function wsExpected(d){
   const earned=+(d&&d.earned&&d.earned.a)||0; const mk=todayIso().slice(0,7);
   let ren=0, rn=0; try{ rpRenewalsOfMonth(mk).forEach(x=>{ if(x.status==='due'){ ren+=x.value; rn++; } }); }catch(e){}
   const month=new Date(mk+'-15').toLocaleString('en-GB',{month:'long'});
-  return {earned, ren, rn, month, total:earned+ren};
+  const pct=Math.max(0,Math.min(100, d&&typeof d.renewPct==='number'?d.renewPct:70)); const renSafe=Math.round(ren*pct/100);
+  return {earned, ren, rn, month, pct, renSafe, total:earned+renSafe};
 }
 function wsGroupSum(g){ return (g.items||[]).reduce((t,i)=>t+(+i.a||0),0); }
 function wsGroupTotal(g){ return wsGroupSum(g); }
@@ -7060,18 +7066,21 @@ function wsBodyHtml(x){
     return `<div class="fw-grp"><div class="fw-r h"><span class="n">${esc(g.h)}</span><span class="a">${m(tot)}</span></div>
       ${(g.items||[]).map(i=>`<div class="fw-r i"><span class="n">${esc(i.n)}</span><span class="a">${m(i.a)}</span></div>`).join('')}</div>`; }).join('');
   const nm=d.notMine&&(+d.notMine.a)?d.notMine:null;
-  return `<div class="fw-asof">Where it is · latest update <b>${d.asOf?fmtDate(d.asOf):'—'}</b></div>
+  const T=wsTotal(d);
+  return `<div class="fw-asof">Where it was on <b>${d.asOf?fmtDate(d.asOf):'—'}</b></div>
     ${grp}
     <div class="fw-sum">
-      <div class="fw-r t0"><span class="n">In the accounts<small>${d.groups.map(g=>esc(g.h.replace(/:\s*$/,''))).join(' + ')} · the big number</small></span><span class="a">${m(acc)}</span></div>
+      <div class="fw-r t0"><span class="n">In the accounts on ${d.asOf?fmtDate(d.asOf):'—'}<small>${d.groups.map(g=>esc(g.h.replace(/:\s*$/,''))).join(' + ')}</small></span><span class="a">${m(acc)}</span></div>
+      <div class="fw-r"><span class="n">Earned since ${d.asOf?fmtDate(d.asOf):'then'}<small>money received − expenses · not split into the accounts yet</small></span><span class="a ${T.since<0?'neg':'g'}">${T.since<0?'− ':'+ '}${m(Math.abs(T.since))}</span></div>
+      <div class="fw-r t"><span class="n">= Total profit today</span><span class="a">${m(T.total)}</span></div>
     </div>
     <div class="fw-exp">
       <div class="fw-xh">Expected · not in the bank yet</div>
       ${earned?`<div class="fw-r"><span class="n"><i class="dot g"></i>${esc(d.earned.n||'Earned')}<small>earned, not in the bank yet</small></span><span class="a g">${earned<0?'− ':'+ '}${m(Math.abs(earned))}</span></div>`:''}
-      <div class="fw-r"><span class="n"><i class="dot b"></i>Renewals still due in ${ex.month}<small>${ex.rn?ex.rn+' client'+(ex.rn===1?'':'s')+' not renewed yet this month (estimate)':'none left this month'}</small></span><span class="a b">+ ${m(ex.ren)}</span></div>
-      <div class="fw-r t"><span class="n">= If it all comes in</span><span class="a">${m(acc+ex.total)}</span></div>
+      <div class="fw-r"><span class="n"><i class="dot b"></i>Renewals still due in ${ex.month}<small>${ex.rn?`${ex.rn} client${ex.rn===1?'':'s'} not renewed yet · <b class="bl">${m(ex.ren)}</b> if all renew · safe estimate: ${ex.pct}% renew`:'none left this month'}</small></span><span class="a b">+ ${m(ex.renSafe)}</span></div>
+      <div class="fw-r t"><span class="n">= Total profit + expected<small>with renewals at ${ex.pct}%</small></span><span class="a">${m(T.total+ex.total)}</span></div>
     </div>
-    ${nm?`<div class="fw-note">Inside the ${m(acc)}: <b>${m(nm.a)} ${esc(nm.n)}</b><br>Without it: <b>${m(sumAll-(+nm.a))}</b></div>`:''}
+    ${nm?`<div class="fw-note">Inside the ${m(acc)}: <b>${m(nm.a)} ${esc(nm.n)}</b><br>Total profit without it: <b>${m(T.total-(+nm.a))}</b></div>`:''}
     <div class="fw-btns"><button class="fw-btn" data-fw="edit">Update balances</button></div>`;
 }
 function wsEditorHtml(d){
@@ -7084,6 +7093,7 @@ function wsEditorHtml(d){
     <div style="margin-top:8px"><button class="add" data-fw="addGroup">+ group</button></div>
     <div class="lab">Expected · earned, not in the bank yet</div><div class="er"><input class="nm" data-k="en" value="${esc(d.earned&&d.earned.n||'')}" placeholder="e.g. +1.5k earned"><input class="am" data-k="ea" inputmode="decimal" value="${+(d.earned&&d.earned.a)||''}" placeholder="€"></div>
     <div class="lab">Of which not mine</div><div class="er"><input class="nm" data-k="mn" value="${esc(d.notMine&&d.notMine.n||'')}" placeholder="e.g. cash not mine"><input class="am" data-k="ma" inputmode="decimal" value="${+(d.notMine&&d.notMine.a)||''}" placeholder="€"></div>
+    <div class="lab">Renewals · safe estimate</div><div class="er"><span style="font-size:12px;font-weight:700;color:rgba(255,255,255,.8)">Count them at</span><input class="am" data-k="rp" inputmode="numeric" style="flex:0 0 64px;width:64px;margin-left:0" value="${typeof d.renewPct==='number'?d.renewPct:70}"><span style="font-size:12px;font-weight:700;color:rgba(255,255,255,.8)">% (how many usually renew)</span></div>
     <div class="er gr tot"><span>In the accounts</span><span class="gsum" data-gs="all"></span></div><div class="fw-btns"><button class="fw-btn pri" data-fw="save">Save</button><button class="fw-btn" data-fw="cancel">Cancel</button></div></div>`;
 }
 function wsReadEditor(card){
@@ -7093,7 +7103,7 @@ function wsReadEditor(card){
   card.querySelectorAll('.fw-ed input').forEach(inp=>{
     const k=inp.dataset.k, gi=+inp.dataset.g, ii=+inp.dataset.i, v=inp.value;
     if(k==='asOf') d.asOf=v; else if(k==='en') d.earned.n=v.trim(); else if(k==='ea') d.earned.a=num(v);
-    else if(k==='mn') d.notMine.n=v.trim(); else if(k==='ma') d.notMine.a=num(v);
+    else if(k==='mn') d.notMine.n=v.trim(); else if(k==='ma') d.notMine.a=num(v); else if(k==='rp') d.renewPct=Math.max(0,Math.min(100,num(v)||0));
     else { const g=d.groups[gi]||(d.groups[gi]={h:'',items:[]});
       if(k==='h') g.h=v.trim();
       else { const it=g.items[ii]||(g.items[ii]={n:'',a:0}); if(k==='n') it.n=v.trim(); else it.a=num(v); } }
@@ -7111,7 +7121,9 @@ function wsAction(act, el, e){
   if(act==='base'){ editWealthBase(); return; }
   if(act==='edit'){ wsEditing=true; wsRedraw(); const ed=card.querySelector('.fw-ed'); if(ed) wsLiveSums(ed); return; }
   if(act==='cancel'){ wsEditing=false; wsRedraw(); return; }
-  if(act==='save'){ ensureMeta(); state.meta.wealthSplit=wsReadEditor(card); wsEditing=false; save(); renderAll(); toast('Balances saved'); return; }
+  if(act==='save'){ ensureMeta(); const old=wsData(), nd=wsReadEditor(card);
+    if(old && typeof old.anchor==='number' && old.asOf===nd.asOf && Math.round(wsAccounts(old))===Math.round(wsAccounts(nd))) nd.anchor=old.anchor; else nd.anchor=realProfitToDate();
+    state.meta.wealthSplit=nd; wsEditing=false; save(); renderAll(); toast('Balances saved'); return; }
   if(act==='addLine'||act==='addGroup'||act==='rm'){
     const d=wsReadEditor(card); const gi=+el.dataset.g, ii=+el.dataset.i;
     if(act==='addLine'){ (d.groups[gi]||d.groups[d.groups.push({h:'',items:[]})-1]).items.push({n:'',a:0}); }
