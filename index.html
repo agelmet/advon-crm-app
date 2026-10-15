@@ -7119,6 +7119,16 @@ function wsAction(act, el, e){
     }catch(e){ console.warn('where link',e); toast('That breakdown link could not be read'); } },4000);
   },1000);
 })();
+/* Private inbox: Claude can drop a breakdown into leads/lists.json → lists._crm = {id, wealthSplit} in the PRIVATE data repo
+   (read only with the CRM's sign-in, via /api/pool). Applied once per id, then kept in the encrypted state. */
+function wsInbox(box){
+  if(!box || !box.id || !box.wealthSplit || !Array.isArray(box.wealthSplit.groups)) return false;
+  ensureMeta(); const done=state.meta.wsIn||(state.meta.wsIn={}); if(done[box.id]) return false;
+  if(state.meta.wealthSplit) state.meta.wealthSplitPrev=state.meta.wealthSplit;
+  state.meta.wealthSplit=box.wealthSplit; done[box.id]=Date.now(); wsSetOpen(true);
+  setTimeout(()=>{ try{ renderAll(); }catch(e){} toast('Total profit: breakdown added (Year tab)'); },50);
+  return true;
+}
 function wsRedraw(){ const card=$('#finWealth'), x=wealthNow(); if(card&&x) card.querySelector('.fw-body').innerHTML=wsBodyHtml(x); }
 /* The yearly call/revenue statistics — relocated here from Quick Log. */
 function renderYearStats(){
@@ -10156,6 +10166,7 @@ const Leads={
       if(!res.ok) throw new Error('server '+res.status);
       const data=await res.json();
       ensureLeads(); let changed=false;
+      if(data.lists && typeof data.lists==='object' && data.lists._crm){ try{ if(wsInbox(data.lists._crm)) changed=true; }catch(e){ console.warn('ws inbox',e); } data.lists=Object.assign({},data.lists); delete data.lists._crm; }
       if(data.lists && typeof data.lists==='object' && JSON.stringify(data.lists)!==JSON.stringify(state.meta.ld.lists||{})){ state.meta.ld.lists=data.lists; changed=true; }
       const n=ldMerge(data.leads||[], 'harvest');
       this.lastAt=Date.now();
