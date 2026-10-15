@@ -478,6 +478,46 @@ body.dark .ycard .m-earned b{color:#3BE38F;}
 .fin-wealth .v{font-family:'Sora'; font-weight:800; font-size:30px; letter-spacing:-.03em; font-variant-numeric:tabular-nums; margin-top:4px; color:#6FF0AE;}
 .fin-wealth .sub{font-size:11.5px; color:rgba(255,255,255,.72); font-weight:600; margin-top:4px; line-height:1.45;}
 .fin-wealth .sub b{color:#6FF0AE;} .fin-wealth .sub b.neg{color:#FFB39F;}
+/* 15 Oct 2026 — Total profit opens up: where the money is */
+.fin-wealth{cursor:default;} .fin-wealth:hover{transform:none;}
+.fin-wealth .fw-top{cursor:pointer; position:relative; padding-right:34px;}
+.fin-wealth .fw-chev{position:absolute; right:0; top:2px; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.1); color:#fff; transition:transform .25s, background .2s;}
+.fin-wealth .fw-chev .ic{width:15px; height:15px;}
+.fin-wealth .fw-top:hover .fw-chev{background:rgba(255,255,255,.2);}
+.fin-wealth.open .fw-chev{transform:rotate(90deg);}
+.fin-wealth .fw-hint{display:inline-block; margin-top:8px; font-size:11px; font-weight:800; color:#6FF0AE; letter-spacing:.02em;}
+.fin-wealth.open .fw-hint{display:none;}
+.fw-body{display:none; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,.14);}
+.fin-wealth.open .fw-body{display:block; animation:fwIn .25s ease;}
+@keyframes fwIn{from{opacity:0; transform:translateY(-4px);}to{opacity:1; transform:none;}}
+.fw-asof{font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.62); margin-bottom:8px;}
+.fw-asof b{color:#fff;}
+.fw-grp{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:8px 12px; margin-bottom:8px;}
+.fw-r{display:flex; align-items:baseline; gap:10px; padding:5px 0; font-size:13px; font-weight:600; color:rgba(255,255,255,.88);}
+.fw-r .n{min-width:0; word-break:break-word;}
+.fw-r .n small{display:block; font-size:10.5px; font-weight:600; color:rgba(255,255,255,.55); margin-top:1px;}
+.fw-r .a{margin-left:auto; font-family:'Sora'; font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap; color:#fff;}
+.fw-grp .fw-r.h{font-weight:800; color:#fff; border-bottom:1px dashed rgba(255,255,255,.16); padding-bottom:7px; margin-bottom:2px;}
+.fw-grp .fw-r.h .a{color:#6FF0AE;}
+.fw-grp .fw-r.i .n{padding-left:12px; position:relative;}
+.fw-grp .fw-r.i .n:before{content:''; position:absolute; left:0; top:.55em; width:5px; height:5px; border-radius:50%; background:rgba(111,240,174,.7);}
+.fw-sum{margin-top:6px; border-radius:12px; padding:6px 12px; background:rgba(0,0,0,.18);}
+.fw-sum .fw-r{border-bottom:1px dashed rgba(255,255,255,.12);} .fw-sum .fw-r:last-child{border-bottom:none;}
+.fw-sum .fw-r .a.g{color:#6FF0AE;} .fw-sum .fw-r .a.neg{color:#FFB39F;}
+.fw-sum .fw-r.t{font-weight:800; color:#fff; border-top:2px solid rgba(255,255,255,.22); margin-top:2px; padding-top:8px;}
+.fw-sum .fw-r.t .a{font-size:17px; color:#6FF0AE;}
+.fw-note{margin-top:8px; border-radius:12px; padding:9px 12px; background:rgba(255,179,159,.12); border:1px solid rgba(255,179,159,.28); font-size:12px; font-weight:600; color:rgba(255,255,255,.88); line-height:1.45;}
+.fw-note b{color:#FFD2C6;}
+.fw-btns{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+.fw-btn{border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.08); color:#fff; font:inherit; font-size:12px; font-weight:800; padding:7px 12px; border-radius:999px; cursor:pointer;}
+.fw-btn:hover{background:rgba(255,255,255,.16);} .fw-btn.pri{background:#6FF0AE; color:#0B2A1C; border-color:#6FF0AE;}
+.fw-ed input{font:inherit; font-size:13px; font-weight:600; color:#0B2A1C; background:#fff; border:1px solid rgba(255,255,255,.4); border-radius:8px; padding:6px 8px; min-width:0;}
+.fw-ed .er{display:flex; gap:6px; align-items:center; margin:5px 0;}
+.fw-ed .er .nm{flex:1 1 auto;} .fw-ed .er .am{width:96px; flex:0 0 96px; text-align:right;}
+.fw-ed .er .x{flex:0 0 26px; height:26px; border-radius:50%; border:none; background:rgba(255,255,255,.12); color:#fff; cursor:pointer; font-weight:800;}
+.fw-ed .gh{width:100%; font-weight:800 !important;}
+.fw-ed .lab{font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:rgba(255,255,255,.6); margin:10px 0 2px;}
+.fw-ed .add{border:1px dashed rgba(255,255,255,.3); background:none; color:#6FF0AE; font:inherit; font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:999px; cursor:pointer; margin-top:2px;}
 .fin-net.neg{background:var(--coral-soft); border-color:rgba(255,107,87,.3);}
 .fin-net .k{font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
 .fin-net .v{font-family:'Sora'; font-weight:800; font-size:30px; letter-spacing:-.03em; font-variant-numeric:tabular-nums; color:var(--deep); margin-top:4px;}
@@ -6900,7 +6940,7 @@ function renderYear(){
   renderYearStats();
 }
 /* Expenses + net profit live here — out of the banner, with room to breathe. */
-document.addEventListener('click',e=>{ if(e.target.closest('#finWealth')) editWealthBase(); });
+document.addEventListener('click',e=>{ const b=e.target.closest('#finWealth [data-fw]'); if(b) wsAction(b.dataset.fw, b, e); });
 function renderYearFinance(yGenerated, yExp, yNet, rTotal, pots){
   const el=$('#yearFinance'); if(!el) return;
   pots=pots||{yPaid:0,subCollected:0,rPaid:0,ytd:0,toCollect:0,rCount:0};
@@ -6945,10 +6985,15 @@ function renderYearFinance(yGenerated, yExp, yNet, rTotal, pots){
           <div class="v">${fmtMoney2(Math.round(yNet))}</div>
           <div class="sub">generated − expenses${pots.rPaid?` · includes ${fmtMoney2(Math.round(pots.rPaid))} from renewals`:''}</div>
         </div>
-        ${(()=>{ const x=wealthNow(); if(!x) return ''; const g=Math.round(x.gained); return `<div class="fin-wealth" id="finWealth" title="Click to change the starting amount">
+        ${(()=>{ const x=wealthNow(); if(!x) return ''; const g=Math.round(x.gained); return `<div class="fin-wealth${wsOpen()?' open':''}" id="finWealth">
+          <div class="fw-top" data-fw="toggle" title="Click to see where it is">
           <div class="k">${IC.wallet} Total profit</div>
           <div class="v">${fmtMoney2(Math.round(x.total))}</div>
           <div class="sub">started at ${fmtMoney2(x.w.base)} on ${fmtDate(x.w.since)} · <b class="${g<0?'neg':''}">${g<0?'−':'+'}${fmtMoney2(Math.abs(g))}</b> since then · only money actually received, minus expenses</div>
+          <span class="fw-hint">Where it is ›</span>
+          <span class="fw-chev">${IC.chevRight}</span>
+          </div>
+          <div class="fw-body">${wsBodyHtml(x)}</div>
         </div>`; })()}
       </div>
     </div>`;
@@ -6973,6 +7018,89 @@ function editWealthBase(){
   if(v===null) return; const n=parseFloat(String(v).replace(/[€\s,]/g,'')); if(isNaN(n)){ toast('Write a number, e.g. 46000'); return; }
   x.w.base=Math.round(n*100)/100; save(); renderAll(); toast('Starting amount saved');
 }
+/* 15 Oct 2026 — «Total profit» opens up: WHERE the money is (Angelo's balances note, names as he writes them).
+   The balances live ONLY in the encrypted state (state.meta.wealthSplit) — never in this public file.
+   Shape: {asOf:'YYYY-MM-DD', groups:[{h:'14.5k from:', t:14500?, items:[{n,a,sub?}]}], earned:{n,a}, notMine:{n,a}}
+   Maths shown: accounts (note) + earned = starting amount; + money received − expenses since = Total profit.
+   The Total profit number itself is NOT changed by any of this. */
+let wsEditing=false;
+function wsOpen(){ try{ return localStorage.getItem('crm.wsOpen')==='1'; }catch(e){ return false; } }
+function wsSetOpen(v){ try{ localStorage.setItem('crm.wsOpen', v?'1':'0'); }catch(e){} }
+function wsData(){ ensureMeta(); const d=state.meta.wealthSplit; return (d && Array.isArray(d.groups)) ? d : null; }
+function wsGroupSum(g){ return (g.items||[]).reduce((t,i)=>t+(+i.a||0),0); }
+function wsGroupTotal(g){ return typeof g.t==='number' ? g.t : wsGroupSum(g); }
+function wsAccounts(d){ return d.groups.reduce((t,g)=>t+wsGroupTotal(g),0); }
+function wsBodyHtml(x){
+  const d=wsData();
+  if(wsEditing) return wsEditorHtml(d);
+  if(!d) return `<div class="fw-asof">No breakdown yet</div><div class="fw-btns"><button class="fw-btn pri" data-fw="edit">Add my balances</button><button class="fw-btn" data-fw="base">Change starting amount</button></div>`;
+  const m=v=>fmtMoney2(Math.round(v));
+  const acc=wsAccounts(d), earned=+(d.earned&&d.earned.a)||0, base=+x.w.base||0, since=x.gained;
+  const diff=Math.round(base-acc-earned);
+  const grp=d.groups.map(g=>{ const sum=wsGroupSum(g), tot=wsGroupTotal(g);
+    return `<div class="fw-grp"><div class="fw-r h"><span class="n">${esc(g.h)}${Math.round(sum)!==Math.round(tot)?`<small>the lines below add up to ${m(sum)}</small>`:''}</span><span class="a">${m(tot)}</span></div>
+      ${(g.items||[]).map(i=>`<div class="fw-r i"><span class="n">${esc(i.n)}${i.sub?`<small>${esc(i.sub)}</small>`:''}</span><span class="a">${m(i.a)}</span></div>`).join('')}</div>`; }).join('');
+  const nm=d.notMine&&(+d.notMine.a)?d.notMine:null;
+  return `<div class="fw-asof">Where it is · latest update <b>${d.asOf?fmtDate(d.asOf):'—'}</b></div>
+    ${grp}
+    <div class="fw-sum">
+      <div class="fw-r"><span class="n">In the accounts<small>${d.groups.map(g=>esc(g.h.replace(/:\s*$/,''))).join(' + ')}</small></span><span class="a">${m(acc)}</span></div>
+      ${earned?`<div class="fw-r"><span class="n">${esc(d.earned.n||'Earned')}</span><span class="a g">+ ${m(earned)}</span></div>`:''}
+      ${diff?`<div class="fw-r"><span class="n">Not matched to an account<small>starting amount − the lines above</small></span><span class="a ${diff<0?'neg':'g'}">${diff<0?'− ':'+ '}${m(Math.abs(diff))}</span></div>`:''}
+      <div class="fw-r"><span class="n">= Starting amount<small>on ${fmtDate(x.w.since)}</small></span><span class="a">${m(base)}</span></div>
+      <div class="fw-r"><span class="n">Since ${fmtDate(x.w.since)}<small>money received − expenses (not in the accounts above yet)</small></span><span class="a ${since<0?'neg':'g'}">${since<0?'− ':'+ '}${m(Math.abs(since))}</span></div>
+      <div class="fw-r t"><span class="n">= Total profit</span><span class="a">${m(x.total)}</span></div>
+    </div>
+    ${nm?`<div class="fw-note">Inside the ${m(acc)}: <b>${m(nm.a)} ${esc(nm.n)}</b><br>Total profit without it: <b>${m(x.total-(+nm.a))}</b></div>`:''}
+    <div class="fw-btns"><button class="fw-btn" data-fw="edit">Update balances</button><button class="fw-btn" data-fw="base">Change starting amount</button></div>`;
+}
+function wsEditorHtml(d){
+  d=d||{asOf:todayIso(), groups:[{h:'Accounts:', items:[{n:'',a:0}]}], earned:{n:'',a:0}, notMine:{n:'',a:0}};
+  const row=(i,gi,ii)=>`<div class="er"><input class="nm" data-k="n" data-g="${gi}" data-i="${ii}" value="${esc(i.n)}" placeholder="Name"><input class="am" data-k="a" data-g="${gi}" data-i="${ii}" inputmode="decimal" value="${+i.a||''}" placeholder="€"><button class="x" data-fw="rm" data-g="${gi}" data-i="${ii}" title="Remove">×</button></div>`;
+  return `<div class="fw-ed">
+    <div class="lab">Latest update (date)</div><div class="er"><input type="date" data-k="asOf" value="${esc(d.asOf||todayIso())}"></div>
+    ${d.groups.map((g,gi)=>`<div class="lab">Group</div><div class="er"><input class="gh" data-k="h" data-g="${gi}" value="${esc(g.h)}"></div>
+      ${(g.items||[]).map((i,ii)=>row(i,gi,ii)).join('')}<button class="add" data-fw="addLine" data-g="${gi}">+ line</button>`).join('')}
+    <div style="margin-top:8px"><button class="add" data-fw="addGroup">+ group</button></div>
+    <div class="lab">Earned on top (not in an account)</div><div class="er"><input class="nm" data-k="en" value="${esc(d.earned&&d.earned.n||'')}" placeholder="e.g. +1.5k earned"><input class="am" data-k="ea" inputmode="decimal" value="${+(d.earned&&d.earned.a)||''}" placeholder="€"></div>
+    <div class="lab">Of which not mine</div><div class="er"><input class="nm" data-k="mn" value="${esc(d.notMine&&d.notMine.n||'')}" placeholder="e.g. cash not mine"><input class="am" data-k="ma" inputmode="decimal" value="${+(d.notMine&&d.notMine.a)||''}" placeholder="€"></div>
+    <div class="fw-btns"><button class="fw-btn pri" data-fw="save">Save</button><button class="fw-btn" data-fw="cancel">Cancel</button></div></div>`;
+}
+function wsReadEditor(card){
+  const num=v=>{ const n=parseFloat(String(v||'').replace(/[€\s,]/g,'')); return isNaN(n)?0:Math.round(n*100)/100; };
+  const old=wsData();
+  const d={asOf:'', groups:[], earned:{n:'',a:0}, notMine:{n:'',a:0}};
+  card.querySelectorAll('.fw-ed input').forEach(inp=>{
+    const k=inp.dataset.k, gi=+inp.dataset.g, ii=+inp.dataset.i, v=inp.value;
+    if(k==='asOf') d.asOf=v; else if(k==='en') d.earned.n=v.trim(); else if(k==='ea') d.earned.a=num(v);
+    else if(k==='mn') d.notMine.n=v.trim(); else if(k==='ma') d.notMine.a=num(v);
+    else { const g=d.groups[gi]||(d.groups[gi]={h:'',items:[]});
+      if(k==='h') g.h=v.trim();
+      else { const it=g.items[ii]||(g.items[ii]={n:'',a:0}); if(k==='n') it.n=v.trim(); else it.a=num(v); } }
+  });
+  d.groups=d.groups.filter(Boolean).map((g,gi)=>{ g.items=g.items.filter(i=>i&&(i.n||i.a));
+    const og=old&&old.groups[gi];   // keep the note's own group total / sub-notes only while that group is unchanged
+    if(og && JSON.stringify(og.items.map(i=>[i.n,+i.a]))===JSON.stringify(g.items.map(i=>[i.n,+i.a]))){
+      if(typeof og.t==='number') g.t=og.t; g.items.forEach((i,k)=>{ if(og.items[k]&&og.items[k].sub) i.sub=og.items[k].sub; }); }
+    return g; }).filter(g=>g.h||g.items.length);
+  return d;
+}
+function wsAction(act, el, e){
+  const card=$('#finWealth'); if(!card) return;
+  if(act==='toggle'){ const o=!card.classList.contains('open'); card.classList.toggle('open',o); wsSetOpen(o); if(!o && wsEditing){ wsEditing=false; wsRedraw(); } return; }
+  if(act==='base'){ editWealthBase(); return; }
+  if(act==='edit'){ wsEditing=true; wsRedraw(); return; }
+  if(act==='cancel'){ wsEditing=false; wsRedraw(); return; }
+  if(act==='save'){ ensureMeta(); state.meta.wealthSplit=wsReadEditor(card); wsEditing=false; save(); renderAll(); toast('Balances saved'); return; }
+  if(act==='addLine'||act==='addGroup'||act==='rm'){
+    const d=wsReadEditor(card); const gi=+el.dataset.g, ii=+el.dataset.i;
+    if(act==='addLine'){ (d.groups[gi]||d.groups[d.groups.push({h:'',items:[]})-1]).items.push({n:'',a:0}); }
+    if(act==='addGroup') d.groups.push({h:'',items:[{n:'',a:0}]});
+    if(act==='rm' && d.groups[gi]) d.groups[gi].items.splice(ii,1);
+    const body=card.querySelector('.fw-body'); body.innerHTML=wsEditorHtml(d); return;
+  }
+}
+function wsRedraw(){ const card=$('#finWealth'), x=wealthNow(); if(card&&x) card.querySelector('.fw-body').innerHTML=wsBodyHtml(x); }
 /* The yearly call/revenue statistics — relocated here from Quick Log. */
 function renderYearStats(){
   const el=$('#yearStats'); if(!el) return;
