@@ -7047,11 +7047,13 @@ function wsData(){ ensureMeta(); const d=state.meta.wealthSplit; return (d && Ar
 function wsAnchor(d){ if(typeof d.anchor!=='number'){ d.anchor=realProfitToDate(); try{ save(); }catch(e){} } return d.anchor; }
 function wsTotal(d){ const acc=wsAccounts(d); const since=Math.round((realProfitToDate()-wsAnchor(d))*100)/100; return {acc, since, total:acc+since}; }
 function wsExpected(d){
-  const earned=+(d&&d.earned&&d.earned.a)||0; const mk=todayIso().slice(0,7);
+  /* «About to pay» = the clients marked GREEN on the Remaining tab, what they still owe — live, same number as there */
+  let earned=0, gn=0; try{ state.clients.filter(isUnpaid).filter(c=>remFlag(c)==='green').forEach(c=>{ earned+=cowed(c); gn++; }); }catch(e){}
+  const mk=todayIso().slice(0,7);
   let ren=0, rn=0; try{ rpRenewalsOfMonth(mk).forEach(x=>{ if(x.status==='due'){ ren+=x.value; rn++; } }); }catch(e){}
   const month=new Date(mk+'-15').toLocaleString('en-GB',{month:'long'});
   const pct=Math.max(0,Math.min(100, d&&typeof d.renewPct==='number'?d.renewPct:70)); const renSafe=Math.round(ren*pct/100);
-  return {earned, ren, rn, month, pct, renSafe, total:earned+renSafe};
+  return {earned, gn, ren, rn, month, pct, renSafe, total:earned+renSafe};
 }
 function wsGroupSum(g){ return (g.items||[]).reduce((t,i)=>t+(+i.a||0),0); }
 function wsGroupTotal(g){ return wsGroupSum(g); }
@@ -7076,7 +7078,7 @@ function wsBodyHtml(x){
     </div>
     <div class="fw-exp">
       <div class="fw-xh">Expected · not in the bank yet</div>
-      ${earned?`<div class="fw-r"><span class="n"><i class="dot g"></i>${esc(d.earned.n||'Earned')}<small>earned, not in the bank yet</small></span><span class="a g">${earned<0?'− ':'+ '}${m(Math.abs(earned))}</span></div>`:''}
+      <div class="fw-r"><span class="n"><i class="dot g"></i>About to pay<small>${ex.gn?`${ex.gn} client${ex.gn===1?'':'s'} marked green on Remaining`:'nobody marked green on Remaining'}</small></span><span class="a g">+ ${m(earned)}</span></div>
       <div class="fw-r"><span class="n"><i class="dot b"></i>Renewals still due in ${ex.month}<small>${ex.rn?`${ex.rn} client${ex.rn===1?'':'s'} not renewed yet · <b class="bl">${m(ex.ren)}</b> if all renew · safe estimate: ${ex.pct}% renew`:'none left this month'}</small></span><span class="a b">+ ${m(ex.renSafe)}</span></div>
       <div class="fw-r t"><span class="n">= Total profit + expected<small>with renewals at ${ex.pct}%</small></span><span class="a">${m(T.total+ex.total)}</span></div>
     </div>
@@ -7091,7 +7093,6 @@ function wsEditorHtml(d){
     ${d.groups.map((g,gi)=>`<div class="lab">Group</div><div class="er gr"><input class="gh" data-k="h" data-g="${gi}" value="${esc(g.h)}"><span class="gsum" data-gs="${gi}">${fmtMoney2(Math.round(wsGroupSum(g)))}</span></div>
       ${(g.items||[]).map((i,ii)=>row(i,gi,ii)).join('')}<button class="add" data-fw="addLine" data-g="${gi}">+ line</button>`).join('')}
     <div style="margin-top:8px"><button class="add" data-fw="addGroup">+ group</button></div>
-    <div class="lab">Expected · earned, not in the bank yet</div><div class="er"><input class="nm" data-k="en" value="${esc(d.earned&&d.earned.n||'')}" placeholder="e.g. +1.5k earned"><input class="am" data-k="ea" inputmode="decimal" value="${+(d.earned&&d.earned.a)||''}" placeholder="€"></div>
     <div class="lab">Of which not mine</div><div class="er"><input class="nm" data-k="mn" value="${esc(d.notMine&&d.notMine.n||'')}" placeholder="e.g. cash not mine"><input class="am" data-k="ma" inputmode="decimal" value="${+(d.notMine&&d.notMine.a)||''}" placeholder="€"></div>
     <div class="lab">Renewals · safe estimate</div><div class="er"><span style="font-size:12px;font-weight:700;color:rgba(255,255,255,.8)">Count them at</span><input class="am" data-k="rp" inputmode="numeric" style="flex:0 0 64px;width:64px;margin-left:0" value="${typeof d.renewPct==='number'?d.renewPct:70}"><span style="font-size:12px;font-weight:700;color:rgba(255,255,255,.8)">% (how many usually renew)</span></div>
     <div class="er gr tot"><span>In the accounts</span><span class="gsum" data-gs="all"></span></div><div class="fw-btns"><button class="fw-btn pri" data-fw="save">Save</button><button class="fw-btn" data-fw="cancel">Cancel</button></div></div>`;
@@ -7099,7 +7100,7 @@ function wsEditorHtml(d){
 function wsReadEditor(card){
   const num=v=>{ const n=parseFloat(String(v||'').replace(/[€\s,]/g,'')); return isNaN(n)?0:Math.round(n*100)/100; };
   const old=wsData();
-  const d={asOf:'', groups:[], earned:{n:'',a:0}, notMine:{n:'',a:0}};
+  const d={asOf:'', groups:[], earned:(old&&old.earned)||{n:'',a:0}, notMine:{n:'',a:0}};
   card.querySelectorAll('.fw-ed input').forEach(inp=>{
     const k=inp.dataset.k, gi=+inp.dataset.g, ii=+inp.dataset.i, v=inp.value;
     if(k==='asOf') d.asOf=v; else if(k==='en') d.earned.n=v.trim(); else if(k==='ea') d.earned.a=num(v);
