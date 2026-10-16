@@ -1364,6 +1364,11 @@ body.dark .ql-card input:focus{background:#fff;}
 .qs-pill .v{font-family:'Sora'; font-weight:800; font-size:22px; letter-spacing:-.02em; font-variant-numeric:tabular-nums; margin-top:6px;}
 .qs-pill .sub{font-size:10.5px; color:var(--muted); font-weight:600; margin-top:2px;}
 .qs-pill.accent{background:var(--grad); border:none; color:#fff;}
+.qs-pill.mc-pill .v{display:flex; align-items:center;}
+.qs-pill .mc-worst{display:inline-flex; flex-direction:column; min-width:0; margin-left:9px; padding-left:9px; border-left:1px solid var(--line); font-size:14px; font-weight:700; color:var(--muted); line-height:1.05;}
+.qs-pill .mc-worst i{font-family:inherit; font-style:normal; font-size:9.5px; font-weight:600; letter-spacing:0; margin-top:2px; font-family:system-ui,-apple-system,sans-serif;}
+.qs-pill .mc-bar{position:relative;}
+.qs-pill .mc-bar b{position:absolute; top:0; bottom:0; width:2px; margin-left:-1px; background:#fff; opacity:.95;}
 .qs-pill.accent .k{color:rgba(255,255,255,.85);} .qs-pill.accent .sub{color:rgba(255,255,255,.8);}
 .qs-pill .tgt-bar{margin-top:auto;}
 .day-log{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:14px; overflow:hidden;}
@@ -7229,6 +7234,34 @@ function dayStats(iso, raw){
   const coldBooked=cold.filter(l=>l.type==='g').length;
   return { calls:cold.length, booked:day.filter(l=>l.type==='g').length, sms:day.filter(l=>l.type==='y').length, nos:day.filter(l=>l.type==='r').length, coldBooked, rate: cold.length? coldBooked/cold.length : 0 };
 }
+/* 16 Oct 2026 (Angelo): «Meeting → client» = how many SAID YES out of the meetings that really took place or
+   were scheduled and missed. A meeting counts once its outcome is known:
+     yes    = the card moved on to the work (Need info … Paid) or the meeting was logged «won»
+     no     = Lost
+     noshow = logged «No show» (a scheduled meeting — it counts, as a meeting that gave no client)
+   Left OUT of the % (not decided yet): Thinking (shown beside it as «if they all say no»), meetings still to
+   come, and past meetings nobody logged yet. The meeting's own day decides the month (else the card's month).
+   Trashed cards and other services (€1–119) never count. */
+function meetMonthOf(c){ return (c.day && /^\d{4}-\d{2}-\d{2}$/.test(c.day)) ? c.day.slice(0,7) : (c.month||''); }
+function meetClass(c){
+  if(!c || isTrashed(c)) return '';
+  const v=cval(c); if(v>0 && v<SITE_MIN) return '';
+  if(c.stage==='lost') return 'no';
+  if(c.stage==='thinking') return 'think';
+  if(c.stage!=='booked') return 'yes';
+  if(c.meetOutcome==='won') return 'yes';
+  if(c.meetOutcome==='noshow') return 'noshow';
+  const end = (c.day && c.time) ? mqEnd(c) : (c.day ? Date.parse(c.day+'T23:59') : 0);
+  return (end && end<=Date.now()) ? 'unlogged' : 'upcoming';
+}
+function meetConvOf(list){
+  const n={yes:0,no:0,noshow:0,think:0,unlogged:0,upcoming:0};
+  list.forEach(c=>{ const k=meetClass(c); if(k) n[k]++; });
+  const decided=n.yes+n.no+n.noshow, withThink=decided+n.think;
+  return { meetClients:decided, converted:n.yes, meetConv: decided? n.yes/decided : 0,
+    meetNo:n.no, meetNoshow:n.noshow, meetThink:n.think, meetUnlogged:n.unlogged, meetUpcoming:n.upcoming,
+    meetConvWorst: withThink? n.yes/withThink : 0 };
+}
 function monthLogStats(key){
   const logs=logsForMonth(key).filter(statLog);
   const cold=logs.filter(l=>(l.source||'cold')==='cold');
@@ -7236,22 +7269,33 @@ function monthLogStats(key){
   const daysWith=new Set(logs.map(l=>l.date)).size;
   const ov=(state.workdays&&state.workdays[key]!=null)?+state.workdays[key]:null;
   const workingDays= ov!=null? ov : daysWith;
-  const meetClients=state.clients.filter(c=>c.month===key && statClient(c) && cval(c)>=SITE_MIN);  /* every client had a booked meeting (under €120 = another service) */
-  const converted=meetClients.filter(c=>PAYING_STAGES.includes(c.stage)).length;  /* lost ⇒ not counted */
+  const MC=meetConvOf(state.clients.filter(c=>meetMonthOf(c)===key && statClient(c)));
   /* 14 Oct 2026 (Angelo): «New revenue generated» = exactly the «New money» figure of the month (new websites that said yes —
      paid + still to collect; Booked, Thinking and Lost left out), then ÷ working days */
   const revenue=goalPlan(key).done;
   return { calls:cold.length, booked:logs.filter(l=>l.type==='g').length, sms:logs.filter(l=>l.type==='y').length, nos:logs.filter(l=>l.type==='r').length,
     coldBooked, callConv: cold.length? coldBooked/cold.length : 0,
     daysWith, workingDays, avgCalls: workingDays? cold.length/workingDays : 0,
-    meetClients:meetClients.length, converted, meetConv: meetClients.length? converted/meetClients.length : 0,
+    ...MC,
     revenue, avgRevPerDay: workingDays? revenue/workingDays : 0 };
 }
 function yearLogStats(year){
-  const months=[]; let calls=0,booked=0,sms=0,nos=0,coldBooked=0,workingDays=0,meetC=0,conv=0,revenue=0;
+  const months=[]; let calls=0,booked=0,sms=0,nos=0,coldBooked=0,workingDays=0,meetC=0,conv=0,revenue=0,mNo=0,mNs=0,mTh=0,mUl=0,mUp=0;
   for(let m=1;m<=12;m++){ const s=monthLogStats(year+'-'+pad(m)); months.push(s);
-    calls+=s.calls; booked+=s.booked; sms+=s.sms; nos+=s.nos; coldBooked+=s.coldBooked; workingDays+=s.workingDays; meetC+=s.meetClients; conv+=s.converted; revenue+=s.revenue; }
-  return { months, calls, booked, sms, nos, coldBooked, callConv: calls? coldBooked/calls : 0, workingDays, avgCalls: workingDays? calls/workingDays : 0, meetClients:meetC, converted:conv, meetConv: meetC? conv/meetC : 0, revenue, avgRevPerDay: workingDays? revenue/workingDays : 0 };
+    calls+=s.calls; booked+=s.booked; sms+=s.sms; nos+=s.nos; coldBooked+=s.coldBooked; workingDays+=s.workingDays; meetC+=s.meetClients; conv+=s.converted; revenue+=s.revenue; mNo+=s.meetNo; mNs+=s.meetNoshow; mTh+=s.meetThink; mUl+=s.meetUnlogged; mUp+=s.meetUpcoming; }
+  return { months, calls, booked, sms, nos, coldBooked, callConv: calls? coldBooked/calls : 0, workingDays, avgCalls: workingDays? calls/workingDays : 0, meetClients:meetC, converted:conv, meetConv: meetC? conv/meetC : 0, meetNo:mNo, meetNoshow:mNs, meetThink:mTh, meetUnlogged:mUl, meetUpcoming:mUp, meetConvWorst: (meetC+mTh)? conv/(meetC+mTh) : 0, revenue, avgRevPerDay: workingDays? revenue/workingDays : 0 };
+}
+function meetConvPill(m){
+  const pc=Math.round(m.meetConv*100), worst=Math.round(m.meetConvWorst*100);
+  const bits=[`${m.converted} yes of ${m.meetClients} meeting${m.meetClients===1?'':'s'}`];
+  if(m.meetNoshow) bits.push(`${m.meetNoshow} no‑show`);
+  if(m.meetUnlogged) bits.push(`${m.meetUnlogged} not logged yet`);
+  const tip=`Said yes ÷ meetings with an answer (yes + no + no-show). Thinking, meetings still to come and meetings not logged yet are left out until they are decided.`
+    +`\n\nYes ${m.converted} · No ${m.meetNo} · No-show ${m.meetNoshow} · Thinking ${m.meetThink} · Not logged ${m.meetUnlogged} · Still to come ${m.meetUpcoming}`;
+  return `<div class="qs-pill mc-pill" title="${esc(tip)}"><div class="k">${IC.check2} Meeting → client</div>`
+    +`<div class="v">${m.meetClients?pc+'%':'—'}${m.meetThink?`<span class="mc-worst" title="If all ${m.meetThink} people still thinking say no">${worst}%<i>if ${m.meetThink} thinking say no</i></span>`:''}</div>`
+    +`<div class="sub">${bits.join(' · ')}</div>`
+    +`<div class="tgt-bar mc-bar"><i class="${progClass(pc)}" style="width:${Math.min(100,pc)}%"></i>${m.meetThink?`<b style="left:${Math.min(100,worst)}%" title="if the thinking say no"></b>`:''}</div></div>`;
 }
 function monthStatsHtml(m,key){
   const callConv=Math.round(m.callConv*100), meetConv=Math.round(m.meetConv*100);
@@ -7268,7 +7312,7 @@ function monthStatsHtml(m,key){
     <div class="qs-pill"><div class="k">${IC.message} SMS-e-mail sent</div><div class="v">${m.sms}</div><div class="sub">all sources</div></div>
     <div class="qs-pill"><div class="k">${IC.x} No's</div><div class="v">${m.nos}</div><div class="sub">all sources</div></div>
     <div class="qs-pill accent"><div class="k">${IC.target} Call → booking</div><div class="v">${callConv}%</div><div class="sub">cold booked ÷ cold calls</div><div class="tgt-bar on-dark"><i class="${progClass(callConv)}" style="width:${Math.min(100,callConv)}%"></i></div></div>
-    <div class="qs-pill"><div class="k">${IC.check2} Meeting → client</div><div class="v">${meetConv}%</div><div class="sub">${m.converted}/${m.meetClients} paid · lost = fail</div><div class="tgt-bar"><i class="${progClass(meetConv)}" style="width:${Math.min(100,meetConv)}%"></i></div></div>
+    ${meetConvPill(m)}
     <div class="qs-pill" id="wdOverride" style="cursor:pointer" title="Click to override the working-day count"><div class="k">${IC.calendar} Working days</div><div class="v">${m.workingDays}${wdIsOverride?' *':''}</div><div class="sub">${wdIsOverride?'manual · auto '+m.daysWith:'auto from logs'} · edit ${IC.edit}</div></div>
     <div class="qs-pill"><div class="k">${IC.phone} Avg calls / day</div><div class="v">${m.avgCalls.toFixed(1)}</div><div class="sub">over ${m.workingDays} working day${m.workingDays===1?'':'s'}</div></div>
     <div class="qs-pill"><div class="k">${IC.euro} New revenue generated</div><div class="v">${fmtMoney(Math.round(m.revenue))}</div><div class="sub">new money this month · same as «New money»</div></div>
@@ -7298,7 +7342,7 @@ function yearStatsHtml(y,year){
     <div class="qs-pill"><div class="k">${IC.message} SMS-e-mail sent</div><div class="v">${y.sms}</div><div class="sub">all sources</div></div>
     <div class="qs-pill"><div class="k">${IC.x} No's</div><div class="v">${y.nos}</div><div class="sub">all sources</div></div>
     <div class="qs-pill accent"><div class="k">${IC.target} Call → booking</div><div class="v">${callConv}%</div><div class="sub">cold booked ÷ cold calls</div><div class="tgt-bar on-dark"><i class="${progClass(callConv)}" style="width:${Math.min(100,callConv)}%"></i></div></div>
-    <div class="qs-pill"><div class="k">${IC.check2} Meeting → client</div><div class="v">${meetConv}%</div><div class="sub">${y.converted}/${y.meetClients} paid · lost = fail</div><div class="tgt-bar"><i class="${progClass(meetConv)}" style="width:${Math.min(100,meetConv)}%"></i></div></div>
+    ${meetConvPill(y)}
     <div class="qs-pill"><div class="k">${IC.calendar} Working days</div><div class="v">${y.workingDays}</div><div class="sub">summed from the months</div></div>
     <div class="qs-pill"><div class="k">${IC.phone} Avg calls / day</div><div class="v">${y.avgCalls.toFixed(1)}</div><div class="sub">over ${y.workingDays} working day${y.workingDays===1?'':'s'}</div></div>
     <div class="qs-pill"><div class="k">${IC.euro} New revenue generated</div><div class="v">${fmtMoney(Math.round(y.revenue))}</div><div class="sub">new money, all months added up</div></div>
