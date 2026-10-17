@@ -2971,6 +2971,16 @@ body.dark .rm-new input{background:var(--surface);}
 .card .c-draft{display:inline-flex;align-items:center;gap:5px;max-width:100%;margin-top:7px;padding:4px 9px;border-radius:8px;background:linear-gradient(135deg,#0EA5E9,#2563EB);color:#fff;font-weight:800;font-size:11px;line-height:1.3;text-decoration:none;letter-spacing:.01em;box-shadow:0 3px 8px -4px rgba(37,99,235,.6);transition:transform .15s,filter .15s}
 .card .c-draft span{font-size:10.5px;font-weight:800;color:#FDE68A;background:rgba(15,23,42,.24);padding:1px 6px;border-radius:5px;letter-spacing:.02em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card .c-draft:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.site-chip{display:inline-flex;align-items:center;gap:5px;max-width:100%;padding:3px 9px;border-radius:8px;background:linear-gradient(135deg,#0EA5E9,#2563EB);color:#fff!important;font-weight:800;font-size:11px;line-height:1.35;text-decoration:none;white-space:nowrap;box-shadow:0 3px 8px -4px rgba(37,99,235,.6);transition:transform .15s,filter .15s;vertical-align:middle}
+.site-chip span{font-size:10.5px;font-weight:800;color:#FDE68A;background:rgba(15,23,42,.24);padding:1px 6px;border-radius:5px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.site-chip.live{background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 3px 8px -4px rgba(5,150,105,.6)}
+.site-chip:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.rn-sub .site-chip{margin-right:2px}
+.site-edit{border:0;background:none;color:var(--muted);cursor:pointer;font:inherit;font-size:11px;font-weight:700;padding:2px 5px;border-radius:6px}
+.site-edit:hover{background:rgba(37,99,235,.08);color:#2563EB}
+.m-site-auto{margin-top:6px;font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.m-site-auto:empty{display:none}
+.m-site-auto i{font-style:normal;opacity:.8}
 .card .c-draft.live{background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 3px 8px -4px rgba(5,150,105,.6)}
 /* Paid card → gold «REVIEW» button (Angelo, 14 Oct 2026): opens the «domain connected + review» message */
 .card .c-acts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:7px}
@@ -4239,7 +4249,7 @@ body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
         <div class="field"><label>Viber <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label><input id="mViber" type="tel" placeholder="Viber number"></div>
       </div>
       <div class="field"><label>Email <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label><input id="mEmail" type="email" placeholder="name@email.gr"></div>
-      <div class="field"><label>Draft / website link <span style="font-weight:400;text-transform:none;letter-spacing:0;">(shows a big «Open draft» button on the card)</span></label><input id="mDraft" type="url" placeholder="https://drafts.advonmedia.com/NAME/"></div>
+      <div class="field"><label>Draft / website link <span style="font-weight:400;text-transform:none;letter-spacing:0;">(shows a big «Open draft» button on the card)</span></label><input id="mDraft" type="url" placeholder="https://drafts.advonmedia.com/NAME/"><div id="mDraftAuto" class="m-site-auto"></div></div>
       <div class="field"><label>Contact note <span style="font-weight:400;text-transform:none;letter-spacing:0;">(always visible on the card — e.g. «No Viber — SMS & e-mail only»)</span></label><input id="mCnote" type="text" maxlength="140" placeholder="No Viber — SMS & e-mail only"></div>
       <div class="field"><label>Notes</label><textarea id="mNotes" placeholder="Viber, needs images, waiting for logo…"></textarea></div>
       <div class="field"><label>Card color</label><div class="swatches" id="mColors"></div>
@@ -8322,7 +8332,8 @@ function rnRow(r,today){
   row.className='rn-row'+(chip.cls?' '+chip.cls:'');
   const n=(r.history||[]).length;
   const hist= n ? `<span class="hist" title="Renewed ${n} time${n===1?'':'s'}">${IC.repeat} renewed ${n}×${r.lastRenewed?' · last '+fmtDate(r.lastRenewed):''}</span>` : `<span class="hist">first renewal</span>`;
-  row.innerHTML=`<div class="rn-main"><div class="rn-name">${esc(r.name)}</div><div class="rn-sub">${hist}${r.note?`<span>${esc(r.note)}</span>`:''}</div></div>
+  const su=rnSiteUrl(r);
+  row.innerHTML=`<div class="rn-main"><div class="rn-name">${esc(r.name)}</div><div class="rn-sub">${su?siteChipHtml(su):''}<button class="site-edit" type="button" title="${su?'Change this client’s website / draft link':'Add the website / draft link'}">${su?'✎':'＋ link'}</button>${hist}${r.note?`<span>${esc(r.note)}</span>`:''}</div></div>
     <span class="rn-val" title="Click to edit the amount">${fmtMoney(r.value||0)}</span>
     <button class="rn-date" title="Click to change the renewal date">${IC.calendar} ${r.date? fmtDate(r.date) : 'set date'}</button>
     <span class="rn-days">${chip.txt}</span>
@@ -8332,6 +8343,9 @@ function rnRow(r,today){
       <button class="item-x" title="Remove this client from renewals">${IC.x}</button>
     </div>`;
   row.querySelector('.rn-done').addEventListener('click',()=>markRenewed(r));
+  row.querySelector('.site-edit').addEventListener('click',e=>{ e.stopPropagation();
+    const nv=prompt('Website or draft link for '+r.name+' (empty = find it automatically):', r.site||su||''); if(nv===null) return;
+    const t=nv.trim(); if(t && t!==su) r.site=t; else if(!t) delete r.site; r.updated=Date.now(); save(); renderAll(); });
   row.querySelector('.rn-lostbtn').addEventListener('click',()=>{
     if(!confirm(`Move "${r.name}" to Lost · won't renew?\n\nThey leave every renewal total. You can restore them any time.`)) return;
     r.lost=true; r.lostAt=todayIso(); r.updated=Date.now(); save(); renderAll(); toast(r.name+' moved to Lost · won\'t renew');
@@ -8450,6 +8464,7 @@ function remRowEl(c){
         ${cxTotal(c)?`<span class="rem-chip xtra" title="${esc(cx(c).map(e=>e.name+' · '+fmtMoney(+e.value||0)).join(' · '))}">+ ${cx(c).length===1?esc(cx(c)[0].name):cx(c).length+' extras'} ${fmtMoney(cxTotal(c))}</span>`:''}
         ${c.day?`<span class="rem-chip">${IC.calendar} ${fmtDay(c.day)}${c.time?' · '+c.time:''}</span>`:''}
         ${c.phone?`<a class="rem-chip link" href="tel:${esc(c.phone)}" onclick="event.stopPropagation()">${IC.phone} ${esc(c.phone)}</a>`:''}
+        ${siteChipHtml(cDraftUrl(c))}
         ${c.notes?`<span class="rem-note" title="${esc(c.notes)}">${esc(c.notes)}</span>`:''}
       </div>
     </div>
@@ -10046,7 +10061,7 @@ function openModal(id, presetDay){
   $('#mDay').value=c?(c.day||''):(presetDay||''); $('#mTime').value=c?(c.time||''):'';
   $('#mMonth').value=c?c.month:(presetDay?presetDay.slice(0,7):curMonth);
   $('#mNotes').value=c?(c.notes||''):'';
-  $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; $('#mCnote').value=c?cContactNote(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
+  $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
   const sel=$('#mStage'); sel.innerHTML=STAGES.map(s=>`<option value="${s.id}" ${c&&s.id===c.stage?'selected':''}>${s.name}</option>`).join('');
   modalColor = c ? (c.color||'') : '';
   $('#mFill').checked = c ? !!c.fill : false;
@@ -12609,7 +12624,107 @@ function chClientFor(t){
 /* the client's draft / website link for the Board card button: the card's own «Draft link» field, else the chat's «draft» (set by Claude with chat.py meta <slug> draft=…, never shown to the client), else the website on its chat, else a drafts.advonmedia.com link in the notes */
 /* Board cards show NO notes under the name (Angelo, 8 Oct 2026) — booking lines, meeting logs and links are read inside the card */
 function cContactNote(c){ try{ if(!c) return ''; if(typeof c.cnote==='string') return c.cnote.trim(); const th=chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } }   /* card's own note wins (even empty = turned off); else the chat's `cnote` set by Claude (chat.py meta <slug> cnote=…) */
-function cDraftUrl(c){ try{ if(!c) return ''; const ok=u=>{ u=String(u||'').trim(); return !u?'':(/^https?:\/\//i.test(u)?u:'https://'+u); }; if(c.domain && /\.[a-z]{2,}$/i.test(c.domain)) return ok(c.domain); if(c.draft) return ok(c.draft); const th=chThreadFor(c); if(th&&th.draft) return ok(th.draft); if(th&&th.site) return ok(th.site); const m=String(c.notes||'').match(/https?:\/\/drafts\.advonmedia\.com\/[^\s)]+/i); return m?m[0]:''; }catch(e){ return ''; } }
+function cDraftUrl(c){ try{ if(!c) return '';
+  const ok=u=>{ u=String(u||'').trim(); return !u?'':(/^https?:\/\//i.test(u)?u:'https://'+u); };
+  const isDraft=u=>/drafts\.advonmedia\.com|github\.io/i.test(u);
+  const repoOf=u=>((String(u).match(/drafts\.advonmedia\.com\/([^\/?#]+)/i)||[])[1]||'').toLowerCase();
+  const dom=c.domain && /\.[a-z]{2,}$/i.test(c.domain) ? ok(c.domain) : '';
+  if(dom && sitesIsLive(dom)) return dom;                    /* a live domain on the card (planned Papaki domains are skipped) */
+  const a=siteFor(c.name, (c.notes||'')+' '+(c.domain||'')+' '+(c.draft||''), c.phone);   /* links.json */
+  const same=u=>a && a.r && repoOf(u) && repoOf(u)===a.r.toLowerCase();
+  if(c.draft){ const u=ok(c.draft); return (a && a.w && same(u)) ? a.w : u; }   /* Angelo's own link always wins (a draft that went live → the website) */
+  let soft=''; const th=chThreadFor(c); if(th&&th.draft) soft=ok(th.draft); else if(th&&th.site) soft=ok(th.site); else { const m=String(c.notes||'').match(/https?:\/\/drafts\.advonmedia\.com\/[^\s)]+/i); if(m) soft=m[0]; }
+  if(a && a.w && (!soft || same(soft))) return a.w;
+  if(soft && (isDraft(soft) || sitesIsLive(soft))) return soft;
+  if(a && (a.d||a.w)) return a.d||a.w;
+  if(soft) return soft;
+  return (dom && !(SITES_PARKED && SITES_PARKED.has(sitesHost(dom)))) ? dom : '';
+}catch(e){ return ''; } }
+/* ---------- Client websites on every card (Angelo, 17 Oct 2026) ----------
+   links.json next to this page (built by ADVON-CLIENTS/.advon/crm_links/build.py) lists every client:
+   r = repo, d = draft link (drafts.advonmedia.com/REPO/), w = live website (only domains that really point
+   at the site — checked in DNS), pd = domains bought at Papaki but not live yet, k = surname keys, f = first
+   names, g = Greek surname, p = phone fingerprints. siteFor() finds a card's / renewal's client by surname
+   (Greek or Latin, any spelling), first name, phone and any domain written on it; a tie gives nothing rather
+   than a wrong link. The card's own «Draft / website link» always wins over the automatic one. */
+var SITES=null, SITES_LIVE=null, SITES_PARKED=null, SITES_MEMO=new Map();
+function sitesNorm(s){
+  s=String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  [['ου','u'],['αι','e'],['ει','i'],['οι','i'],['υι','i'],['ευ','ef'],['αυ','af'],['μπ','b'],['ντ','d'],['γκ','g'],['γγ','g']].forEach(([a,b])=>{ s=s.split(a).join(b); });
+  const G={'α':'a','β':'v','γ':'g','δ':'d','ε':'e','ζ':'z','η':'i','θ':'th','ι':'i','κ':'k','λ':'l','μ':'m','ν':'n','ξ':'ks','ο':'o','π':'p','ρ':'r','σ':'s','ς':'s','τ':'t','υ':'i','φ':'f','χ':'h','ψ':'ps','ω':'o'};
+  s=Array.from(s).map(ch=>G[ch]||ch).join('');
+  [['ch','h'],['kh','h'],['x','h'],['ph','f'],['ou','u'],['w','o'],['y','i'],['ei','i'],['oi','i'],['ai','e'],['mp','b'],['nt','d'],['gk','g'],['ng','g'],['gg','g'],['ev','ef'],['av','af'],['c','k'],['q','k']].forEach(([a,b])=>{ s=s.split(a).join(b); });
+  return s.replace(/[^a-z]/g,'').replace(/(.)\1+/g,'$1');
+}
+function sitesStrip(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
+function sitesLev(a,b){ if(Math.abs(a.length-b.length)>1) return 9; let p=Array.from({length:b.length+1},(_,i)=>i); for(let i=1;i<=a.length;i++){ const c=[i]; for(let j=1;j<=b.length;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]!==b[j-1]?1:0)); p=c; } return p[b.length]; }
+function sitesFnv(s){ let h=0x811c9dc5; for(const ch of new TextEncoder().encode(s)){ h^=ch; h=Math.imul(h,0x01000193)>>>0; } return ('0000000'+h.toString(16)).slice(-8); }
+function sitesHost(u){ return String(u||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/[\/?#].*$/,''); }
+function siteFor(name, extra, phone){
+  if(!SITES||!SITES.clients) return null;
+  const mk=name+'\u0001'+(extra||'')+'\u0001'+(phone||'');
+  if(SITES_MEMO.has(mk)) return SITES_MEMO.get(mk);
+  const words=String(name||'').split(/[^A-Za-zͰ-Ͽἀ-῿]+/).filter(Boolean);
+  const toks=words.map(sitesNorm).filter(t=>t.length>=3);
+  const gtoks=words.map(sitesStrip);
+  const doms=(String(extra||'')+' '+String(name||'')).toLowerCase().match(/[a-z0-9][a-z0-9-]*(?:\.[a-z0-9-]+)*\.(?:gr|com|eu|org|net|cy)\b/g)||[];
+  const dset=new Set(doms.map(sitesHost));
+  const ph=String(phone||'').replace(/\D/g,'').slice(-10); const pf=ph.length===10?sitesFnv(ph):'';
+  let best=null, bs=0, second=0;
+  for(const e of SITES.clients){
+    let s=0, sur=0;
+    for(const t of toks){
+      let v=0;
+      for(const k of e.k){
+        if(t===k){ v=10; break; }
+        if(t.length>=6 && k.length>=6 && sitesLev(t,k)<=1) v=Math.max(v,7);
+        else if(t.length>=7 && k.length>=7 && (t.startsWith(k)||k.startsWith(t))) v=Math.max(v,6);
+        else if(t.length>=9 && k.length>=6 && t.includes(k)) v=Math.max(v,6);
+      }
+      if(v>sur) sur=v;
+    }
+    s+=sur;
+    if(sur) for(const t of toks) if(e.f && e.f.includes(t)){ s+=3; break; }
+    if(sur && e.g && gtoks.some(t=>e.g.includes(t))) s+=2;
+    if(dset.size){ const all=[e.w,...(e.wa||[]),...(e.pd||[])].filter(Boolean).map(sitesHost); if(all.some(d=>dset.has(d))) s+=30; }
+    if(pf && e.p && e.p.includes(pf)) s+=20;
+    if(s>bs){ second=bs; bs=s; best=e; } else if(s>second) second=s;
+  }
+  const res=(best && bs>=10 && bs-second>=2) ? best : null;
+  SITES_MEMO.set(mk,res); return res;
+}
+function sitesIsLive(u){ const h=sitesHost(u); if(!h) return false; if(SITES_PARKED && SITES_PARKED.has(h)) return false; return !SITES_LIVE || SITES_LIVE.has(h) || !/\.(gr|com|eu|org|net|cy)$/.test(h); }
+/* the link for a renewal row: its own link, else the Board card with the same name, else the directory */
+function rnSiteUrl(r){
+  try{
+    if(r.site) return /^https?:\/\//i.test(r.site)?r.site:'https://'+r.site;
+    const n=sitesNorm(String(r.name||'').replace(/\(.*?\)/g,''));
+    const c=(state&&state.clients||[]).find(c=>!c.deleted && sitesNorm(c.name)===n);
+    if(c){ const u=cDraftUrl(c); if(u) return u; }
+    const a=siteFor(r.name, r.note||'', ''); return a ? (a.w||a.d||'') : '';
+  }catch(e){ return ''; }
+}
+function siteChipHtml(u, cls){
+  if(!u) return '';
+  const dr=/drafts\.advonmedia\.com|github\.io/.test(u);
+  const short=u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,'');
+  return `<a class="site-chip${dr?'':' live'}${cls?' '+cls:''}" href="${esc(u)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Draft':'▶ Website'}<span>${esc(short)}</span></a>`;
+}
+function sitesApply(j){
+  if(!j||!Array.isArray(j.clients)) return false;
+  SITES=j; SITES_LIVE=new Set((j.live||[]).map(sitesHost)); SITES_PARKED=new Set((j.parked||[]).map(sitesHost)); SITES_MEMO=new Map();
+  return true;
+}
+(function sitesBoot(){
+  try{ const c=localStorage.getItem('advon_crm_sites'); if(c) sitesApply(JSON.parse(c)); }catch(e){}
+  const load=()=>fetch('links.json?'+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
+    if(!j||!sitesApply(j)) return;
+    try{ localStorage.setItem('advon_crm_sites',JSON.stringify(j)); }catch(e){}
+    try{ if(state) renderAll(); }catch(e){}
+  }).catch(e=>console.warn('links.json',e));
+  load(); setInterval(load, 6*60*60*1000);
+})();
+
 function chThreadFor(c){ try{ return c&&c.chat ? (Chats.list.find(t=>t.slug===c.chat && !t.archived)||null) : null; }catch(e){ return null; } }   /* a function (hoisted) + try: the Board renders before this part of the file has run */
 const chMailDone=new Set();
 const chMailOk=e=>/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(String(e||''));
