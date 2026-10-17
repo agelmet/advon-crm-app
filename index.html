@@ -1741,6 +1741,29 @@ body.dark .gq-seg.now{box-shadow:0 0 0 2px var(--surface), 0 0 0 3.5px var(--bra
 .day-row.done{opacity:.45; text-decoration:line-through;}
 .day-row .tm{font-family:'Sora'; font-weight:800; font-size:12px; color:var(--brand); min-width:44px;}
 body.dark .day-row button{background:var(--surface);}
+/* «Today» window v2 (17 Oct 2026): today's panel first, the rest below */
+.day-today{display:flex; flex-direction:column; gap:6px; padding:12px 12px 14px; border:1.5px solid var(--brand); border-radius:16px; background:linear-gradient(180deg,var(--blue-soft),var(--surface) 150px); box-shadow:0 8px 22px rgba(47,127,224,.13);}
+.day-today .day-row{background:var(--surface); box-shadow:0 1px 2px rgba(16,20,31,.06); border:1px solid var(--line);}
+.day-today .day-row.hot{background:var(--red-soft); border-color:transparent;}
+.day-today .day-h:first-of-type{padding-top:4px;}
+.day-ph{display:flex; align-items:center; gap:8px; padding:0 2px 2px;}
+.day-ph .ttl{font-family:'Sora'; font-weight:800; font-size:17px; color:var(--ink);}
+.day-ph .n{background:var(--brand); color:#fff; font-size:11.5px; font-weight:800; border-radius:99px; padding:2px 9px; line-height:1.5;}
+.day-ph .dt{margin-left:auto; font-size:11.5px; font-weight:700; color:var(--brand);}
+.day-none{font-size:13px; color:var(--muted); font-weight:600; padding:8px 4px;}
+.day-today .gm-dayblk{margin-top:6px;}
+.day-more{margin-top:16px;}
+.day-more>summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:6px 2px; font-size:11.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); user-select:none;}
+.day-more>summary::-webkit-details-marker{display:none;}
+.day-more>summary .n{background:var(--line); color:var(--ink); border-radius:99px; padding:1px 8px; letter-spacing:0; font-size:11px;}
+.day-more>summary .od{letter-spacing:0; text-transform:none; font-weight:700; font-size:11.5px; color:var(--red);}
+.day-more>summary::after{content:''; flex:1; height:1px; background:var(--line); order:9;}
+.day-more>summary .chev{order:10; width:8px; height:8px; border-right:2px solid var(--muted); border-bottom:2px solid var(--muted); transform:rotate(45deg); margin:0 4px 3px; transition:transform .2s;}
+.day-more:not([open])>summary .chev{transform:rotate(-45deg); margin-bottom:0;}
+.day-more-b{display:flex; flex-direction:column; gap:6px; padding:0 2px;}
+.day-more .day-row{font-size:13px; padding:9px 12px;}
+.day-more .day-h{padding-top:8px;}
+@media (max-width:640px){ .day-today{padding:10px 8px 12px; border-radius:14px;} }
 .day-foot{padding:14px 24px 20px; display:flex; gap:10px; align-items:center; border-top:1px solid var(--line); margin-top:8px;}
 .day-foot small{flex:1; font-size:11.5px; color:var(--muted); font-weight:600;}
 .day-foot .btn{height:40px; padding:0 20px; border-radius:12px; background:var(--grad); color:#fff; font-weight:800;}
@@ -13099,17 +13122,47 @@ function dayItems(){
 }
 function openDay(){
   if(!state) return; const {rem, meet, asap, cbs, fus, ups, n}=dayItems(); const today=todayIso();
+  /* 17 Oct 2026 (Angelo): today's important tasks + reminders FIRST, in their own panel; everything else below, clearly apart */
+  const isT=day=>!day||day>=today, isOld=day=>!!day&&day<today;
+  const asapToday=t=>t.hot || (t.from==='calendar' && t.created && new Date(t.created).toDateString()===new Date().toDateString());
+  const T={ asap:asap.filter(asapToday), rem:rem.filter(r=>isT(r.day)), meet, cbs:cbs.filter(e=>isT(e.day)), fus:fus.filter(c=>isT(c.fu.day)), ups:ups.filter(x=>isT(x.u.day)) };
+  const R={ rem:rem.filter(r=>isOld(r.day)), fus:fus.filter(c=>isOld(c.fu.day)), ups:ups.filter(x=>isOld(x.u.day)), cbs:cbs.filter(e=>isOld(e.day)), asap:asap.filter(t=>!asapToday(t)) };
+  const nT=Object.values(T).reduce((s,a)=>s+a.length,0), nR=Object.values(R).reduce((s,a)=>s+a.length,0);
   const d=new Date(); $('#dayTitle').textContent=(d.getHours()<12?'Good morning':d.getHours()<18?'Good afternoon':'Good evening')+' — here is today';
-  $('#daySub').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})+' · '+(n?n+' thing'+(n===1?'':'s'):'nothing waiting');
+  $('#daySub').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})+' · '+(n?(nT?nT+' for today':'nothing dated today')+(nR?' · '+nR+' more waiting':''):'nothing waiting');
+  const tel=p=>`<button onclick="location.href='tel:${esc(String(p).replace(/\s+/g,''))}'">Call</button>`;
+  const sec=(cls,t,k)=>`<div class="day-h ${cls}">${t} · ${k}</div>`;
+  const remRow=r=>`<div class="day-row${r.day<today?' over':''}" data-r="${esc(r.uid)}"><div class="tx"><b>${esc(r.client)}</b>${r.what?' — '+esc(r.what):''}${r.day<today?`<small>still open since ${esc(remDayLabel(r.day))}</small>`:''}</div><button data-rcopy="${esc(r.uid)}">Copy Viber text</button><button class="go" data-rdone="${esc(r.uid)}">✓ Done</button></div>`;
+  const fuRow=c=>`<div class="day-row${c.fu.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(c.fu.what)}${c.fu.day<today?`<small>was due ${esc(mqDayLbl(c.fu.day))}</small>`:''}</div>${c.phone?tel(c.phone):''}<button data-fuup="${c.id}">Update</button><button class="go" data-fudone="${c.id}">✓ Done</button></div>`;
+  const upRow=({c,u})=>`<div class="day-row${u.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(u.what.join(', '))}${u.note?`<small>«${esc(u.note)}»</small>`:''}${u.day<today?`<small>was due ${esc(mqDayLbl(u.day))}</small>`:''}</div>${c.phone?tel(c.phone):''}<button class="go" data-updone="${c.id}|${u.id}">✓ Done</button></div>`;
+  const meetRow=c=>`<div class="day-row"><span class="tm">${esc(c.time||'—')}</span><div class="tx"><b>${esc(c.name)}</b>${c.phone?`<small>${esc(c.phone)}</small>`:''}</div>${c.phone?tel(c.phone):''}<button data-open="${esc(c.id)}">Open</button></div>`;
+  const cbRow=e=>`<div class="day-row${e.day&&e.day<today?' over':''}"><span class="tm">${esc(e.day&&e.day<today?fmtDay(e.day):(e.time||'today'))}</span><div class="tx"><b>${esc(e.name)}</b> · ${CA_HOW[e.how][0]}${e.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${e.note&&e.note!==e.name?`<small>${esc(e.note)}</small>`:''}</div>${e.phone?(e.how==='sms'?`<button data-cbsms="${esc(e.key)}">SMS</button>`:`<button onclick="location.href='tel:${esc(caTel(e.phone))}'">Call</button>`):''}<button class="go" data-cbk="${esc(e.key)}">Open</button><button class="del" data-cbdel="${esc(e.key)}" title="Delete this call-back" aria-label="Delete">${IC.trash}</button></div>`;
+  const asapRow=t=>`<div class="day-row${t.hot?' hot':''}" data-a="${esc(t.id)}"><div class="tx">${t.hot?'🔥 ':'📌 '}${esc(t.text)}</div><button class="go" data-adone="${esc(t.id)}">✓ Done</button></div>`;
   let h='';
-  if(rem.length) h+=`<div class="day-h rem">⏰ Remind today · ${rem.length}</div>`+rem.map(r=>`<div class="day-row${r.day<today?' over':''}" data-r="${esc(r.uid)}"><div class="tx"><b>${esc(r.client)}</b>${r.what?' — '+esc(r.what):''}${r.day<today?`<small>still open since ${esc(remDayLabel(r.day))}</small>`:''}</div><button data-rcopy="${esc(r.uid)}">Copy Viber text</button><button class="go" data-rdone="${esc(r.uid)}">✓ Done</button></div>`).join('');
-  if(fus.length) h+=`<div class="day-h rem">🤝 Follow up after the meeting · ${fus.length}</div>`+fus.map(c=>`<div class="day-row${c.fu.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(c.fu.what)}${c.fu.day<today?`<small>was due ${esc(mqDayLbl(c.fu.day))}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button data-fuup="${c.id}">Update</button><button class="go" data-fudone="${c.id}">✓ Done</button></div>`).join('');
-  if(ups.length) h+=`<div class="day-h rem">➕ Extras to bring up · ${ups.length}</div>`+ups.map(({c,u})=>`<div class="day-row${u.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(u.what.join(', '))}${u.note?`<small>«${esc(u.note)}»</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(c.phone)}'">Call</button>`:''}<button class="go" data-updone="${c.id}|${u.id}">✓ Done</button></div>`).join('');
-  if(meet.length) h+=`<div class="day-h meet">📅 Meetings today · ${meet.length}</div>`+meet.map(c=>`<div class="day-row"><span class="tm">${esc(c.time||'—')}</span><div class="tx"><b>${esc(c.name)}</b>${c.phone?`<small>${esc(c.phone)}</small>`:''}</div>${c.phone?`<button onclick="location.href='tel:${esc(String(c.phone).replace(/\s+/g,''))}'">Call</button>`:''}<button data-open="${esc(c.id)}">Open</button></div>`).join('');
-  if(cbs.length) h+=`<div class="day-h meet">📞 Callbacks today · ${cbs.length}</div>`+cbs.map(e=>`<div class="day-row${e.day&&e.day<today?' over':''}"><span class="tm">${esc(e.day&&e.day<today?fmtDay(e.day):(e.time||'today'))}</span><div class="tx"><b>${esc(e.name)}</b> · ${CA_HOW[e.how][0]}${e.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${e.note&&e.note!==e.name?`<small>${esc(e.note)}</small>`:''}</div>${e.phone?(e.how==='sms'?`<button data-cbsms="${esc(e.key)}">SMS</button>`:`<button onclick="location.href='tel:${esc(caTel(e.phone))}'">Call</button>`):''}<button class="go" data-cbk="${esc(e.key)}">Open</button><button class="del" data-cbdel="${esc(e.key)}" title="Delete this call-back" aria-label="Delete">${IC.trash}</button></div>`).join('');
-  if(asap.length) h+=`<div class="day-h asap">🚩 Do ASAP · ${asap.length}</div>`+asap.map((t,i)=>`<div class="day-row${t.hot?' hot':''}" data-a="${esc(t.id)}"><div class="tx">${t.hot?'🔥 ':''}${esc(t.text)}</div><button class="go" data-adone="${esc(t.id)}">✓ Done</button></div>`).join('');
-  if(!n) h='<div class="home-empty">Nothing to remind, no meetings, nothing in Do ASAP. Enjoy the day.</div>';
-  try{ if(gmWorkday()) h=gmDayBlock()+h; }catch(e){}
+  if(n){
+    /* 1 · TODAY — the important tasks and the reminders of the day */
+    let t='';
+    if(T.asap.length) t+=sec('asap','🔥 Important today',T.asap.length)+T.asap.map(asapRow).join('');
+    if(T.rem.length) t+=sec('rem','⏰ Remind today',T.rem.length)+T.rem.map(remRow).join('');
+    if(T.meet.length) t+=sec('meet','📅 Meetings today',T.meet.length)+T.meet.map(meetRow).join('');
+    if(T.cbs.length) t+=sec('meet','📞 Callbacks today',T.cbs.length)+T.cbs.map(cbRow).join('');
+    if(T.fus.length) t+=sec('rem','🤝 Follow up after the meeting',T.fus.length)+T.fus.map(fuRow).join('');
+    if(T.ups.length) t+=sec('rem','➕ Extras to bring up',T.ups.length)+T.ups.map(upRow).join('');
+    if(!nT) t+='<div class="day-none">Nothing dated for today — below is what is still open.</div>';
+    h+=`<section class="day-today"><div class="day-ph"><span class="ttl">Today</span><span class="n">${nT}</span><span class="dt">${esc(d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'}))}</span></div>${t}</section>`;
+    /* 2 · everything else — still open from earlier days + the rest of Do ASAP */
+    if(nR){
+      let m='';
+      const old=R.rem.length+R.fus.length+R.ups.length+R.cbs.length;
+      if(R.rem.length) m+=sec('rem','⏰ Reminders still open',R.rem.length)+R.rem.map(remRow).join('');
+      if(R.fus.length) m+=sec('rem','🤝 Follow-ups still open',R.fus.length)+R.fus.map(fuRow).join('');
+      if(R.ups.length) m+=sec('rem','➕ Extras still open',R.ups.length)+R.ups.map(upRow).join('');
+      if(R.cbs.length) m+=sec('meet','📞 Missed callbacks',R.cbs.length)+R.cbs.map(cbRow).join('');
+      if(R.asap.length) m+=sec('asap','🚩 Do ASAP',R.asap.length)+R.asap.map(asapRow).join('');
+      h+=`<details class="day-more" open><summary><span>Also on your list</span><span class="n">${nR}</span>${old?`<span class="od">${old} from earlier days</span>`:''}<span class="chev" aria-hidden="true"></span></summary><div class="day-more-b">${m}</div></details>`;
+    }
+  } else h='<div class="home-empty">Nothing to remind, no meetings, nothing in Do ASAP. Enjoy the day.</div>';
+  try{ if(gmWorkday()){ const g=gmDayBlock(); h=h.includes('class="day-today"')? h.replace('</section>', g+'</section>') : g+h; } }catch(e){}
   const body=$('#dayBody'); body.innerHTML=h;
   body.querySelectorAll('[data-rcopy]').forEach(b=>b.addEventListener('click',()=>{ const r=Reminders.list.find(x=>x.uid===b.dataset.rcopy); if(r) remCopy(r); }));
   body.querySelectorAll('[data-rdone]').forEach(b=>b.addEventListener('click',()=>{ Reminders.done(b.dataset.rdone,false); b.closest('.day-row').classList.add('done'); b.remove(); }));
