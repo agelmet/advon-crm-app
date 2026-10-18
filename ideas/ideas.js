@@ -32,11 +32,12 @@
   /* copy buttons on every script */
   [].forEach.call(d.querySelectorAll('.say'),function(s){
     var lbl=s.querySelector('.lbl'); if(!lbl) return;
-    var b=d.createElement('button'); b.className='cp'; b.type='button'; b.textContent='Copy';
+    var GR=(d.documentElement.lang||'').indexOf('el')===0, LC=GR?'Αντιγραφή':'Copy', LD=GR?'Αντιγράφηκε ✓':'Copied ✓', LS=GR?'Επίλεξε & αντέγραψε':'Select & copy';
+    var b=d.createElement('button'); b.className='cp'; b.type='button'; b.textContent=LC;
     b.addEventListener('click',function(){
       var t=s.cloneNode(true); var l=t.querySelector('.lbl'); if(l) l.remove();
       var txt=t.textContent.replace(/^\s+|\s+$/g,'');
-      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){b.textContent='Copied ✓';b.classList.add('ok');setTimeout(function(){b.textContent='Copy';b.classList.remove('ok')},1800)}).catch(function(){b.textContent='Select & copy'});
+      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){b.textContent=LD;b.classList.add('ok');setTimeout(function(){b.textContent=LC;b.classList.remove('ok')},1800)}).catch(function(){b.textContent=LS});
     });
     lbl.appendChild(b);
   });

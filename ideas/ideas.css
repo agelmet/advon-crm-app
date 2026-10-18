@@ -1,5 +1,5 @@
 /* Advon · Ideas — light only */
-@font-face{font-family:"Caveat";src:url(fonts/caveat-latin-600-normal.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2190-2199}
+
 :root{
   color-scheme:light only;
   --paper:#F7F5EF;--paper2:#F1EEE5;--card:#FFFFFF;--ink:#15201E;--ink2:#3A4542;--mute:#717B77;--line:#E5E0D4;
@@ -235,7 +235,7 @@ td.r,th.r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .niche[open] summary .pl{transform:rotate(45deg)}
 .niche .body{padding:0 20px 18px}
 .niche table{font-size:14.5px}
-.next{background:var(--ink);color:#EEF2F0;border-radius:26px;padding:30px 32px;margin-top:20px}
+div.next{background:var(--ink);color:#EEF2F0;border-radius:26px;padding:30px 32px;margin-top:20px}
 .next h2,.next h3{color:#fff}
 .next .k{color:#9CD3C3}
 .next ol{margin-bottom:0}
@@ -257,5 +257,23 @@ td.r,th.r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
   .ncard,.icard,.wcard{transition:none}
 }
 
-.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.tagrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 14px}
 td .tag{white-space:nowrap}
+
+/* brand: the Advon logo + «Ideas» */
+.brand{gap:12px}
+.brand img{height:44px;width:auto;display:block}
+.brand .sep{width:1px;height:26px;background:var(--line)}
+.brand .bt{font-weight:800;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+@media(max-width:640px){.brand img{height:36px}.brand .bt{font-size:15px}}
+/* language switch */
+.top nav{align-items:center}
+.lang{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;margin-left:8px;box-shadow:var(--sh1)}
+.lang a{font-size:12.5px!important;font-weight:800!important;letter-spacing:.04em;padding:5px 10px!important;border-radius:999px!important;color:var(--mute)!important;text-decoration:none}
+.lang a.on{background:var(--ink);color:#fff!important}
+.lang a:not(.on):hover{color:var(--ink)!important;background:var(--paper)!important}
+@media(max-width:640px){.top nav a.hide-s{display:none}.lang{margin-left:0}}
+
+/* page starts straight at "Working on now" */
+.first-sec{padding-top:44px}
+@media(max-width:640px){.first-sec{padding-top:28px}}
