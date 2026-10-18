@@ -3666,7 +3666,6 @@ body.dark .cm-foot .cm-save{background:var(--brand); border-color:var(--brand);}
       <button class="tab" data-view="leads">Leads</button>
       <button class="tab" data-view="board">Board</button>
       <button class="tab" data-view="calendar">Calendar</button>
-      <button class="tab" data-view="todo">To Do</button>
       <button class="tab" data-view="ideas">Ideas</button>
       <button class="tab" data-view="callbacks">Callbacks<span class="tab-n" id="cbTabN" hidden>0</span></button>
       <button class="tab" data-view="monthly">Monthly</button>
@@ -8914,10 +8913,18 @@ try{ ideaFilter=localStorage.getItem('advon_idea_filter')||'all'; }catch(e){}
 
 /* The ideas from our chats — added once (state.meta.ideasSeed). An idea already on the board
    (same name/keywords) is never duplicated: only its EMPTY new fields are filled in. */
-const IDEA_SEED_VER='v3-2026-10-09';
+const IDEA_SEED_VER='v4-2026-10-18';
 /* v2: ideas whose seed text changed — a field is replaced only if it still holds the old seed text (never your own edits); new links are added on top */
 const IDEA_SEED_OLD={'seed-ai-education':{"title": "AI-EDUCATION — exam machine for Πανελλήνιες", "pitch": "Not «an AI helper»: the student sits a real past paper by hand with a timer, photographs it, gets graded like a βαθμολογητής against the official marking scheme, and the parents get a report every Sunday.", "why": "About 100,000 Πανελλήνιες candidates every year, and parents already pay €200–500/month for φροντιστήρια. What ChatGPT will never do: real exam conditions, grading against the official solutions, a weak-spot map, and the parent report — the parent is the buyer. Γυμνάσιο: not now. IB / IAL: later, with the same engine.", "nums": "€24.90/month or €199 for the season (Sept–June)\nφροντιστήρια: €149–299/month for up to 50 students\n~100,000 candidates a year\nMVP by mid-December, panic season Jan–May", "risks": "Grading must be right every time — grade only against official solutions and show them side by side. Students leave every year (sell to φροντιστήρια so it renews). Start with Θετικές: Μαθηματικά, Φυσική, Χημεία.", "next": "Call 15 φροντιστήρια (start with the vresfrontistirio sign-ups): «Θα το δίνατε στους μαθητές σας για Χ€/μήνα;» — if 3–4 say yes, build the MVP and pilot it free in January."},'seed-ai-automation':{"title": "AI AUTOMATION BUSINESS — automate Greek companies", "pitch": "Sell what we built for Advon (CRM, synced calendar, chats, backups, morning brief) to Greek companies: «Show me the job that eats hours every week — I automate it in 2 weeks at no charge; if it doesn't save the hours we agreed, you pay nothing.»", "why": "Every Greek company runs on Excel and WhatsApp and nobody cleans it up for them in plain Greek. High ticket: 5–15 clients that each pay what 10–15 website clients pay. They buy you running Claude, not Claude itself — that is the moat. Best niche: wholesale / distribution with an ERP (SoftOne, Entersoft, Pylon), then accounting offices, clinics, hotels.", "nums": "First automation: no charge, 2 weeks\nthen €500–2,000/month, no contract\n«less than half a salary, works 24/7»\n5–15 clients is enough", "risks": "Custom work per company — don't let it eat the website business or the Google Ads launch. Start with ONE pilot and a measured case study. With bigger companies say «δοκιμή χωρίς χρέωση», not «δωρεάν».", "next": "Call the Nef Nef owner: offer the free first automation with the hours guarantee, measure the hours before/after, and turn it into the case study."}};
 const IDEA_SEED=[
+  {id:'seed-salon-cards', keys:['κομμωτ','νυχαδ','business cards','επαγγελματικές κάρτες','salon cards'],
+   title:'Κομμωτήρια & νυχάδικα — περπάτα και μοίρασε κάρτες', type:'offer', status:'next', prio:'high', pin:true, at:'2026-10-18T11:16',
+   pitch:'Μία ώρα περπάτημα σε μια περιοχή: μπαίνεις σε κομμωτήρια και νυχάδικα, λες 3 προτάσεις και αφήνεις την κάρτα. «Φτιάχνουμε τις καλύτερες ιστοσελίδες στην Ελλάδα, εντελώς δωρεάν. Έχουμε πάνω από 200 online και 130 αξιολογήσεις 5★ στο Google. Μόνο 10€ τον μήνα έξοδα — με 1 πελάτη τον χρόνο είστε σε κέρδος για πάντα.»',
+   why:'Μπορείς να το δοκιμάσεις όποια μέρα θέλεις, για μία ώρα, χωρίς κόστος πέρα από τις κάρτες — και βλέπεις αμέσως αν φέρνει κάτι. Ο ιδιοκτήτης είναι συνήθως μέσα (αποφασίζει επί τόπου), οι περισσότεροι ζουν μόνο στο Instagram χωρίς δική τους σελίδα, και η πελάτισσα επιστρέφει κάθε λίγες εβδομάδες — άρα ένας νέος πελάτης τον χρόνο πληρώνει πολλές φορές τα 130€. Πρόσωπο με πρόσωπο χτίζει εμπιστοσύνη πιο γρήγορα από το τηλέφωνο.',
+   nums:'1 ώρα = περίπου 10–15 μαγαζιά\n130€ + ΦΠΑ τον χρόνο (≈10,83€/μήνα) — κατασκευή 0€\nπαράδειγμα: πελάτισσα 25€ × 12 επισκέψεις = 300€ τον χρόνο από ΕΝΑ άτομο\nμέτρα: κάρτες που μοίρασες → τηλέφωνα/κρατήσεις σε 2 εβδομάδες',
+   risks:'Μην πας ώρα αιχμής — καλύτερα Τρίτη–Πέμπτη 11:00–13:00. 60 δευτερόλεπτα, όχι παρουσίαση. Λέγε πάντα το «δωρεάν» μαζί με τα 10€/μήνα, για να μη μοιάζει ύποπτο. Έχε 2–3 από τις καλύτερες σελίδες μας ανοιχτές στο κινητό για να τις δείξεις.',
+   next:'Τύπωσε 100 κάρτες με QR προς advonmedia.com/dorean?utm_source=karta (για να μετράμε τι φέρνουν), διάλεξε μία περιοχή και κάνε τη πρώτη βόλτα μίας ώρας. Γράψε κάθε μαγαζί στο Quick Log.',
+   links:[]},
   {id:'seed-ai-education', keys:['ai-education','ai education','ai - education','exam machine','πανελλην','θέμα δ','thema-d'],
    title:'Θέμα Δ (AI-EDUCATION) — exam machine for Πανελλήνιες', type:'product', status:'next', prio:'medium', pin:true, at:'2026-10-09T11:41',
    pitch:'Working name «Θέμα Δ». Not «an AI helper»: the student sits a past paper BY HAND with a 3-hour timer, photographs it, gets graded like a βαθμολογητής against the official marking scheme, sees exactly where marks were lost, and the parents get a report every Sunday. Plan + clickable MVP are built (Apps → Θέμα Δ).',
@@ -9437,7 +9444,7 @@ function renderHome(){
   escalateThinking();
   const thinking=state.clients.filter(c=>isThinking(c) && !isTrashed(c)).sort((a,b)=>thinkDays(b)-thinkDays(a));
   const thinkDue=state.clients.filter(c=>!isTrashed(c) && (fuOpen(c) ? fuDue(c) : thinkOverdue(c)));
-  const openTodos=(state.todos||[]).filter(n=>!n.done).length;   /* every new task is high now, so count what is open instead */
+  const openTodos=(state.asap||[]).filter(t=>!t.done).length;   /* To Do tab removed 18 Oct 2026 (Angelo) — the Attention card counts the open Do ASAP items instead */
   const hiCount=openTodos;
   const cbNow=cbCounts().due;   /* callbacks for today + overdue (Callbacks 3.0) */
   // hero
@@ -9472,7 +9479,7 @@ function renderHome(){
           <div class="hs" data-goto="callbacks" style="cursor:pointer" title="Callbacks for today + overdue (calls, SMS and e-mails, from Callbacks and Leads) — opens Callbacks"><div class="k">Callbacks today</div><div class="v ${cbNow?'c':'g'}">${cbNow}</div></div>
           <div class="hs"><div class="k">Overdue renewals</div><div class="v ${overdue.length?'c':'g'}">${overdue.length}</div></div>
           <div class="hs"><div class="k">Chase after meeting</div><div class="v ${thinkDue.length?'c':'g'}">${thinkDue.length}</div></div>
-          <div class="hs" data-goto="todo" style="cursor:pointer" title="Open tasks on the To Do board"><div class="k">Open to-dos</div><div class="v ${hiCount?'c':'g'}">${hiCount}</div></div>
+          <div class="hs" data-scrollto=".asap-card" style="cursor:pointer" title="Open items in Do ASAP (below on Home)"><div class="k">Do ASAP</div><div class="v ${hiCount?'c':'g'}">${hiCount}</div></div>
         </div>
       </div>
     </div>`;
@@ -9546,6 +9553,7 @@ function renderHome(){
   // wire
   $('#view-home').querySelectorAll('[data-open]').forEach(el=>el.addEventListener('click',()=>openModal(el.dataset.open)));
   $('#view-home').querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>switchView(el.dataset.goto)));
+  $('#view-home').querySelectorAll('[data-scrollto]').forEach(el=>el.addEventListener('click',()=>{ const t=document.querySelector(el.dataset.scrollto); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }));
 }
 
 
@@ -10962,7 +10970,7 @@ const Brief={ lastAt:0, lastHash:'', busy:false,
     const extras=upsList().filter(x=>x.u.day<=t).map(({c,u})=>({name:c.name, phone:c.phone||'', day:u.day, what:u.what.join(', '), note:u.note||'', overdue:u.day<t}));
     let cbToday=[]; try{ cbToday=caEntries().filter(caDue).sort(caCmpDay).map(e=>({name:e.name, day:e.day||'', time:e.time||'', how:e.how, phone:e.phone||'', note:e.note&&e.note!==e.name?e.note:'', overdue:!!(e.day&&e.day<t), lead:e.src==='lead'})); }catch(e){}
     const asap=(followups.map(f=>({text:'Follow up '+f.name+' — '+f.what+(f.phone?' · '+f.phone:''), hot:f.overdue})).concat(extras.map(x=>({text:'Offer '+x.name+': '+x.what+(x.note?' — «'+x.note+'»':'')+(x.phone?' · '+x.phone:''), hot:x.overdue}))).concat((state.asap||[]).filter(a=>!a.done).sort((a,b)=>(a.sort||0)-(b.sort||0)).map(a=>({text:a.text, hot:!!a.hot}))));
-    const todosHigh=(state.todos||[]).filter(x=>!x.done && x.prio==='high').map(x=>x.text).slice(0,12);
+    const todosHigh=[];   /* To Do tab removed 18 Oct 2026 — old tasks stay in the data/backup but no longer reach the morning brief */
     const fc=cashForecast();
     return { updated:new Date().toISOString(), today:t, month:curMonth,
       money:{ earned, target, toCollect, forecast30:fc[30].sum, forecast60:fc[60].sum, forecast90:fc[90].sum },
