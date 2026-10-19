@@ -963,6 +963,14 @@ body.dark .rem-dot.on{border-color:var(--surface);}
 .tray-body.dragover{background:var(--bg); box-shadow:inset 0 0 0 2px var(--tc); border-radius:0 0 var(--radius) var(--radius);}
 .tray-body .card{min-width:200px; max-width:250px; flex:0 0 auto;}
 .tray-empty{font-size:11.5px; color:#B4BAC8; padding:12px 6px;}
+/* Booked tray = upcoming calendar meetings only (19 Oct 2026); the rest sits in two folded lines */
+.tray-card-when{display:inline-block;font-size:10.5px;font-weight:800;color:var(--green);background:var(--green-soft,#E6F6EC);border-radius:99px;padding:2px 8px;margin:0 0 4px}
+.tray-aside{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px}
+.tray-aside button{font:inherit;font-size:11px;font-weight:700;color:var(--muted);background:var(--bg);border:1px dashed var(--line);border-radius:99px;padding:4px 10px;cursor:pointer}
+.tray-aside button.on{color:var(--ink,#1d2433);border-style:solid}
+.tray-aside-body{display:flex;gap:8px;overflow-x:auto;padding:0 12px 12px;opacity:.78}
+.tray-aside-body .card{min-width:200px;max-width:250px;flex:0 0 auto}
+.tray-aside-note{font-size:11px;color:var(--muted);padding:0 14px 6px}
 
 /* ---------- Monthly subscriptions ---------- */
 .subs-scroll{overflow-x:auto;}
@@ -5886,6 +5894,79 @@ function dropHandlers(el, stageId){
     }
   });
 }
+/* ---- Booked tray = ONLY the meetings still to come from the calendar (Angelo, 19 Oct 2026) ----
+   «There should be all from Calendar that I haven't had the meeting yet but I will in the future —
+   not some that are thinking about it, are about to book etc.»
+   Upcoming = a Booked card whose meeting is in the booking calendar and has not ended yet (start + 30′),
+   from ANY month, soonest first. Everything else that is still in the Booked stage folds into two quiet
+   lines under the tray: «Meeting done — not logged yet» (log it with «How did it go?») and
+   «Not in the calendar» (said they'd book / booked by hand / cancelled). Nothing is moved or deleted. */
+const BK_KEEP=30;   /* minutes after the start a meeting still counts as «now» */
+const bkStartMs=(day,time)=>{ if(!day) return 0; const t=Date.parse(day+'T'+(time||'23:59')); return isNaN(t)?0:t; };
+const bkStillAhead=(day,time)=>{ const t=bkStartMs(day,time); return !!t && t+BK_KEEP*60000>Date.now(); };
+/* card id → its next calendar meeting still ahead (built from what the calendar says right now) */
+function bkAheadMap(){
+  const m={};
+  if(Bookings.state!=='ok') return m;
+  BK_LIST.filter(b=>b.uid && bkStillAhead(b.day,b.time)).forEach(b=>{
+    const c=bkMatchClient(b); if(!c) return;
+    const o=m[c.id]; if(!o || bkStartMs(b.day,b.time)<bkStartMs(o.day,o.time)) m[c.id]=b;
+  });
+  return m;
+}
+function bkIsUpcoming(c, ahead){
+  if(isTrashed(c) || c.stage!=='booked') return false;
+  if(Bookings.state==='ok') return !!ahead[c.id];
+  /* calendar not read yet / offline: trust the card itself */
+  return !!c.fromBooking && bkStillAhead(c.day,c.time);
+}
+let bookedAside='';   /* '' | 'done' | 'cal' — which folded line is open */
+function renderBookedTray(mc){
+  const st=stageById('booked'), el=$('#bookedTray'); if(!el) return;
+  const ahead=bkAheadMap();
+  const up=state.clients.filter(c=>bkIsUpcoming(c,ahead)).map(c=>{
+    const b=ahead[c.id]; return {c, day:(b&&b.day)||c.day, time:(b&&b.time)||c.time};
+  }).sort((a,b)=>bkStartMs(a.day,a.time)-bkStartMs(b.day,b.time));
+  const upIds=new Set(up.map(x=>x.c.id));
+  const rest=mc.filter(c=>c.stage==='booked' && !upIds.has(c.id));
+  const done=rest.filter(c=>c.day && bkStartMs(c.day,c.time) && !bkStillAhead(c.day,c.time));
+  const cal=rest.filter(c=>!done.includes(c));
+  if(bookedAside==='done' && !done.length) bookedAside='';
+  if(bookedAside==='cal' && !cal.length) bookedAside='';
+  const sum=up.reduce((a,x)=>a+cval(x.c),0);
+  const calNote = Bookings.state==='ok' ? '' : (Bookings.state==='loading' ? 'checking the calendar…' : 'calendar not read yet — showing the cards booked from it');
+  el.innerHTML=`
+    <div class="tray-head">
+      <span class="name">Booked — meetings still to come ${IC.arrowDown}</span>
+      <span class="count" style="background:${st.cs};color:${st.hex}">${up.length}</span>
+      <span class="tsum">${sum? fmtMoney(sum):''}</span>
+    </div>
+    ${calNote?`<div class="tray-aside-note">${esc(calNote)}</div>`:''}
+    <div class="tray-body">${up.length?'':'<div class="tray-empty">No meetings coming up in the calendar.</div>'}</div>
+    ${(done.length||cal.length)?`<div class="tray-aside">
+      ${done.length?`<button type="button" data-aside="done" class="${bookedAside==='done'?'on':''}">✓ Meeting done — not logged yet · ${done.length}</button>`:''}
+      ${cal.length?`<button type="button" data-aside="cal" class="${bookedAside==='cal'?'on':''}">Not in the calendar · ${cal.length}</button>`:''}
+    </div>`:''}
+    ${bookedAside?`<div class="tray-aside-body"></div>`:''}`;
+  const body=el.querySelector('.tray-body');
+  up.forEach(x=>{
+    const card=cardEl(x.c,st);
+    const tag=document.createElement('div'); tag.className='tray-card-when';
+    { const l=mqDayLbl(x.day); tag.textContent='📅 '+l.charAt(0).toUpperCase()+l.slice(1)+(x.time?' · '+x.time:''); }
+    card.insertBefore(tag, card.firstChild);
+    body.appendChild(card);
+  });
+  dropHandlers(body,'booked');
+  el.querySelectorAll('[data-aside]').forEach(b=>b.addEventListener('click',()=>{
+    bookedAside = bookedAside===b.dataset.aside ? '' : b.dataset.aside; renderBookedTray(mc);
+  }));
+  const ab=el.querySelector('.tray-aside-body');
+  if(ab) (bookedAside==='done'?done:cal).forEach(c=>{
+    const card=cardEl(c,st);
+    if(bookedAside==='done') card.addEventListener('click',e=>{ if(e.target.closest('button,a')) return; e.stopPropagation(); e.preventDefault(); mqOpen(c.id); }, true);
+    ab.appendChild(card);
+  });
+}
 function renderBoard(){
   const mc=state.clients.filter(c=>c.month===curMonth && notLost(c));
   /* Two horizontal trays: Booked (new) and Making changes (quick fixes) */
@@ -5905,7 +5986,7 @@ function renderBoard(){
     items.forEach(c=>body.appendChild(cardEl(c,st)));
     dropHandlers(body,stageId);
   };
-  tray('#bookedTray','booked',`Booked — drag into the pipeline ${IC.arrowDown}`,'Empty — new booked clients land here.');
+  renderBookedTray(mc);
   tray('#changesTray','changes','Making changes — quick fixes','Empty — drop cards here while you fix them.');
   /* The working pipeline columns (booked/changes are trays, lost is its own drawer) */
   const board=$('#board'); board.innerHTML='';
@@ -10054,6 +10135,25 @@ const Bookings={
     if(this.state==='ok'){
       let folded=0;
       bkNew().forEach(b=>{ if(bkMatchClient(b)){ bkPut(b, true); folded++; } });
+      /* 19 Oct 2026 — the calendar is the truth for meetings still to come: a rescheduled booking moves the
+         card's day/time, and someone in Thinking / Lost who books a NEW meeting comes back to Booked.
+         Once per booking (meta.bk.mv), so a change he makes by hand afterwards is never fought. */
+      const bkm=ensureBk(); if(!bkm.mv || typeof bkm.mv!=='object') bkm.mv={};
+      let moved=[], resched=0;
+      const ahead=bkAheadMap();
+      Object.keys(ahead).forEach(id=>{
+        const b=ahead[id], c=state.clients.find(x=>x.id===id); if(!c || bkm.mv[b.uid]) return;
+        if(c.stage==='thinking' || c.stage==='lost'){
+          if(!c.mqDone) c.mqDone=mqSlot(c)||'-';
+          c.stage='booked'; c.stageAt=Date.now(); c.thinkAt=null; delete c.thinkAck; c.lostAt=null; delete c.lostReason;
+          c.day=b.day; c.time=b.time||c.time; c.month=b.day.slice(0,7); c.fromBooking=b.uid; c.updated=Date.now();
+          bkm.mv[b.uid]=1; moved.push(c.name);
+        } else if(c.stage==='booked' && (c.day!==b.day || (b.time && c.time!==b.time))){
+          c.day=b.day; c.time=b.time||c.time; c.month=b.day.slice(0,7); c.fromBooking=b.uid; c.updated=Date.now();
+          bkm.mv[b.uid]=1; resched++;
+        } else bkm.mv[b.uid]=1;
+      });
+      if(moved.length||resched){ save(); if(moved.length) toast(moved.join(', ')+' booked a new meeting — back in Booked'); }
       let added=0, matched=0, past=0;
       const t=todayIso();
       /* every booking still to come goes straight on the Board — Booked meetings is the one place for all of them */
