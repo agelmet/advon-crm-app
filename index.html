@@ -3733,6 +3733,63 @@ body:not(.dark) .stat-pill,body:not(.dark) .modal,body:not(.dark) .export-menu,b
 @media(max-width:700px){ body[data-view="calendar"] .stat-pills.mx{grid-template-columns:1fr;} }
 /* ===================== /DESIGN v5 ===================== */
 </style>
+<style id="nd-css">
+/* «Where do they stand?» follow-up marker — 19 Oct 2026 */
+.nd-add{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:3px 9px;border:1px dashed #C9D3E4;border-radius:8px;background:transparent;color:var(--muted);font:inherit;font-size:11px;font-weight:700;line-height:1.35;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+.nd-add:hover{border-color:#2563EB;color:#2563EB;background:#EEF4FF}
+.nd-line{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;max-width:100%;margin-top:7px;padding:6px 10px;border-radius:9px;border:1px solid;font:inherit;text-align:left;cursor:pointer;line-height:1.3;transition:transform .15s,box-shadow .15s}
+.card .nd-line{display:flex;width:100%}
+.nd-line:hover{transform:translateY(-1px);box-shadow:0 4px 10px -6px rgba(16,20,31,.35)}
+.nd-line b{font-size:11.5px;font-weight:800}
+.nd-line small{font-size:10.5px;font-weight:600;opacity:.88}
+.nd-line.wait,.nd-now.wait{background:#EEF4FF;border-color:#BFD3FF;color:#1E40AF}
+.nd-line.ok,.nd-now.ok{background:#E1FBEF;border-color:#9BE7C4;color:#06714A}
+.nd-line.due,.nd-now.due{background:#FFF4E5;border-color:#FFB866;color:#9A4A00}
+.rem-main .nd-line,.rem-main .nd-add{margin-top:6px}
+.rn-row:not(.lost):not(.paid){grid-template-areas:"main val" "nd nd" "date days" "acts acts"}
+.rn-row .rn-nd{grid-area:nd;min-width:0}
+.rn-nd .nd-line{display:flex;width:100%;margin-top:0}.rn-nd .nd-add{margin-top:0}
+body.dark .nd-add{border-color:#34405A}
+body.dark .nd-line.wait,body.dark .nd-now.wait{background:rgba(59,130,246,.14);border-color:rgba(96,165,250,.45);color:#9DC1FF}
+body.dark .nd-line.ok,body.dark .nd-now.ok{background:rgba(14,198,115,.13);border-color:rgba(14,198,115,.45);color:#6EE7B7}
+body.dark .nd-line.due,body.dark .nd-now.due{background:rgba(255,138,0,.14);border-color:rgba(255,160,60,.5);color:#FFB65C}
+/* the sheet */
+#ndOverlay .modal{max-width:520px;width:100%}
+#ndBody{display:flex;flex-direction:column;gap:8px}
+.nd-intro{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+.nd-now{display:flex;flex-direction:column;gap:2px;padding:9px 12px;border:1px solid;border-radius:11px}
+.nd-now b{font-size:13px;font-weight:800}.nd-now small{font-size:12px;font-weight:600;opacity:.9}
+.nd-lbl{margin-top:6px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.nd-lbl i{font-style:normal;font-weight:600;letter-spacing:0;text-transform:none}
+.nd-chips{display:flex;flex-wrap:wrap;gap:6px}
+.nd-chip{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.nd-chip i{font-style:normal;font-weight:600;color:var(--muted);font-size:11px}
+.nd-chip.on{background:#10141F;border-color:#10141F;color:#fff}
+body.dark .nd-chip.on{background:#E9EDF5;border-color:#E9EDF5;color:#10141F}
+.nd-chip.prom:hover{border-color:#0B9E5C;color:#0B9E5C}
+.nd-pick{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted)}
+.nd-pick input{font:inherit;font-size:12.5px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.nd-big{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.nd-b{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 13px;border-radius:12px;border:0;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer;text-align:left;color:#fff}
+.nd-b small{font-size:11.5px;font-weight:600;opacity:.9}
+.nd-b.sent{background:linear-gradient(135deg,#3B82F6,#2563EB);box-shadow:0 6px 14px -8px rgba(37,99,235,.8)}
+.nd-b.rep{background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 6px 14px -8px rgba(5,150,105,.8)}
+.nd-b.rep.on{outline:3px solid rgba(16,185,129,.35)}
+.nd-b:active{transform:scale(.98)}
+#ndNote{font:inherit;font-size:13.5px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink)}
+#ndTxt{font:inherit;font-size:13px;line-height:1.45;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);resize:vertical;min-height:110px}
+.nd-row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.nd-s{padding:7px 12px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}
+.nd-s.pri{background:#10141F;border-color:#10141F;color:#fff}
+body.dark .nd-s.pri{background:#E9EDF5;color:#10141F}
+.nd-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;padding-top:8px;border-top:1px solid var(--line);font-size:11.5px;font-weight:600;color:var(--muted)}
+.nd-clear{padding:6px 11px;border-radius:9px;border:1px solid #9BE7C4;background:#E1FBEF;color:#06714A;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.chase-head.nd b,.chase-head.nd i{color:#C2410C}
+.chase-row.nd{cursor:pointer}
+.chase-row.nd .cr-sub{color:#9A4A00;font-weight:700}
+body.dark .chase-row.nd .cr-sub{color:#FFB65C}
+@media(max-width:560px){ .nd-big{grid-template-columns:1fr} .nd-b{font-size:15px;padding:13px 14px} }
+</style>
 </head>
 <body class="locked">
 
@@ -4362,6 +4419,14 @@ body:not(.dark) .stat-pill,body:not(.dark) .modal,body:not(.dark) .export-menu,b
       <button class="btn btn-ghost" id="mLost">Didn't convert</button>
       <button class="btn btn-brand" id="mSave">Save</button>
     </div>
+  </div>
+</div>
+
+<!-- «Where do they stand?» follow-up sheet (19 Oct 2026) -->
+<div class="overlay" id="ndOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ndTitle">
+    <div class="modal-head"><h3 id="ndTitle">Follow-up</h3><button class="modal-close" id="ndClose" title="Close">✕</button></div>
+    <div class="modal-body" id="ndBody"></div>
   </div>
 </div>
 
@@ -6063,6 +6128,169 @@ function renderLostTray(){
   lost.forEach(c=>body.appendChild(cardEl(c,st)));
   dropHandlers(body,'lost');
 }
+/* ---------- «Where do they stand?» follow-up marker (Angelo, 19 Oct 2026) ----------
+   One tap on a Board card, a Remaining row or a Renewal row: «📨 Mark sent» → what I sent (photos, draft, changes, payment, renewal).
+   Later: «💬 They replied» + the day they promised, or «📨 Sent another reminder», or «✓ Clear».
+   The card then shows ONE coloured line: blue = sent, wait · green = they answered, wait · orange = a gentle nudge is fine today.
+   Gentle pace: 2nd nudge 4 days after the 1st, 3rd 6 days later, then one last friendly «door open» message 10 days later;
+   a promise («this weekend») → nudge the day after it.
+   Stored on the client / renewal as `nd` = {st:'sent'|'replied', what, at, n, hist:[ms], by, rAt, note, stage | date}.
+   It goes quiet by itself when the card moves to another stage, or when the renewal is paid (its date moves on). */
+var ND_WHAT={
+  material:{i:'📷',t:'photos & material',v:'send the material',gr:'τις φωτογραφίες και το υλικό'},
+  draft:{i:'▶',t:'the draft',v:'reply about the draft',gr:'την πρώτη εικόνα της ιστοσελίδας'},
+  changes:{i:'✏️',t:'their changes',v:'send their changes',gr:'τις αλλαγές'},
+  pay:{i:'€',t:'payment',v:'pay',gr:'τη μεταφορά'},
+  renewal:{i:'↻',t:'renewal payment',v:'pay the renewal',gr:'την ανανέωση'},
+  other:{i:'💬',t:'a message',v:'answer',gr:'το προηγούμενο μήνυμα'}
+};
+var ND_ORDER_C=['material','draft','changes','pay','other'], ND_ORDER_R=['renewal','other'];
+function ndObj(id,kind){ return kind==='rn' ? (state.renewals||[]).find(r=>r.id===id) : (state.clients||[]).find(c=>c.id===id); }
+function ndGet(o,kind){
+  const n=o&&o.nd; if(!n||!n.st) return null;
+  if(kind==='rn'){ if((n.date||'')!==(o.date||'')) return null; }
+  else if(n.stage && n.stage!==o.stage) return null;
+  return n;
+}
+function ndDefWhat(o,kind){ if(kind==='rn') return 'renewal'; return ({needinfo:'material',building:'material',review:'draft',changes:'changes',pay:'pay'})[o.stage]||'other'; }
+function ndAddDays(ms,d){ const x=new Date(ms); x.setHours(12,0,0,0); x.setDate(x.getDate()+d); return isoDate(x); }
+function ndIsoPlus(iso,d){ return ndAddDays(Date.parse(iso+'T12:00'),d); }
+function ndDaysAgo(ms){ const a=new Date(ms); a.setHours(0,0,0,0); const b=new Date(); b.setHours(0,0,0,0); return Math.round((b-a)/864e5); }
+function ndAgo(ms){ const d=ndDaysAgo(ms); return d<=0?'today':d===1?'yesterday':d+' days ago'; }
+function ndDow(iso){ const d=new Date(iso+'T12:00'); return d.toLocaleDateString('en-GB',{weekday:'short'})+' '+fmtDay(iso); }
+function ndWhen(iso){ if(iso===todayIso()) return 'today'; if(iso===ndAddDays(Date.now(),1)) return 'tomorrow'; return ndDow(iso); }
+function ndNext(n){
+  if(n.st==='replied') return n.by ? ndIsoPlus(n.by,1) : ndAddDays(n.rAt||n.at,5);
+  const k=n.n||1; return ndAddDays(n.at, k<=1?4:k===2?6:10);
+}
+function ndOrd(k){ return k===2?'2nd':k===3?'3rd':k+'th'; }
+function ndInfo(o,kind){
+  const n=ndGet(o,kind); if(!n) return null;
+  const w=ND_WHAT[n.what]||ND_WHAT.other, t=todayIso(), next=ndNext(n), due=next<=t;
+  let cls, head, sub;
+  if(n.st==='sent'){
+    cls=due?'due':'wait';
+    head=(n.n>=2?'📨 '+ndOrd(n.n)+' reminder':'📨 Sent')+' · '+w.t+' · '+ndAgo(n.at);
+    sub= due ? (n.n>=3 ? 'no reply — time for one last friendly message' : 'no reply yet — a gentle nudge is fine today')
+             : 'no reply yet · wait, next nudge '+ndWhen(next);
+  } else {
+    const late=!!(n.by && n.by<t);
+    cls=(late||due)?'due':'ok';
+    head= n.by ? (late ? '⏰ Promised '+ndDow(n.by)+' · not yet' : '💬 Replied · will '+w.v+' '+(n.by===t?'today':'by '+ndWhen(n.by)))
+               : '💬 Replied · will '+w.v+' soon';
+    sub= (late||due) ? 'replied '+ndAgo(n.rAt||n.at)+' — a soft reminder is fine now' : 'replied '+ndAgo(n.rAt||n.at)+' · nothing to do, wait';
+  }
+  return {n,w,cls,head,sub,due,next};
+}
+function ndLineHtml(o,kind){
+  if(!o||!o.id) return '';
+  const f=ndInfo(o,kind);
+  if(!f) return `<button type="button" class="nd-add" data-nd="${esc(o.id)}" data-ndk="${kind}" draggable="false" title="Mark what you sent them, and later whether they answered">📨 Mark sent</button>`;
+  return `<button type="button" class="nd-line ${f.cls}" data-nd="${esc(o.id)}" data-ndk="${kind}" draggable="false" title="Tap to update — replied, sent again, or clear"><b>${esc(f.head)}</b><small>${esc(f.sub)}${f.n.note?' · «'+esc(f.n.note)+'»':''}</small></button>`;
+}
+/* everything where a gentle nudge is fine today — Home «People to contact» */
+function ndDueList(){
+  const out=[];
+  (state.clients||[]).forEach(c=>{ if(c.trashed||c.stage==='paid'||c.stage==='lost') return; const f=ndInfo(c,'c'); if(f&&f.due) out.push({o:c,kind:'c',f}); });
+  (state.renewals||[]).forEach(r=>{ if(r.lost) return; const f=ndInfo(r,'rn'); if(f&&f.due) out.push({o:r,kind:'rn',f}); });
+  return out.sort((a,b)=>a.f.next<b.f.next?-1:1);
+}
+/* the gentle Greek text, in Angelo's voice — never pushy, never sent by itself */
+function ndText(o,kind,what,cur){
+  let who=''; try{ const s=mqGuessSal(o); who=(s.t+' '+s.n).trim(); }catch(e){}
+  const hi=(new Date().getHours()<12?'Καλημέρα':'Καλησπέρα')+(who?' '+who:'')+',';
+  const w=ND_WHAT[what]||ND_WHAT.other;
+  const k=cur&&cur.st==='sent'?(cur.n||1):0;            /* how many we already sent */
+  const promised=cur&&cur.st==='replied';
+  let link=''; try{ if(kind!=='rn') link=cDraftUrl(o)||''; }catch(e){}
+  const money=v=>{ const x=Math.round((+v||0)*100)/100, vat=Math.round(x*24)/100, tot=Math.round((x+vat)*100)/100; const f2=n=>n.toFixed(2).replace('.',','); return (Number.isInteger(x)?String(x):f2(x))+'€ + 24% ΦΠΑ ('+f2(vat)+'€) = '+f2(tot)+'€'; };
+  const iban='Alpha Bank, IBAN: GR7301401630163002002013569';
+  if(k>=3) return hi+'\n\nδεν θέλω να σας ενοχλώ άλλο με μηνύματα. Από τη μεριά μας όλα μένουν έτοιμα — όποτε θελήσετε να συνεχίσουμε, ένα μήνυμά σας αρκεί και προχωράμε αμέσως.\n\nΝα είστε καλά!';
+  if(promised) return hi+'\n\nμια μικρή υπενθύμιση μόνο για '+w.gr+' που είχαμε πει — όποτε μπορέσετε, χωρίς καμία βιασύνη.\n\nΕυχαριστώ πολύ!';
+  if(what==='material'){
+    if(k>=1 && link) return hi+'\n\nγια να έχετε μια εικόνα, ετοιμάσαμε ήδη την ιστοσελίδα σας με προσωρινές φωτογραφίες και μπορείτε να τη δείτε εδώ:\n'+link+'\n\nΤις δικές σας φωτογραφίες τις βάζουμε όποτε μας τις στείλετε, μαζί με ό,τι αλλαγές θέλετε.\n\nΕυχαριστώ πολύ!';
+    return hi+'\n\nσας στέλνω μόνο μια μικρή υπενθύμιση: έχουμε προχωρήσει αρκετά την ιστοσελίδα σας και πλέον μας λείπουν μόνο οι φωτογραφίες σας. Όποτε βρείτε λίγο χρόνο, στείλτε μας ό,τι έχετε.\n\nΕυχαριστώ πολύ!';
+  }
+  if(what==='draft') return hi+'\n\nήθελα μόνο να ρωτήσω αν είχατε την ευκαιρία να δείτε την πρώτη εικόνα της ιστοσελίδας σας'+(link?':\n'+link+'\n\n':'. ')+'Ό,τι αλλαγή θέλετε, μας τη γράφετε όπως σας βολεύει.\n\nΕυχαριστώ πολύ!';
+  if(what==='changes') return hi+'\n\nμόνο να ρωτήσω αν είχατε την ευκαιρία να δείτε ξανά την ιστοσελίδα'+(link?' ('+link+')':'')+'. Ό,τι αλλαγές θέλετε, μας τις στέλνετε όποτε σας βολεύει και τις κάνουμε αμέσως.\n\nΕυχαριστώ πολύ!';
+  if(what==='pay'){ let v=130; try{ v=cowed(o)||cval(o)||130; }catch(e){} return hi+'\n\nμια μικρή υπενθύμιση για τη μεταφορά της φιλοξενίας: '+money(v)+', με κατάθεση στην '+iban+'. Για το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας. Μόλις γίνει, αγοράζουμε και το domain.\n\nΕυχαριστώ πολύ!'; }
+  if(what==='renewal') return hi+'\n\nσας στέλνω μια υπενθύμιση για την ετήσια ανανέωση της φιλοξενίας και του domain της ιστοσελίδας σας'+(o.date?' (λήγει '+fmtDate(o.date)+')':'')+': '+money(o.value||130)+', με κατάθεση στην '+iban+'.\n\nΕυχαριστώ πολύ!';
+  return hi+'\n\nήθελα μόνο να ρωτήσω αν είδατε το προηγούμενο μήνυμά μου.\n\nΕυχαριστώ πολύ!';
+}
+var ndCur=null;
+function ndClose(){ const ov=$('#ndOverlay'); if(ov) ov.classList.remove('open'); ndCur=null; }
+function ndOpen(id,kind){
+  const o=ndObj(id,kind); if(!o) return;
+  const cur=ndGet(o,kind);
+  ndCur={id,kind,what:cur?cur.what:ndDefWhat(o,kind),prom:false};
+  $('#ndTitle').textContent=o.name||'Follow-up';
+  ndRender();
+  $('#ndOverlay').classList.add('open');
+}
+function ndRender(){
+  if(!ndCur) return; const {id,kind}=ndCur; const o=ndObj(id,kind); if(!o) return ndClose();
+  const cur=ndGet(o,kind), f=ndInfo(o,kind), w=ND_WHAT[ndCur.what]||ND_WHAT.other;
+  const order=kind==='rn'?ND_ORDER_R:ND_ORDER_C;
+  const t=todayIso(), dnow=new Date().getDay();
+  const sat=ndAddDays(Date.now(), dnow===0?0:(6-dnow));
+  const mon=ndAddDays(Date.now(), ((8-dnow)%7)||7);
+  const proms=[['Today',t],['Tomorrow',ndAddDays(Date.now(),1)],['This weekend',sat],['Next week',mon],['In a few days',ndAddDays(Date.now(),3)],['No date','']];
+  const hist=(cur&&cur.hist&&cur.hist.length)?cur.hist.map(ms=>fmtDay(isoDate(new Date(ms)))).join(' · '):'';
+  $('#ndBody').innerHTML=`
+    ${f?`<div class="nd-now ${f.cls}"><b>${esc(f.head)}</b><small>${esc(f.sub)}</small></div>`:'<p class="nd-intro">Mark what you sent — the card then shows where they stand, and tells you when a gentle nudge is fine (never before).</p>'}
+    <div class="nd-lbl">What is it about?</div>
+    <div class="nd-chips">${order.map(k=>`<button type="button" class="nd-chip${ndCur.what===k?' on':''}" data-ndw="${k}">${ND_WHAT[k].i} ${esc(ND_WHAT[k].t)}</button>`).join('')}</div>
+    <div class="nd-big">
+      <button type="button" class="nd-b sent" id="ndSent">📨 ${cur&&cur.st==='sent'?'Sent another reminder':'I sent it'}<small>today${cur&&cur.st==='sent'?' · it becomes the '+ndOrd((cur.n||1)+1):''}</small></button>
+      <button type="button" class="nd-b rep${ndCur.prom?' on':''}" id="ndRep">💬 They replied<small>pick when they said they’ll ${esc(w.v)}</small></button>
+    </div>
+    <div class="nd-prom"${ndCur.prom?'':' hidden'}>
+      <div class="nd-lbl">When will they ${esc(w.v)}?</div>
+      <div class="nd-chips">${proms.map(([l,d])=>`<button type="button" class="nd-chip prom" data-ndby="${d}">${l}${d&&l!=='Today'&&l!=='Tomorrow'?' <i>'+ndDow(d)+'</i>':''}</button>`).join('')}<label class="nd-pick">or a day <input type="date" id="ndBy" min="${t}"></label></div>
+    </div>
+    <div class="nd-lbl">Short note <i>(optional — e.g. «after her holidays»)</i></div>
+    <input type="text" id="ndNote" maxlength="80" value="${esc(cur&&cur.note||'')}" placeholder="what they said, in a few words">
+    <div class="nd-lbl nd-txh">A gentle text you can send <i>(edit freely · nothing is sent by itself)</i></div>
+    <textarea id="ndTxt" rows="6">${esc(ndText(o,kind,ndCur.what,cur))}</textarea>
+    <div class="nd-row"><button type="button" class="nd-s" id="ndCopy">Copy text</button><button type="button" class="nd-s pri" id="ndCopySent">Copy + mark sent</button></div>
+    <div class="nd-foot">${hist?`<span>Sent: ${esc(hist)}</span>`:'<span></span>'}${cur?'<button type="button" class="nd-clear" id="ndClr">✓ Clear — nothing pending</button>':''}</div>`;
+  const B=$('#ndBody');
+  B.querySelectorAll('[data-ndw]').forEach(b=>b.addEventListener('click',()=>{ ndCur.what=b.dataset.ndw; ndRender(); }));
+  $('#ndSent').addEventListener('click',()=>ndSave('sent'));
+  $('#ndRep').addEventListener('click',()=>{ ndCur.prom=!ndCur.prom; ndRender(); });
+  B.querySelectorAll('[data-ndby]').forEach(b=>b.addEventListener('click',()=>ndSave('replied',b.dataset.ndby)));
+  const bi=$('#ndBy'); if(bi) bi.addEventListener('change',()=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(bi.value)) ndSave('replied',bi.value); });
+  const copy=()=>{ const tx=$('#ndTxt').value; try{ navigator.clipboard.writeText(tx); }catch(e){ const ta=$('#ndTxt'); ta.select(); try{ document.execCommand('copy'); }catch(_){} } };
+  $('#ndCopy').addEventListener('click',()=>{ copy(); toast('Copied — paste it in Viber'); });
+  $('#ndCopySent').addEventListener('click',()=>{ copy(); ndSave('sent'); toast('Copied + marked sent — paste it in Viber'); });
+  const cl=$('#ndClr'); if(cl) cl.addEventListener('click',()=>ndSave('clear'));
+}
+function ndSave(act,by){
+  if(!ndCur) return; const {id,kind,what}=ndCur; const o=ndObj(id,kind); if(!o) return ndClose();
+  const prev=ndGet(o,kind), now=Date.now(), note=(($('#ndNote')||{}).value||'').trim();
+  const anchor= kind==='rn' ? {date:o.date||''} : {stage:o.stage};
+  let msg;
+  if(act==='clear'){ delete o.nd; msg=o.name+' · nothing pending'; }
+  else if(act==='sent'){
+    const k=prev ? ((prev.st==='sent'?(prev.n||1):(prev.n||0))+1) : 1;
+    o.nd=Object.assign({st:'sent',what,at:now,n:k,hist:[...((prev&&prev.hist)||[]),now].slice(-12),note},anchor);
+    msg=o.name+' · '+(k>=2?ndOrd(k)+' reminder':'sent')+' · next nudge not before '+ndWhen(ndNext(o.nd));
+  } else {
+    o.nd=Object.assign({st:'replied',what,at:prev?prev.at:now,n:prev?(prev.n||0):0,hist:(prev&&prev.hist)||[],rAt:now,by:by||'',note},anchor);
+    msg=o.name+' · replied'+(by?' · will '+(ND_WHAT[what]||ND_WHAT.other).v+' by '+ndWhen(by):'');
+  }
+  o.updated=now; save(); ndClose(); renderAll(); toast(msg);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('[data-nd]'); if(!b) return;
+  e.stopPropagation(); e.preventDefault(); ndOpen(b.dataset.nd,b.dataset.ndk);
+},true);
+['mousedown','pointerdown','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{ if(e.target.closest&&e.target.closest('[data-nd]')) e.stopPropagation(); },true));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&ndCur) ndClose(); });
+
+$('#ndClose').addEventListener('click',ndClose);
+$('#ndOverlay').addEventListener('click',e=>{ if(e.target.id==='ndOverlay') ndClose(); });
+
 function cardEl(c,st){
   const el=document.createElement('div');
   el.className='card'; el.draggable=true;
@@ -6090,6 +6318,7 @@ function cardEl(c,st){
       ${(()=>{ const th=chThreadFor(c); if(!th) return ''; const w=th.lastFrom==='client'; return `<span class="chip chat${w?' wait':''}" data-chat="${esc(th.slug)}" title="${w?'The client wrote and is waiting for an answer':'Open the chat with this client'}">${IC.message} ${w?'waiting':'chat'}</span>`; })()}
     </div>
     ${(()=>{ const n=cContactNote(c); return n?`<div class="c-cnote" title="Contact note"><i>⚠</i><span>${esc(n)}</span></div>`:''; })()}
+    ${(c.stage!=='paid'&&!isLost)?ndLineHtml(c,'c'):''}
     ${(()=>{ const u=cDraftUrl(c); const d=!u?'':(()=>{ const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Open draft':'▶ Open website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })();
       const rv= c.stage==='paid' ? `<button type="button" class="c-review${c.reviewAsked?' sent':''}" draggable="false" title="${c.reviewAsked?'Review message already copied on '+esc(fmtDay(rvDay(c.reviewAsked)))+' — tap to open it again':'Domain connected → open the review message for '+esc(c.name)}">${RV_STAR}REVIEW${c.reviewAsked?' <i>✓</i>':''}</button>` : '';
       return (d||rv) ? `<div class="c-acts">${d}${rv}</div>` : ''; })()}
@@ -8434,6 +8663,7 @@ function rnRow(r,today){
   const hist= n ? `<span class="hist" title="Renewed ${n} time${n===1?'':'s'}">${IC.repeat} renewed ${n}×${r.lastRenewed?' · last '+fmtDate(r.lastRenewed):''}</span>` : `<span class="hist">first renewal</span>`;
   const su=rnSiteUrl(r);
   row.innerHTML=`<div class="rn-main"><div class="rn-name">${esc(r.name)}</div><div class="rn-sub">${su?siteChipHtml(su):''}<button class="site-edit" type="button" title="${su?'Change this client’s website / draft link':'Add the website / draft link'}">${su?'✎':'＋ link'}</button>${hist}${r.note?`<span>${esc(r.note)}</span>`:''}</div></div>
+    <div class="rn-nd">${ndLineHtml(r,'rn')}</div>
     <span class="rn-val" title="Click to edit the amount">${fmtMoney(r.value||0)}</span>
     <button class="rn-date" title="Click to change the renewal date">${IC.calendar} ${r.date? fmtDate(r.date) : 'set date'}</button>
     <span class="rn-days">${chip.txt}</span>
@@ -8567,6 +8797,7 @@ function remRowEl(c){
         ${siteChipHtml(cDraftUrl(c))}
         ${c.notes?`<span class="rem-note" title="${esc(c.notes)}">${esc(c.notes)}</span>`:''}
       </div>
+      ${ndLineHtml(c,'c')}
     </div>
     <div class="rem-val${hasPart(c)?' part':''}">${fmtMoney2(cowed(c))}${hasPart(c)?`<small><b>${fmtMoney2(cpaid(c))}</b> paid of ${fmtMoney2(cval(c))}</small><i class="rv-bar"><u style="width:${Math.round(cpaid(c)/cval(c)*100)}%"></u></i>`:''}</div>
     <div class="rem-actions">
@@ -9641,6 +9872,9 @@ function renderHome(){
     chase+=overdueRn.map(r=>`<div class="chase-row r" data-goto="renewals"><span class="cr-name">${esc(r.name)}</span><span class="cr-sub">was due ${fmtDate(r.date)}</span><span class="cr-val">${fmtMoney2(r.value||0)}</span></div>`).join('');
   }
   if(plainList.length) chase+=`<div class="chase-foot" data-goto="remaining">+ ${plainList.length} more unpaid with no flag · ${fmtMoney2(pSum)} — open Remaining to mark them</div>`;
+  { const nd=ndDueList(); if(nd.length){   /* «Where do they stand?» — a gentle nudge is fine today (19 Oct 2026) */
+    chase=`<div class="chase-head nd"><b>Nudge today</b><span>${nd.length} sent/promised and quiet — a gentle message is fine now</span><i>${nd.length}</i></div>`
+      +nd.map(x=>`<div class="chase-row nd" data-nd="${esc(x.o.id)}" data-ndk="${x.kind}"><span class="cr-name">${esc(x.o.name)}</span><span class="cr-sub">${esc(x.f.head)}</span><span class="cr-val">${x.kind==='rn'?'renewal':esc(stageById(x.o.stage).name)}</span></div>`).join('')+chase; } }
   hc.innerHTML=chase;
   const hrn=$('#homeRenew'); if(hrn) hrn.innerHTML='';
   // every monthly client who has not paid for the month we are in — overdue first
