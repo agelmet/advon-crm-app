@@ -7628,6 +7628,8 @@ function renderCalExtras(){
 }
 function renderBoardStats(){ const el=$('#boardStats'); if(el) el.innerHTML=monthStatsHtml(monthLogStats(curMonth),curMonth); }
 /* ---------- calendar ---------- */
+/* the day's number counts only meetings still on — a cancelled one (Lost, shown faded) is left out (20 Oct 2026) */
+const meetLive=items=>items.filter(c=>meetOut(c)!=='lost');
 function meetingsOn(iso){
   return state.clients.filter(c=>c.day===iso && !isTrashed(c)).sort((a,b)=>(a.time||'99')<(b.time||'99')?-1:1);
 }
@@ -7656,7 +7658,7 @@ function renderCalendar(){
     days.forEach((d,i)=>{
       const iso=isoDate(d);
       const items=meetingsOn(iso);
-      const sum=items.reduce((s,c)=>s+cval(c),0);
+      const sum=meetLive(items).reduce((s,c)=>s+cval(c),0);
       html+=`<div class="day-col ${iso===todayIso()?'today':''}">
         <div class="day-head"><span class="dn">${DOW[i]}</span><span class="dd">${d.getDate()}</span>${sum?`<span class="dsum">${fmtMoney(sum)}</span>`:''}</div>
         <div class="day-body">
@@ -7680,16 +7682,16 @@ function renderCalendar(){
       const items=meetingsOn(iso);
       /* every meeting of the day is shown — no «+N more» (7 Oct 2026) */
       html+=`<div class="mcell ${inMonth?'':'out'} ${iso===todayIso()?'today':''}${items.length>4?' busy':''}" data-day="${iso}">
-        <div class="num">${d.getDate()}${items.length?`<span class="mcnt">${items.length}</span>`:''}</div>
+        <div class="num">${d.getDate()}${meetLive(items).length?`<span class="mcnt">${meetLive(items).length}</span>`:''}</div>
         ${items.map(meetMini).join('')}
       </div>`;
       if(inMonth && items.length) agenda.push({iso, d, items});
       if(i>=34 && d.getMonth()!==m-1 && (i+1)%7===0) break;
     }
     /* phone: the month as a clear list underneath — every day with meetings, every meeting */
-    const tot=agenda.reduce((s,a)=>s+a.items.length,0);
+    const tot=agenda.reduce((s,a)=>s+meetLive(a.items).length,0);
     html+='</div><div class="magenda"><div class="magenda-h">'+fmtMonth(curMonth)+' · '+tot+' meeting'+(tot===1?'':'s')+'</div>'+
-      (agenda.length? agenda.map(a=>`<div class="mag-day${a.iso===todayIso()?' today':''}"><div class="mag-dh"><b>${DOW[(a.d.getDay()+6)%7]} ${a.d.getDate()}</b><span>${a.items.length} meeting${a.items.length===1?'':'s'}</span></div>${a.items.map(meetHtml).join('')}</div>`).join('') : '<div class="empty-note">No meetings this month yet.</div>')+'</div>';
+      (agenda.length? agenda.map(a=>`<div class="mag-day${a.iso===todayIso()?' today':''}"><div class="mag-dh"><b>${DOW[(a.d.getDay()+6)%7]} ${a.d.getDate()}</b><span>${meetLive(a.items).length} meeting${meetLive(a.items).length===1?'':'s'}</span></div>${a.items.map(meetHtml).join('')}</div>`).join('') : '<div class="empty-note">No meetings this month yet.</div>')+'</div>';
     body.innerHTML=html;
   }
   body.querySelectorAll('.m2cb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); m2Open(b.dataset.m2, b); }));
