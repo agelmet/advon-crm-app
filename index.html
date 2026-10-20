@@ -1992,6 +1992,18 @@ body.dark .day-row button{background:var(--surface);}
 .ld-tools .btn-callmode{background:var(--grad); color:#fff; border:none; box-shadow:0 6px 18px rgba(47,127,224,.35);}
 .ld-tools .btn-callmode.on{background:linear-gradient(120deg,#10141F,#2A3548);}
 .ld-tools .ld-import{margin-left:auto; display:flex; gap:6px;}
+/* Caught as spam (20 Oct 2026) — /api/lead?spam=1 */
+.sp-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;color:var(--muted,#667);font-size:13px}
+.sp-head b{color:inherit}
+.sp-head .btn{margin-left:auto}
+.sp-row{border:1px solid var(--line,#e5e7eb);border-radius:12px;padding:10px 12px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start}
+.sp-row .sp-who{font-weight:700}
+.sp-row .sp-meta{font-size:12px;color:var(--muted,#667)}
+.sp-row .sp-why{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 8px;background:#fff1f0;color:#b42318;margin-right:6px}
+.sp-row .sp-msg{grid-column:1/-1;font-size:13px;color:var(--muted,#556);white-space:pre-wrap;word-break:break-word;max-height:4.6em;overflow:hidden}
+.sp-row .sp-acts{display:flex;gap:6px;grid-row:1/3;grid-column:2}
+.sp-empty{padding:18px;text-align:center;color:var(--muted,#667)}
+
 /* lead categories — New leads (harvest) and Angelo's own lists (Excel) */
 .ld-lists{display:flex; gap:6px; flex-wrap:wrap; margin:-4px 0 14px; align-items:center;}
 .ld-lists button{font-size:12.5px; font-weight:700; padding:7px 12px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--ink); box-shadow:var(--shadow); display:inline-flex; align-items:center; gap:6px; transition:transform .1s;}
@@ -4243,6 +4255,7 @@ body.dark .chase-row.nd .cr-sub{color:#FFB65C}
     <div class="ld-import">
       <button class="btn btn-ghost" id="ldCbNew" title="Write a callback — it goes straight into Callbacks on its day">＋ Callback</button>
       <button class="btn btn-ghost" id="ldPull" title="Fetch new leads from the weekly harvest">Pull new leads</button>
+      <button class="btn btn-ghost" id="ldSpam" title="Form messages the robot checks on advonmedia.com caught — glance once a month in case a real one is in there">🛡 Caught as spam</button>
       <button class="btn btn-ghost" id="ldImport" title="Import a CSV (name, spec, phone, city, address, reviews, url)">Import CSV</button>
       <input type="file" id="ldImportFile" accept=".csv,text/csv" style="display:none">
     </div>
@@ -11327,6 +11340,45 @@ $('#ldSpec').addEventListener('change',()=>{ ldFilter.spec=$('#ldSpec').value; l
 $('#ldCity').addEventListener('change',()=>{ ldFilter.city=$('#ldCity').value; ldShown=LD_PAGE; ensureLeads(); delete state.meta.ld.focus; renderLeads(); });
 $('#ldSort').addEventListener('change',()=>{ ldFilter.sort=$('#ldSort').value; renderLeads(); });
 $('#ldPull').addEventListener('click',()=>Leads.pull(true));
+/* ---------- Caught as spam (20 Oct 2026) ----------
+   advonmedia.com /api/lead now answers robots «sent ✓» and files them in leads/spam.json instead of the inbox.
+   This window lists them; «Not spam» sends one on as a normal lead (e-mail + Telegram + Leads tab). */
+const SPAM_URL=API_BASE+'/api/lead';
+const SPAM_WHY=(r)=>{ const w=String(r||''); if(w.startsWith('phrase:')) return 'spam phrase «'+w.slice(7)+'»';
+  return ({'no-stamp':'sent without opening the page','bad-stamp':'sent without opening the page','forged-stamp':'fake page stamp','too-fast':'filled in under 3 seconds','old-stamp':'page open for 2+ days','hidden-field':'filled the hidden robot field','link':'contains a link','foreign-script':'foreign script','gibberish-name':'made-up name','throwaway-email':'throwaway e-mail','name-equals-message':'name = message'})[w]||w; };
+async function spamOpen(){
+  bkModal('Caught as spam', '<div class="sp-empty">Loading…</div>');
+  let list=null;
+  try{ const r=await fetch(SPAM_URL+'?spam=1&t='+Date.now(),{headers:{'x-crm-auth':SYNC_TOKEN},cache:'no-store'}); const j=await r.json(); if(j && j.ok) list=j.spam||[]; }catch(e){}
+  if(!list){ $('#bkupBody').innerHTML='<div class="sp-empty">Not available yet — this list starts working once the anti-spam update is live on advonmedia.com.</div>'; return; }
+  const month=todayIso().slice(0,7), nMonth=list.filter(r=>String(r.at||'').slice(0,7)===month).length;
+  const rows=list.map(r=>`<div class="sp-row" data-id="${esc(r.id)}">
+      <div><span class="sp-why">${esc(SPAM_WHY(r.reason))}</span><span class="sp-who">${esc(r.name||'(no name)')}</span></div>
+      <div class="sp-acts"><button class="btn btn-ghost" data-sp-ok="${esc(r.id)}" title="It is a real person — send it on as a lead">Not spam</button><button class="btn btn-ghost" data-sp-del="${esc(r.id)}" title="Delete">✕</button></div>
+      <div class="sp-meta">${esc(new Date(r.at).toLocaleString('el-GR',{timeZone:'Europe/Athens',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}))} · ${esc(r.source||'')} · ${esc(r.phone||'—')} · ${esc(r.email||'—')}</div>
+      ${(r.message||r.profession)?`<div class="sp-msg">${esc([r.profession,r.message].filter(Boolean).join(' · '))}</div>`:''}
+    </div>`).join('');
+  $('#bkupBody').innerHTML=`<div class="sp-head"><span><b>${nMonth}</b> this month · <b>${list.length}</b> kept in all · robots are answered «sent ✓» and never reach your inbox</span>${list.length?'<button class="btn btn-ghost" id="spClear">Clear all</button>':''}</div>`
+    +(rows||'<div class="sp-empty">Nothing caught yet.</div>');
+}
+async function spamAct(kind, id){
+  const row=document.querySelector(`.sp-row[data-id="${CSS.escape(id)}"]`); if(row) row.style.opacity=.45;
+  try{
+    const r = kind==='ok'
+      ? await fetch(SPAM_URL+'?unspam=1',{method:'POST',headers:{'x-crm-auth':SYNC_TOKEN,'Content-Type':'application/json'},body:JSON.stringify({id})})
+      : await fetch(SPAM_URL+'?spam=1',{method:'DELETE',headers:{'x-crm-auth':SYNC_TOKEN,'Content-Type':'application/json'},body:JSON.stringify(kind==='all'?{all:true}:{ids:[id]})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok || !j.ok) throw new Error(j.error||r.status);
+    toast(kind==='ok'?'Sent on as a lead — it is in the Leads tab now':'Deleted');
+    if(kind==='ok' && typeof Leads!=='undefined' && Leads.pull) Leads.pull(false);
+  }catch(e){ toast('Could not do that — try again in a moment'); }
+  spamOpen();
+}
+$('#ldSpam').addEventListener('click',spamOpen);
+$('#bkupBody').addEventListener('click',e=>{ const ok=e.target.closest('[data-sp-ok]'), del=e.target.closest('[data-sp-del]');
+  if(ok) spamAct('ok', ok.dataset.spOk); else if(del) spamAct('del', del.dataset.spDel);
+  else if(e.target.closest('#spClear') && confirm('Delete every message in the spam list?')) spamAct('all',''); });
+
 $('#ldCbNew').addEventListener('click',()=>{ const b=$('#ldCbQuick'); b.hidden=!b.hidden; if(!b.hidden){ caQuickMount('ldCbQuick'); const f=b.querySelector('[data-cq="name"]'); if(f) f.focus(); } });
 $('#ldImport').addEventListener('click',()=>$('#ldImportFile').click());
 $('#ldImportFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>ldImportCSV(String(r.result)); r.readAsText(f,'utf-8'); e.target.value=''; });
