@@ -1989,6 +1989,39 @@ body.dark .day-row button{background:var(--surface);}
 .m2-ft{display:flex; justify-content:flex-end; gap:8px; margin-top:12px;}
 .m2-ft .m2-go{background:var(--violet); border-color:var(--violet); color:#fff;}
 @media (max-width:700px){ .m2-chips button, .m2-pick{padding:10px 13px; font-size:13.5px;} .m2-note{font-size:16px;} }
+/* ===== No-shows list (Angelo, 20 Oct 2026) ===== */
+.mo-cell.ns-click{cursor:pointer; transition:transform .15s ease, box-shadow .15s ease;}
+.mo-cell.ns-click:hover{transform:translateY(-2px); box-shadow:var(--shadow-lg);}
+.mo-cell .ns-go{display:inline-block; margin-top:4px; font-size:11px; font-weight:800; color:var(--red);}
+#nsOverlay .modal{max-width:640px;}
+.ns-body{padding:4px 18px 18px; max-height:min(72vh,760px); overflow:auto;}
+.ns-tabs{display:flex; gap:6px; margin:6px 0 12px; position:sticky; top:0; background:#fff; padding:6px 0; z-index:1;}
+.ns-tabs button{border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:999px; padding:7px 13px; font:700 12.5px 'Inter',sans-serif; cursor:pointer;}
+.ns-tabs button.on{background:var(--red); border-color:var(--red); color:#fff;}
+.ns-tabs button i{font-style:normal; opacity:.75; margin-left:4px;}
+.ns-row{display:grid; grid-template-columns:96px 1fr auto; gap:12px; align-items:center; padding:11px 12px; border:1px solid var(--line); border-left:4px solid var(--red); border-radius:14px; margin-bottom:8px; background:var(--surface);}
+.ns-row.done{border-left-color:var(--muted); opacity:.75;}
+.ns-row.ok{border-left-color:var(--green);}
+.ns-row.cb{border-left-color:var(--violet);}
+.ns-when b{display:block; font-family:'Sora',sans-serif; font-size:13.5px;}
+.ns-when small{display:block; color:var(--muted); font-size:11px; font-weight:700; margin-top:2px;}
+.ns-who{min-width:0;}
+.ns-who b{display:block; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;}
+.ns-who b:hover{text-decoration:underline;}
+.ns-who .ns-tel{display:block; font-size:12px; color:var(--muted); font-weight:600; margin-top:2px;}
+.ns-st{display:inline-block; margin-top:5px; font-size:10.5px; font-weight:800; letter-spacing:.02em; padding:3px 8px; border-radius:999px; background:var(--red-soft); color:var(--red);}
+.ns-st.ok{background:var(--green-soft); color:var(--deep);} .ns-st.cb{background:var(--violet-soft); color:var(--violet);} .ns-st.mu{background:var(--bg); color:var(--muted);}
+.ns-act{display:flex; gap:6px; align-items:center;}
+.ns-act a,.ns-act button{display:inline-flex; align-items:center; gap:4px; height:32px; padding:0 10px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--ink); font:700 12px 'Inter',sans-serif; cursor:pointer; text-decoration:none; white-space:nowrap;}
+.ns-act a svg,.ns-act button svg{width:13px; height:13px;}
+.ns-act .ns-call{background:var(--green); border-color:var(--green); color:#fff;}
+.ns-act .ns-done{color:var(--deep);}
+.ns-empty{padding:26px 10px; text-align:center; color:var(--muted); font-weight:600; font-size:13px;}
+@media (max-width:640px){
+  .ns-row{grid-template-columns:1fr; gap:6px;}
+  .ns-when{display:flex; gap:8px; align-items:baseline;} .ns-when small{margin:0;}
+  .ns-act{flex-wrap:wrap;} .ns-act a,.ns-act button{height:38px; padding:0 12px; font-size:13px;}
+}
 /* ===== Calendar meeting → Trash (Angelo, 20 Oct 2026) ===== */
 .meet .rmcb{position:absolute; right:5px; top:5px; display:none; align-items:center; justify-content:center; width:24px; height:24px; padding:0; border-radius:999px;
   border:1px solid rgba(255,77,94,.35); background:var(--surface); color:var(--red); cursor:pointer; z-index:3; box-shadow:0 2px 10px rgba(24,49,92,.14);}
@@ -4488,6 +4521,12 @@ body.dark .chase-row.nd .cr-sub{color:#FFB65C}
     <div class="modal-body" id="bkupBody"></div>
   </div>
 </div>
+<div class="overlay" id="nsOverlay">
+  <div class="modal ns-modal" role="dialog" aria-modal="true" aria-labelledby="nsTitle">
+    <div class="modal-head"><div><h3 id="nsTitle">No-shows</h3><small id="nsSub"></small></div><button class="modal-close" id="nsClose" title="Close">✕</button></div>
+    <div class="ns-body" id="nsBody"></div>
+  </div>
+</div>
 <div class="overlay" id="goalOverlay">
   <div class="modal goal-modal" role="dialog" aria-modal="true" aria-labelledby="goalTitle">
     <div class="modal-head"><div><h3 id="goalTitle">Goal</h3><small id="goalSub"></small></div><button class="modal-close" id="goalClose" title="Close">✕</button></div>
@@ -6680,6 +6719,121 @@ function m2Apply(){
     save(); renderAll(); }, 8);
 }
 document.addEventListener('click',e=>{ if(m2 && !e.target.closest('.m2pop') && !e.target.closest('.m2cb') && !e.target.closest('#mqToCb')) m2Close(); });
+/* ================= No-shows — kept for good, one list to call them back (Angelo, 20 Oct 2026) =================
+   «save the no-shows in the calendar and when I click it should open the list of no-shows with their dates of
+   "supposed meeting" so that I can check and maybe call them back».
+   state.noshows = [{id, cid, slot:'YYYY-MM-DD HH:MM', day, time, name, phone, email, at, done?, doneAt?}]
+   nsSync() (every render) files every meeting marked «No show» — from «How did it go?» (c.mlog / c.meetOutcome) —
+   and keeps it even after the card is moved to Callbacks, rebooked or taken off the Board. A no-show that was
+   corrected (outcome changed / Undo) leaves the list; the bin on a meeting removes it too (meta.nsGone).
+   Calendar → the red «No show» box → the list: supposed meeting day + time, how long ago, what happened since
+   (rebooked / became a client / said no / in Callbacks), Call · Callback tomorrow · ✓ Called · open the card. */
+const nsSlotKey=s=>String(s||'').trim().replace(/\s+/g,' ');
+function nsCarried(c){                    /* the no-show slots this card carries: {slot:true} */
+  const out={};
+  const last={}; (c.mlog||[]).forEach(m=>{ if(m && m.slot) last[nsSlotKey(m.slot)]=m.out; });
+  Object.keys(last).forEach(k=>{ if(last[k]==='noshow') out[k]=true; });
+  if(c.meetOutcome==='noshow'){ const k=nsSlotKey(c.mqDone || ((c.day||'')+' '+(c.time||''))); if(/^\d{4}-\d{2}-\d{2}/.test(k) && !(k in last && last[k]!=='noshow')) out[k]=true; }
+  return out;
+}
+function nsSync(){
+  if(!state || !Array.isArray(state.clients)) return false;
+  ensureMeta(); const gone=state.meta.nsGone||{};
+  if(!Array.isArray(state.noshows)) state.noshows=[];
+  let ch=false;
+  const have={}; state.noshows.forEach(e=>{ have[e.cid+'|'+e.slot]=e; });
+  const byId={}; state.clients.forEach(c=>{ byId[c.id]=c; });
+  state.clients.forEach(c=>{
+    if(!c || isJob(c)) return;
+    Object.keys(nsCarried(c)).forEach(slot=>{
+      const k=c.id+'|'+slot; if(gone[k]) return;
+      const [day,time]=[slot.slice(0,10), slot.slice(11)];
+      const e=have[k];
+      if(!e){ const n={id:uid(), cid:c.id, slot, day, time:time||'', name:c.name||'', phone:c.phone||'', email:c.email||'', at:Date.now()}; state.noshows.push(n); have[k]=n; ch=true; }
+      else { ['name','phone','email'].forEach(f=>{ if(c[f] && e[f]!==c[f]){ e[f]=c[f]; ch=true; } }); }
+    });
+  });
+  /* a no-show that was corrected on its own card (Undo, outcome changed) leaves the list */
+  const keep=state.noshows.filter(e=>{
+    if(gone[e.cid+'|'+e.slot]) return false;
+    const c=byId[e.cid]; if(!c || e.done) return true;
+    if(nsCarried(c)[e.slot]) return true;
+    const cur=nsSlotKey((c.day||'')+' '+(c.time||'')), inLog=(c.mlog||[]).some(m=>m && nsSlotKey(m.slot)===e.slot);
+    return !(cur===e.slot || inLog || nsSlotKey(c.mqDone)===e.slot);
+  });
+  if(keep.length!==state.noshows.length){ state.noshows=keep; ch=true; }
+  return ch;
+}
+function nsCb(e){ return (state.prio||[]).find(p=>p && !p.done && (p.nsId===e.id || (e.cid && p.fromMeet===e.cid))); }
+function nsStatus(e){
+  if(e.done) return {t:'Called back'+(e.doneAt?' · '+fmtDay(isoDate(new Date(e.doneAt))):''), k:'mu', open:false};
+  const c=state.clients.find(x=>x.id===e.cid);
+  const cb=nsCb(e);
+  if(c && !isTrashed(c)){
+    if(c.stage==='lost') return {t:'Said no since', k:'mu', open:false};
+    if(!['booked','thinking'].includes(c.stage)) return {t:'Became a client', k:'ok', open:false};
+    const cur=nsSlotKey((c.day||'')+' '+(c.time||''));
+    if(c.day && cur!==e.slot && c.day>=e.day && !nsCarried(c)[cur]) return {t:'Rebooked · '+fmtDay(c.day)+(c.time?' '+c.time:''), k:'ok', open:false};
+    if(c.stage==='thinking') return {t:'Thinking', k:'cb', open:true};
+  }
+  if(cb) return {t:'In Callbacks · '+(cb.day?caShort(cb.day):'no day'), k:'cb', open:true};
+  return {t:'To call back', k:'', open:true};
+}
+const nsOpenN=()=> (state && Array.isArray(state.noshows)) ? state.noshows.filter(e=>nsStatus(e).open).length : 0;
+let nsTab='open';
+function nsAgo(day){ const d=Math.round((Date.parse(todayIso()+'T12:00')-Date.parse(day+'T12:00'))/864e5);
+  return d<0? 'in '+(-d)+' day'+(d===-1?'':'s') : d===0? 'today' : d===1? 'yesterday' : d<14? d+' days ago' : d<60? Math.round(d/7)+' weeks ago' : Math.round(d/30)+' months ago'; }
+function nsOpen(){ nsTab=nsOpenN()? 'open' : 'all'; nsRender(); $('#nsOverlay').classList.add('open'); }
+function nsClose(){ $('#nsOverlay').classList.remove('open'); }
+function nsRender(){
+  const all=(state.noshows||[]).slice().sort((a,b)=>(b.slot||'').localeCompare(a.slot||''));
+  const rows=all.map(e=>({e, s:nsStatus(e)}));
+  const open=rows.filter(r=>r.s.open);
+  const list=nsTab==='open'? open : rows;
+  $('#nsSub').textContent= all.length? `${all.length} no-show${all.length===1?'':'s'} kept · ${open.length} still to call back` : 'Nobody has missed a meeting yet';
+  const telHref=p=>'tel:'+String(p||'').replace(/[^\d+]/g,'');
+  const row=({e,s})=>{
+    const c=state.clients.find(x=>x.id===e.cid);
+    const cls=e.done?' done':s.k==='ok'?' ok':s.k==='cb'?' cb':'';
+    return `<div class="ns-row${cls}">
+      <div class="ns-when"><b>${esc(caShort(e.day))}</b><small>${e.time?esc(e.time)+' · ':''}${esc(nsAgo(e.day))}</small></div>
+      <div class="ns-who"><b ${c?`data-nsopen="${c.id}" title="Open the card"`:''}>${esc(e.name||'—')}</b>
+        <span class="ns-tel">${esc([e.phone, e.email].filter(Boolean).join(' · ')||'no phone on the card')}</span>
+        <span class="ns-st ${s.k}">${esc(s.t)}</span></div>
+      <div class="ns-act">
+        ${e.phone?`<a class="ns-call" href="${esc(telHref(e.phone))}" title="Call ${esc(e.phone)}">${IC.phone}Call</a>`:''}
+        ${s.open && !nsCb(e)?`<button type="button" data-nscb="${e.id}" title="Put them in Callbacks for the next working day">Callback</button>`:''}
+        <button type="button" class="ns-done" data-nsdone="${e.id}" title="${e.done?'Put back on the list':'Called back — done'}">${e.done?'↺':'✓ Called'}</button>
+      </div></div>`;
+  };
+  $('#nsBody').innerHTML=`<div class="ns-tabs"><button type="button" data-nstab="open" class="${nsTab==='open'?'on':''}">To call back<i>${open.length}</i></button><button type="button" data-nstab="all" class="${nsTab==='all'?'on':''}">All no-shows<i>${rows.length}</i></button></div>`
+    + (list.length? list.map(row).join('') : `<div class="ns-empty">${rows.length?'Everyone is handled — nobody left to call back.':'No no-shows yet. When you tap «No show» after a meeting, the person lands here with the date of the meeting.'}</div>`);
+}
+$('#nsClose').addEventListener('click',nsClose);
+$('#nsOverlay').addEventListener('click',e=>{
+  if(e.target.id==='nsOverlay'){ nsClose(); return; }
+  const t=e.target.closest('[data-nstab],[data-nscb],[data-nsdone],[data-nsopen]'); if(!t) return;
+  if(t.dataset.nstab){ nsTab=t.dataset.nstab; nsRender(); return; }
+  if(t.dataset.nsopen){ nsClose(); openModal(t.dataset.nsopen); return; }
+  const en=(state.noshows||[]).find(x=>x.id===(t.dataset.nscb||t.dataset.nsdone)); if(!en) return;
+  if(t.dataset.nsdone){
+    const was={done:en.done, doneAt:en.doneAt};
+    if(en.done){ delete en.done; delete en.doneAt; } else { en.done=true; en.doneAt=Date.now(); }
+    save(); renderAll(); nsRender();
+    toastUndo(en.name+(en.done?' — called back ✓':' — back on the list'), ()=>{ if(was.done){ en.done=was.done; en.doneAt=was.doneAt; } else { delete en.done; delete en.doneAt; } save(); renderAll(); nsRender(); }, 6);
+    return;
+  }
+  if(t.dataset.nscb){
+    const day=caNextWork(todayIso());
+    const r=caAdd({name:en.name, phone:en.phone, email:en.email, note:'No show '+caShort(en.day)+(en.time?' '+en.time:''), day, how:'call'});
+    if(!r || !r.it){ toast('Could not add the callback'); return; }
+    r.it.nsId=en.id; if(en.cid) r.it.fromMeet=en.cid;
+    save(); renderAll(); nsRender();
+    toastUndo(en.name+' → Callbacks · '+caDayName(day), ()=>{ const i=(state.prio||[]).indexOf(r.it); if(i>=0) state.prio.splice(i,1); save(); renderAll(); nsRender(); }, 6);
+  }
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#nsOverlay').classList.contains('open')) nsClose(); });
+
 /* ================= Calendar meeting → Trash (Angelo, 20 Oct 2026) =================
    «a trash option in the calendar to just remove a meeting completely without putting it in conversions».
    The small bin on a meeting (hover; always on the phone) or «🗑 Remove meeting» in «How did it go?» opens one small box:
@@ -6763,10 +6917,17 @@ function rmDo(c, o){
     leads.forEach(l=>{ l.clientId=null; });
   }
   if(uidB){ bk.gone[uidB]=1; bk.seen[uidB]='gone'; bk.mv[uidB]=1; }
+  /* the bin removes the meeting completely — also from the no-shows list */
+  ensureMeta(); if(!state.meta.nsGone || typeof state.meta.nsGone!=='object') state.meta.nsGone={};
+  const nsKey=c.id+'|'+nsSlotKey(c.mqDone && c.meetOutcome==='noshow' ? c.mqDone : ((c.day||'')+' '+(c.time||'')));
+  const nsWas=state.meta.nsGone[nsKey], nsRm=(state.noshows||[]).filter(e=>e.cid===c.id && e.cid+'|'+e.slot===nsKey);
+  state.meta.nsGone[nsKey]=1; if(nsRm.length) state.noshows=state.noshows.filter(e=>!nsRm.includes(e));
   if(drop){ if(ci>=0) state.clients.splice(ci,1); }
   else { c.meetGone={day:c.day||'', time:c.time||'', at:Date.now()}; c.day=''; c.time=''; delete c.meetOutcome;
     c.notes=[c.notes, 'Ραντεβού '+fmtDay(snapC.day||todayIso())+(snapC.time?' '+snapC.time:'')+' — αφαιρέθηκε'].filter(Boolean).join('\n'); c.updated=Date.now(); }
   const undo=()=>{
+    if(nsWas===undefined) delete state.meta.nsGone[nsKey]; else state.meta.nsGone[nsKey]=nsWas;
+    if(nsRm.length){ state.noshows=(state.noshows||[]).concat(nsRm); }
     removedLogs.slice().reverse().forEach(([i,l])=>{ if(!state.logs.includes(l)) state.logs.splice(Math.min(i,state.logs.length),0,l); });
     logs.forEach((l,i)=>{ Object.keys(l).forEach(k=>{ if(!(k in snapL[i])) delete l[k]; }); Object.assign(l, snapL[i]); });
     leads.forEach((l,i)=>{ Object.assign(l, snapLd[i]); });
@@ -7459,8 +7620,9 @@ function renderCalExtras(){
       <div class="mo-cell" style="--c:var(--green)"><div class="k">Won</div><div class="v" style="color:var(--deep)">${n('won')}</div><div class="s">said yes / paying</div></div>
       <div class="mo-cell" style="--c:var(--yellow)"><div class="k">Thinking</div><div class="v" style="color:#B8860B">${n('think')}</div><div class="s">still deciding</div></div>
       <div class="mo-cell" style="--c:var(--muted)"><div class="k">Lost</div><div class="v" style="color:var(--muted)">${n('lost')}</div><div class="s">said no</div></div>
-      <div class="mo-cell" style="--c:var(--red)"><div class="k">No show</div><div class="v" style="color:var(--red)">${n('noshow')}</div><div class="s">never happened</div></div>`
-      : '<div class="mo-cell" style="grid-column:1 / -1; --c:var(--line)"><div class="k">Meetings in '+fmtMonth(curMonth)+'</div><div class="v">0</div><div class="s">Book one from Quick Log or by clicking a day above. Click any meeting to say how it went.</div></div>';
+      <div class="mo-cell ns-click" data-ns style="--c:var(--red)" title="Open the list of every no-show"><div class="k">No show</div><div class="v" style="color:var(--red)">${n('noshow')}</div><div class="s">never happened</div><span class="ns-go">${nsOpenN()?nsOpenN()+' to call back · ':''}See the list ›</span></div>`
+      : '<div class="mo-cell" style="grid-column:1 / -1; --c:var(--line)"><div class="k">Meetings in '+fmtMonth(curMonth)+'</div><div class="v">0</div><div class="s">Book one from Quick Log or by clicking a day above. Click any meeting to say how it went.</div>'+((state.noshows||[]).length?'<span class="ns-go" data-ns style="cursor:pointer">'+(nsOpenN()?nsOpenN()+' no-shows to call back · ':'')+'See the no-shows ›</span>':'')+'</div>';
+    el.querySelectorAll('[data-ns]').forEach(x=>x.addEventListener('click',()=>nsOpen()));
   }
   const st=$('#calStats'); if(st) st.innerHTML=monthStatsHtml(monthLogStats(curMonth),curMonth);
 }
@@ -12266,6 +12428,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(fixSalakou20261009()) setTimeout(save,0); }catch(e){}
   try{ if(fixJobs20261020()) setTimeout(save,0); }catch(e){}
   try{ if(fixManios20261020()) setTimeout(save,0); }catch(e){ console.warn('manios fix',e); }
+  try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
 }
 
