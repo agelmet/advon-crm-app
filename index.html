@@ -1960,7 +1960,7 @@ body.dark .day-row button{background:var(--surface);}
 .mcell .meet.mini .m2cb span{display:none;}
 @media (hover:hover){ .meet:hover .m2cb, .meet:focus-within .m2cb{display:flex;} }
 @media (hover:none){ .day-col .meet .m2cb{display:flex; position:static; margin-top:6px; width:max-content;} }
-.mag-day .meet{grid-template-columns:auto 1fr auto auto;}
+.mag-day .meet{grid-template-columns:auto 1fr auto auto auto;}
 .mag-day .meet .m2cb{display:flex; position:static; height:30px; padding:0 11px 0 9px; font-size:12px;}
 .m2pop{position:fixed; z-index:180; width:350px; background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow-lg); padding:14px 14px 12px; color:var(--ink);}
 .m2pop.mid{left:50% !important; top:50% !important; transform:translate(-50%,-50%);}
@@ -1989,6 +1989,20 @@ body.dark .day-row button{background:var(--surface);}
 .m2-ft{display:flex; justify-content:flex-end; gap:8px; margin-top:12px;}
 .m2-ft .m2-go{background:var(--violet); border-color:var(--violet); color:#fff;}
 @media (max-width:700px){ .m2-chips button, .m2-pick{padding:10px 13px; font-size:13.5px;} .m2-note{font-size:16px;} }
+/* ===== Calendar meeting → Trash (Angelo, 20 Oct 2026) ===== */
+.meet .rmcb{position:absolute; right:5px; top:5px; display:none; align-items:center; justify-content:center; width:24px; height:24px; padding:0; border-radius:999px;
+  border:1px solid rgba(255,77,94,.35); background:var(--surface); color:var(--red); cursor:pointer; z-index:3; box-shadow:0 2px 10px rgba(24,49,92,.14);}
+.meet .rmcb svg{width:12px; height:12px;}
+.meet .rmcb:hover{background:var(--red); color:#fff; border-color:var(--red);}
+.mcell .meet.mini .rmcb{right:28px; top:50%; transform:translateY(-50%); width:22px; height:22px;}
+@media (hover:hover){ .meet:hover .rmcb, .meet:focus-within .rmcb{display:flex;} }
+@media (hover:none){ .day-col .meet .rmcb{display:flex; top:4px; right:4px;} }
+.mag-day .meet .rmcb{display:flex; position:static; width:30px; height:30px;}
+.rmpop .m2-ic{background:var(--red-soft); color:var(--red);}
+.rm-chk{display:flex; gap:8px; align-items:flex-start; margin:10px 2px 0; font-size:12px; font-weight:600; line-height:1.4; color:var(--ink); cursor:pointer;}
+.rm-chk input{margin-top:2px; accent-color:var(--red);}
+.m2-ft .rm-go{background:var(--red); border-color:var(--red); color:#fff;}
+.mq-link.mq-rm:hover{color:var(--red);}
 
 /* ---------- LEADS — call mode (13 Sept 2026) ---------- */
 .ld-banner{background:linear-gradient(120deg,#10141F 10%,#0E2A45 55%,#2F7FE0 140%); color:#fff; border-radius:var(--radius); padding:20px 26px; margin-bottom:16px; display:grid; grid-template-columns:1.5fr repeat(6,1fr); gap:16px 20px; align-items:start; box-shadow:var(--shadow-lg);}
@@ -5964,7 +5978,8 @@ const bkStillAhead=(day,time)=>{ const t=bkStartMs(day,time); return !!t && t+BK
 function bkAheadMap(){
   const m={};
   if(Bookings.state!=='ok') return m;
-  BK_LIST.filter(b=>b.uid && bkStillAhead(b.day,b.time)).forEach(b=>{
+  const gone=(state && state.meta && state.meta.bk && state.meta.bk.gone) || {};
+  BK_LIST.filter(b=>b.uid && !gone[b.uid] && bkStillAhead(b.day,b.time)).forEach(b=>{
     const c=bkMatchClient(b); if(!c) return;
     const o=m[c.id]; if(!o || bkStartMs(b.day,b.time)<bkStartMs(o.day,o.time)) m[c.id]=b;
   });
@@ -6665,6 +6680,106 @@ function m2Apply(){
     save(); renderAll(); }, 8);
 }
 document.addEventListener('click',e=>{ if(m2 && !e.target.closest('.m2pop') && !e.target.closest('.m2cb') && !e.target.closest('#mqToCb')) m2Close(); });
+/* ================= Calendar meeting → Trash (Angelo, 20 Oct 2026) =================
+   «a trash option in the calendar to just remove a meeting completely without putting it in conversions».
+   The small bin on a meeting (hover; always on the phone) or «🗑 Remove meeting» in «How did it go?» opens one small box:
+     • a card that is only a booking (Booked / Thinking / Lost, nothing paid) comes off the Board and the Calendar for good;
+       a card that has moved on (Need info, Building, paid…) stays on the Board — only its meeting goes (c.meetGone);
+     • it is counted NOWHERE: not Won / Lost / No-show, not «Meeting → client», not in the month's meetings;
+     • the same person still on the Board (a double booking, e.g. Zoho «Manions» + Quick Log «Μανιός Γιάννη») keeps
+       the Quick Log call — it is moved onto that card; otherwise the Quick Log call stays as a call unless
+       «Also delete its call from Quick Log» is ticked;
+     • its online booking never comes back (meta.bk.gone).
+   One Undo puts everything back. */
+let rm=null;
+function rmClose(){ const p=document.querySelector('.rmpop'); if(p) p.remove(); rm=null; }
+const rmDropsCard=c=>!isJob(c) && ['booked','thinking','lost'].includes(c.stage) && !cpaid(c);
+function rmTwin(c){
+  const tel=bkTel(c.phone), em=String(c.email||'').toLowerCase().trim();
+  const list=state.clients.filter(x=>x!==c && !isTrashed(x) && !isJob(x) && (
+    (tel && bkTel(x.phone)===tel) || (em && String(x.email||'').toLowerCase().trim()===em) ||
+    bkSamePerson(x.name, c.name) || bkSoundSame(x.name, c.name)));
+  if(!list.length) return null;
+  const t=Date.parse((c.day||todayIso())+'T12:00');
+  return list.sort((a,b)=>Math.abs(Date.parse((a.day||'2000-01-01')+'T12:00')-t)-Math.abs(Date.parse((b.day||'2000-01-01')+'T12:00')-t))[0];
+}
+function rmOpen(id, anchor){
+  const c=state && state.clients.find(x=>x.id===id); if(!c) return;
+  rmClose(); try{ m2Close(); }catch(e){} try{ closeCalPop(); }catch(e){}
+  rm={id, delLogs:false};
+  const d=document.createElement('div'); d.className='m2pop rmpop'; d.setAttribute('role','dialog'); d.setAttribute('aria-label','Remove meeting');
+  document.body.appendChild(d);
+  const when=c.day? (caDayName(c.day)+(c.time?' · '+c.time:'')) : '';
+  const drop=rmDropsCard(c), st=(stageById(c.stage)||{name:c.stage}).name;
+  const tw=rmTwin(c), logs=m2Links(c);
+  const twWhen=tw? [tw.day?fmtDay(tw.day):'', tw.time||''].filter(Boolean).join(' ') : '';
+  d.innerHTML=`<div class="m2-h"><span class="m2-ic">${IC.trash}</span><div><b>${esc(c.name)}</b><small>${when?'Meeting '+esc(when):'No meeting date'}</small></div><button type="button" class="m2-x" data-rmx aria-label="Close">✕</button></div>
+    <p class="m2-hint" style="margin-top:0">Removes the meeting <b>completely</b>: off the Calendar and out of every count — not Won, not Lost, not No-show, not «Meeting → client».${drop?' Its card comes off the Board too.':' The card stays on the Board in «'+esc(st)+'», only the meeting goes.'}</p>
+    ${tw? `<p class="m2-hint">Same person still on the Board: <b>${esc(tw.name)}</b>${twWhen?' · '+esc(twWhen):''}${logs.length?' — the Quick Log call moves to that card.':'.'}</p>`
+        : (logs.length? `<label class="rm-chk"><input type="checkbox" data-rmlogs> Also delete its «Booked» call from Quick Log (only if the call never happened — the call and booked counts drop by ${logs.length})</label>` : '')}
+    <div class="m2-ft"><button type="button" class="btn btn-ghost btn-sm" data-rmx>Cancel</button><button type="button" class="btn rm-go" data-rmgo>${IC.trash} Remove meeting</button></div>`;
+  if(window.innerWidth<=700) d.classList.add('sheet');
+  else if(!anchor) d.classList.add('mid');
+  else { const r=anchor.getBoundingClientRect(), w=d.offsetWidth, h=d.offsetHeight;
+    d.style.left=Math.max(10, Math.min(window.innerWidth-w-10, r.left-w/2+r.width/2))+'px';
+    d.style.top=(r.bottom+8+h>window.innerHeight ? Math.max(10, r.top-h-8) : r.bottom+8)+'px'; }
+  d.addEventListener('click',e=>{ e.stopPropagation(); const t=e.target.closest('[data-rmx],[data-rmgo]'); if(!t) return;
+    if(t.dataset.rmx!=null){ rmClose(); return; }
+    rmApply(); });
+  d.addEventListener('change',e=>{ if(e.target.matches('[data-rmlogs]') && rm) rm.delLogs=e.target.checked; });
+}
+function rmApply(){
+  if(!rm) return;
+  const c=state.clients.find(x=>x.id===rm.id); if(!c){ rmClose(); return; }
+  const r=rmDo(c, {delLogs:rm.delLogs});
+  rmClose(); save(); renderAll();
+  toastUndo(c.name+' — meeting removed'+(r.drop?' · off the Calendar and the Board':' · off the Calendar')+(r.tw?' · call kept on '+r.tw.name:''), ()=>{ r.undo(); save(); renderAll(); }, 8);
+}
+/* does the work; returns {drop, tw, undo} — no save/render */
+function rmDo(c, o){
+  o=o||{};
+  const ci=state.clients.indexOf(c), snapC=JSON.parse(JSON.stringify(c)), drop=rmDropsCard(c);
+  const tw=o.twin!==undefined? o.twin : rmTwin(c);
+  const snapT=tw? JSON.parse(JSON.stringify(tw)) : null;
+  const logs=m2Links(c), snapL=logs.map(l=>({...l}));
+  const leads=(state.leads||[]).filter(l=>l && l.clientId===c.id), snapLd=leads.map(l=>({...l}));
+  const prio=(state.prio||[]).filter(p=>p && p.fromMeet===c.id);
+  const bk=ensureBk(); if(!bk.gone || typeof bk.gone!=='object') bk.gone={}; if(!bk.mv || typeof bk.mv!=='object') bk.mv={};
+  const uidB=c.fromBooking||'', snapBk=uidB? {gone:bk.gone[uidB], seen:bk.seen[uidB], mv:bk.mv[uidB]} : null;
+  let removedLogs=[];
+  if(tw){
+    logs.forEach(l=>{ l.clientId=tw.id; l.updated=Date.now(); });
+    leads.forEach(l=>{ l.clientId=tw.id; });
+    prio.forEach(p=>{ p.fromMeet=tw.id; });
+    ['phone','email','fromLog','fromLead','salut'].forEach(k=>{ if(c[k] && !tw[k]) tw[k]=c[k]; });
+    if(!(+tw.value>0) && +c.value>0) tw.value=c.value;
+    tw.updated=Date.now();
+  } else if(o.delLogs){
+    removedLogs=logs.map(l=>[state.logs.indexOf(l), l]).filter(x=>x[0]>=0).sort((a,b)=>b[0]-a[0]);
+    removedLogs.forEach(([i])=>state.logs.splice(i,1));
+    if(drop) leads.forEach(l=>{ l.clientId=null; });
+  } else if(drop){
+    logs.forEach(l=>{ l.clientId=null; l.note=['meeting removed', l.note].filter(Boolean).join(' · '); l.updated=Date.now(); });
+    leads.forEach(l=>{ l.clientId=null; });
+  }
+  if(uidB){ bk.gone[uidB]=1; bk.seen[uidB]='gone'; bk.mv[uidB]=1; }
+  if(drop){ if(ci>=0) state.clients.splice(ci,1); }
+  else { c.meetGone={day:c.day||'', time:c.time||'', at:Date.now()}; c.day=''; c.time=''; delete c.meetOutcome;
+    c.notes=[c.notes, 'Ραντεβού '+fmtDay(snapC.day||todayIso())+(snapC.time?' '+snapC.time:'')+' — αφαιρέθηκε'].filter(Boolean).join('\n'); c.updated=Date.now(); }
+  const undo=()=>{
+    removedLogs.slice().reverse().forEach(([i,l])=>{ if(!state.logs.includes(l)) state.logs.splice(Math.min(i,state.logs.length),0,l); });
+    logs.forEach((l,i)=>{ Object.keys(l).forEach(k=>{ if(!(k in snapL[i])) delete l[k]; }); Object.assign(l, snapL[i]); });
+    leads.forEach((l,i)=>{ Object.assign(l, snapLd[i]); });
+    prio.forEach(p=>{ p.fromMeet=c.id; });
+    if(tw){ Object.keys(tw).forEach(k=>{ if(!(k in snapT)) delete tw[k]; }); Object.assign(tw, snapT); }
+    if(uidB){ ['gone','seen','mv'].forEach(k=>{ if(snapBk[k]===undefined) delete bk[k][uidB]; else bk[k][uidB]=snapBk[k]; }); }
+    if(drop){ if(!state.clients.some(x=>x.id===snapC.id)) state.clients.splice(Math.min(ci,state.clients.length),0,snapC); }
+    else { const cc=state.clients.find(x=>x.id===snapC.id); if(cc){ Object.keys(cc).forEach(k=>{ if(!(k in snapC)) delete cc[k]; }); Object.assign(cc, snapC); } }
+  };
+  return {drop, tw, undo};
+}
+document.addEventListener('click',e=>{ if(rm && !e.target.closest('.rmpop') && !e.target.closest('.rmcb') && !e.target.closest('#mqRm')) rmClose(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && rm) rmClose(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && m2) m2Close(); });
 /* ================= After the meeting — «How did it go?» in 20 seconds (8 Oct 2026) =================
    Angelo's Google Meet calls last ~15 minutes and he forgets who said what. 15 minutes after a
@@ -6817,10 +6932,12 @@ function mqRender(){
       ${mqSlot(c)&&!mqLogged(c)?'<button type="button" class="mq-link" id="mqSkip" title="Not a real meeting — never ask about it">Skip</button>':''}
       <button type="button" class="mq-link" id="mqCard">Open the card</button>
       ${c.day?'<button type="button" class="mq-link" id="mqToCb" title="Call them back another day instead — off the Calendar, not counted as a meeting">→ Callbacks</button>':''}
+      ${c.day?'<button type="button" class="mq-link mq-rm" id="mqRm" title="Remove this meeting completely — not counted anywhere, not marked Lost">🗑 Remove meeting</button>':''}
       ${('Notification' in window && Notification.permission==='default')?'<button type="button" class="mq-link mq-bell" id="mqBell" title="So the CRM can ping you when a meeting ends, even if this tab is in the background">🔔 Ping me after meetings</button>':''}
     </div>
     <button type="button" class="btn btn-brand mq-save" id="mqSave" ${o?'':'disabled'}>${o?('Save'+(o==='yes'?' · €'+((+c.value>0)?c.value:MQ_YES_VALUE):'')+(rd?' · remind '+mqDayLbl(rd):'')):'Pick how it went'}${more&&o?` <small>then ${more} more</small>`:''}</button>`;
   const tcb=$('#mqToCb'); if(tcb) tcb.addEventListener('click',()=>{ const id=c.id; mqClose(); m2Open(id); });
+  const trm=$('#mqRm'); if(trm) trm.addEventListener('click',()=>{ const id=c.id; mqClose(); rmOpen(id); });
   mqWire();
 }
 function mqRenderPick(body, foot){
@@ -7360,11 +7477,12 @@ function meetHtml(c){
     <div class="mn">${esc(c.name)}</div>
     ${cval(c)?`<div class="mv">${fmtMoney(cval(c))}</div>`:''}
     <button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button>
+    <button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button>
   </div>`;
 }
 function meetMini(c){
   const o=meetOut(c);
-  return `<div class="meet mini${o?' o-'+o:''}" data-id="${c.id}" title="${esc((c.time?c.time+' · ':'')+c.name)}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${esc(c.name)}</span><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button></div>`;
+  return `<div class="meet mini${o?' o-'+o:''}" data-id="${c.id}" title="${esc((c.time?c.time+' · ':'')+c.name)}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${esc(c.name)}</span><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button></div>`;
 }
 function renderCalendar(){
   const body=$('#calBody');
@@ -7413,6 +7531,7 @@ function renderCalendar(){
     body.innerHTML=html;
   }
   body.querySelectorAll('.m2cb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); m2Open(b.dataset.m2, b); }));
+  body.querySelectorAll('.rmcb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); rmOpen(b.dataset.rm, b); }));
   body.querySelectorAll('.meet').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(c) mqOpen(c.id); }));
   body.querySelectorAll('.day-add').forEach(el=>el.addEventListener('click',()=>openModal(null, el.dataset.day)));
   body.querySelectorAll('.mcell').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.meet')) return; openModal(null, el.dataset.day); }));
@@ -7794,6 +7913,7 @@ function dayStats(iso, raw){
 function meetMonthOf(c){ return (c.day && /^\d{4}-\d{2}-\d{2}$/.test(c.day)) ? c.day.slice(0,7) : (c.month||''); }
 function meetClass(c){
   if(!c || isTrashed(c)) return '';
+  if(c.meetGone && !c.day) return '';           /* meeting removed with the bin (20 Oct 2026) — counted nowhere */
   if(isJob(c)) return '';
   const v=cval(c); if(v>0 && v<SITE_MIN) return '';
   if(c.stage==='lost') return 'no';
@@ -12095,6 +12215,34 @@ function fixJobs20261020(){
   });
   return ch;
 }
+/* 20 Oct 2026 (Angelo): «10:30 Manions» + «14:00 Μανιός Γιάννη» are ONE meeting — the right one is
+   10:30 with «Μανιός Γιάννης». Keeps the 10:30 card under that name, takes over what only the 14:00 card had
+   (phone, e-mail, price, Quick Log call, lead, logged outcome), removes the 14:00 card from the Board, the
+   Calendar and every count, and never lets its online booking come back. Runs once (meta.fixManios). */
+function fixManios20261020(){
+  if(!state || !Array.isArray(state.clients)) return false;
+  ensureMeta(); if(state.meta.fixManios) return false;
+  const isM=c=>c && !isTrashed(c) && !isJob(c) && bkWords(c.name).some(w=>/^(mani|μανι)/.test(w)) && (c.day||'')>='2026-10-01';
+  const cs=state.clients.filter(isM);
+  const A=cs.filter(c=>c.time==='10:30'), B=cs.filter(c=>c.time==='14:00');
+  if(A.length!==1 || B.length!==1) return false;
+  const keep=A[0], gone=B[0];
+  if(gone.mlog && !keep.mlog){ keep.mlog=gone.mlog; }
+  ['meetOutcome','fu','ups','cnote','chat','draft'].forEach(k=>{ if(gone[k]!=null && keep[k]==null) keep[k]=gone[k]; });
+  if(gone.mqDone && !keep.mqDone) keep.mqDone=mqSlot(keep);
+  if(keep.stage==='booked' && gone.stage!=='booked' && gone.stage!=='lost'){ keep.stage=gone.stage; keep.stageAt=gone.stageAt||Date.now(); }
+  if(gone.notes && !String(keep.notes||'').includes(String(gone.notes).trim())) keep.notes=[keep.notes, gone.notes].filter(Boolean).join('\n');
+  rmDo(gone, {twin:keep});
+  keep.name='Μανιός Γιάννης'; keep.month=(keep.day||'').slice(0,7)||keep.month; keep.updated=Date.now();
+  /* one meeting = one «Booked» call: same-day duplicates linked to the card go, the names follow */
+  const seenDay={};
+  (state.logs||[]).filter(l=>l && l.clientId===keep.id && l.type==='g').sort((a,b)=>(a.created||0)-(b.created||0)).forEach(l=>{
+    if(seenDay[l.date]){ const i=state.logs.indexOf(l); if(i>=0) state.logs.splice(i,1); return; }
+    seenDay[l.date]=1; l.name='Μανιός Γιάννης'; l.updated=Date.now(); });
+  state.meta.fixManios=Date.now();
+  setTimeout(()=>{ try{ toast('Μανιός Γιάννης — one meeting now, 10:30 (the 14:00 copy was removed)'); }catch(e){} }, 900);
+  return true;
+}
 function fixSalakou20261009(){
   let ch=false; const NEW='Σαλάκου Γεωργία';
   const hit=n=>String(n||'').trim().toLowerCase()==='salakou';
@@ -12117,6 +12265,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
   try{ if(fixSalakou20261009()) setTimeout(save,0); }catch(e){}
   try{ if(fixJobs20261020()) setTimeout(save,0); }catch(e){}
+  try{ if(fixManios20261020()) setTimeout(save,0); }catch(e){ console.warn('manios fix',e); }
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
 }
 
