@@ -335,6 +335,19 @@ body.dark .card.is-paid .chip{background:rgba(0,0,0,.18);}
 .chip{font-size:10.5px; font-weight:600; padding:3px 7px; border-radius:7px; background:var(--bg); color:var(--muted); font-variant-numeric:tabular-nums;}
 .chip.money{background:var(--green-soft); color:var(--deep); font-weight:700;}
 .chip.xtra{background:var(--violet-soft); color:var(--violet); font-weight:700;}
+.chip.job{background:#FFF3DC; color:#9A5B00; font-weight:800; letter-spacing:.01em;}
+body.dark .chip.job{background:#3A2A0C; color:#FFC965;}
+.card.is-job{border-left:3px dashed #F5A623;}
+.rem-job{font-size:10.5px; font-weight:800; padding:2px 7px; border-radius:99px; background:#FFF3DC; color:#9A5B00;}
+#qaKind{border:1px solid var(--line); border-radius:10px; padding:9px 10px; background:var(--bg); font-weight:600; max-width:230px;}
+.quickadd.job{border-left-color:#F5A623;}
+.quickadd.job .qa-title{color:#9A5B00;}
+.quickadd .qa-hint{flex-basis:100%; font-size:11.5px; color:#9A5B00; font-weight:600; margin-top:-2px;}
+.quickadd .qa-hint[hidden]{display:none;}
+.mx-bar .xo,.stat-pills.mx .mx-bank .mx-bar .xo{background:#F5A623;}
+.stat-pills.mx .mx-bank .mx-legend .xo i,.mx-legend .xo i{background:#F5A623;}
+.bank-tot .t-xtra{background:#FFF3DC; color:#9A5B00;}
+
 /* extra services sold on top of the main website */
 .xtra-list{display:flex; flex-direction:column; gap:6px;}
 .xtra-list:not(:empty){margin-bottom:9px;}
@@ -4064,12 +4077,14 @@ body.dark .chase-row.nd .cr-sub{color:#FFB65C}
 <!-- BOARD -->
 <main class="view" id="view-board">
   <div class="quickadd">
-    <span class="qa-title">＋ New booked client</span>
+    <span class="qa-title" id="qaTitle">＋ New booked client</span>
+    <select id="qaKind" title="What is it? A new website client, or extra work for a client (SEO, articles, form…)"></select>
     <input id="qaName" placeholder="Name — e.g. Papadopoulos dentist">
     <input id="qaValue" type="number" placeholder="€ value" min="0">
     <input id="qaDay" type="date">
     <input id="qaTime" type="time">
     <button class="btn btn-green" id="qaAdd">Add to Booked</button>
+    <div class="qa-hint" id="qaHint" hidden>Extra work = money earned on its own: it counts in the month's money, but never as a new client, a website sold or a renewal. It goes straight to «Building».</div>
   </div>
   <div class="tray-row">
     <div class="tray" id="bookedTray" style="--tc:var(--green)"></div>
@@ -4388,6 +4403,7 @@ body.dark .chase-row.nd .cr-sub{color:#FFB65C}
     </div>
     <div class="modal-body">
       <div class="field"><label>Name</label><input id="mName"></div>
+      <div class="field"><label>What was sold</label><select id="mJob" title="Website = a new client. Anything else = extra work: counts as money, never as a client, a website sold or a renewal"></select></div>
       <div class="field-row">
         <div class="field"><label>Value (€)</label><input id="mValue" type="number" min="0"></div>
         <div class="field"><label>Stage</label><select id="mStage"></select></div>
@@ -5278,6 +5294,31 @@ function ensureTargets(){
 function cx(c){ return (c && Array.isArray(c.extras)) ? c.extras : []; }
 function cxTotal(c){ return cx(c).reduce((a,e)=>a+(+e.value||0),0); }
 function cval(c){ return (+(c&&c.value)||0) + cxTotal(c); }
+/* ---------- EXTRA WORK cards (Angelo, 20 Oct 2026) ----------
+   «＋ New booked client» → pick what was sold. «Website» = a new client, as always. Anything else
+   (Growth · SEO package, articles, form of interest, GBP, admin panel…) is a card with c.job = id:
+   its money counts in the month (in the bank / to collect / generated / goal) as its OWN pot «extras»,
+   but it is never a new client, never a website sold (no domain cost), never a renewal, never a chat,
+   never a meeting or a booking match and never a client slot on the goal track. */
+var JOBS=[
+  {id:'seo',     n:'Growth · SEO package',      s:'SEO package'},
+  {id:'gads',    n:'Google Ads',                s:'Google Ads'},
+  {id:'gbp',     n:'Google Business Profile',   s:'Google Business Profile', v:90},
+  {id:'articles',n:'Articles section',          s:'Articles', v:70},
+  {id:'form',    n:'Form of interest / contact form', s:'Form', v:50},
+  {id:'admin',   n:'Admin panel',               s:'Admin panel', v:180},
+  {id:'changes', n:'Changes after going live',  s:'Changes', v:50},
+  {id:'logo',    n:'Logo',                      s:'Logo'},
+  {id:'social',  n:'Social media',              s:'Social media'},
+  {id:'other',   n:'Other extra work',          s:'Extra work'},
+];
+function isJob(c){ return !!(c && c.job); }
+function jobOf(c){ return c && c.job ? ((JOBS||[]).find(j=>j.id===c.job)||{id:c.job, n:String(c.job), s:String(c.job)}) : null; }
+function jobLbl(c){ const j=jobOf(c); return j ? j.s : ''; }
+function jobOptions(sel){
+  return `<option value="">Website · new client</option><optgroup label="Extra work — not a new client, no renewal">`+
+    JOBS.map(j=>`<option value="${j.id}" ${sel===j.id?'selected':''}>${esc(j.n)}${j.v?' · €'+j.v:''}</option>`).join('')+`</optgroup>`;
+}
 /* ---------- part payments (deposits) — 20 Sept 2026 ----------
    Some clients pay half up front. Every payment received before the card reaches «Paid» is a line in
    c.pays — {id, amount, date:'YYYY-MM-DD', note}. cpaid() = money already in the bank for this client
@@ -5333,14 +5374,15 @@ const XTRA_PRESETS=['NFC review stand','Google Business Profile','Λογότυπ
 /* "Collected" = paid-stage client revenue + collected monthly-subscription income
    for the period — matches the Year tab's "Money made" figure. */
 function newPaidForMonth(key){ return state.clients.filter(c=>c.month===key).reduce((a,c)=>a+cpaid(c),0); }   /* Paid cards in full + every deposit */
+function jobsPaidForMonth(key){ return state.clients.filter(c=>c.month===key && isJob(c)).reduce((a,c)=>a+cpaid(c),0); }   /* the extra-work part of it */
 function newBookedForMonth(key){ return state.clients.filter(c=>c.month===key && notLost(c) && c.stage!=='booked').reduce((a,c)=>a+cval(c),0) + lostPaidForMonth(key); }
 function subsPaidForMonth(key){ return state.subs.reduce((a,s)=>a+((s.paid && s.paid[key])?(+s.value||0):0),0); }
 /* The three pots of money actually EARNED in a month — new websites (paid stage), renewals
    (pressed «Renewed») and monthly subscriptions (month box ticked) — and their total.
    Board strip, Home, Year cards and the year banner all read this one function. */
 function earnedForMonth(key){
-  const n=newPaidForMonth(key), r=renewalsPaidForMonth(key), s=subsPaidForMonth(key);
-  return {new:n, renew:r, subs:s, total:n+r+s};
+  const n=newPaidForMonth(key), r=renewalsPaidForMonth(key), s=subsPaidForMonth(key), x=jobsPaidForMonth(key);
+  return {new:n, xtra:x, sites:n-x, renew:r, subs:s, total:n+r+s};   /* new = websites + extra work (as before); xtra = the extra-work part, sites = websites only */
 }
 function collectedForMonth(key){ return earnedForMonth(key).total; }
 /* ---------- renewals income ----------
@@ -5398,7 +5440,7 @@ function recAmount(r,key){
 function recHasOverride(r,key){ return !!(r && r.months && r.months[key]!=null && r.months[key]!==''); }
 function recurringMonthly(key){ ensureExpenses(); return state.expenses.recurring.reduce((a,r)=>a+recAmount(r,key),0); }
 /* websites sold in a period = clients that reached the 'paid' stage that month */
-function websitesSold(key){ return state.clients.filter(c=>c.month===key && c.stage==='paid').length; }
+function websitesSold(key){ return state.clients.filter(c=>c.month===key && c.stage==='paid' && !isJob(c)).length; }
 function expensesForMonth(key){ ensureExpenses(); return websitesSold(key)*(+state.expenses.perWebsite||0) + recurringMonthly(key); }
 function expensesForYear(y){ let sum=0; for(let m=1;m<=12;m++) sum+=expensesForMonth(y+'-'+pad(m)); return sum; }
 function monthTarget(key){ /* monthly targets are the only ones you set by hand */
@@ -5446,6 +5488,7 @@ document.addEventListener('click',e=>{ if(e.target.closest && e.target.closest('
    POTENTIAL    not agreed yet or in danger: Booked (not started), Thinking, and Trash.
                 It is shown faded, with a +, beside Generated and as a ghost on the target bar. */
 const SITE_MIN=120;   /* below this it is another service, not a website — it never counts as a client */
+function isSiteCard(c){ return !isJob(c) && cval(c)>=SITE_MIN; }   /* extra-work cards never count as a client, whatever their value */
 function monthMoney(key){
   const all=state.clients.filter(c=>c.month===key && c.stage!=='lost');
   const live=all.filter(c=>!c.trashed);
@@ -5459,7 +5502,7 @@ function monthMoney(key){
   pot.n=live.filter(isPot).length+all.filter(c=>c.trashed).length;
   return { earned, collect, collectN:working.filter(c=>c.stage!=='paid').length, pot,
            generated:earned.total+collect, withPotential:earned.total+collect+pot.total,
-           riskN:all.filter(c=>c.trashed).length, n:live.filter(c=>c.stage!=='booked' && cval(c)>=SITE_MIN).length };
+           riskN:all.filter(c=>c.trashed).length, n:live.filter(c=>c.stage!=='booked' && isSiteCard(c)).length, xtraOwed:live.filter(c=>isJob(c) && c.stage!=='booked' && c.stage!=='thinking').reduce((a,c)=>a+cowed(c),0) };
 }
 function renderStats(){
   $('#monthLabel').textContent=fmtMonth(curMonth);
@@ -5468,14 +5511,14 @@ function renderStats(){
   const seg=(cls,v,tot)=>{ const w=tot>0 ? Math.max(0,Math.min(100,v/tot*100)) : 0; return w>0.01 ? `<i class="${cls}" style="width:${w.toFixed(2)}%"></i>` : ''; };
   /* ---- 1 · IN THE BANK: what really came in, split new / renewals / monthly, what it becomes if the owed money arrives, costs ---- */
   $('#statEarned').textContent=fmtMoney(earned.total);
-  $('#mxBankBar').innerHTML= earned.total>0 ? seg('g',earned.new,earned.total)+seg('b',earned.renew,earned.total)+seg('vi',earned.subs,earned.total) : '';
-  $('#statEarnedSplit').innerHTML=`<span class="g es new" title="New websites paid"><i></i><b>${fmtMoney(earned.new)}</b> new sites</span><span class="b es ren" title="Renewals paid"><i></i><b>${fmtMoney(earned.renew)}</b> renewals</span><span class="vi es sub" title="Monthly subscriptions paid"><i></i><b>${fmtMoney(earned.subs)}</b> monthly</span>`;
+  $('#mxBankBar').innerHTML= earned.total>0 ? seg('g',earned.sites,earned.total)+seg('xo',earned.xtra,earned.total)+seg('b',earned.renew,earned.total)+seg('vi',earned.subs,earned.total) : '';
+  $('#statEarnedSplit').innerHTML=`<span class="g es new" title="New websites paid"><i></i><b>${fmtMoney(earned.sites)}</b> new sites</span>${earned.xtra>0?`<span class="xo es xtra" title="Extra work paid — SEO, articles, forms… (not new clients)"><i></i><b>${fmtMoney(earned.xtra)}</b> extras</span>`:''}<span class="b es ren" title="Renewals paid"><i></i><b>${fmtMoney(earned.renew)}</b> renewals</span><span class="vi es sub" title="Monthly subscriptions paid"><i></i><b>${fmtMoney(earned.subs)}</b> monthly</span>`;
   $('#mxBankIf').innerHTML= m.collect>0
     ? `<div><div class="l">If the ${m.collectN} who owe pay</div><div class="vv">${fmtMoney(earned.total+m.collect)} in the bank <small>+${fmtMoney(m.collect)}</small></div></div>`
     : `<div><div class="l">Still to collect</div><div class="vv ok">Nothing — everything agreed is in ✓</div></div>`;
   const mExpS=expensesForMonth(key), mNetS=earned.total-mExpS;
   $('#mxBankFoot').innerHTML=`<span>Costs <b>${fmtMoney(Math.round(mExpS))}</b></span><span>Left after costs <span class="net${mNetS<0?' neg':''}">${mNetS>=0?'+':'−'}${fmtMoney(Math.abs(Math.round(mNetS)))}</span></span>`;
-  $('#statEarnedPill').title=fmtMoney(earned.total)+' already received in '+fmtMonth(key)+' — '+fmtMoney(earned.new)+' new websites + '+fmtMoney(earned.renew)+' renewals + '+fmtMoney(earned.subs)+' monthly. Click to see who paid.';
+  $('#statEarnedPill').title=fmtMoney(earned.total)+' already received in '+fmtMonth(key)+' — '+fmtMoney(earned.sites)+' new websites + '+(earned.xtra?fmtMoney(earned.xtra)+' extra work + ':'')+fmtMoney(earned.renew)+' renewals + '+fmtMoney(earned.subs)+' monthly. Click to see who paid.';
   /* ---- the small facts ---- */
   const subsN=state.subs.filter(s=>s.paid && s.paid[key]).length;
   $('#statSubs').textContent=fmtMoney(earned.subs);
@@ -5521,12 +5564,12 @@ function bankRows(key){
     let left=paid;
     pays.forEach((x,i)=>{
       const amt=Math.min(left, +x.amount||0); if(!(amt>0)) return; left-=amt;
-      rows.push({kind:'new', id:c.id, name:c.name, amount:amt, when:x.date, sort:x.date||'',
+      rows.push({kind:isJob(c)?'xtra':'new', id:c.id, name:c.name+(isJob(c)?' · '+jobLbl(c):''), amount:amt, when:x.date, sort:x.date||'',
         note:(x.note|| (pays.length>1?'payment '+(i+1):'payment'))});
     });
     if(left>0.004){
       const when=c.stageAt||c.updated||null;
-      rows.push({kind:'new', id:c.id, name:c.name, amount:left, when, sort:when?isoDate(new Date(when)):key+'-00',
+      rows.push({kind:isJob(c)?'xtra':'new', id:c.id, name:c.name+(isJob(c)?' · '+jobLbl(c):''), amount:left, when, sort:when?isoDate(new Date(when)):key+'-00',
         note: pays.length? 'rest — paid in full' : 'paid in full'});
     }
   });
@@ -5552,8 +5595,8 @@ function openBank(key){
       `<button type="button" class="bank-row" data-k="${x.kind}" data-id="${esc(x.id||'')}"><span class="n">${esc(x.name||'—')}</span><span class="a">${fmtMoney2(x.amount)}</span><span class="d">${x.when?bankDate(x.when):'date not recorded · '+fmtMonth(key)}<i>${esc(x.note)}</i></span></button>`).join('');
   };
   $('#bankBody').innerHTML = rows.length
-    ? `<div class="bank-tot"><span class="t-new">New websites <b>${fmtMoney2(e.new)}</b></span><span class="t-ren">Renewals <b>${fmtMoney2(e.renew)}</b></span><span class="t-sub">Monthly <b>${fmtMoney2(e.subs)}</b></span></div>`
-      + grp('new','New websites',e.new) + grp('ren','Renewals',e.renew) + grp('sub','Monthly subscriptions',e.subs)
+    ? `<div class="bank-tot"><span class="t-new">New websites <b>${fmtMoney2(e.sites)}</b></span>${e.xtra?`<span class="t-xtra">Extra work <b>${fmtMoney2(e.xtra)}</b></span>`:''}<span class="t-ren">Renewals <b>${fmtMoney2(e.renew)}</b></span><span class="t-sub">Monthly <b>${fmtMoney2(e.subs)}</b></span></div>`
+      + grp('new','New websites',e.sites) + grp('xtra','Extra work · SEO, articles, forms…',e.xtra) + grp('ren','Renewals',e.renew) + grp('sub','Monthly subscriptions',e.subs)
     : `<div class="bank-empty">Nothing received in ${fmtMonth(key)} yet.</div>`;
   $('#bankOverlay').classList.add('open');
 }
@@ -5565,7 +5608,7 @@ $('#bankOverlay').addEventListener('click',e=>{
   if(e.target.id==='bankOverlay'){ closeBank(); return; }
   const r=e.target.closest('.bank-row'); if(!r) return;
   closeBank();
-  if(r.dataset.k==='new' && r.dataset.id) openModal(r.dataset.id);
+  if((r.dataset.k==='new'||r.dataset.k==='xtra') && r.dataset.id) openModal(r.dataset.id);
   else if(r.dataset.k==='ren') openRenewalsMonth(curMonth);
   else { subYear=+curMonth.slice(0,4); switchView('monthly'); }
 });
@@ -5639,11 +5682,11 @@ function goalRows(key){
   return {rows, pot};
 }
 function goalPrice(key){
-  const vals=state.clients.filter(c=>c.month===key && goalWorking(c) && cval(c)>=SITE_MIN).map(cval);
+  const vals=state.clients.filter(c=>c.month===key && goalWorking(c) && isSiteCard(c)).map(cval);
   if(vals.length<3){ /* not enough this month — look at the previous two as well */
     const [y,m]=key.split('-').map(Number);
     for(let back=1; back<=2; back++){ const d=new Date(y,m-1-back,1), k=d.getFullYear()+'-'+pad(d.getMonth()+1);
-      state.clients.filter(c=>c.month===k && goalWorking(c) && cval(c)>=SITE_MIN).forEach(c=>vals.push(cval(c))); }
+      state.clients.filter(c=>c.month===k && goalWorking(c) && isSiteCard(c)).forEach(c=>vals.push(cval(c))); }
   }
   if(!vals.length) return GOAL_PRICE_FALLBACK;
   return Math.max(SITE_MIN, Math.round(vals.reduce((a,b)=>a+b,0)/vals.length/5)*5);
@@ -5737,7 +5780,7 @@ function renderGoalPill(m){
     let wk='';
     if(g.wi>=0 && g.wi<g.N && g.st!=='won'){
       const w=g.W[g.wi];
-      const wonN=g.rows.filter(r=>!r.kept && r.day>=w.from && r.day<=w.to).length;
+      const wonN=g.rows.filter(r=>!r.kept && !isJob(r.c) && r.day>=w.from && r.day<=w.to).length;
       const need=g.needWeek>0 ? g.clientsWeek : 0;
       const MAX=12; let shownW=wonN, shownR=need, more=0;
       if(wonN+need>MAX){ shownR=Math.min(need, MAX); shownW=Math.max(0, MAX-shownR); more=(wonN-shownW)+(need-shownR); }
@@ -5777,7 +5820,7 @@ function renderGoalPill(m){
       ${bar}
       <div class="mx-legend"><span class="g"><i></i><b>${fmtMoney(earned.total)}</b> in the bank</span><span class="ns"><i></i><b>${fmtMoney(m.collect)}</b> to collect</span>${soonNew?`<span class="gh"><i></i><b>${fmtMoney(soonNew)}</b> not counted yet</span>`:''}</div>
       <div class="mx-if">${ifl}</div>
-      <div class="mx-foot"><span>New websites <b>${fmtMoney(newPaid+newOwed)}</b> · renewals <b>${fmtMoney(earned.renew)}</b> · monthly <b>${fmtMoney(earned.subs)}</b></span></div>`;
+      <div class="mx-foot"><span>New websites <b>${fmtMoney(newPaid+newOwed-(earned.xtra||0)-(m.xtraOwed||0))}</b>${(earned.xtra||m.xtraOwed)?` · extras <b>${fmtMoney((earned.xtra||0)+(m.xtraOwed||0))}</b>`:''} · renewals <b>${fmtMoney(earned.renew)}</b> · monthly <b>${fmtMoney(earned.subs)}</b></span></div>`;
     gen.title=fmtMoney(tot)+' generated in '+fmtMonth(key)+' = '+fmtMoney(earned.total)+' in the bank + '+fmtMoney(m.collect)+' still to collect'+(T?' · goal '+fmtMoney(T):'')+'. Click to open the goal window.';
   }
   const ov=$('#goalOverlay'); if(ov && ov.classList.contains('open') && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('#goalBody input'))) openGoalWin(key, true);
@@ -6399,9 +6442,11 @@ function cardEl(c,st){
   const addedTxt= added ? pad(added.getDate())+'/'+pad(added.getMonth()+1) : '';
   const prio= c.prio&&PRIO_COLOR[c.prio] ? c.prio : '';
   if(prio==='high') el.classList.add('pr-high');
+  if(isJob(c)) el.classList.add('is-job');
   el.innerHTML=`
     <div class="c-name">${prio?`<span class="c-prio ${prio}" title="Priority: ${prio}"><i></i>${prio}</span>`:''}${esc(c.name)}${addedTxt?`<span class="c-added" title="Added ${addedTxt}">${addedTxt}</span>`:''}</div>
     <div class="c-meta">
+      ${isJob(c)?`<span class="chip job" title="Extra work — counts as money, not as a new client or a renewal">★ ${esc(jobLbl(c))}</span>`:''}
       ${cval(c)?(hasPart(c)?`<span class="chip money part" title="${fmtMoney2(cpaid(c))} already paid · ${fmtMoney2(cowed(c))} still owed"><b>${fmtMoney(cpaid(c))}</b> / ${fmtMoney(cval(c))}<i style="width:${Math.round(cpaid(c)/cval(c)*100)}%"></i></span>`:`<span class="chip money">${fmtMoney(cval(c))}</span>`):''}
       ${cxTotal(c)?`<span class="chip xtra" title="${esc(cx(c).map(e=>e.name+' · '+fmtMoney(+e.value||0)).join(' · '))}">+ ${cx(c).length===1?esc(cx(c)[0].name):cx(c).length+' extras'} ${fmtMoney(cxTotal(c))}</span>`:''}
       ${c.day?`<span class="chip">${IC.calendar} ${fmtDay(c.day)}</span>`:''}
@@ -6414,7 +6459,7 @@ function cardEl(c,st){
     ${(()=>{ const n=cContactNote(c); return n?`<div class="c-cnote" title="Contact note"><i>⚠</i><span>${esc(n)}</span></div>`:''; })()}
     ${(c.stage!=='paid'&&!isLost)?ndLineHtml(c,'c'):''}
     ${(()=>{ const u=cDraftUrl(c); const d=!u?'':(()=>{ const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Open draft':'▶ Open website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })();
-      const rv= c.stage==='paid' ? `<button type="button" class="c-review${c.reviewAsked?' sent':''}" draggable="false" title="${c.reviewAsked?'Review message already copied on '+esc(fmtDay(rvDay(c.reviewAsked)))+' — tap to open it again':'Domain connected → open the review message for '+esc(c.name)}">${RV_STAR}REVIEW${c.reviewAsked?' <i>✓</i>':''}</button>` : '';
+      const rv= c.stage==='paid' && !isJob(c) ? `<button type="button" class="c-review${c.reviewAsked?' sent':''}" draggable="false" title="${c.reviewAsked?'Review message already copied on '+esc(fmtDay(rvDay(c.reviewAsked)))+' — tap to open it again':'Domain connected → open the review message for '+esc(c.name)}">${RV_STAR}REVIEW${c.reviewAsked?' <i>✓</i>':''}</button>` : '';
       return (d||rv) ? `<div class="c-acts">${d}${rv}</div>` : ''; })()}
     
     ${isLost&&c.lostReason?`<div class="c-reason" title="Reason">${IC.ban} ${esc(c.lostReason)}</div>`:''}
@@ -6445,14 +6490,36 @@ function reviveClient(id, toStage){
   save(); renderAll(); toast(c.name+' → '+stageById(c.stage).name);
   try{ chSyncBoard(); }catch(err){}
 }
+function qaKindSync(){
+  const k=$('#qaKind').value, j=JOBS.find(x=>x.id===k), box=document.querySelector('.quickadd');
+  box.classList.toggle('job', !!j);
+  $('#qaTitle').textContent= j ? '＋ Extra work' : '＋ New booked client';
+  $('#qaName').placeholder= j ? 'Which client — e.g. LOULOU' : 'Name — e.g. Papadopoulos dentist';
+  $('#qaAdd').textContent= j ? 'Add extra work' : 'Add to Booked';
+  $('#qaDay').title= j ? 'Day it was sold (decides the month)' : 'Meeting day';
+  $('#qaTime').style.display= j ? 'none' : '';
+  $('#qaHint').hidden=!j;
+  if(j && j.v && !$('#qaValue').value) $('#qaValue').value=j.v;
+}
 function qaSubmit(){
   const name=$('#qaName').value.trim(); if(!name){ $('#qaName').focus(); return; }
+  const job=$('#qaKind').value;
   const day=$('#qaDay').value;
   const month= day ? day.slice(0,7) : curMonth;
+  if(job){
+    const j=JOBS.find(x=>x.id===job);
+    const c={id:uid(), name, job, value:+$('#qaValue').value||0, day, time:'', stage:'building', stageAt:Date.now(), month, notes:'', created:Date.now(), updated:Date.now(), v130:1, chatOff:true};
+    state.clients.push(c);
+    ['#qaName','#qaValue','#qaDay','#qaTime'].forEach(s=>$(s).value=''); $('#qaKind').value=''; qaKindSync();
+    save(); renderAll(); toast(name+' · '+(j?j.s:'extra work')+(c.value?' '+fmtMoney(c.value):'')+' → Building · counts as extra money in '+fmtMonth(month)+', not as a new client'); $('#qaName').focus();
+    return;
+  }
   state.clients.push({id:uid(), name, value:+$('#qaValue').value||0, day, time:$('#qaTime').value, stage:'booked', month, notes:'', created:Date.now()});
   ['#qaName','#qaValue','#qaDay','#qaTime'].forEach(s=>$(s).value='');
   save(); renderAll(); toast('Added to '+fmtMonth(month)+' · Booked'); $('#qaName').focus();
 }
+$('#qaKind').innerHTML=jobOptions('');
+$('#qaKind').addEventListener('change',()=>{ $('#qaValue').value=''; qaKindSync(); });
 $('#qaAdd').addEventListener('click',qaSubmit);
 ['#qaName','#qaValue'].forEach(s=>$(s).addEventListener('keydown',e=>{ if(e.key==='Enter') qaSubmit(); }));
 
@@ -6677,7 +6744,7 @@ function mqLogged(c){ const s=mqSlot(c); return c.mqDone ? c.mqDone===s : (!!c.m
 function mqPending(){
   if(!state) return [];
   const now=Date.now();
-  return state.clients.filter(c=>!isTrashed(c) && (c.stage==='booked'||c.stage==='thinking') && mqSlot(c) && !mqLogged(c)
+  return state.clients.filter(c=>!isTrashed(c) && !isJob(c) && (c.stage==='booked'||c.stage==='thinking') && mqSlot(c) && !mqLogged(c)
       && mqEnd(c)<=now && mqEnd(c)>=now-4*864e5 && !(mqSnooze[c.id]>now))
     .sort((a,b)=>mqEnd(b)-mqEnd(a));            /* the meeting that just ended first */
 }
@@ -7727,6 +7794,7 @@ function dayStats(iso, raw){
 function meetMonthOf(c){ return (c.day && /^\d{4}-\d{2}-\d{2}$/.test(c.day)) ? c.day.slice(0,7) : (c.month||''); }
 function meetClass(c){
   if(!c || isTrashed(c)) return '';
+  if(isJob(c)) return '';
   const v=cval(c); if(v>0 && v<SITE_MIN) return '';
   if(c.stage==='lost') return 'no';
   if(c.stage==='thinking') return 'think';
@@ -8882,7 +8950,7 @@ function remRowEl(c){
       ${Object.keys(REM_FLAGS).map(k=>`<button class="rem-dot ${k}${f===k?' on':''}" data-flag="${k}" title="${REM_FLAGS[k].name}" aria-label="${REM_FLAGS[k].name}"></button>`).join('')}
     </div>
     <div class="rem-main" data-open="${c.id}">
-      <div class="rem-name">${esc(c.name)}${fm?`<span class="rem-flag-lbl ${f}">${fm.name}</span>`:''}</div>
+      <div class="rem-name">${esc(c.name)}${isJob(c)?`<span class="rem-job">★ ${esc(jobLbl(c))}</span>`:''}${fm?`<span class="rem-flag-lbl ${f}">${fm.name}</span>`:''}</div>
       <div class="rem-meta">
         <span class="rem-stage" style="background:${st.cs};color:${st.hex}">${st.name}</span>
         <span class="rem-age${c.stage==='pay'&&age>=7?' late':''}">${IC.hourglass} ${ageTxt}</span>
@@ -8986,7 +9054,7 @@ function renderRemaining(){
     const row=document.createElement('div'); row.className='rem-row trashed';
     row.innerHTML=`
       <div class="rem-main" data-open="${c.id}">
-        <div class="rem-name">${esc(c.name)}</div>
+        <div class="rem-name">${esc(c.name)}${isJob(c)?`<span class="rem-job">★ ${esc(jobLbl(c))}</span>`:''}</div>
         <div class="rem-meta">
           <span class="rem-stage" style="background:${st.cs};color:${st.hex}">was ${st.name}</span>
           ${c.month?`<span class="rem-chip">${IC.calendar} ${fmtMonth(c.month)}</span>`:''}
@@ -10056,7 +10124,7 @@ function bkMatchClient(b){
   const n=bkName(b.name), e=String(b.email||'').toLowerCase(), tel=bkTel(b.phone);
   const past=!b.day || b.day<todayIso();
   const hit=state.clients.find(c=>{
-    if(isTrashed(c)) return false;
+    if(isTrashed(c) || isJob(c)) return false;
     if(c.fromBooking===b.uid) return true;
     if(e && String(c.email||'').toLowerCase()===e) return true;
     if(tel && bkTel(c.phone)===tel) return true;
@@ -10520,6 +10588,7 @@ function openModal(id, presetDay){
   mLost.style.display= c ? '' : 'none';
   if(c) mLost.textContent = isTrashed(c) ? 'Restore from trash' : c.stage==='lost' ? 'Bring back' : "Didn't convert";
   $('#mName').value=c?c.name:''; $('#mValue').value=c?(c.value||''):'';
+  $('#mJob').innerHTML=jobOptions(c&&c.job||'');
   modalXtras = c ? cx(c).map(e=>({id:e.id||uid(), name:String(e.name||''), value:+e.value||0})) : [];
   renderXtras();
   modalPays = c ? cpays(c).map(x=>({id:x.id||uid(), amount:+x.amount||0, date:x.date||'', note:String(x.note||'')})) : [];
@@ -10621,16 +10690,19 @@ $('#mSave').addEventListener('click',()=>{
   { const tot=data.value+data.extras.reduce((a,e)=>a+e.value,0), got=data.pays.reduce((a,x)=>a+x.amount,0);
     if(tot>0 && got>=tot && data.stage!=='paid' && data.stage!=='lost'){ data.stage='paid'; autoPaid=true; } }
   { const cn=$('#mCnote').value.trim(), th=window._mCnoteTh||''; if(cn===th) data.cnote=undefined; else data.cnote=cn; }   /* same as the chat's note → keep following it; cleared while the chat has one → '' = off */
+  data.job=$('#mJob').value||'';
+  if(data.job){ data.chatOff=true; data.v130=1; }
   if(editingId){
     const tgt=state.clients.find(x=>x.id===editingId)||{};
     const wasLost=tgt.stage==='lost';
-    const stageWas=tgt.stage; Object.assign(tgt, data, {updated:Date.now()}); if(tgt.cnote===undefined) delete tgt.cnote; if(data.stage && data.stage!==stageWas) tgt.stageAt=Date.now();
+    const wasJob=!!tgt.job;
+    const stageWas=tgt.stage; Object.assign(tgt, data, {updated:Date.now()}); if(tgt.cnote===undefined) delete tgt.cnote; if(!tgt.job){ delete tgt.job; if(wasJob) delete tgt.chatOff; } if(data.stage && data.stage!==stageWas) tgt.stageAt=Date.now();
     if(data.stage==='lost' && !wasLost){ tgt.lostAt=Date.now(); }
     else if(data.stage!=='lost' && wasLost){ delete tgt.lostReason; tgt.lostAt=null; }
     if(data.stage==='thinking'){ if(!tgt.thinkAt) tgt.thinkAt=Date.now(); }
     else { tgt.thinkAt=null; delete tgt.thinkAck; }
   }
-  else { const nc={id:uid(), ...data, created:Date.now(), updated:Date.now()}; if(nc.cnote===undefined||nc.cnote==='') delete nc.cnote; state.clients.push(nc); }
+  else { const nc={id:uid(), ...data, created:Date.now(), updated:Date.now()}; if(nc.cnote===undefined||nc.cnote==='') delete nc.cnote; if(!nc.job) delete nc.job; state.clients.push(nc); }
   save(); renderAll(); closeModal(); toast(autoPaid ? name+' paid in full → moved to Paid' : 'Saved');
   try{ chSyncBoard(); renderChats(); }catch(err){}
 });
@@ -12010,6 +12082,19 @@ function fixTraki20261007(){
   return ch;
 }
 /* 9 Oct 2026: the Zoho booking of 13 Oct came in as just «Salakou» — her real name is Σαλάκου Γεωργία. Only touches that exact name. */
+function fixJobs20261020(){
+  if(!state || !Array.isArray(state.clients)) return false;
+  let ch=false;
+  (state.clients||[]).forEach(c=>{
+    if(!c || c.job || isTrashed(c)) return;
+    const m=String(c.name||'').trim().match(/^(.*\S)\s+[-–·(]*\s*(growth[\s-]*seo|seo)(\s*(package|πακέτο))?\)?$/i);
+    if(!m || (c.created||0) < Date.parse('2026-10-15T00:00:00')) return;
+    c.job='seo'; c.name=m[1].replace(/[\s\-–·(]+$/,''); c.chatOff=true; c.v130=1;
+    if(c.stage==='booked'){ c.stage='building'; c.stageAt=Date.now(); }
+    c.updated=Date.now(); ch=true;
+  });
+  return ch;
+}
 function fixSalakou20261009(){
   let ch=false; const NEW='Σαλάκου Γεωργία';
   const hit=n=>String(n||'').trim().toLowerCase()==='salakou';
@@ -12022,7 +12107,7 @@ function fixSalakou20261009(){
 const BOOKED_VALUE=130;
 function applyBookedDefault(){
   let ch=false;
-  (state.clients||[]).forEach(c=>{ if(c.stage==='booked' && !c.v130 && !isTrashed(c)){ c.v130=1; if(!(+c.value>0) && !cxTotal(c)){ c.value=BOOKED_VALUE; } ch=true; } });
+  (state.clients||[]).forEach(c=>{ if(c.stage==='booked' && !c.v130 && !isTrashed(c) && !isJob(c)){ c.v130=1; if(!(+c.value>0) && !cxTotal(c)){ c.value=BOOKED_VALUE; } ch=true; } });
   return ch;
 }
 function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e){}
@@ -12031,6 +12116,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(goalStampWon()) setTimeout(save,0); }catch(e){ console.warn('goal stamp',e); }
   try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
   try{ if(fixSalakou20261009()) setTimeout(save,0); }catch(e){}
+  try{ if(fixJobs20261020()) setTimeout(save,0); }catch(e){}
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
 }
 
@@ -13121,7 +13207,7 @@ function chSameName(a,b){
 }
 function chClientFor(t){
   if(!t || !state || !Array.isArray(state.clients)) return null;
-  const live=state.clients.filter(c=>!isTrashed(c) && c.stage!=='lost');
+  const live=state.clients.filter(c=>!isTrashed(c) && !isJob(c) && c.stage!=='lost');
   const linked=live.find(c=>c.chat===t.slug); if(linked) return linked;
   const m=live.filter(c=>!c.chat && chSameName(c.name,t.name));
   return m.length===1 ? m[0] : null;
@@ -13242,7 +13328,7 @@ const chCreating=new Set(); let chAutoBusy=false;
 async function chAutoCreate(){
   if(chAutoBusy || !state || !Array.isArray(state.clients) || Chats.state!=='ok') return;
   const since=(state.meta&&state.meta.chatAutoSince)||0;
-  const todo=state.clients.filter(c=>!isTrashed(c) && CH_AUTO[c.stage] && !c.chat && !c.chatOff && ((c.month||'')>=CH_AUTO_FROM || (since && (c.stageAt||0)>=since)) && String(c.name||'').trim().length>=2 && !chCreating.has(c.id));
+  const todo=state.clients.filter(c=>!isTrashed(c) && !isJob(c) && CH_AUTO[c.stage] && !c.chat && !c.chatOff && ((c.month||'')>=CH_AUTO_FROM || (since && (c.stageAt||0)>=since)) && String(c.name||'').trim().length>=2 && !chCreating.has(c.id));
   if(!todo.length) return;
   chAutoBusy=true; const made=[];
   for(const c of todo){                /* one at a time — each is one commit in the data repo */
