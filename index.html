@@ -12422,8 +12422,33 @@ function applyBookedDefault(){
   (state.clients||[]).forEach(c=>{ if(c.stage==='booked' && !c.v130 && !isTrashed(c) && !isJob(c)){ c.v130=1; if(!(+c.value>0) && !cxTotal(c)){ c.value=BOOKED_VALUE; } ch=true; } });
   return ch;
 }
+/* ==================================================================
+   Auto-leads bridge (20 Oct 2026). The «Leads» menu on /ideas/automations.html (the «Τετράδιο» 100-call test)
+   keeps its calls in localStorage «advon_auto_leads_v1» on this same address. The CRM carries them in its
+   encrypted state as state.autoLeads, so they sync to every device like everything else. Merge = newest per lead
+   wins; the call log is a union (undone calls carry u:1). Never touches anything else in the state.
+   ================================================================== */
+const AL_KEY='advon_auto_leads_v1';
+function alMerge(a,b){
+  if(!a&&!b) return null; a=a||{v:1,upd:0,leads:{},log:[]}; b=b||{v:1,upd:0,leads:{},log:[]};
+  const leads={}; const ids=new Set([...Object.keys(a.leads||{}),...Object.keys(b.leads||{})]);
+  ids.forEach(id=>{ const x=(a.leads||{})[id], y=(b.leads||{})[id]; leads[id]= !x? y : !y? x : ((y.upd||0)>(x.upd||0)? y : x); });
+  const seen=new Map(); [...(a.log||[]),...(b.log||[])].forEach(e=>{ const k=e.id+'|'+e.t+'|'+e.o; const o=seen.get(k); if(!o) seen.set(k,Object.assign({},e)); else if(e.u) o.u=1; });
+  const log=[...seen.values()].sort((p,q)=>p.t-q.t);
+  return {v:1, upd:Math.max(a.upd||0,b.upd||0), leads, log};
+}
+function alSync(){
+  if(!state) return; let loc=null; try{ loc=JSON.parse(localStorage.getItem(AL_KEY)||'null'); }catch(e){}
+  if(!loc && !state.autoLeads) return;
+  const m=alMerge(state.autoLeads, loc); const ms=JSON.stringify(m);
+  try{ if(localStorage.getItem(AL_KEY)!==ms) localStorage.setItem(AL_KEY, ms); localStorage.setItem('advon_auto_leads_crm_at', String(Date.now())); }catch(e){}
+  if(JSON.stringify(state.autoLeads||null)!==ms){ state.autoLeads=m; save(); }
+}
+window.addEventListener('storage',e=>{ if(e.key===AL_KEY){ try{ alSync(); }catch(err){} } });
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ try{ alSync(); }catch(e){} } });
 function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e){}
   if(!state) return;
+  try{ alSync(); }catch(e){}
   try{ if(applyBookedDefault()) setTimeout(save,0); }catch(e){}
   try{ if(goalStampWon()) setTimeout(save,0); }catch(e){ console.warn('goal stamp',e); }
   try{ if(fixTraki20261007()) setTimeout(save,0); }catch(e){}
