@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#F7F5EF">
+<title>Σκέψου σαν επιχείρηση · Ιδέες</title>
+<meta name="description" content="Τα μαθηματικά του Advon ως μηχανή: τι αξίζει μια συνάντηση, τι μπορούν να γυρίσουν οι διαφημίσεις, πότε και πώς προσλαμβάνεις, τι κάνεις με τον χρόνο σου — με ρυθμιστές για τους δικούς σου αριθμούς.">
+<link rel="icon" type="image/png" sizes="32x32" href="img/advon-mark-32.png?v=20261018">
+<link rel="apple-touch-icon" href="img/advon-mark-180.png?v=20261018">
+<link rel="alternate" hreflang="el" href="scale.html"><link rel="alternate" hreflang="en" href="en/scale.html">
+<link rel="preload" as="image" href="img/advon-logo.webp?v=20261018">
+<link rel="stylesheet" href="ideas.css?v=20261018">
+<style>@font-face{font-family:"Caveat";src:url(fonts/caveat-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+:root{--c:#1F3A5F;--c2:#C47F12;--c3:#2F6FE0;--c4:#0F7A5C}
+.sl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px}
+@media(max-width:760px){.sl-grid{grid-template-columns:1fr}}
+.sl{display:block}
+.sl .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--ink2);margin-bottom:4px}
+.sl .lab b{color:var(--ink);font-size:16px;font-variant-numeric:tabular-nums}
+.sl input[type=range]{width:100%;accent-color:var(--c);height:28px;margin:0}
+.outs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+@media(max-width:860px){.outs{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.outs{grid-template-columns:1fr}}
+.out{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--sh1)}
+.out b{display:block;font-size:30px;letter-spacing:-.02em;color:var(--c);line-height:1.1;font-variant-numeric:tabular-nums}
+.out span{display:block;font-size:14.5px;font-weight:700;color:var(--ink);margin:6px 0 4px}
+.out small{display:block;font-size:13px;color:var(--mute);line-height:1.45}
+.out.hi{background:var(--c);border-color:var(--c)}
+.out.hi b,.out.hi span{color:#fff}.out.hi small{color:rgba(255,255,255,.75)}
+.rst{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font:700 13px/1 inherit;font-family:inherit;color:var(--ink2);cursor:pointer;margin-top:12px}
+.rst:hover{color:var(--ink)}
+table.num td,table.num th{font-variant-numeric:tabular-nums}
+td.pos{color:var(--c4);font-weight:700}td.neg{color:#B42318;font-weight:700}td.warn{color:#B45309;font-weight:700}
+.rule5{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:860px){.rule5{grid-template-columns:1fr}}
+.rule5 .card:last-child{grid-column:1/-1}
+.rule5 .card h3{font-size:17px}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 18px 10px;box-shadow:var(--sh1);margin-top:16px;position:relative}
+.chart h4{margin:0 0 6px;font-size:15px;color:var(--ink)}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart .lg{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--ink2);margin:8px 0 4px}
+.chart .lg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.chart .lg s{text-decoration:none;display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.chart .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:10px;padding:8px 11px;font-size:12.5px;line-height:1.4;opacity:0;transform:translate(-50%,-110%);transition:opacity .15s;white-space:nowrap;z-index:2}
+.chart .tip b{color:#fff}
+.chart .gl{stroke:var(--line)}.chart .ax{fill:var(--mute);font-size:11px}
+.scen3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+@media(max-width:860px){.scen3{grid-template-columns:1fr}}
+.scen3 .card{border-top:4px solid var(--sc)}
+.scen3 .card h3{font-size:16px;color:var(--sc)}
+.lad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+@media(max-width:900px){.lad{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.lad{grid-template-columns:1fr}}
+.lad .st{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--sh1);position:relative}
+.lad .st .w{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--c);margin-bottom:6px}
+.lad .st b{display:block;font-size:15.5px;margin-bottom:6px;color:var(--ink)}
+.lad .st p{font-size:14px;color:var(--ink2);margin:0}
+.lad .st::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--mute);font-weight:800}
+.lad .st:last-child::after{display:none}
+@media(max-width:900px){.lad .st::after{display:none}}
+.hl{display:grid;grid-template-columns:1fr;gap:12px}
+.hl .h{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--sh1);display:grid;grid-template-columns:120px 1fr auto;gap:14px;align-items:start}
+@media(max-width:700px){.hl .h{grid-template-columns:1fr}}
+.hl .h .w{font-weight:800;color:var(--c);font-size:14px;letter-spacing:.02em}
+.hl .h b{display:block;font-size:16px;margin-bottom:4px}
+.hl .h p{margin:0;font-size:14.5px;color:var(--ink2)}
+.hl .h .pr{font-size:13px;font-weight:800;background:var(--paper2);border-radius:999px;padding:6px 10px;white-space:nowrap;color:var(--ink2)}
+.goals{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+@media(max-width:860px){.goals{grid-template-columns:repeat(2,1fr)}}
+.goals div{background:var(--paper2);border-radius:16px;padding:14px 16px}
+.goals b{display:block;font-size:26px;color:var(--c);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.goals span{font-size:13.5px;color:var(--ink2)}
+.vlist{counter-reset:v;list-style:none;padding:0;margin:14px 0 0}
+.vlist li{position:relative;padding:0 0 0 44px;margin:0 0 14px;font-size:16px;line-height:1.55}
+.vlist li::before{counter-increment:v;content:counter(v);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+.flw{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0 6px}
+@media(max-width:760px){.flw{grid-template-columns:1fr 1fr}}
+.flw div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 12px;text-align:center;box-shadow:var(--sh1);position:relative}
+.flw div b{display:block;font-size:15px;color:var(--ink);margin-bottom:3px}
+.flw div span{font-size:12.5px;color:var(--mute)}
+.flw div:not(:first-child)::before{content:'→';position:absolute;left:-11px;top:50%;transform:translateY(-50%);color:var(--mute);font-weight:800;background:var(--paper);padding:0 2px}
+@media(max-width:760px){.flw div::before{display:none!important}}
+table.cmp{font-size:14px}table.cmp th{font-size:11px}
+.outs.o4{grid-template-columns:repeat(2,1fr)}
+</style>
+</head>
+<body>
+<div class="prog" aria-hidden="true"></div>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./" aria-label="Advon Media · Ιδέες"><img src="img/advon-logo.webp?v=20261018" width="87" height="44" alt="Advon Media"><span class="sep" aria-hidden="true"></span><span class="bt">Ιδέες</span></a>
+  <nav>
+    <a href="./#now" class="hide-s">Τώρα</a><a href="./#next" class="hide-s">Επόμενο</a><a href="./#all" class="hide-s">Όλες οι ιδέες</a><a href="https://crm.advonmedia.com/" class="hide-s">CRM ↗</a><span class="lang"><a href="scale.html" class="on" hreflang="el" lang="el">ΕΛ</a><a href="en/scale.html" hreflang="en" lang="en">EN</a></span>
+  </nav>
+</div></header>
+
+<section class="dhero"><div class="glow"></div><div class="wrap">
+  <a class="back" href="./">← Όλες οι ιδέες</a>
+  <div class="dhero-grid">
+    <div>
+      <div class="k rv"><i></i>Στρατηγική · η συμβουλή του mastermind</div>
+      <div class="tagrow rv"><span class="tag doing dot">Νέο · 21 Οκτ</span><span class="tag type">Στρατηγική</span><span class="tag type">Μαθηματικά + πλάνο</span></div>
+      <h1 class="rv d1">Δεν είσαι «μικρή επιχείρηση». Είσαι ένας άνθρωπος με μια μηχανή που δεν την έχεις ταΐσει ακόμα.</h1>
+      <p class="oneline rv d2">Κλείνεις 45–50% των συναντήσεων σε πελάτες, έχεις 220+ ιστοσελίδες online, η παράδοση σχεδόν δεν σου κοστίζει χρόνο και έχεις μερικές χιλιάδες ευρώ για διαφημίσεις. Αυτό δεν είναι μικρό — είναι μια μηχανή που δουλεύει μόνο με το χέρι. Η σελίδα αυτή δείχνει, με αριθμούς, τι γίνεται όταν βάλεις ρεύμα.</p>
+    </div>
+    <div class="art rv d2"><svg class="draw " viewBox="0 0 320 200" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle class="fill" cx="236" cy="78" r="52" fill="currentColor" stroke="none" fill-opacity=".08"/>
+<path pathLength="1" d="M24 172h272"/>
+<rect pathLength="1" class="d2" x="48" y="120" width="34" height="52" rx="4"/>
+<rect pathLength="1" class="d3" x="104" y="92" width="34" height="80" rx="4"/>
+<rect pathLength="1" class="d4" x="160" y="58" width="34" height="114" rx="4"/>
+<rect pathLength="1" class="d5 fill" x="216" y="22" width="34" height="150" rx="4" fill="currentColor" stroke="none" fill-opacity=".14"/>
+<rect pathLength="1" class="d5" x="216" y="22" width="34" height="150" rx="4"/>
+<g class="float"><circle pathLength="1" class="d3" cx="65" cy="100" r="9"/><path pathLength="1" class="d4" d="M60 114l-6 10M70 114l6 10"/></g>
+<path pathLength="1" class="d4" d="M70 96c30-30 76-40 112-44l12-2"/><path pathLength="1" class="d5" d="M186 44l10 6-3 11"/>
+<g class="float s2"><path pathLength="1" class="d5" d="M272 40l6 12 13 2-10 9 3 13-12-7-12 7 3-13-10-9 13-2z"/></g>
+</svg></div>
+  </div>
+  <div class="strip"><div class="rv d1"><b>45–50%</b><span>συνάντηση → πελάτης. Αυτός είναι ο αριθμός που κάνει τα πάντα να δουλεύουν.</span></div><div class="rv d2"><b>220+</b><span>ιστοσελίδες online — η απόδειξη που αγοράζει εμπιστοσύνη εκ των προτέρων</span></div><div class="rv d3"><b>~0 ώρες</b><span>κοστίζει η κατασκευή σε σένα — ο Claude είναι το εργοστάσιο</span></div><div class="rv d1"><b>1 αριθμός</b><span>σου λείπει: τι κοστίζει μια κλεισμένη συνάντηση από διαφήμιση</span></div></div>
+</div></section><div class="wrap layout">
+  <aside class="toc"><b>Σε αυτή τη σελίδα</b><a href="#mindset">Πώς σκέφτεται ο ιδιοκτήτης</a><a href="#machine">Η μηχανή σου σε αριθμούς</a><a href="#ads">Διαφημίσεις: τα μαθηματικά</a><a href="#income">Τι μπορεί να γίνει το εισόδημα</a><a href="#highticket">Το high-ticket, με σειρά</a><a href="#time">Τι αξίζει η ώρα σου</a><a href="#hire">Προσλήψεις χωρίς φόβο</a><a href="#risks">Τι μπορεί να πάει στραβά</a><a href="#plan">Οι επόμενες 90 μέρες</a><a href="#verdict">Αν ήμουν στη θέση σου</a></aside>
+  <main>
+
+<section class="blk" id="mindset"><h2 class="rv"><small>Πώς σκέφτεται ο ιδιοκτήτης</small>Πέντε κανόνες που χωρίζουν τον «άνθρωπο που δουλεύει» από τον «άνθρωπο που έχει επιχείρηση».</h2><div class="rv d1">
+<p>Κάθε επιχείρηση που έχεις δει να τρέχει διαφημίσεις στην Αμερική ή οπουδήποτε δεν έχει κάποιο μυστικό. Έχει αυτούς τους πέντε κανόνες στο κεφάλι του ιδιοκτήτη. Διάβασέ τους σαν να σου τους λέει κάποιος που το έχει κάνει πολλές φορές, γιατί έτσι είναι γραμμένοι.</p>
+<div class="rule5"><div class="card"><h3>1 · Δεν είσαι η επιχείρηση. Είσαι ο πρώτος επενδυτής της.</h3><p>Η δουλειά σου δεν είναι να κάνεις τη δουλειά. Είναι να αποφασίζεις πού πάει κάθε ευρώ και κάθε ώρα, ώστε να γυρίζουν πίσω περισσότερα. Όταν φτιάχνεις μια ιστοσελίδα ή απαντάς σε ένα chat, δουλεύεις ΓΙΑ την επιχείρηση. Όταν αποφασίζεις «1.000€ στις διαφημίσεις αυτόν τον μήνα», δουλεύεις ΠΑΝΩ στην επιχείρηση. Μόνο το δεύτερο τη μεγαλώνει.</p></div><div class="card"><h3>2 · Κάθε ευρώ είναι είτε κόστος είτε επένδυση. Ποτέ και τα δύο.</h3><p>Κόστος = βγαίνει και δεν φέρνει τίποτα πίσω (τα Netlify credits για μια μικροαλλαγή). Σωστά είσαι τσιγκούνης εκεί. Επένδυση = βγαίνει 1€ και γυρίζει 2€ (μια διαφήμιση που φέρνει συνάντηση φθηνότερα από ό,τι αξίζει). Εκεί ο ιδιοκτήτης κάνει το αντίθετο: ψάχνει πώς να βάλει ΠΕΡΙΣΣΟΤΕΡΑ. Το λάθος του ενός ανθρώπου είναι ότι φέρεται και στα δύο με τον ίδιο τρόπο — σαν κόστος.</p></div><div class="card"><h3>3 · Μέτρα την αναλογία, μετά τάισε τη μηχανή.</h3><p>Μια μηχανή είναι μια αναλογία: βάζω Χ, βγαίνει Υ. Πρώτα τη μετράς με λίγα χρήματα (300€). Αν 1€ → 2€, βάζεις όσα ευρώ βρεις, γιατί κάθε ευρώ που ΔΕΝ βάζεις είναι χαμένο κέρδος. Αν 1€ → 0,70€, δεν «βάζεις περισσότερο μπας και πιάσει» — φτιάχνεις τη μηχανή (διαφήμιση, σελίδα, προσφορά) και ξαναμετράς. Ποτέ δεν μεγαλώνεις κάτι που δεν έχεις μετρήσει.</p></div><div class="card"><h3>4 · Αγόρασε πίσω τον χρόνο σου.</h3><p>Η ώρα σου αξίζει όσο το ΚΑΛΥΤΕΡΟ πράγμα που μπορείς να κάνεις μέσα σε αυτήν. Αν μία ώρα συναντήσεων φέρνει 2 πελάτες, η ώρα σου αξίζει εκατοντάδες ευρώ (δες παρακάτω τον ακριβή αριθμό). Κάθε δουλειά που θα την έκανε κάποιος για 15€ την ώρα — αλλαγές, κυνήγι πληρωμών, chats — σου κοστίζει τη διαφορά κάθε φορά που την κάνεις εσύ. «Δεν έχω προσλάβει ποτέ» είναι ένας φόβος, όχι ένας λόγος. Παρακάτω το λύνουμε.</p></div><div class="card"><h3>5 · Ένα πείραμα τη φορά, με προϋπολογισμό και όριο.</h3><p>Οι ιδιοκτήτες δεν «ρισκάρουν». Ορίζουν: τόσα χρήματα, τόσες μέρες, αυτός ο αριθμός λέει «συνέχισε» και αυτός λέει «σταμάτα». Μετά αποφασίζουν με τον αριθμό, όχι με το συναίσθημα. Έτσι μια «αποτυχία» κοστίζει 300€ και ένα μάθημα, ποτέ την επιχείρηση. Και έτσι ένα «πέτυχε» γίνεται αμέσως εντολή: διπλασίασε.</p></div></div>
+<div class="callout"><b>Το μόνο που σου λείπει πραγματικά:</b> ένας αριθμός. Τι κοστίζει μια κλεισμένη συνάντηση όταν την αγοράζεις από το Meta αντί να την κερδίζεις με το τηλέφωνο. Δεν τον ξέρεις, κι έτσι το κεφάλι σου γεμίζει το κενό με «είμαι μικρός». Παρακάτω μαθαίνουμε πόσο ΜΠΟΡΕΙΣ να πληρώσεις — και μετά το μόνο που μένει είναι να το μετρήσεις.</div>
+</div></section>
+
+<section class="blk" id="machine"><h2 class="rv"><small>Η μηχανή σου σε αριθμούς</small>Τι αξίζει μια συνάντηση, ένας πελάτης, μία ώρα σου — με τους δικούς σου αριθμούς.</h2><div class="rv d1">
+<p>Οι ρυθμιστές ξεκινούν με λογικές τιμές. Άλλαξέ τους στους πραγματικούς σου αριθμούς (το ποσοστό ανανέωσης το βλέπεις στο CRM → Renewals) και ΟΛΗ η σελίδα ξαναϋπολογίζεται: διαφημίσεις, εισόδημα, ώρες, προσλήψεις.</p>
+<div class="card"><div class="sl-grid"><label class="sl"><span class="lab"><span>Κλήσεις τη μέρα (όταν καλείς)</span><b></b></span><input type="range" min="3" max="60" step="1" data-k="calls" data-f="%d"></label><label class="sl"><span class="lab"><span>Κλήση → συνάντηση</span><b></b></span><input type="range" min="2" max="40" step="1" data-k="callMeet" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Συνάντηση → πελάτης</span><b></b></span><input type="range" min="10" max="80" step="1" data-k="meetClient" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Φιλοξενία τον χρόνο (χωρίς ΦΠΑ)</span><b></b></span><input type="range" min="80" max="300" step="5" data-k="price" data-f="%d€"></label><label class="sl"><span class="lab"><span>Ανανεώνουν τον 2ο χρόνο</span><b></b></span><input type="range" min="30" max="100" step="1" data-k="renew" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Παίρνουν Google Ads / social (ιδέα 01)</span><b></b></span><input type="range" min="0" max="60" step="1" data-k="take" data-f="%d%%"></label><label class="sl"><span class="lab"><span>…και πληρώνουν τον μήνα</span><b></b></span><input type="range" min="29" max="199" step="1" data-k="mrr" data-f="%d€"></label><label class="sl"><span class="lab"><span>Ώρες δικές σου ανά νέο πελάτη (εκτός συνάντησης)</span><b></b></span><input type="range" min="0.25" max="4" step="0.25" data-k="hrs" data-f="%.1f"></label><label class="sl"><span class="lab"><span>Κόστος ανά lead από Meta</span><b></b></span><input type="range" min="2" max="40" step="1" data-k="cpl" data-f="%d€"></label><label class="sl"><span class="lab"><span>Lead → συνάντηση που γίνεται</span><b></b></span><input type="range" min="10" max="80" step="1" data-k="leadMeet" data-f="%d%%"></label></div><button class="rst" type="button">Επαναφορά τιμών</button></div>
+<div class="outs"><div class="out" id="oClient"><b>—</b><span>Αξία ενός πελάτη σε 3 χρόνια</span><small>φιλοξενία + ανανεώσεις + 3 χρόνια social/Ads για όσους το παίρνουν, μείον domain</small></div><div class="out" id="oMeet"><b>—</b><span>Αξία μίας συνάντησης</span><small>× το ποσοστό κλεισίματος — τόσα φέρνει κατά μέσο όρο κάθε 15λεπτο</small></div><div class="out" id="oHour"><b>—</b><span>Αξία μίας ώρας σου σε συναντήσεις</span><small>4 συναντήσεις την ώρα. Οτιδήποτε κάνεις που αξίζει λιγότερο, το κάνει άλλος.</small></div><div class="out hi" id="oMaxMeet"><b>—</b><span>Μέγιστο που αξίζει να πληρώσεις για μία συνάντηση</span><small>για να πάρεις τα λεφτά πίσω ΜΕΣΑ ΣΤΟΝ ΠΡΩΤΟ ΜΗΝΑ (μόνο από την πρώτη πληρωμή)</small></div><div class="out" id="oMaxLead"><b>—</b><span>Μέγιστο κόστος ανά lead για να βγαίνεις ίσα</span><small>πάνω από αυτό το νούμερο η καμπάνια «τρώει»· κάτω από το μισό, τυπώνει</small></div><div class="out" id="oCpc"><b>—</b><span>Τι θα κοστίζει ένας πελάτης από διαφήμιση</span><small>με το κόστος ανά lead και τα ποσοστά που έβαλες</small></div></div>
+<div class="callout"><b>Διάβασε έτσι τα δύο κουτιά με τα «μέγιστα»:</b> ο Meta δεν ξέρει πόσο αξίζει μια συνάντηση για σένα — εσύ ξέρεις. Αν μια κλεισμένη συνάντηση σου κοστίζει λιγότερο από το «μέγιστο», κάθε ευρώ διαφήμισης γυρίζει πίσω μέσα σε 30 μέρες και ό,τι ακολουθεί (ανανεώσεις, social) είναι καθαρό. Αυτό ακριβώς κάνουν οι «μεγάλοι»: ξέρουν τον αριθμό και πληρώνουν μέχρι εκεί, χωρίς άγχος.</div>
+</div></section>
+
+<section class="blk" id="ads"><h2 class="rv"><small>Διαφημίσεις για τις ιστοσελίδες</small>Τα μαθηματικά, βήμα βήμα: από τον προϋπολογισμό στους πελάτες.</h2><div class="rv d1">
+<p>Το μοντέλο σου (κατασκευή 0€, πληρωμή 130€ στο πρώτο draft) είναι ΦΤΙΑΓΜΕΝΟ για διαφημίσεις: η προσφορά είναι εύκολη να την πεις σε 3 δευτερόλεπτα, η απόδειξη υπάρχει (220+ sites, 130 κριτικές), και η παράδοση σχεδόν δεν σου κοστίζει. Το μόνο «αλλά» είναι ότι κάθε πελάτης δίνει λίγα — γι’ αυτό το σημαντικότερο κουμπί δεν είναι ο προϋπολογισμός, είναι η ιδέα 01 (Google Ads/social στους πελάτες), που πενταπλασιάζει τι αξίζει ο καθένας.</p>
+<div class="flw"><div><b>Προϋπολογισμός</b><span>€ / μήνα</span></div><div><b>Leads</b><span>÷ κόστος ανά lead</span></div><div><b>Συναντήσεις</b><span>× lead → συνάντηση</span></div><div><b>Πελάτες</b><span>× συνάντηση → πελάτης</span></div><div><b>Πρώτες πληρωμές</b><span>× 130€ τον 1ο μήνα</span></div></div>
+<div class="sub-h">Τρία επίπεδα προϋπολογισμού — τι βγάζει το καθένα τον μήνα</div>
+<div class="tscroll"><table class="num cmp"><thead><tr><th>Budget / μήνα</th><th class=r>Leads</th><th class=r>Συναντήσεις</th><th class=r>Πελάτες</th><th class=r>Πρώτες πληρωμές</th><th class=r>Κέρδος μήνα 1</th><th class=r>Αξία 3 ετών</th><th class=r>Ώρες σου</th></tr></thead><tbody id="adsBody"></tbody></table></div>
+<p class="small mute">Κόστος ανά πελάτη με τους ρυθμιστές σου: <b id="cpcNote">—</b> · «Ώρες δικές σου» = συναντήσεις 15′ + οι ώρες ανά πελάτη που έβαλες. Πορτοκαλί = πάνω από 120 ώρες τον μήνα.</p>
+<div class="callout warn"><b>Ο κανόνας «σταμάτα / συνέχισε» (γράψε τον πριν ξεκινήσεις):</b> Μετά τα πρώτα <b>300€</b>, υπολόγισε κόστος ανά <u>κλεισμένη συνάντηση που έγινε</u> (όχι ανά lead). Αν είναι <b>κάτω από το «μέγιστο» του κουτιού πιο πάνω</b> → η μηχανή δουλεύει: διπλασίασε τον ημερήσιο προϋπολογισμό κάθε 2 εβδομάδες όσο ο αριθμός μένει εκεί. Αν είναι <b>πάνω</b> → ΜΗΝ βάλεις περισσότερα· άλλαξε ΕΝΑ πράγμα (το βίντεο, το κείμενο, τη σελίδα /dorean, το κοινό) και ξαναμέτρησε με άλλα 300€. Ποτέ περισσότερα από δύο «άλλαξε ένα πράγμα» πριν ρωτήσεις τι λέει το κοινό στις συναντήσεις.</div>
+<div class="cols2"><div class="card"><h3>Ταμειακή ροή</h3><p class="small">Τη διαφήμιση την πληρώνεις σήμερα· ο πελάτης πληρώνει στο πρώτο draft, 4–10 μέρες μετά τη συνάντηση. Άρα χρειάζεσαι περίπου <b>έναν μήνα διαφήμισης μπροστά</b> — οι «μερικές χιλιάδες» σου είναι ακριβώς αυτό. Μετά τον μήνα 2 η μηχανή πληρώνει τον εαυτό της.</p></div><div class="card"><h3>Πού σπάει</h3><p class="small">Όχι στα λεφτά. Στις ώρες σου: δες τη στήλη «Ώρες δικές σου». Όταν περάσει τις <b>~120 ώρες τον μήνα</b>, δεν χρειάζεσαι λιγότερη διαφήμιση — χρειάζεσαι τον πρώτο άνθρωπο (ενότητα «Προσλήψεις»). Αυτή είναι η καλή στιγμή να προσλάβεις: όταν η δουλειά υπάρχει ήδη και πληρώνει.</p></div><div class="card"><h3>Το κοινό</h3><p class="small">Οι διαφημίσεις σου (Advon) ΔΕΝ πέφτουν στους περιορισμούς υγείας του Meta — πουλάς ιστοσελίδες, όχι ιατρικές υπηρεσίες. Κοινό: ελεύθεροι επαγγελματίες 27+, Αττική + μεγάλες πόλεις, ενδιαφέροντα «small business owner», «ιδιωτικό ιατρείο», lookalike από τους 220 πελάτες σου (ανέβασε τα e-mail τους).</p></div><div class="card"><h3>Το δημιουργικό</h3><p class="small">Έχεις ήδη τα βίντεο που δουλεύουν («Ο ανιψιός σας δεν είναι web designer», «Χρυσός Οδηγός», «φορτώνει…»). Τρέξε 3–4 μαζί, ο Meta διαλέγει. Η σελίδα προσγείωσης είναι το /dorean με το ημερολόγιο — η συνάντηση κλείνεται ΧΩΡΙΣ εσένα.</p></div></div>
+</div></section>
+
+<section class="blk" id="income"><h2 class="rv"><small>Τι μπορεί να γίνει το εισόδημα</small>Δώδεκα μήνες, τρία σενάρια, ίδιοι ρυθμιστές.</h2><div class="rv d1">
+<p>Καθαρό μηνιαίο εισόδημα (χωρίς ΦΠΑ, πριν τους φόρους) αφού αφαιρεθούν η διαφήμιση, τα domains και ο μισθός του ανθρώπου που προσλαμβάνεις. Οι ανανεώσεις των 220 σημερινών πελατών μπαίνουν σε όλα τα σενάρια. Κάθε νέος πελάτης φέρνει την πρώτη πληρωμή τον μήνα που κλείνει και — για το ποσοστό που έβαλες στον ρυθμιστή — social/Google Ads από τον επόμενο μήνα.</p>
+<div class="scen3"><div class="card" style="--sc:#C47F12"><h3>Σήμερα</h3><p class="small">Μόνο τηλέφωνο, όπως τώρα. Οι ρυθμιστές «κλήσεις» καθορίζουν τους νέους πελάτες.</p></div><div class="card" style="--sc:#2F6FE0"><h3>Διαφημίσεις</h3><p class="small">Τηλέφωνο + Meta: 900€ τους μήνες 1–2, 1.800€ τους 3–4, 3.000€ από τον 5ο — ΜΟΝΟ αν ο κανόνας «συνέχισε» ισχύει. Ο μήνας που οι ώρες σου περνούν τις 120 σημειώνεται.</p></div><div class="card" style="--sc:#0F7A5C"><h3>Διαφημίσεις + άνθρωπος</h3><p class="small">Το ίδιο, αλλά από τον μήνα 4 ένας άνθρωπος (1.000€/μήνα) παίρνει τα chats, τις αλλαγές και την οργάνωση· εσύ κρατάς συναντήσεις, διαφημίσεις, αποφάσεις. Η διαφήμιση ανεβαίνει στα 4.500€ από τον 7ο. Από τον 5ο μήνα ένας πελάτης high-ticket (AI βοηθός γραφείου) τον μήνα.</p></div></div>
+<div class="chart"><h4>Καθαρό μηνιαίο εισόδημα, μήνες 1–12</h4><div id="chart" data-hrs="οι ώρες σου περνούν τις 120 → ώρα για τον πρώτο άνθρωπο"></div><div class="lg" id="lg"></div><div class="tip" id="tip"></div></div>
+<div class="sub-h">Πίνακας · μήνας 12</div>
+<div class="tscroll"><table class="num cmp"><thead><tr><th>Σενάριο</th><th class=r>Νέοι / μήνα</th><th class=r>Καθαρό μήνα 12</th><th class=r>Σύνολο 12 μηνών</th><th class=r>Ώρες σου</th><th class=r>Social/Ads MRR</th></tr></thead><tbody id="scenBody"></tbody></table></div>
+<div class="callout"><b>Τι να κρατήσεις από το γράφημα:</b> η γραμμή «Σήμερα» ανεβαίνει αργά, μόνο από τις ανανεώσεις και το social. Η διαφορά ανάμεσα στις τρεις γραμμές ΔΕΝ είναι ταλέντο, ώρες ή τύχη — είναι ΜΟΝΟ (α) ότι αγόρασες συναντήσεις αντί να τις κερδίζεις μία-μία και (β) ότι πλήρωσες έναν άνθρωπο 1.000€ για να κρατήσεις τις ώρες σου εκεί που αξίζουν. Αν οι πραγματικοί σου αριθμοί βγουν χειρότεροι, σύρε τους ρυθμιστές — η λογική μένει ίδια, αλλάζουν τα νούμερα.</div>
+</div></section>
+
+<section class="blk" id="highticket"><h2 class="rv"><small>Το high-ticket, με τη σωστή σειρά</small>AI βοηθός γραφείου (1,5–5k + 150–300€/μήνα): πότε βάζεις διαφημίσεις και πότε όχι ακόμα.</h2><div class="rv d1">
+<p>Σκέφτηκες σωστά: «διαφημίσεις μετά τον 1ο–2ο πελάτη». Να γιατί αυτή είναι η σωστή σειρά και όχι τσιγκουνιά. Στις ιστοσελίδες η διαφήμιση δουλεύει γιατί ο ξένος βλέπει 220 sites και 130 κριτικές και λέει «ναι» σε 15 λεπτά. Στο high-ticket ο ξένος πληρώνει 3.000€ σε κάποιον που δεν έχει ακόμα ΕΝΑ γραφείο να του δείξει. Η διαφήμιση δεν φτιάχνει εμπιστοσύνη — τη μεγεθύνει. Αν δεν υπάρχει ακόμα, μεγεθύνει το κενό.</p>
+<div class="lad"><div class="st"><div class="w">Τώρα → 3 εβδ.</div><b>100 κλήσεις, 3 κλάδοι (ήδη έτοιμο)</b><p>Κόστος 0€. Στόχος: 6–10 συναντήσεις μισής ώρας, 2 δωρεάν πιλότοι. Μαθαίνεις ΤΙ λένε, ΤΙ τους πονάει, ΠΟΙΟΣ κλάδος κλείνει.</p></div><div class="st"><div class="w">Μήνας 2</div><b>2 πιλότοι 30 ημερών → πληρωμή</b><p>Ο πιλότος μετατρέπεται σε 1.500–3.000€ στήσιμο + 150–300€/μήνα. Ένας «ναι» = η απόδειξη. Γράφεις την ιστορία του (πριν/μετά, ώρες που γλίτωσε) με το όνομα του γραφείου.</p></div><div class="st"><div class="w">Μήνας 3</div><b>Case study + 2η φουρνιά κλήσεων</b><p>Τώρα η κλήση λέει «το κάνουμε ήδη στο γραφείο Χ στη Λάρισα». Το κλείσιμο ανεβαίνει. Στόχος: 3–5 πελάτες συνολικά, η παράδοση να τρέχει ΧΩΡΙΣ εσένα κάθε μέρα.</p></div><div class="st"><div class="w">Μήνας 4+</div><b>Διαφημίσεις στο high-ticket</b><p>Μόνο τώρα: βίντεο με τον πραγματικό πελάτη, προσγείωση σε «δωρεάν πιλότος 30 ημερών», ραντεβού με ημερολόγιο. Προϋπολογισμός 1.000–1.500€/μήνα για αρχή.</p></div></div>
+<div class="sub-h">Τα μαθηματικά ενός πελάτη high-ticket (άλλαξε τα)</div>
+<div class="card"><div class="sl-grid"><label class="sl"><span class="lab"><span>Στήσιμο</span><b></b></span><input type="range" min="500" max="8000" step="100" data-k="setup" data-f="%d€"></label><label class="sl"><span class="lab"><span>Συνδρομή / μήνα</span><b></b></span><input type="range" min="0" max="600" step="10" data-k="mon" data-f="%d€"></label><label class="sl"><span class="lab"><span>Συνάντηση → πελάτης (B2B)</span><b></b></span><input type="range" min="5" max="50" step="1" data-k="hClose" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Κόστος ανά συνάντηση από διαφήμιση (B2B)</span><b></b></span><input type="range" min="20" max="300" step="5" data-k="hCpm" data-f="%d€"></label><label class="sl"><span class="lab"><span>Ώρες δικές σου στο στήσιμο</span><b></b></span><input type="range" min="5" max="80" step="1" data-k="hDel" data-f="%d"></label></div></div>
+<div class="outs o4"><div class="out" id="hY1"><b>—</b><span>Έσοδα 1ου έτους ανά πελάτη</span><small>στήσιμο + 12 συνδρομές</small></div><div class="out" id="hCac"><b>—</b><span>Κόστος να φέρεις έναν πελάτη με διαφήμιση</span><small>κόστος συνάντησης ÷ ποσοστό κλεισίματος</small></div><div class="out" id="hRoi"><b>—</b><span>Επιστροφή τον 1ο χρόνο</span><small>για κάθε 1€ διαφήμισης</small></div><div class="out" id="hMax"><b>—</b><span>Μέγιστο κόστος συνάντησης για ίσα-ίσα στο στήσιμο</span><small>πάνω από αυτό χάνεις χρήματα τον 1ο μήνα</small></div></div>
+<div class="callout warn"><b>Το πραγματικό ρίσκο δεν είναι η πώληση — είναι η παράδοση.</b> Ένας πελάτης των 3.000€ περιμένει να απαντάς σε 2 ώρες, να μεταφέρεις τα δεδομένα του από το τετράδιο/Excel, να τον εκπαιδεύσεις. Δέκα τέτοιοι πελάτες ταυτόχρονα χωρίς άνθρωπο = ο χρόνος σου εξαφανίζεται και οι ιστοσελίδες (η σίγουρη μηχανή) υποφέρουν. Γι’ αυτό το high-ticket ΑΚΟΛΟΥΘΕΙ την πρόσληψη, δεν προηγείται. Και γι’ αυτό στο σενάριο «Διαφημίσεις + άνθρωπος» έβαλα 1 νέο πελάτη τον μήνα, όχι 5: είναι ο ρυθμός που αντέχει ένα γραφείο δύο ανθρώπων.</div>
+</div></section>
+
+<section class="blk" id="time"><h2 class="rv"><small>Τι αξίζει η ώρα σου</small>Μια εβδομάδα σου, κομμάτι κομμάτι — ποια ώρα βγάζει χρήματα και ποια τα καίει.</h2><div class="rv d1">
+<p>Η λογική είναι απλή: κάθε δραστηριότητα έχει μια τιμή την ώρα — πόσα φέρνει στην επιχείρηση ή πόσα θα κόστιζε να την κάνει άλλος. Εσύ κρατάς ΜΟΝΟ τις γραμμές με τους μεγάλους αριθμούς. Οι υπόλοιπες πάνε σε Claude, σε άνθρωπο ή σβήνονται.</p>
+<div class="tscroll"><table><thead><tr><th>Τι κάνεις</th><th>Ώρες / εβδ. (τυπικά)</th><th>Αξία την ώρα</th><th>Ποιος πρέπει να το κάνει</th></tr></thead><tbody><tr><td>Συναντήσεις με υποψήφιους (15′)</td><td class="r">8</td><td class="r"><span class=hourv>—</span></td><td><b>ΕΣΥ</b> — είναι το πιο ακριβό πράγμα που κάνεις. Κλείνεις 1 στους 2.</td></tr><tr><td>Αποφάσεις για διαφημίσεις, προσφορές, τιμές</td><td class="r">2</td><td class="r"><span class=hourv>—</span>+</td><td><b>ΕΣΥ</b> — 2 ώρες εδώ αλλάζουν όλο τον μήνα.</td></tr><tr><td>Πωλήσεις high-ticket (κλήσεις + 30′ συναντήσεις)</td><td class="r">4</td><td class="r">~300€</td><td><b>ΕΣΥ</b> για τους πρώτους 5 πελάτες· μετά μαθαίνεις κάποιον.</td></tr><tr><td>Έλεγχος και έγκριση drafts πριν σταλούν</td><td class="r">4</td><td class="r">~60€</td><td>ΕΣΥ τώρα → ο άνθρωπος με λίστα ελέγχου από τον μήνα 4.</td></tr><tr><td>Chats, αλλαγές, υπενθυμίσεις, κυνήγι πληρωμών</td><td class="r">8</td><td class="r">15€</td><td><b>Άνθρωπος</b> (1.000€/μήνα) + Claude. Κάθε ώρα που την κάνεις εσύ κοστίζει τη διαφορά.</td></tr><tr><td>Ψυχρές κλήσεις ιστοσελίδων</td><td class="r">10</td><td class="r">~70€</td><td>ΕΣΥ μέχρι να δουλέψουν οι διαφημίσεις → μετά <b>setter</b> με 20€ ανά συνάντηση, ή σταματούν.</td></tr><tr><td>Social της Advon, βίντεο, περιεχόμενο</td><td class="r">3</td><td class="r">~40€</td><td>Claude (ήδη) + έγκριση 20′ από σένα.</td></tr><tr><td>Τιμολόγια, Papaki, Netlify, λογιστικά</td><td class="r">2</td><td class="r">15€</td><td>Άνθρωπος + Χιώτης. Μία φορά την εβδομάδα, όλα μαζί.</td></tr></tbody></table></div>
+<div class="callout"><b>Το συμπέρασμα σε μία πρόταση:</b> από τις ~40 ώρες της εβδομάδας, μόνο ~14 αξίζουν εκατοντάδες ευρώ την ώρα. Οι άλλες 26 κοστίζουν 15–60€ την ώρα να τις κάνει άλλος. Ένας άνθρωπος στα 1.000€ τον μήνα σου αγοράζει πίσω ~100 ώρες — και τις 100 αυτές ώρες, αν τις βάλεις σε συναντήσεις και διαφημίσεις, αξίζουν πολλές χιλιάδες. Αυτό είναι όλο το νόημα της πρόσληψης: δεν «ξοδεύεις 1.000€», ανταλλάσσεις ώρες των 15€ με ώρες των <span class="hourv">—</span>.</div>
+</div></section>
+
+<section class="blk" id="hire"><h2 class="rv"><small>Προσλήψεις χωρίς φόβο</small>Δεν προσλαμβάνεις «υπάλληλο». Αγοράζεις ώρες, λίγες-λίγες, με δοκιμή.</h2><div class="rv d1">
+<p>«Δεν το έχω κάνει ποτέ» είναι αλήθεια για κάθε ιδιοκτήτη την πρώτη φορά. Η λύση δεν είναι θάρρος — είναι να το κάνεις τόσο μικρό που να μην μπορεί να πάει στραβά ακριβά. Υπάρχει μια σκάλα και είσαι ήδη στο δεύτερο σκαλί.</p>
+<div class="hl"><div class="h"><div class="w">Σκαλί 1</div><div><b>Αυτοματοποίησε</b><p>Έγινε. Claude, CRM, υπενθυμίσεις, backups, αντιγραφές. Δουλεύεις με 1 άτομο σαν να είσαι 4.</p></div><span class="pr">0€</span></div><div class="h"><div class="w">Σκαλί 2</div><div><b>Πλήρωσε με το αποτέλεσμα</b><p>Χωρίς μισθό, χωρίς ωράριο: ένας setter που βάζει συναντήσεις στο ημερολόγιό σου και παίρνει 15–25€ ανά συνάντηση που έγινε. Αν δεν φέρει, δεν πληρώνεις. Βρίσκεται σε Upwork / Facebook groups «τηλεφωνικές πωλήσεις» / φοιτητές. Μαθηματικά: 3 συναντήσεις τη μέρα × 20€ = 1.200€/μήνα → ~28 πελάτες → 3.600€ πρώτες πληρωμές.</p></div><span class="pr">0€ ρίσκο</span></div><div class="h"><div class="w">Σκαλί 3</div><div><b>Ο πρώτος μερικής απασχόλησης</b><p>Ένας άνθρωπος 4 ώρες τη μέρα (~700–1.000€/μήνα με όλα, ή freelancer με τιμολόγιο) για chats, αλλαγές με Claude, έλεγχο drafts με λίστα, υπενθυμίσεις, τιμολόγια. Ο Claude γράφει το εγχειρίδιό του από το CLAUDE.md σε μια μέρα. Δοκιμή 2 εβδομάδων με πληρωμή — αν δεν ταιριάζει, χάθηκαν 400€, όχι μια επιχείρηση.</p></div><span class="pr">~1.000€/μήνα</span></div><div class="h"><div class="w">Σκαλί 4</div><div><b>Ο δεύτερος εσύ</b><p>Μόνο όταν οι συναντήσεις ξεπεράσουν όσες χωράς: κάποιος που παίρνει το 15λεπτο με το script σου, πληρωμένος με ποσοστό (π.χ. 30€ ανά πελάτη). Το κλείσιμό του θα είναι χειρότερο από το δικό σου στην αρχή — και αυτό είναι εντάξει, γιατί πληρώνεται μόνο όταν κλείνει.</p></div><span class="pr">ποσοστό</span></div></div>
+<div style="height:14px"></div>
+<div class="fear rv"><div class="q">Δεν ξέρω να βρω / να διαλέξω άνθρωπο.</div><div class="a">Δεν διαλέγεις — δοκιμάζεις. Δίνεις σε 3 υποψήφιους την ίδια μικρή πληρωμένη εργασία (2 chats πελατών + 1 αλλαγή με Claude, 2 ώρες, 30€ ο καθένας). Κρατάς αυτόν που έγραψε τα καλύτερα ελληνικά και ρώτησε τις σωστές ερωτήσεις. Ο Claude γράφει την αγγελία, τα κριτήρια και το τεστ.</div></div><div class="fear rv"><div class="q">Θα κάνει λάθη με τους πελάτες μου.</div><div class="a">Θα κάνει. Γι’ αυτό τον πρώτο μήνα ΤΙΠΟΤΑ δεν φεύγει χωρίς το ✓ σου — όπως ακριβώς κάνει ο Claude σήμερα (ετοιμάζει, εσύ εγκρίνεις). Το ✓ σου παίρνει 1 λεπτό, η δουλειά που γλιτώνεις 1 ώρα.</div></div><div class="fear rv"><div class="q">Αν μετά δεν έχω δουλειά να του δώσω;</div><div class="a">Γι’ αυτό το σκαλί 2 και 3 είναι ανά αποτέλεσμα ή μερικής απασχόλησης με δοκιμή. Σταματάς με ένα μήνυμα. Οι «μεγάλες» επιχειρήσεις το κάνουν ακριβώς έτσι: freelancers πρώτα, υπάλληλοι μετά.</div></div><div class="fear rv"><div class="q">Μου ακούγεται ακριβό: 1.000€ τον μήνα.</div><div class="a">Το κόστος συγκρίνεται με το τι κάνεις με τις ώρες. 100 ώρες τον μήνα × η αξία της ώρας σου σε συναντήσεις = δες το κουτί «Αξία μίας ώρας σου». Τα 1.000€ είναι ίσως το φθηνότερο πράγμα σε όλη τη σελίδα.</div></div>
+</div></section>
+
+<section class="blk" id="risks"><h2 class="rv"><small>Τι μπορεί να πάει στραβά</small>Οι έξι τρόποι που αυτό το πλάνο αποτυγχάνει — και πώς δεν αποτυγχάνει.</h2><div class="rv d1">
+<div class="fear rv"><div class="q">Το κόστος ανά συνάντηση βγαίνει διπλό από το «μέγιστο».</div><div class="a">Συμβαίνει συχνά τον 1ο μήνα. Δεν σημαίνει «οι διαφημίσεις δεν δουλεύουν για μένα» — σημαίνει ότι ΕΝΑ από τα τέσσερα (βίντεο, κείμενο, σελίδα, κοινό) είναι λάθος. Αλλάζεις ένα, ξαναμετράς με 300€. Τρεις γύροι το πολύ.</div></div><div class="fear rv"><div class="q">Έρχονται leads που δεν εμφανίζονται στη συνάντηση.</div><div class="a">Μέτρα «συναντήσεις που έγιναν», ποτέ «leads». Λύση: SMS υπενθύμισης 1 ώρα πριν (αυτόματο), ημερολόγιο που ζητάει τηλέφωνο, και η ερώτηση «έχετε ήδη ιστοσελίδα;» στη φόρμα για να φιλτράρει.</div></div><div class="fear rv"><div class="q">Τρέχεις 4 ιδέες μαζί και καμία δεν φτάνει στον αριθμό.</div><div class="a">Η συνηθέστερη αποτυχία των ικανών ανθρώπων. Μία μηχανή τη φορά: πρώτα οι διαφημίσεις ιστοσελίδων (η σίγουρη), παράλληλα ΜΟΝΟ οι 100 κλήσεις (0€). Τα Θέμα Δ, Panta, vresfrontistirio περιμένουν — όχι γιατί είναι κακά, αλλά γιατί είναι άλλη επιχείρηση (καταναλωτές, χιλιάδες χρήστες, υποστήριξη) και θέλουν διαφημίσεις από την πρώτη μέρα. Θα ξέρεις διαφημίσεις σε 3 μήνες.</div></div><div class="fear rv"><div class="q">Πουλάς πολλά social/Google Ads και δεν προλαβαίνεις να τα παραδώσεις.</div><div class="a">Το social είναι ο μισός κίνδυνος «παράδοσης» αυτής της σελίδας. Λύση: ο Claude φτιάχνει τον μήνα κάθε πελάτη με προγραμματισμένη εργασία στις 20 του μήνα, ο άνθρωπος ελέγχει, εσύ εγκρίνεις σε 10 λεπτά. Δέχεσαι το πολύ 10 νέους πελάτες social τον μήνα τους πρώτους 3 μήνες.</div></div><div class="fear rv"><div class="q">Ταμείο: η διαφήμιση πληρώνεται σήμερα, ο πελάτης σε 10 μέρες.</div><div class="a">Κράτα πάντα έναν μήνα διαφήμισης στην άκρη. Μην ανεβάζεις τον προϋπολογισμό πάνω από το 1/3 των εσόδων του προηγούμενου μήνα — κανόνας που σε κρατάει ασφαλή χωρίς να σε φρενάρει.</div></div><div class="fear rv"><div class="q">Ο Meta κλείνει τον λογαριασμό διαφημίσεων / απορρίπτει βίντεο.</div><div class="a">Συμβαίνει σε όλους. Ο λογαριασμός «Advon Media» να έχει επαληθευμένη επιχείρηση και ΑΦΜ, δεύτερος διαχειριστής, πάντα 2–3 εγκεκριμένα δημιουργικά σε αναμονή. Και Google Ads σε αναζήτηση «κατασκευή ιστοσελίδας δωρεάν» ως δεύτερο κανάλι από τον μήνα 3, ώστε να μην κρέμεσαι από ένα.</div></div>
+</div></section>
+
+<section class="blk" id="plan"><h2 class="rv"><small>Οι επόμενες 90 μέρες</small>Το πλάνο, εβδομάδα-εβδομάδα — τι κάνεις εσύ, τι κάνω εγώ.</h2><div class="rv d1">
+<ol class="steps"><li><b class="t">Ανοίγει η μηχανή <span class="time">Εβδ. 1</span></b><b>Εσύ (1 ώρα):</b> ναι στην καμπάνια Meta με 30€/μέρα (~900€/μήνα) και τα 3 βίντεο που ήδη δουλεύουν · επαληθευμένη επιχείρηση στο Meta Business · το ημερολόγιο στο /dorean ζητάει τηλέφωνο. <b>Εγώ:</b> η καμπάνια, η σελίδα, ο πίνακας «κόστος ανά συνάντηση» που ανανεώνεται κάθε μέρα στο CRM → Home, το SMS υπενθύμισης.</li><li><b class="t">Πενταπλασιάζουμε την αξία κάθε πελάτη <span class="time">Εβδ. 1–2</span></b><b>Εγώ:</b> ένα μήνυμα σε κάθε έναν από τους 220 πελάτες για Google Ads/social (ιδέα 01), στο chat του, προς έγκριση. <b>Εσύ:</b> εγκρίνεις σε παρτίδες των 20. Στόχος: 15 ναι τον 1ο μήνα = ~1.100€ MRR.</li><li><b class="t">Τα 100 τηλεφωνήματα <span class="time">Εβδ. 2–4</span></b><b>Εσύ:</b> 3 πρωινά, 33 κλήσεις το καθένα, όλα έτοιμα στη σελίδα της ιδέας 03. <b>Εγώ:</b> το script, τα leads, οι slides, η σημείωση κάθε κλήσης. Στόχος: 2 δωρεάν πιλότοι.</li><li><b class="t">Η πρώτη απόφαση με αριθμό <span class="time">Εβδ. 3</span></b>300€ ξοδεύτηκαν. Κόστος ανά συνάντηση που έγινε: κάτω από το «μέγιστο» → 60€/μέρα. Πάνω → αλλάζουμε ένα πράγμα. Το αποφασίζεις σε 5 λεπτά με τον πίνακα, όχι με το συναίσθημα.</li><li><b class="t">Ο πρώτος άνθρωπος <span class="time">Εβδ. 5–8</span></b><b>Εγώ:</b> αγγελία, τεστ 2 ωρών, εγχειρίδιο από το CLAUDE.md, λίστα ελέγχου drafts. <b>Εσύ:</b> διαλέγεις 1 από 3, δοκιμή 2 εβδομάδων. Από τη μέρα που ξεκινά, τα chats και οι αλλαγές δεν περνούν πια από τα χέρια σου — μόνο το ✓.</li><li><b class="t">Οι πιλότοι γίνονται πελάτες <span class="time">Εβδ. 6–10</span></b>Οι 2 πιλότοι → 1.500–3.000€ + συνδρομή. Γράφουμε το case study με όνομα. Δεύτερη φουρνιά 50 κλήσεων με «το κάνουμε ήδη στο…».</li><li><b class="t">Ταΐζουμε ό,τι απέδειξε τον αριθμό <span class="time">Εβδ. 9–12</span></b>Διαφήμιση ιστοσελίδων στο επίπεδο που επιτρέπει το 1/3 των εσόδων (1.800–3.000€). Google Ads ως 2ο κανάλι. Αν υπάρχει case study, πρώτες 1.000€ διαφήμισης στο high-ticket. Στο τέλος της εβδομάδας 12 ξαναδιαβάζεις αυτή τη σελίδα με τους ΠΡΑΓΜΑΤΙΚΟΥΣ αριθμούς στους ρυθμιστές.</li></ol>
+<div class="sub-h">Πού πρέπει να είσαι στις 90 μέρες (με τους σημερινούς ρυθμιστές)</div>
+<div class="goals"><div id="g1"><b>—</b><span>νέοι πελάτες ιστοσελίδων στους 3 μήνες</span></div><div id="g2"><b>—</b><span>MRR από social/Google Ads</span></div><div id="g3"><b>—</b><span>πελάτες high-ticket (πιλότοι που πλήρωσαν)</span></div><div id="g4"><b>—</b><span>καθαρό μηνιαίο εισόδημα τον μήνα 3</span></div></div>
+</div></section>
+
+<section class="blk" id="verdict"><div class="next rv"><div class="k"><i></i>Αν ήμουν στη θέση σου</div><h3>Έξι γραμμές, χωρίς περιστροφές.</h3>
+<ol class="vlist"><li>Σταματάς να μετράς τον εαυτό σου με το τι κάνεις ΕΣΥ σε μια μέρα. Η επιχείρησή σου είναι μια αναλογία (€ μέσα → € έξω) και μια ώρα σου που αξίζει εκατοντάδες. Αυτά μετράς.</li><li>Ανοίγεις τη διαφήμιση ιστοσελίδων ΑΥΤΗ την εβδομάδα με 30€/μέρα — όχι γιατί είσαι σίγουρος, αλλά για να μάθεις τον ένα αριθμό που σου λείπει. Τα 300€ είναι το κόστος της γνώσης.</li><li>Πουλάς social/Google Ads στους 220 που ήδη σε εμπιστεύονται ΠΡΙΝ ψάξεις τον 221ο. Είναι το φθηνότερο χρήμα που θα βγάλεις ποτέ.</li><li>Προσλαμβάνεις τον πρώτο άνθρωπο όταν οι ώρες σου περάσουν τις 120 — όχι νωρίτερα, όχι αργότερα. Ανά αποτέλεσμα ή με δοκιμή 2 εβδομάδων. Ο φόβος φεύγει την πρώτη εβδομάδα.</li><li>Το high-ticket το κερδίζεις με 100 κλήσεις και 2 πιλότους, ΜΕΤΑ το ταΐζεις με διαφήμιση. Ένας πελάτης τον μήνα είναι αρκετός: 3.000€ + 250€/μήνα × 12 μήνες = 36.000€ τον χρόνο μετά.</li><li>Μία μηχανή τη φορά. Τα υπόλοιπα στη σελίδα Ιδέες περιμένουν τη σειρά τους — δεν χάνονται, μπαίνουν σε ουρά. Σε 90 μέρες ξαναγυρίζεις εδώ με πραγματικούς αριθμούς και το ξαναγράφουμε.</li></ol>
+<p class="small" style="margin:14px 0 0;opacity:.8">Αυτή η σελίδα ξαναϋπολογίζεται με τους ρυθμιστές. Οι τρέχουσες τιμές τους μένουν στο πρόγραμμα περιήγησής σου, ώστε την επόμενη φορά να βρεις τους δικούς σου αριθμούς.</p></div></section>
+<p class="src">Πηγές: κόστος ανά lead 5–15€ για υπηρεσίες B2B/επαγγελματίες στο Meta (ευρωπαϊκοί μέσοι όροι 2025–26, WordStream / Metricool benchmarks) · οι ποσοστιαίες τιμές σου (45–50% κλείσιμο) όπως μου τις είπες · τιμές Advon από το advonmedia.com.</p>
+</main>
+</div>
+<footer class="foot"><div class="wrap">Advon Media · ιδιωτική σελίδα · 21 Οκτ 2026 · <a href="./">Όλες οι ιδέες</a> · <a href="https://crm.advonmedia.com/">Πίσω στο CRM</a></div></footer>
+<script src="ideas.js?v=20261018"></script>
+<script>
+(function(){
+var d=document, LANG=d.documentElement.lang.indexOf('el')===0;
+var DEF={"calls": 15, "callMeet": 12, "meetClient": 47, "price": 130, "renew": 75, "take": 20, "mrr": 79, "hrs": 1.25, "cpl": 10, "leadMeet": 30, "setup": 3000, "mon": 250, "hClose": 15, "hCpm": 90, "hDel": 25}, KEY='advon-scale-v1', S={};
+try{ var sv=JSON.parse(localStorage.getItem(KEY)||'{}'); for(var k in DEF) S[k]=(k in sv)?+sv[k]:DEF[k]; }catch(e){ for(var k in DEF) S[k]=DEF[k]; }
+function eur(n,dec){ n=Math.round(n); var s=Math.abs(n).toLocaleString(LANG?'el-GR':'en-GB'); return (n<0?'−':'')+s+'€'; }
+function pct(n){ return Math.round(n)+'%'; }
+function fmt(k,v){ var f=d.querySelector('[data-k="'+k+'"]').dataset.f; if(f==='%d%%') return Math.round(v)+'%'; if(f==='%d€') return eur(v); if(f==='%.1f') return (Math.round(v*4)/4).toLocaleString(LANG?'el-GR':'en-GB',{minimumFractionDigits:1,maximumFractionDigits:2}); return Math.round(v); }
+var DOMAIN=12, BASE=220, HOURS_CAP=120, WORKDAYS=20;
+function calc(){
+  var s=S, cm=s.callMeet/100, mc=s.meetClient/100, rn=s.renew/100, tk=s.take/100, lm=s.leadMeet/100;
+  var net=s.price-DOMAIN;
+  var ltv=net*(1+rn+rn*rn) + tk*s.mrr*36*0.85;           // 3 years, 85% of social clients stay the whole time
+  var meetV=ltv*mc, hourV=meetV*4;
+  var maxMeet=net*mc;                                       // break even in month 1
+  var maxLead=maxMeet*lm, cpc=s.cpl/(lm*mc);
+  var callMeetings=s.calls*WORKDAYS*cm, callClients=callMeetings*mc;
+  return {net:net,ltv:ltv,meetV:meetV,hourV:hourV,maxMeet:maxMeet,maxLead:maxLead,cpc:cpc,callMeetings:callMeetings,callClients:callClients,cm:cm,mc:mc,rn:rn,tk:tk,lm:lm};
+}
+function adsRow(B,c){
+  var leads=B/S.cpl, meets=leads*c.lm, cl=meets*c.mc;
+  return {B:B,leads:leads,meets:meets,cl:cl,first:cl*S.price,profit:cl*c.net-B,ltv:cl*c.ltv,hours:cl*S.hrs+meets*0.25};
+}
+function sim(kind,c){
+  // 12 months; returns arrays of net income + info
+  var out=[],cum=0,cumSoc=0,socPaying=0,hrsOver=null,ht=0,ltot=0;
+  for(var m=1;m<=12;m++){
+    var B=0, team=0, newC=c.callClients, meets=c.callMeetings, htNew=0;
+    if(kind>0){ B = m<=2?900 : m<=4?1800 : 3000; if(kind===2 && m>=7) B=4500; }
+    if(kind===2 && m>=4) team=1000;
+    if(kind===2 && m>=5) htNew=1;
+    if(B){ var a=adsRow(B,c); newC+=a.cl; meets+=a.meets; }
+    if(kind>0) { newC = Math.max(newC, 0); }
+    // when ads run, cold calls stop once hours are tight (simple: keep calls)
+    var socNew = cumSoc; // social clients who signed before this month pay this month
+    var renew = BASE*c.rn*c.net/12 + (m>12?0:0);
+    var revenue = newC*c.net + socNew*S.mrr + renew + ht*S.mon + htNew*S.setup;
+    var hours = newC*S.hrs + meets*0.25 + socNew*0.15 + ht*3 + htNew*S.hDel;
+    if(kind===2 && team) hours = Math.max(0, hours - 100);
+    var netInc = revenue - B - team;
+    if(hrsOver===null && hours>HOURS_CAP) hrsOver=m;
+    out.push({m:m,net:netInc,newC:newC,hours:hours,mrr:socNew*S.mrr,B:B});
+    cum+=newC; cumSoc+=newC*c.tk; ht+=htNew; ltot+=netInc;
+  }
+  return {rows:out,total:ltot,hrsOver:hrsOver,cum:cum};
+}
+function setOut(id,txt){ var e=d.getElementById(id); if(e) e.firstElementChild.textContent=txt; }
+var COL=['#C47F12','#2F6FE0','#0F7A5C'], NAMES=LANG?['Σήμερα','Διαφημίσεις','Διαφημίσεις + άνθρωπος']:['Today','Ads','Ads + a person'];
+var sims=[];
+function render(){
+  var c=calc();
+  setOut('oClient',eur(c.ltv)); setOut('oMeet',eur(c.meetV)); setOut('oHour',eur(c.hourV)); setOut('oMaxMeet',eur(c.maxMeet)); setOut('oMaxLead',eur(c.maxLead)); setOut('oCpc',eur(c.cpc));
+  [].forEach.call(d.querySelectorAll('.hourv'),function(e){e.textContent=eur(c.hourV)});
+  // ads table
+  var tb=d.getElementById('adsBody'); tb.innerHTML='';
+  [900,1800,3000].forEach(function(B){ var a=adsRow(B,c), tr=d.createElement('tr');
+    var cls=a.profit>=0?'pos':'neg', hc=a.hours>HOURS_CAP?'warn':'';
+    tr.innerHTML='<td><b>'+eur(B)+'</b></td><td class="r">'+Math.round(a.leads)+'</td><td class="r">'+Math.round(a.meets)+'</td><td class="r"><b>'+Math.round(a.cl)+'</b></td><td class="r">'+eur(a.first)+'</td><td class="r '+cls+'">'+eur(a.profit)+'</td><td class="r">'+eur(a.ltv)+'</td><td class="r '+hc+'">'+Math.round(a.hours)+' h</td>';
+    tb.appendChild(tr); });
+  var cm=d.getElementById('cpcNote'); if(cm) cm.textContent = eur(c.cpc);
+  // scenarios
+  sims=[sim(0,c),sim(1,c),sim(2,c)];
+  var sb=d.getElementById('scenBody'); sb.innerHTML='';
+  sims.forEach(function(s,i){ var r=s.rows[11], tr=d.createElement('tr');
+    tr.innerHTML='<td><s style="text-decoration:none;display:inline-block;width:10px;height:10px;border-radius:50%;background:'+COL[i]+';margin-right:8px;vertical-align:middle"></s><b>'+NAMES[i]+'</b></td><td class="r">'+Math.round(r.newC)+'</td><td class="r"><b>'+eur(r.net)+'</b></td><td class="r">'+eur(s.total)+'</td><td class="r '+(r.hours>HOURS_CAP?'warn':'')+'">'+Math.round(r.hours)+' h</td><td class="r">'+eur(r.mrr)+'</td>';
+    sb.appendChild(tr); });
+  drawChart(sims);
+  // high ticket
+  var y1=S.setup+12*S.mon, cac=S.hCpm/(S.hClose/100), roi=y1/cac, hmax=S.setup*(S.hClose/100);
+  setOut('hY1',eur(y1)); setOut('hCac',eur(cac)); setOut('hRoi',(Math.round(roi*10)/10).toLocaleString(LANG?'el-GR':'en-GB')+'×'); setOut('hMax',eur(hmax));
+  // 90-day goals (month 3 of scenario 1 + social)
+  var s1=sims[1], g1=0,g2=s1.rows[2].mrr; for(var i=0;i<3;i++) g1+=s1.rows[i].newC;
+  var exSoc = 15*S.mrr; // 15 existing clients say yes in month 1
+  setOut('g1',Math.round(g1)); setOut('g2',eur(g2+exSoc)+' /'+(LANG?'μήνα':'mo')); setOut('g3','2'); setOut('g4',eur(s1.rows[2].net+exSoc));
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+}
+function drawChart(sims){
+  var host=d.getElementById('chart'), W=720,H=300,PL=56,PR=24,PT=16,PB=30;
+  var all=[]; sims.forEach(function(s){s.rows.forEach(function(r){all.push(r.net)})});
+  var mx=Math.max.apply(null,all), mn=Math.min(0,Math.min.apply(null,all));
+  var step=Math.pow(10,Math.floor(Math.log10(mx-mn||1))); if((mx-mn)/step<4) step/=2; if((mx-mn)/step>8) step*=2;
+  var top=Math.ceil(mx/step)*step, bot=Math.floor(mn/step)*step;
+  var X=function(m){return PL+(m-1)*(W-PL-PR)/11}, Y=function(v){return PT+(top-v)*(H-PT-PB)/(top-bot||1)};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+(LANG?'Καθαρό μηνιαίο εισόδημα ανά σενάριο':'Net monthly income per scenario')+'">';
+  for(var v=bot;v<=top+1;v+=step){ s+='<line class="gl" x1="'+PL+'" x2="'+(W-PR)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke-width="1"/><text class="ax" x="'+(PL-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+(v/1000).toLocaleString(LANG?'el-GR':'en-GB')+'k</text>'; }
+  for(var m=1;m<=12;m++) s+='<text class="ax" x="'+X(m)+'" y="'+(H-10)+'" text-anchor="middle">'+m+'</text>';
+  var ho=sims[1].hrsOver; if(ho){ s+='<line x1="'+X(ho)+'" x2="'+X(ho)+'" y1="'+PT+'" y2="'+(H-PB)+'" stroke="#B45309" stroke-dasharray="4 4" stroke-width="1.5"/>'; }
+  sims.forEach(function(sm,i){ var p=sm.rows.map(function(r){return X(r.m).toFixed(1)+','+Y(r.net).toFixed(1)}).join(' ');
+    s+='<polyline fill="none" stroke="'+COL[i]+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="'+p+'"/>';
+    var last=sm.rows[11]; s+='<circle cx="'+X(12)+'" cy="'+Y(last.net)+'" r="4" fill="'+COL[i]+'" stroke="#fff" stroke-width="2"/>';
+  });
+  s+='<g id="hov" style="display:none"><line id="hl" y1="'+PT+'" y2="'+(H-PB)+'" stroke="#15201E" stroke-opacity=".35" stroke-width="1"/>'+sims.map(function(_,i){return '<circle id="hc'+i+'" r="5" fill="'+COL[i]+'" stroke="#fff" stroke-width="2"/>'}).join('')+'</g>';
+  s+='<rect id="hit" x="'+PL+'" y="'+PT+'" width="'+(W-PL-PR)+'" height="'+(H-PT-PB)+'" fill="transparent"/></svg>';
+  host.innerHTML=s;
+  var lg=d.getElementById('lg'); lg.innerHTML=sims.map(function(sm,i){return '<span><i style="background:'+COL[i]+'"></i>'+NAMES[i]+' · '+(LANG?'μήνας 12':'month 12')+': <b>'+eur(sm.rows[11].net)+'</b></span>'}).join('') + (ho?'<span><i style="background:#B45309;height:1px;border-top:2px dashed #B45309;background:none"></i>'+(LANG?'μήνας '+ho+': ':'month '+ho+': ')+host.dataset.hrs+'</span>':'');
+  var svg=host.querySelector('svg'), hit=svg.querySelector('#hit'), hov=svg.querySelector('#hov'), tip=d.getElementById('tip');
+  function mv(e){ var r=svg.getBoundingClientRect(), x=(e.clientX-r.left)*W/r.width, m=Math.max(1,Math.min(12,Math.round((x-PL)/((W-PL-PR)/11))+1));
+    hov.style.display=''; svg.querySelector('#hl').setAttribute('x1',X(m)); svg.querySelector('#hl').setAttribute('x2',X(m));
+    sims.forEach(function(sm,i){var c=svg.querySelector('#hc'+i); c.setAttribute('cx',X(m)); c.setAttribute('cy',Y(sm.rows[m-1].net))});
+    tip.innerHTML='<b>'+(LANG?'Μήνας ':'Month ')+m+'</b><br>'+sims.map(function(sm,i){return '<span style="color:'+COL[i]+'">●</span> '+NAMES[i]+': <b>'+eur(sm.rows[m-1].net)+'</b> · '+Math.round(sm.rows[m-1].newC)+(LANG?' νέοι':' new')+' · '+Math.round(sm.rows[m-1].hours)+' h'}).join('<br>');
+    tip.style.left=(X(m)*r.width/W)+'px'; tip.style.top=(Y(sims[2].rows[m-1].net)*r.height/H+host.querySelector('h4').offsetHeight+10)+'px'; tip.style.opacity=1; }
+  hit.addEventListener('pointermove',mv); hit.addEventListener('pointerleave',function(){hov.style.display='none';tip.style.opacity=0});
+}
+[].forEach.call(d.querySelectorAll('input[type=range][data-k]'),function(r){ var k=r.dataset.k; r.value=S[k]; var b=r.parentNode.querySelector('.lab b'); b.textContent=fmt(k,S[k]);
+  r.addEventListener('input',function(){ S[k]=+r.value; b.textContent=fmt(k,S[k]); render(); }); });
+[].forEach.call(d.querySelectorAll('.rst'),function(b){ b.addEventListener('click',function(){ for(var k in DEF) S[k]=DEF[k]; [].forEach.call(d.querySelectorAll('input[type=range][data-k]'),function(r){ r.value=S[r.dataset.k]; r.parentNode.querySelector('.lab b').textContent=fmt(r.dataset.k,S[r.dataset.k]); }); render(); }); });
+render();
+})();
+</script>
+</body>
+</html>

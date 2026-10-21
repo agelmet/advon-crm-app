@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#F7F5EF">
+<title>Think like a business · Ideas</title>
+<meta name="description" content="Advon as a machine, in numbers: what a meeting is worth, what ads can turn into, when and how to hire, what to do with your time — with sliders for your own numbers.">
+<link rel="icon" type="image/png" sizes="32x32" href="../img/advon-mark-32.png?v=20261018">
+<link rel="apple-touch-icon" href="../img/advon-mark-180.png?v=20261018">
+<link rel="alternate" hreflang="el" href="../scale.html"><link rel="alternate" hreflang="en" href="scale.html">
+<link rel="preload" as="image" href="../img/advon-logo.webp?v=20261018">
+<link rel="stylesheet" href="../ideas.css?v=20261018">
+<style>@font-face{font-family:"Caveat";src:url(../fonts/caveat-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+:root{--c:#1F3A5F;--c2:#C47F12;--c3:#2F6FE0;--c4:#0F7A5C}
+.sl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px}
+@media(max-width:760px){.sl-grid{grid-template-columns:1fr}}
+.sl{display:block}
+.sl .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--ink2);margin-bottom:4px}
+.sl .lab b{color:var(--ink);font-size:16px;font-variant-numeric:tabular-nums}
+.sl input[type=range]{width:100%;accent-color:var(--c);height:28px;margin:0}
+.outs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+@media(max-width:860px){.outs{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.outs{grid-template-columns:1fr}}
+.out{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--sh1)}
+.out b{display:block;font-size:30px;letter-spacing:-.02em;color:var(--c);line-height:1.1;font-variant-numeric:tabular-nums}
+.out span{display:block;font-size:14.5px;font-weight:700;color:var(--ink);margin:6px 0 4px}
+.out small{display:block;font-size:13px;color:var(--mute);line-height:1.45}
+.out.hi{background:var(--c);border-color:var(--c)}
+.out.hi b,.out.hi span{color:#fff}.out.hi small{color:rgba(255,255,255,.75)}
+.rst{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font:700 13px/1 inherit;font-family:inherit;color:var(--ink2);cursor:pointer;margin-top:12px}
+.rst:hover{color:var(--ink)}
+table.num td,table.num th{font-variant-numeric:tabular-nums}
+td.pos{color:var(--c4);font-weight:700}td.neg{color:#B42318;font-weight:700}td.warn{color:#B45309;font-weight:700}
+.rule5{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:860px){.rule5{grid-template-columns:1fr}}
+.rule5 .card:last-child{grid-column:1/-1}
+.rule5 .card h3{font-size:17px}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 18px 10px;box-shadow:var(--sh1);margin-top:16px;position:relative}
+.chart h4{margin:0 0 6px;font-size:15px;color:var(--ink)}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart .lg{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--ink2);margin:8px 0 4px}
+.chart .lg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.chart .lg s{text-decoration:none;display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.chart .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:10px;padding:8px 11px;font-size:12.5px;line-height:1.4;opacity:0;transform:translate(-50%,-110%);transition:opacity .15s;white-space:nowrap;z-index:2}
+.chart .tip b{color:#fff}
+.chart .gl{stroke:var(--line)}.chart .ax{fill:var(--mute);font-size:11px}
+.scen3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+@media(max-width:860px){.scen3{grid-template-columns:1fr}}
+.scen3 .card{border-top:4px solid var(--sc)}
+.scen3 .card h3{font-size:16px;color:var(--sc)}
+.lad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+@media(max-width:900px){.lad{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.lad{grid-template-columns:1fr}}
+.lad .st{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--sh1);position:relative}
+.lad .st .w{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--c);margin-bottom:6px}
+.lad .st b{display:block;font-size:15.5px;margin-bottom:6px;color:var(--ink)}
+.lad .st p{font-size:14px;color:var(--ink2);margin:0}
+.lad .st::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--mute);font-weight:800}
+.lad .st:last-child::after{display:none}
+@media(max-width:900px){.lad .st::after{display:none}}
+.hl{display:grid;grid-template-columns:1fr;gap:12px}
+.hl .h{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--sh1);display:grid;grid-template-columns:120px 1fr auto;gap:14px;align-items:start}
+@media(max-width:700px){.hl .h{grid-template-columns:1fr}}
+.hl .h .w{font-weight:800;color:var(--c);font-size:14px;letter-spacing:.02em}
+.hl .h b{display:block;font-size:16px;margin-bottom:4px}
+.hl .h p{margin:0;font-size:14.5px;color:var(--ink2)}
+.hl .h .pr{font-size:13px;font-weight:800;background:var(--paper2);border-radius:999px;padding:6px 10px;white-space:nowrap;color:var(--ink2)}
+.goals{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+@media(max-width:860px){.goals{grid-template-columns:repeat(2,1fr)}}
+.goals div{background:var(--paper2);border-radius:16px;padding:14px 16px}
+.goals b{display:block;font-size:26px;color:var(--c);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.goals span{font-size:13.5px;color:var(--ink2)}
+.vlist{counter-reset:v;list-style:none;padding:0;margin:14px 0 0}
+.vlist li{position:relative;padding:0 0 0 44px;margin:0 0 14px;font-size:16px;line-height:1.55}
+.vlist li::before{counter-increment:v;content:counter(v);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+.flw{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0 6px}
+@media(max-width:760px){.flw{grid-template-columns:1fr 1fr}}
+.flw div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 12px;text-align:center;box-shadow:var(--sh1);position:relative}
+.flw div b{display:block;font-size:15px;color:var(--ink);margin-bottom:3px}
+.flw div span{font-size:12.5px;color:var(--mute)}
+.flw div:not(:first-child)::before{content:'→';position:absolute;left:-11px;top:50%;transform:translateY(-50%);color:var(--mute);font-weight:800;background:var(--paper);padding:0 2px}
+@media(max-width:760px){.flw div::before{display:none!important}}
+table.cmp{font-size:14px}table.cmp th{font-size:11px}
+.outs.o4{grid-template-columns:repeat(2,1fr)}
+</style>
+</head>
+<body>
+<div class="prog" aria-hidden="true"></div>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./" aria-label="Advon Media · Ideas"><img src="../img/advon-logo.webp?v=20261018" width="87" height="44" alt="Advon Media"><span class="sep" aria-hidden="true"></span><span class="bt">Ideas</span></a>
+  <nav>
+    <a href="./#now" class="hide-s">Now</a><a href="./#next" class="hide-s">Next</a><a href="./#all" class="hide-s">All ideas</a><a href="https://crm.advonmedia.com/" class="hide-s">CRM ↗</a><span class="lang"><a href="../scale.html" hreflang="el" lang="el">ΕΛ</a><a href="scale.html" class="on" hreflang="en" lang="en">EN</a></span>
+  </nav>
+</div></header>
+
+<section class="dhero"><div class="glow"></div><div class="wrap">
+  <a class="back" href="./">← All ideas</a>
+  <div class="dhero-grid">
+    <div>
+      <div class="k rv"><i></i>Strategy · the mastermind’s advice</div>
+      <div class="tagrow rv"><span class="tag doing dot">New · 21 Oct</span><span class="tag type">Strategy</span><span class="tag type">Maths + plan</span></div>
+      <h1 class="rv d1">You are not a “small business”. You are one person with a machine you haven’t fed yet.</h1>
+      <p class="oneline rv d2">You close 45–50% of meetings, you have 220+ sites online, delivery costs you almost no time, and you have a few thousand euros for ads. That isn’t small — it’s a machine you’ve only ever cranked by hand. This page shows, in numbers, what happens when you plug it in.</p>
+    </div>
+    <div class="art rv d2"><svg class="draw " viewBox="0 0 320 200" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle class="fill" cx="236" cy="78" r="52" fill="currentColor" stroke="none" fill-opacity=".08"/>
+<path pathLength="1" d="M24 172h272"/>
+<rect pathLength="1" class="d2" x="48" y="120" width="34" height="52" rx="4"/>
+<rect pathLength="1" class="d3" x="104" y="92" width="34" height="80" rx="4"/>
+<rect pathLength="1" class="d4" x="160" y="58" width="34" height="114" rx="4"/>
+<rect pathLength="1" class="d5 fill" x="216" y="22" width="34" height="150" rx="4" fill="currentColor" stroke="none" fill-opacity=".14"/>
+<rect pathLength="1" class="d5" x="216" y="22" width="34" height="150" rx="4"/>
+<g class="float"><circle pathLength="1" class="d3" cx="65" cy="100" r="9"/><path pathLength="1" class="d4" d="M60 114l-6 10M70 114l6 10"/></g>
+<path pathLength="1" class="d4" d="M70 96c30-30 76-40 112-44l12-2"/><path pathLength="1" class="d5" d="M186 44l10 6-3 11"/>
+<g class="float s2"><path pathLength="1" class="d5" d="M272 40l6 12 13 2-10 9 3 13-12-7-12 7 3-13-10-9 13-2z"/></g>
+</svg></div>
+  </div>
+  <div class="strip"><div class="rv d1"><b>45–50%</b><span>meeting → client. This is the number that makes everything else work.</span></div><div class="rv d2"><b>220+</b><span>websites online — the proof that buys trust up front</span></div><div class="rv d3"><b>~0 hours</b><span>building costs you — Claude is the factory</span></div><div class="rv d1"><b>1 number</b><span>you are missing: what a booked meeting costs from an ad</span></div></div>
+</div></section><div class="wrap layout">
+  <aside class="toc"><b>On this page</b><a href="#mindset">How an owner thinks</a><a href="#machine">Your machine in numbers</a><a href="#ads">Ads: the maths</a><a href="#income">What the income can become</a><a href="#highticket">The high-ticket, in order</a><a href="#time">What your hour is worth</a><a href="#hire">Hiring without fear</a><a href="#risks">What can go wrong</a><a href="#plan">The next 90 days</a><a href="#verdict">If I were in your chair</a></aside>
+  <main>
+
+<section class="blk" id="mindset"><h2 class="rv"><small>How an owner thinks</small>Five rules that separate “a person who works” from “a person who owns a business”.</h2><div class="rv d1">
+<p>Every business you’ve seen running ads in the US or anywhere else has no secret. It has these five rules in the owner’s head. Read them as if someone who has done it many times is telling you — because that’s how they’re written.</p>
+<div class="rule5"><div class="card"><h3>1 · You are not the business. You are its first investor.</h3><p>Your job is not to do the work. It is to decide where every euro and every hour goes so that more comes back. When you build a site or answer a chat, you work FOR the business. When you decide “€1,000 into ads this month”, you work ON the business. Only the second one makes it bigger.</p></div><div class="card"><h3>2 · Every euro is either a cost or an investment. Never both.</h3><p>Cost = goes out and brings nothing back (Netlify credits for a tiny change). You are right to be stingy there. Investment = €1 goes out and €2 comes back (an ad that brings a meeting for less than the meeting is worth). There the owner does the opposite: looks for ways to put in MORE. The one-person mistake is treating both the same way — as a cost.</p></div><div class="card"><h3>3 · Measure the ratio, then feed the machine.</h3><p>A machine is a ratio: X in, Y out. First you measure it with little money (€300). If €1 → €2, you put in every euro you can find, because every euro you DON’T put in is lost profit. If €1 → €0.70, you don’t “spend more and hope” — you fix the machine (ad, page, offer) and measure again. You never scale something you haven’t measured.</p></div><div class="card"><h3>4 · Buy back your time.</h3><p>Your hour is worth the BEST thing you could do in it. If one hour of meetings brings 2 clients, your hour is worth hundreds of euros (the exact number is below). Every task someone would do for €15 an hour — changes, chasing payments, chats — costs you the difference each time you do it yourself. “I’ve never hired” is a fear, not a reason. We solve it below.</p></div><div class="card"><h3>5 · One experiment at a time, with a budget and a stop line.</h3><p>Owners don’t “take risks”. They set: this much money, this many days, this number means “continue”, this number means “stop”. Then they decide with the number, not the feeling. That way a “failure” costs €300 and a lesson, never the business. And a “success” becomes an instant order: double it.</p></div></div>
+<div class="callout"><b>The only thing you are truly missing:</b> one number. What a booked meeting costs when you buy it from Meta instead of earning it on the phone. You don’t know it, so your head fills the gap with “I’m small”. Below we work out how much you CAN pay — and then the only thing left is to measure it.</div>
+</div></section>
+
+<section class="blk" id="machine"><h2 class="rv"><small>Your machine in numbers</small>What a meeting, a client and an hour of yours are worth — with your own numbers.</h2><div class="rv d1">
+<p>The sliders start with sensible values. Move them to your real numbers (your renewal rate is in CRM → Renewals) and the WHOLE page recalculates: ads, income, hours, hiring.</p>
+<div class="card"><div class="sl-grid"><label class="sl"><span class="lab"><span>Calls per day (when you call)</span><b></b></span><input type="range" min="3" max="60" step="1" data-k="calls" data-f="%d"></label><label class="sl"><span class="lab"><span>Call → meeting</span><b></b></span><input type="range" min="2" max="40" step="1" data-k="callMeet" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Meeting → client</span><b></b></span><input type="range" min="10" max="80" step="1" data-k="meetClient" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Hosting per year (ex VAT)</span><b></b></span><input type="range" min="80" max="300" step="5" data-k="price" data-f="%d€"></label><label class="sl"><span class="lab"><span>Renew in year 2</span><b></b></span><input type="range" min="30" max="100" step="1" data-k="renew" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Take Google Ads / social (idea 01)</span><b></b></span><input type="range" min="0" max="60" step="1" data-k="take" data-f="%d%%"></label><label class="sl"><span class="lab"><span>…and pay per month</span><b></b></span><input type="range" min="29" max="199" step="1" data-k="mrr" data-f="%d€"></label><label class="sl"><span class="lab"><span>Your hours per new client (besides the meeting)</span><b></b></span><input type="range" min="0.25" max="4" step="0.25" data-k="hrs" data-f="%.1f"></label><label class="sl"><span class="lab"><span>Cost per lead from Meta</span><b></b></span><input type="range" min="2" max="40" step="1" data-k="cpl" data-f="%d€"></label><label class="sl"><span class="lab"><span>Lead → meeting that happens</span><b></b></span><input type="range" min="10" max="80" step="1" data-k="leadMeet" data-f="%d%%"></label></div><button class="rst" type="button">Reset values</button></div>
+<div class="outs"><div class="out" id="oClient"><b>—</b><span>Value of one client over 3 years</span><small>hosting + renewals + 3 years of social/Ads for those who take it, minus domain</small></div><div class="out" id="oMeet"><b>—</b><span>Value of one meeting</span><small>× your close rate — what every 15 minutes brings on average</small></div><div class="out" id="oHour"><b>—</b><span>Value of one hour of your meetings</span><small>4 meetings an hour. Anything you do that is worth less, someone else does.</small></div><div class="out hi" id="oMaxMeet"><b>—</b><span>Most you should pay for one meeting</span><small>to get the money back WITHIN THE FIRST MONTH (from the first payment alone)</small></div><div class="out" id="oMaxLead"><b>—</b><span>Break-even cost per lead</span><small>above this number the campaign loses; below half of it, it prints</small></div><div class="out" id="oCpc"><b>—</b><span>What a client from ads will cost</span><small>with the cost per lead and the rates you set</small></div></div>
+<div class="callout"><b>Read the two “most you should pay” boxes like this:</b> Meta doesn’t know what a meeting is worth to you — you do. If a booked meeting costs you less than the “most”, every ad euro comes back within 30 days and everything after (renewals, social) is pure profit. That is exactly what the “big” businesses do: they know the number and pay up to it, without anxiety.</div>
+</div></section>
+
+<section class="blk" id="ads"><h2 class="rv"><small>Ads for the website offer</small>The maths, step by step: from budget to clients.</h2><div class="rv d1">
+<p>Your model (building 0€, 130€ paid at the first draft) is MADE for ads: the offer takes 3 seconds to say, the proof exists (220+ sites, 130 reviews), and delivery costs you almost nothing. The only “but” is that each client pays little — which is why the most important knob isn’t the budget, it’s idea 01 (Google Ads/social to clients), which multiplies what each one is worth by five.</p>
+<div class="flw"><div><b>Budget</b><span>€ / month</span></div><div><b>Leads</b><span>÷ cost per lead</span></div><div><b>Meetings</b><span>× lead → meeting</span></div><div><b>Clients</b><span>× meeting → client</span></div><div><b>First payments</b><span>× 130€ in month 1</span></div></div>
+<div class="sub-h">Three budget levels — what each one produces per month</div>
+<div class="tscroll"><table class="num cmp"><thead><tr><th>Budget / month</th><th class=r>Leads</th><th class=r>Meetings</th><th class=r>Clients</th><th class=r>First payments</th><th class=r>Month-1 profit</th><th class=r>3-year value</th><th class=r>Your hours</th></tr></thead><tbody id="adsBody"></tbody></table></div>
+<p class="small mute">Cost per client with your sliders: <b id="cpcNote">—</b> · “Your hours” = 15′ meetings + the hours per client you set. Orange = above 120 hours a month.</p>
+<div class="callout warn"><b>The “stop / continue” rule (write it down before you start):</b> After the first <b>€300</b>, work out cost per <u>booked meeting that actually happened</u> (not per lead). If it is <b>below the “most you should pay” box above</b> → the machine works: double the daily budget every 2 weeks as long as the number stays there. If it is <b>above</b> → do NOT add money; change ONE thing (the video, the copy, the /dorean page, the audience) and measure again with another €300. Never more than two “change one thing” rounds before you ask what people say in the meetings.</div>
+<div class="cols2"><div class="card"><h3>Cash flow</h3><p class="small">You pay the ad today; the client pays at the first draft, 4–10 days after the meeting. So you need roughly <b>one month of ads up front</b> — your “few thousand” is exactly that. From month 2 the machine pays for itself.</p></div><div class="card"><h3>Where it breaks</h3><p class="small">Not on money. On your hours: look at the “Your hours” column. Once it passes <b>~120 hours a month</b>, you don’t need less advertising — you need the first person (section “Hiring”). That is the good moment to hire: when the work already exists and already pays.</p></div><div class="card"><h3>The audience</h3><p class="small">Your (Advon) ads do NOT fall under Meta’s health restrictions — you sell websites, not medical services. Audience: self-employed 27+, Attica + big cities, interests “small business owner”, “private practice”, a lookalike of your 220 clients (upload their e-mails).</p></div><div class="card"><h3>The creative</h3><p class="small">You already have the videos that work (“Your nephew is not a web designer”, “Yellow Pages”, “loading…”). Run 3–4 together; Meta picks. The landing page is /dorean with the calendar — the meeting gets booked WITHOUT you.</p></div></div>
+</div></section>
+
+<section class="blk" id="income"><h2 class="rv"><small>What the income can become</small>Twelve months, three scenarios, same sliders.</h2><div class="rv d1">
+<p>Net monthly income (ex VAT, before tax) after ads, domains and the salary of the person you hire. Renewals of today’s 220 clients are in every scenario. Each new client brings the first payment in the month they close and — for the share you set on the slider — social/Google Ads from the next month.</p>
+<div class="scen3"><div class="card" style="--sc:#C47F12"><h3>Today</h3><p class="small">Phone only, as now. The “calls” sliders set the new clients.</p></div><div class="card" style="--sc:#2F6FE0"><h3>Ads</h3><p class="small">Phone + Meta: €900 in months 1–2, €1,800 in 3–4, €3,000 from month 5 — ONLY if the “continue” rule holds. The month your hours pass 120 is marked.</p></div><div class="card" style="--sc:#0F7A5C"><h3>Ads + a person</h3><p class="small">The same, but from month 4 one person (€1,000/month) takes the chats, changes and organising; you keep meetings, ads, decisions. Ads rise to €4,500 from month 7. From month 5, one high-ticket client (AI office assistant) per month.</p></div></div>
+<div class="chart"><h4>Net monthly income, months 1–12</h4><div id="chart" data-hrs="your hours pass 120 → time for the first person"></div><div class="lg" id="lg"></div><div class="tip" id="tip"></div></div>
+<div class="sub-h">Table · month 12</div>
+<div class="tscroll"><table class="num cmp"><thead><tr><th>Scenario</th><th class=r>New / month</th><th class=r>Net, month 12</th><th class=r>12-month total</th><th class=r>Your hours</th><th class=r>Social/Ads MRR</th></tr></thead><tbody id="scenBody"></tbody></table></div>
+<div class="callout"><b>What to take from the chart:</b> the “Today” line rises slowly, only from renewals and social. The gap between the three lines is NOT talent, hours or luck — it is ONLY (a) that you bought meetings instead of earning them one by one and (b) that you paid a person €1,000 to keep your hours where they are worth most. If your real numbers come out worse, move the sliders — the logic stays, the numbers change.</div>
+</div></section>
+
+<section class="blk" id="highticket"><h2 class="rv"><small>The high-ticket, in the right order</small>AI office assistant (1.5–5k + €150–300/month): when to put ads behind it, and when not yet.</h2><div class="rv d1">
+<p>You thought correctly: “ads after the 1st–2nd client”. Here is why that is the right order and not stinginess. In websites the ad works because the stranger sees 220 sites and 130 reviews and says “yes” in 15 minutes. In high-ticket the stranger pays €3,000 to someone who doesn’t yet have ONE office to show. Ads don’t create trust — they amplify it. If it isn’t there yet, they amplify the gap.</p>
+<div class="lad"><div class="st"><div class="w">Now → 3 wks</div><b>100 calls, 3 niches (already prepared)</b><p>Cost €0. Goal: 6–10 half-hour meetings, 2 free pilots. You learn WHAT they say, WHAT hurts them, WHICH niche closes.</p></div><div class="st"><div class="w">Month 2</div><b>2 pilots of 30 days → payment</b><p>The pilot converts to €1,500–3,000 setup + €150–300/month. One “yes” = the proof. You write its story (before/after, hours saved) with the office’s name.</p></div><div class="st"><div class="w">Month 3</div><b>Case study + 2nd batch of calls</b><p>Now the call says “we already run it at office X in Larissa”. Closing goes up. Goal: 3–5 clients in total, delivery running WITHOUT you every day.</p></div><div class="st"><div class="w">Month 4+</div><b>Ads behind the high-ticket</b><p>Only now: a video with the real client, landing on “free 30-day pilot”, calendar booking. Budget €1,000–1,500/month to start.</p></div></div>
+<div class="sub-h">The maths of one high-ticket client (change them)</div>
+<div class="card"><div class="sl-grid"><label class="sl"><span class="lab"><span>Setup</span><b></b></span><input type="range" min="500" max="8000" step="100" data-k="setup" data-f="%d€"></label><label class="sl"><span class="lab"><span>Subscription / month</span><b></b></span><input type="range" min="0" max="600" step="10" data-k="mon" data-f="%d€"></label><label class="sl"><span class="lab"><span>Meeting → client (B2B)</span><b></b></span><input type="range" min="5" max="50" step="1" data-k="hClose" data-f="%d%%"></label><label class="sl"><span class="lab"><span>Cost per meeting from ads (B2B)</span><b></b></span><input type="range" min="20" max="300" step="5" data-k="hCpm" data-f="%d€"></label><label class="sl"><span class="lab"><span>Your hours on the setup</span><b></b></span><input type="range" min="5" max="80" step="1" data-k="hDel" data-f="%d"></label></div></div>
+<div class="outs o4"><div class="out" id="hY1"><b>—</b><span>Year-1 revenue per client</span><small>setup + 12 subscriptions</small></div><div class="out" id="hCac"><b>—</b><span>Cost to win one client with ads</span><small>cost per meeting ÷ close rate</small></div><div class="out" id="hRoi"><b>—</b><span>Year-1 return</span><small>for every €1 of ads</small></div><div class="out" id="hMax"><b>—</b><span>Max cost per meeting to break even on the setup</span><small>above this you lose money in month 1</small></div></div>
+<div class="callout warn"><b>The real risk is not the sale — it is the delivery.</b> A €3,000 client expects answers within 2 hours, their data moved out of the notebook/Excel, training. Ten such clients at once with no person = your time disappears and the websites (the sure machine) suffer. That is why the high-ticket FOLLOWS the hire, it doesn’t precede it. And that is why in the “Ads + a person” scenario I put 1 new client a month, not 5: it is the pace a two-person office can carry.</div>
+</div></section>
+
+<section class="blk" id="time"><h2 class="rv"><small>What your hour is worth</small>One week of yours, piece by piece — which hour makes money and which one burns it.</h2><div class="rv d1">
+<p>The logic is simple: every activity has a price per hour — what it brings to the business, or what it would cost for someone else to do it. You keep ONLY the rows with the big numbers. The rest go to Claude, to a person, or get deleted.</p>
+<div class="tscroll"><table><thead><tr><th>What you do</th><th>Hours / week (typical)</th><th>Value per hour</th><th>Who should do it</th></tr></thead><tbody><tr><td>Meetings with prospects (15′)</td><td class="r">8</td><td class="r"><span class=hourv>—</span></td><td><b>YOU</b> — the most expensive thing you do. You close 1 in 2.</td></tr><tr><td>Decisions on ads, offers, prices</td><td class="r">2</td><td class="r"><span class=hourv>—</span>+</td><td><b>YOU</b> — 2 hours here change the whole month.</td></tr><tr><td>High-ticket sales (calls + 30′ meetings)</td><td class="r">4</td><td class="r">~€300</td><td><b>YOU</b> for the first 5 clients; then you teach someone.</td></tr><tr><td>Checking and approving drafts before they go out</td><td class="r">4</td><td class="r">~€60</td><td>YOU now → the person with a checklist from month 4.</td></tr><tr><td>Chats, changes, reminders, chasing payments</td><td class="r">8</td><td class="r">€15</td><td><b>A person</b> (€1,000/month) + Claude. Every hour you do it costs the difference.</td></tr><tr><td>Cold calls for websites</td><td class="r">10</td><td class="r">~€70</td><td>YOU until ads work → then a <b>setter</b> at €20 per meeting, or they stop.</td></tr><tr><td>Advon social, videos, content</td><td class="r">3</td><td class="r">~€40</td><td>Claude (already) + 20′ of your approval.</td></tr><tr><td>Invoices, Papaki, Netlify, accounting</td><td class="r">2</td><td class="r">€15</td><td>A person + Chiotis. Once a week, all together.</td></tr></tbody></table></div>
+<div class="callout"><b>The conclusion in one sentence:</b> of your ~40 hours a week, only ~14 are worth hundreds of euros an hour. The other 26 cost €15–60 an hour for someone else to do. One person at €1,000 a month buys you back ~100 hours — and those 100 hours, put into meetings and ads, are worth many thousands. That is the whole point of hiring: you don’t “spend €1,000”, you swap €15 hours for <span class="hourv">—</span> hours.</div>
+</div></section>
+
+<section class="blk" id="hire"><h2 class="rv"><small>Hiring without fear</small>You don’t hire “an employee”. You buy hours, a few at a time, with a trial.</h2><div class="rv d1">
+<p>“I’ve never done it” is true for every owner the first time. The answer isn’t courage — it is making it so small that it can’t go wrong expensively. There is a ladder, and you are already on the second step.</p>
+<div class="hl"><div class="h"><div class="w">Step 1</div><div><b>Automate</b><p>Done. Claude, CRM, reminders, backups, copy. You work as 1 person the way 4 would.</p></div><span class="pr">€0</span></div><div class="h"><div class="w">Step 2</div><div><b>Pay for the result</b><p>No salary, no hours: a setter who books meetings into your calendar and gets €15–25 per meeting that happens. No meetings, no pay. Found on Upwork / Facebook groups for phone sales / students. Maths: 3 meetings a day × €20 = €1,200/month → ~28 clients → €3,600 in first payments.</p></div><span class="pr">€0 risk</span></div><div class="h"><div class="w">Step 3</div><div><b>The first part-timer</b><p>One person 4 hours a day (~€700–1,000/month all-in, or a freelancer invoicing you) for chats, changes with Claude, draft checks with a checklist, reminders, invoices. Claude writes their manual from the CLAUDE.md in a day. A paid 2-week trial — if it doesn’t fit, you lost €400, not a business.</p></div><span class="pr">~€1,000/month</span></div><div class="h"><div class="w">Step 4</div><div><b>The second you</b><p>Only when meetings exceed what you can hold: someone who takes the 15-minute meeting with your script, paid on commission (e.g. €30 per client). Their close rate will be worse than yours at first — and that is fine, because they are only paid when they close.</p></div><span class="pr">commission</span></div></div>
+<div style="height:14px"></div>
+<div class="fear rv"><div class="q">I don’t know how to find / choose a person.</div><div class="a">You don’t choose — you test. Give 3 candidates the same small paid task (2 client chats + 1 change with Claude, 2 hours, €30 each). Keep the one who wrote the best Greek and asked the right questions. Claude writes the ad, the criteria and the test.</div></div><div class="fear rv"><div class="q">They will make mistakes with my clients.</div><div class="a">They will. That is why in month one NOTHING goes out without your ✓ — exactly as Claude works today (prepares, you approve). Your ✓ takes 1 minute; the work you save takes an hour.</div></div><div class="fear rv"><div class="q">What if I then have no work for them?</div><div class="a">That is why steps 2 and 3 are per result or part-time with a trial. You stop with one message. “Big” businesses do exactly this: freelancers first, employees later.</div></div><div class="fear rv"><div class="q">€1,000 a month sounds expensive.</div><div class="a">The cost is compared to what you do with the hours. 100 hours a month × the value of your hour in meetings = see the box “Value of one hour”. The €1,000 may be the cheapest thing on this whole page.</div></div>
+</div></section>
+
+<section class="blk" id="risks"><h2 class="rv"><small>What can go wrong</small>The six ways this plan fails — and how it doesn’t.</h2><div class="rv d1">
+<div class="fear rv"><div class="q">Cost per meeting comes out at double the “most”.</div><div class="a">It often does in month 1. It doesn’t mean “ads don’t work for me” — it means ONE of the four (video, copy, page, audience) is wrong. Change one, measure again with €300. Three rounds at most.</div></div><div class="fear rv"><div class="q">Leads come in but don’t show up to the meeting.</div><div class="a">Measure “meetings that happened”, never “leads”. Fix: an automatic SMS reminder 1 hour before, a calendar that asks for a phone number, and the question “do you already have a website?” on the form to filter.</div></div><div class="fear rv"><div class="q">You run 4 ideas at once and none of them reaches the number.</div><div class="a">The most common failure of capable people. One machine at a time: first the website ads (the sure one), in parallel ONLY the 100 calls (€0). Θέμα Δ, Panta, vresfrontistirio wait — not because they are bad, but because they are a different business (consumers, thousands of users, support) and need ads from day one. You will know ads in 3 months.</div></div><div class="fear rv"><div class="q">You sell a lot of social/Google Ads and can’t deliver in time.</div><div class="a">Social is half the “delivery” risk on this page. Fix: Claude builds every client’s month with a scheduled task on the 20th, the person checks, you approve in 10 minutes. You accept at most 10 new social clients a month for the first 3 months.</div></div><div class="fear rv"><div class="q">Cash: the ad is paid today, the client pays in 10 days.</div><div class="a">Always keep one month of ads aside. Never raise the budget above 1/3 of last month’s revenue — a rule that keeps you safe without slowing you down.</div></div><div class="fear rv"><div class="q">Meta disables the ad account / rejects videos.</div><div class="a">It happens to everyone. The “Advon Media” account must have a verified business and tax ID, a second admin, and always 2–3 approved creatives waiting. And Google Ads on the search “κατασκευή ιστοσελίδας δωρεάν” as a second channel from month 3, so you never hang from one.</div></div>
+</div></section>
+
+<section class="blk" id="plan"><h2 class="rv"><small>The next 90 days</small>The plan, week by week — what you do, what I do.</h2><div class="rv d1">
+<ol class="steps"><li><b class="t">The machine goes on <span class="time">Wk 1</span></b><b>You (1 hour):</b> yes to the Meta campaign at €30/day (~€900/month) with the 3 videos that already work · verified business in Meta Business · the /dorean calendar asks for a phone number. <b>Me:</b> the campaign, the page, a “cost per meeting” table refreshed daily in CRM → Home, the SMS reminder.</li><li><b class="t">We multiply each client’s value by five <span class="time">Wk 1–2</span></b><b>Me:</b> one message to each of the 220 clients about Google Ads/social (idea 01), in their chat, for approval. <b>You:</b> approve in batches of 20. Goal: 15 yeses in month 1 = ~€1,100 MRR.</li><li><b class="t">The 100 calls <span class="time">Wk 2–4</span></b><b>You:</b> 3 mornings, 33 calls each, everything ready on idea 03’s page. <b>Me:</b> script, leads, slides, the note on every call. Goal: 2 free pilots.</li><li><b class="t">The first decision by number <span class="time">Wk 3</span></b>€300 spent. Cost per meeting that happened: below the “most” → €60/day. Above → we change one thing. You decide in 5 minutes with the table, not with feeling.</li><li><b class="t">The first person <span class="time">Wk 5–8</span></b><b>Me:</b> job ad, 2-hour test, manual from the CLAUDE.md, draft checklist. <b>You:</b> pick 1 of 3, 2-week trial. From the day they start, chats and changes no longer pass through your hands — only the ✓.</li><li><b class="t">Pilots become clients <span class="time">Wk 6–10</span></b>The 2 pilots → €1,500–3,000 + subscription. We write the case study with a name. Second batch of 50 calls with “we already run it at…”.</li><li><b class="t">We feed whatever proved its number <span class="time">Wk 9–12</span></b>Website ads at the level 1/3 of revenue allows (€1,800–3,000). Google Ads as 2nd channel. If there is a case study, the first €1,000 of ads behind the high-ticket. At the end of week 12 you re-read this page with your REAL numbers on the sliders.</li></ol>
+<div class="sub-h">Where you should be at day 90 (with today’s sliders)</div>
+<div class="goals"><div id="g1"><b>—</b><span>new website clients in 3 months</span></div><div id="g2"><b>—</b><span>MRR from social/Google Ads</span></div><div id="g3"><b>—</b><span>high-ticket clients (pilots that paid)</span></div><div id="g4"><b>—</b><span>net monthly income in month 3</span></div></div>
+</div></section>
+
+<section class="blk" id="verdict"><div class="next rv"><div class="k"><i></i>If I were in your chair</div><h3>Six lines, no detours.</h3>
+<ol class="vlist"><li>You stop measuring yourself by what YOU do in a day. Your business is a ratio (€ in → € out) and an hour of yours worth hundreds. Those are what you measure.</li><li>You switch the website ads on THIS week at €30/day — not because you are sure, but to learn the one number you’re missing. The €300 is the price of knowing.</li><li>You sell social/Google Ads to the 220 who already trust you BEFORE you look for the 221st. It is the cheapest money you will ever make.</li><li>You hire the first person when your hours pass 120 — not earlier, not later. Per result, or with a 2-week trial. The fear leaves in the first week.</li><li>You win the high-ticket with 100 calls and 2 pilots, THEN you feed it with ads. One client a month is enough: €3,000 + €250/month × 12 months = €36,000 a year later.</li><li>One machine at a time. The rest of the Ideas page waits its turn — nothing is lost, it goes in a queue. In 90 days you come back here with real numbers and we rewrite it.</li></ol>
+<p class="small" style="margin:14px 0 0;opacity:.8">This page recalculates from the sliders. Their current values stay in your browser, so next time you find your own numbers.</p></div></section>
+<p class="src">Sources: cost per lead €5–15 for B2B/professional services on Meta (European averages 2025–26, WordStream / Metricool benchmarks) · your own rates (45–50% close) as you told me · Advon prices from advonmedia.com.</p>
+</main>
+</div>
+<footer class="foot"><div class="wrap">Advon Media · private page · 21 Oct 2026 · <a href="./">All ideas</a> · <a href="https://crm.advonmedia.com/">Back to the CRM</a></div></footer>
+<script src="../ideas.js?v=20261018"></script>
+<script>
+(function(){
+var d=document, LANG=d.documentElement.lang.indexOf('el')===0;
+var DEF={"calls": 15, "callMeet": 12, "meetClient": 47, "price": 130, "renew": 75, "take": 20, "mrr": 79, "hrs": 1.25, "cpl": 10, "leadMeet": 30, "setup": 3000, "mon": 250, "hClose": 15, "hCpm": 90, "hDel": 25}, KEY='advon-scale-v1', S={};
+try{ var sv=JSON.parse(localStorage.getItem(KEY)||'{}'); for(var k in DEF) S[k]=(k in sv)?+sv[k]:DEF[k]; }catch(e){ for(var k in DEF) S[k]=DEF[k]; }
+function eur(n,dec){ n=Math.round(n); var s=Math.abs(n).toLocaleString(LANG?'el-GR':'en-GB'); return (n<0?'−':'')+s+'€'; }
+function pct(n){ return Math.round(n)+'%'; }
+function fmt(k,v){ var f=d.querySelector('[data-k="'+k+'"]').dataset.f; if(f==='%d%%') return Math.round(v)+'%'; if(f==='%d€') return eur(v); if(f==='%.1f') return (Math.round(v*4)/4).toLocaleString(LANG?'el-GR':'en-GB',{minimumFractionDigits:1,maximumFractionDigits:2}); return Math.round(v); }
+var DOMAIN=12, BASE=220, HOURS_CAP=120, WORKDAYS=20;
+function calc(){
+  var s=S, cm=s.callMeet/100, mc=s.meetClient/100, rn=s.renew/100, tk=s.take/100, lm=s.leadMeet/100;
+  var net=s.price-DOMAIN;
+  var ltv=net*(1+rn+rn*rn) + tk*s.mrr*36*0.85;           // 3 years, 85% of social clients stay the whole time
+  var meetV=ltv*mc, hourV=meetV*4;
+  var maxMeet=net*mc;                                       // break even in month 1
+  var maxLead=maxMeet*lm, cpc=s.cpl/(lm*mc);
+  var callMeetings=s.calls*WORKDAYS*cm, callClients=callMeetings*mc;
+  return {net:net,ltv:ltv,meetV:meetV,hourV:hourV,maxMeet:maxMeet,maxLead:maxLead,cpc:cpc,callMeetings:callMeetings,callClients:callClients,cm:cm,mc:mc,rn:rn,tk:tk,lm:lm};
+}
+function adsRow(B,c){
+  var leads=B/S.cpl, meets=leads*c.lm, cl=meets*c.mc;
+  return {B:B,leads:leads,meets:meets,cl:cl,first:cl*S.price,profit:cl*c.net-B,ltv:cl*c.ltv,hours:cl*S.hrs+meets*0.25};
+}
+function sim(kind,c){
+  // 12 months; returns arrays of net income + info
+  var out=[],cum=0,cumSoc=0,socPaying=0,hrsOver=null,ht=0,ltot=0;
+  for(var m=1;m<=12;m++){
+    var B=0, team=0, newC=c.callClients, meets=c.callMeetings, htNew=0;
+    if(kind>0){ B = m<=2?900 : m<=4?1800 : 3000; if(kind===2 && m>=7) B=4500; }
+    if(kind===2 && m>=4) team=1000;
+    if(kind===2 && m>=5) htNew=1;
+    if(B){ var a=adsRow(B,c); newC+=a.cl; meets+=a.meets; }
+    if(kind>0) { newC = Math.max(newC, 0); }
+    // when ads run, cold calls stop once hours are tight (simple: keep calls)
+    var socNew = cumSoc; // social clients who signed before this month pay this month
+    var renew = BASE*c.rn*c.net/12 + (m>12?0:0);
+    var revenue = newC*c.net + socNew*S.mrr + renew + ht*S.mon + htNew*S.setup;
+    var hours = newC*S.hrs + meets*0.25 + socNew*0.15 + ht*3 + htNew*S.hDel;
+    if(kind===2 && team) hours = Math.max(0, hours - 100);
+    var netInc = revenue - B - team;
+    if(hrsOver===null && hours>HOURS_CAP) hrsOver=m;
+    out.push({m:m,net:netInc,newC:newC,hours:hours,mrr:socNew*S.mrr,B:B});
+    cum+=newC; cumSoc+=newC*c.tk; ht+=htNew; ltot+=netInc;
+  }
+  return {rows:out,total:ltot,hrsOver:hrsOver,cum:cum};
+}
+function setOut(id,txt){ var e=d.getElementById(id); if(e) e.firstElementChild.textContent=txt; }
+var COL=['#C47F12','#2F6FE0','#0F7A5C'], NAMES=LANG?['Σήμερα','Διαφημίσεις','Διαφημίσεις + άνθρωπος']:['Today','Ads','Ads + a person'];
+var sims=[];
+function render(){
+  var c=calc();
+  setOut('oClient',eur(c.ltv)); setOut('oMeet',eur(c.meetV)); setOut('oHour',eur(c.hourV)); setOut('oMaxMeet',eur(c.maxMeet)); setOut('oMaxLead',eur(c.maxLead)); setOut('oCpc',eur(c.cpc));
+  [].forEach.call(d.querySelectorAll('.hourv'),function(e){e.textContent=eur(c.hourV)});
+  // ads table
+  var tb=d.getElementById('adsBody'); tb.innerHTML='';
+  [900,1800,3000].forEach(function(B){ var a=adsRow(B,c), tr=d.createElement('tr');
+    var cls=a.profit>=0?'pos':'neg', hc=a.hours>HOURS_CAP?'warn':'';
+    tr.innerHTML='<td><b>'+eur(B)+'</b></td><td class="r">'+Math.round(a.leads)+'</td><td class="r">'+Math.round(a.meets)+'</td><td class="r"><b>'+Math.round(a.cl)+'</b></td><td class="r">'+eur(a.first)+'</td><td class="r '+cls+'">'+eur(a.profit)+'</td><td class="r">'+eur(a.ltv)+'</td><td class="r '+hc+'">'+Math.round(a.hours)+' h</td>';
+    tb.appendChild(tr); });
+  var cm=d.getElementById('cpcNote'); if(cm) cm.textContent = eur(c.cpc);
+  // scenarios
+  sims=[sim(0,c),sim(1,c),sim(2,c)];
+  var sb=d.getElementById('scenBody'); sb.innerHTML='';
+  sims.forEach(function(s,i){ var r=s.rows[11], tr=d.createElement('tr');
+    tr.innerHTML='<td><s style="text-decoration:none;display:inline-block;width:10px;height:10px;border-radius:50%;background:'+COL[i]+';margin-right:8px;vertical-align:middle"></s><b>'+NAMES[i]+'</b></td><td class="r">'+Math.round(r.newC)+'</td><td class="r"><b>'+eur(r.net)+'</b></td><td class="r">'+eur(s.total)+'</td><td class="r '+(r.hours>HOURS_CAP?'warn':'')+'">'+Math.round(r.hours)+' h</td><td class="r">'+eur(r.mrr)+'</td>';
+    sb.appendChild(tr); });
+  drawChart(sims);
+  // high ticket
+  var y1=S.setup+12*S.mon, cac=S.hCpm/(S.hClose/100), roi=y1/cac, hmax=S.setup*(S.hClose/100);
+  setOut('hY1',eur(y1)); setOut('hCac',eur(cac)); setOut('hRoi',(Math.round(roi*10)/10).toLocaleString(LANG?'el-GR':'en-GB')+'×'); setOut('hMax',eur(hmax));
+  // 90-day goals (month 3 of scenario 1 + social)
+  var s1=sims[1], g1=0,g2=s1.rows[2].mrr; for(var i=0;i<3;i++) g1+=s1.rows[i].newC;
+  var exSoc = 15*S.mrr; // 15 existing clients say yes in month 1
+  setOut('g1',Math.round(g1)); setOut('g2',eur(g2+exSoc)+' /'+(LANG?'μήνα':'mo')); setOut('g3','2'); setOut('g4',eur(s1.rows[2].net+exSoc));
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+}
+function drawChart(sims){
+  var host=d.getElementById('chart'), W=720,H=300,PL=56,PR=24,PT=16,PB=30;
+  var all=[]; sims.forEach(function(s){s.rows.forEach(function(r){all.push(r.net)})});
+  var mx=Math.max.apply(null,all), mn=Math.min(0,Math.min.apply(null,all));
+  var step=Math.pow(10,Math.floor(Math.log10(mx-mn||1))); if((mx-mn)/step<4) step/=2; if((mx-mn)/step>8) step*=2;
+  var top=Math.ceil(mx/step)*step, bot=Math.floor(mn/step)*step;
+  var X=function(m){return PL+(m-1)*(W-PL-PR)/11}, Y=function(v){return PT+(top-v)*(H-PT-PB)/(top-bot||1)};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+(LANG?'Καθαρό μηνιαίο εισόδημα ανά σενάριο':'Net monthly income per scenario')+'">';
+  for(var v=bot;v<=top+1;v+=step){ s+='<line class="gl" x1="'+PL+'" x2="'+(W-PR)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke-width="1"/><text class="ax" x="'+(PL-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+(v/1000).toLocaleString(LANG?'el-GR':'en-GB')+'k</text>'; }
+  for(var m=1;m<=12;m++) s+='<text class="ax" x="'+X(m)+'" y="'+(H-10)+'" text-anchor="middle">'+m+'</text>';
+  var ho=sims[1].hrsOver; if(ho){ s+='<line x1="'+X(ho)+'" x2="'+X(ho)+'" y1="'+PT+'" y2="'+(H-PB)+'" stroke="#B45309" stroke-dasharray="4 4" stroke-width="1.5"/>'; }
+  sims.forEach(function(sm,i){ var p=sm.rows.map(function(r){return X(r.m).toFixed(1)+','+Y(r.net).toFixed(1)}).join(' ');
+    s+='<polyline fill="none" stroke="'+COL[i]+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="'+p+'"/>';
+    var last=sm.rows[11]; s+='<circle cx="'+X(12)+'" cy="'+Y(last.net)+'" r="4" fill="'+COL[i]+'" stroke="#fff" stroke-width="2"/>';
+  });
+  s+='<g id="hov" style="display:none"><line id="hl" y1="'+PT+'" y2="'+(H-PB)+'" stroke="#15201E" stroke-opacity=".35" stroke-width="1"/>'+sims.map(function(_,i){return '<circle id="hc'+i+'" r="5" fill="'+COL[i]+'" stroke="#fff" stroke-width="2"/>'}).join('')+'</g>';
+  s+='<rect id="hit" x="'+PL+'" y="'+PT+'" width="'+(W-PL-PR)+'" height="'+(H-PT-PB)+'" fill="transparent"/></svg>';
+  host.innerHTML=s;
+  var lg=d.getElementById('lg'); lg.innerHTML=sims.map(function(sm,i){return '<span><i style="background:'+COL[i]+'"></i>'+NAMES[i]+' · '+(LANG?'μήνας 12':'month 12')+': <b>'+eur(sm.rows[11].net)+'</b></span>'}).join('') + (ho?'<span><i style="background:#B45309;height:1px;border-top:2px dashed #B45309;background:none"></i>'+(LANG?'μήνας '+ho+': ':'month '+ho+': ')+host.dataset.hrs+'</span>':'');
+  var svg=host.querySelector('svg'), hit=svg.querySelector('#hit'), hov=svg.querySelector('#hov'), tip=d.getElementById('tip');
+  function mv(e){ var r=svg.getBoundingClientRect(), x=(e.clientX-r.left)*W/r.width, m=Math.max(1,Math.min(12,Math.round((x-PL)/((W-PL-PR)/11))+1));
+    hov.style.display=''; svg.querySelector('#hl').setAttribute('x1',X(m)); svg.querySelector('#hl').setAttribute('x2',X(m));
+    sims.forEach(function(sm,i){var c=svg.querySelector('#hc'+i); c.setAttribute('cx',X(m)); c.setAttribute('cy',Y(sm.rows[m-1].net))});
+    tip.innerHTML='<b>'+(LANG?'Μήνας ':'Month ')+m+'</b><br>'+sims.map(function(sm,i){return '<span style="color:'+COL[i]+'">●</span> '+NAMES[i]+': <b>'+eur(sm.rows[m-1].net)+'</b> · '+Math.round(sm.rows[m-1].newC)+(LANG?' νέοι':' new')+' · '+Math.round(sm.rows[m-1].hours)+' h'}).join('<br>');
+    tip.style.left=(X(m)*r.width/W)+'px'; tip.style.top=(Y(sims[2].rows[m-1].net)*r.height/H+host.querySelector('h4').offsetHeight+10)+'px'; tip.style.opacity=1; }
+  hit.addEventListener('pointermove',mv); hit.addEventListener('pointerleave',function(){hov.style.display='none';tip.style.opacity=0});
+}
+[].forEach.call(d.querySelectorAll('input[type=range][data-k]'),function(r){ var k=r.dataset.k; r.value=S[k]; var b=r.parentNode.querySelector('.lab b'); b.textContent=fmt(k,S[k]);
+  r.addEventListener('input',function(){ S[k]=+r.value; b.textContent=fmt(k,S[k]); render(); }); });
+[].forEach.call(d.querySelectorAll('.rst'),function(b){ b.addEventListener('click',function(){ for(var k in DEF) S[k]=DEF[k]; [].forEach.call(d.querySelectorAll('input[type=range][data-k]'),function(r){ r.value=S[r.dataset.k]; r.parentNode.querySelector('.lab b').textContent=fmt(r.dataset.k,S[r.dataset.k]); }); render(); }); });
+render();
+})();
+</script>
+</body>
+</html>
