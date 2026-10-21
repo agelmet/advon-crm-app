@@ -1,4 +1,4 @@
-/* Advon · Τετράδιο — the 100-call test page: menu, live scoreboard, CRM-style Leads (call mode), scripts, slide links.
+/* Advon · ψηφιακός βοηθός γραφείου (δωρεάν πιλότος) — the 100-call test page: menu, live scoreboard, CRM-style Leads (call mode), scripts, slide links.
    Calls are saved in this browser (localStorage «advon_auto_leads_v1»); the CRM on the same address carries them in its
    encrypted state and syncs them across devices whenever it is open (see «Auto-leads bridge» in the CRM). 20 Oct 2026 */
 (function(){
@@ -97,10 +97,10 @@ function googleUrl(l){ return 'https://www.google.com/search?q='+encodeURICompon
 function slidesUrl(l){ return 'automations-slides.html?n='+l.n+'&c='+encodeURIComponent(l.name.split(' — ')[0]); }
 
 /* ---------------- outcomes ---------------- */
-var panel={id:null, kind:null}, pick={day:'',time:''};
+var panel={id:null, kind:null}, pick={day:'',time:'',where:'office'};
 function outcome(l,o){
   var r=R(l.id);
-  if(o==='g'){ panel={id:l.id,kind:'book'}; pick={day:(r.book&&r.book.day)||'',time:(r.book&&r.book.time)||''}; renderLeads(); return; }
+  if(o==='g'){ panel={id:l.id,kind:'book'}; pick={day:(r.book&&r.book.day)||'',time:(r.book&&r.book.time)||'',where:(r.book&&r.book.where)||'office'}; renderLeads(); return; }
   if(o==='ab'){ panel={id:l.id,kind:'cb',ab:true}; pick={day:(r.cb&&r.cb.day)||'',time:(r.cb&&r.cb.time)||''}; renderLeads(); return; }
   if(o==='y'){ r.st='y'; r.at=Date.now(); logCall(l.id,'y'); touch(l.id); save(); panel={id:l.id,kind:'sms'}; toast(l.name+' → θέλει πληροφορίες'); renderLeads(); return; }
   if(o==='r'){ r.st='r'; r.at=Date.now(); delete r.cb; logCall(l.id,'r'); touch(l.id); save(); toast(l.name+' → Όχι'); advance(l); return; }
@@ -110,20 +110,20 @@ function outcome(l,o){
 }
 function advance(l){ if(UI.call && UI.focus===l.id){ UI.focus=null; saveUI(); } panel={id:null,kind:null}; renderLeads(); }
 function undo(l){ var r=R(l.id); for(var i=S.log.length-1;i>=0;i--){ var e=S.log[i]; if(e.id===l.id && !e.u && e.o!=='n'){ e.u=1; break; } } r.st= r.tries.length? 'na':'new'; delete r.book; delete r.at; touch(l.id); save(); toast(l.name+' → πίσω στη λίστα'); renderLeads(); }
-function confirmBook(l){ var r=R(l.id); if(!pick.day||!pick.time){ toast('Διάλεξε μέρα και ώρα'); return; } r.st='g'; r.book={day:pick.day,time:pick.time}; r.at=Date.now(); delete r.cb; delete r.hot; logCall(l.id,'g'); touch(l.id); save(); panel={id:l.id,kind:'after'}; toast('Ραντεβού: '+l.name+' · '+fmtDay(pick.day)+' '+pick.time); renderLeads(); }
+function confirmBook(l){ var r=R(l.id); if(!pick.day||!pick.time){ toast('Διάλεξε μέρα και ώρα'); return; } r.st='g'; r.book={day:pick.day,time:pick.time,where:pick.where||'office'}; r.at=Date.now(); delete r.cb; delete r.hot; logCall(l.id,'g'); touch(l.id); save(); panel={id:l.id,kind:'after'}; toast('Ραντεβού: '+l.name+' · '+fmtDay(pick.day)+' '+pick.time); renderLeads(); }
 function confirmCb(l){ var r=R(l.id); if(!pick.day){ toast('Διάλεξε μέρα'); return; } r.cb={day:pick.day,time:pick.time||''}; if(panel.ab){ if(r.st!=='ab') logCall(l.id,'ab'); r.st='ab'; } touch(l.id); save(); toast((panel.ab?'Σχεδόν κλεισμένο — ':'Call-back — ')+l.name+' · '+fmtDay(pick.day)+(pick.time?' '+pick.time:'')); panel={id:null,kind:null}; if(UI.call&&UI.focus===l.id){UI.focus=null;saveUI();} renderLeads(); }
 
 /* ---------------- ready texts ---------------- */
-function afterMsg(l){ var r=rec(l.id), b=r.book||{}, dt=b.day? new Date(b.day+'T12:00'):null; var who=(r.contact||'').trim();
-  return 'Καλησπέρα σας'+(who?' '+who:'')+', ευχαριστώ πολύ για την κουβέντα!\n\nΌπως είπαμε, τα λέμε '+(dt? (b.day===TODAY?'σήμερα':DAYS_ACC[dt.getDay()]+' '+dt.getDate()+'/'+(dt.getMonth()+1)) : '')+(b.time?' στις '+b.time:'')+' στο Google Meet — 15 λεπτά. Θα σας στείλω το link λίγο πριν.\n\nΑν θέλετε, έχετε πρόχειρο το τετράδιο ή το Excel σας, για να δούμε μαζί πώς θα φαίνονται τα δικά σας στοιχεία.\n\nΆγγελος Μετρίδης · 6934088046\nAdvon Media · advonmedia.com'; }
-function calUrl(l){ var r=rec(l.id), b=r.book||{}; if(!b.day||!b.time) return '#'; var s=b.day.replace(/-/g,'')+'T'+b.time.replace(':','')+'00'; var e=new Date(b.day+'T'+b.time+':00'); e.setMinutes(e.getMinutes()+15); var en=iso(e).replace(/-/g,'')+'T'+pad(e.getHours())+pad(e.getMinutes())+'00';
-  var det='Τετράδιο — demo 15 λεπτών ('+N[l.n].label+')\nΤηλ: '+fmtPhone(l.phone)+(r.contact?'\nΕπαφή: '+r.contact:'')+'\nSlides: https://crm.advonmedia.com/ideas/'+slidesUrl(l)+(r.memo?'\nΣημείωση: '+r.memo:'');
-  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Τετράδιο demo — '+l.name)+'&dates='+s+'/'+en+'&ctz=Europe/Athens&details='+encodeURIComponent(det); }
+function afterMsg(l){ var r=rec(l.id), b=r.book||{}, dt=b.day? new Date(b.day+'T12:00'):null; var who=(r.contact||'').trim(), meet=b.where==='meet';
+  return 'Καλησπέρα σας'+(who?' '+who:'')+', ευχαριστώ πολύ για την κουβέντα!\n\nΌπως είπαμε, τα λέμε '+(dt? (b.day===TODAY?'σήμερα':DAYS_ACC[dt.getDay()]+' '+dt.getDate()+'/'+(dt.getMonth()+1)) : '')+(b.time?' στις '+b.time:'')+(meet?' στο Google Meet, για μισή ώρα — θα σας στείλω το link λίγο πριν.':' στο γραφείο σας ('+[l.street,l.city].filter(Boolean).join(', ')+'), για μισή ώρα.')+'\n\nΘα σας δείξω πώς θα δούλευε ο ψηφιακός βοηθός στο δικό σας γραφείο και πώς στήνουμε τον δωρεάν πιλότο. Αν θέλετε, έχετε πρόχειρο το τετράδιο ή το Excel σας, για να δούμε μαζί πώς θα φαίνονται τα δικά σας στοιχεία.\n\nΆγγελος Μετρίδης · 6934088046\nAdvon Media · advonmedia.com'; }
+function calUrl(l){ var r=rec(l.id), b=r.book||{}; if(!b.day||!b.time) return '#'; var s=b.day.replace(/-/g,'')+'T'+b.time.replace(':','')+'00'; var e=new Date(b.day+'T'+b.time+':00'); e.setMinutes(e.getMinutes()+30); var en=iso(e).replace(/-/g,'')+'T'+pad(e.getHours())+pad(e.getMinutes())+'00';
+  var det='Συνάντηση μισής ώρας — δωρεάν πιλότος ψηφιακού βοηθού ('+N[l.n].label+')'+(b.where==='meet'?' · Google Meet':' · στο γραφείο τους')+'\nΤηλ: '+fmtPhone(l.phone)+(r.contact?'\nΕπαφή: '+r.contact:'')+'\nSlides: https://crm.advonmedia.com/ideas/'+slidesUrl(l)+(r.memo?'\nΣημείωση: '+r.memo:'');
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Πιλότος — '+l.name)+'&dates='+s+'/'+en+'&ctz=Europe/Athens'+(b.where==='meet'?'':'&location='+encodeURIComponent([l.street,l.city].filter(Boolean).join(', ')))+'&details='+encodeURIComponent(det); }
 
 /* ---------------- render: banner ---------------- */
 function renderBanner(){ var el=$('#lban'); if(!el) return; var c=counts(), f=queue().length;
   el.innerHTML='<div class="lnow"><span class="k">Να καλέσω</span><div class="big">'+c.left+'</div><div class="sub">'+c.fresh+' καινούργια · '+c.na+' ξανά'+(UI.n?' · '+esc(N[UI.n].short)+': '+f:'')+'</div></div>'+
-   '<div class="ok"><span class="k">Ραντεβού</span><div class="big">'+c.g+'</div><div class="sub">demo στο Meet</div></div>'+
+   '<div class="ok"><span class="k">Ραντεβού</span><div class="big">'+c.g+'</div><div class="sub">συναντήσεις μισής ώρας</div></div>'+
    '<div class="ab"><span class="k">Σχεδόν</span><div class="big">'+c.ab+'</div><div class="sub">πάρε ξανά να κλείσεις ώρα</div></div>'+
    '<div><span class="k">Θέλουν info</span><div class="big">'+c.y+'</div><div class="sub">SMS στάλθηκε</div></div>'+
    '<div class="no"><span class="k">Όχι</span><div class="big">'+c.r+'</div><div class="sub">δεν ενδιαφέρονται</div></div>'+
@@ -152,13 +152,13 @@ function renderFocus(){
     '<span class="f-niche"><span class="dot '+l.n+'"></span>'+esc(n.label)+(l.round!==1?' · εφεδρικό':'')+'</span>'+
     '<div class="f-name">'+esc(l.name)+'</div><div class="f-sub">'+esc([l.street,l.city].filter(Boolean).join(', '))+'</div>'+
     '<a class="f-phone" href="tel:+30'+esc(l.phone)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>'+esc(fmtPhone(l.phone))+'</a>'+
-    '<div class="f-meta"><span class="chip">★ '+String(l.rating).replace('.',',')+' · '+l.reviews+' κριτικές</span><a class="chip" href="'+esc(mapsUrl(l))+'" target="_blank" rel="noopener">Maps ↗</a><a class="chip" href="'+esc(googleUrl(l))+'" target="_blank" rel="noopener">Google ↗</a><a class="chip" href="'+esc(slidesUrl(l))+'" target="_blank" rel="noopener">Slides με το όνομά τους ↗</a>'+tries+cb+'</div>'+
+    '<div class="f-meta">'+(l.tier==='A'?'<span class="chip" style="background:#E3F8EF;color:#0B7A55">Μεγάλο γραφείο · στόχος 2.900€</span>':'<span class="chip">Μικρότερο γραφείο · 1.500€</span>')+'<span class="chip">★ '+String(l.rating).replace('.',',')+' · '+l.reviews+' κριτικές</span><a class="chip" href="'+esc(mapsUrl(l))+'" target="_blank" rel="noopener">Maps ↗</a><a class="chip" href="'+esc(googleUrl(l))+'" target="_blank" rel="noopener">Google ↗</a><a class="chip" href="'+esc(slidesUrl(l))+'" target="_blank" rel="noopener">Slides με το όνομά τους ↗</a>'+tries+cb+'</div>'+
     '<div class="f-why">'+esc(l.why)+'</div>'+(r.memo?'<div class="f-memo">✎ '+esc(r.memo)+'</div>':'')+
     '</div><div class="f-right">επόμενοι στη σειρά<b>'+Math.max(0,q.length-(idx<0?0:idx)-1)+'</b>'+fmtDay(TODAY)+'</div></div>'+
     '<div class="f-script">'+scriptFor(l)+'</div>'+
     '<div class="f-q"><div class="qbox"><div class="ql">Πού τα κρατάνε σήμερα;</div><div class="opt" data-k="uses">'+['Τετράδιο','Excel','Πρόγραμμα','Μνήμη / τίποτα'].map(function(x){return '<button type="button" class="'+(r.uses===x?'on':'')+'">'+x+'</button>'}).join('')+'</div></div>'+
     '<div class="qbox"><div class="ql">Ποιος σήκωσε · όνομα επαφής</div><div class="opt" data-k="who">'+['Ιδιοκτήτης','Υπάλληλος'].map(function(x){return '<button type="button" class="'+(r.who===x?'on':'')+'">'+x+'</button>'}).join('')+'</div><input type="text" data-contact placeholder="π.χ. κ. Λαμπρόπουλε (για το μήνυμα)" value="'+esc(r.contact||'')+'" style="margin-top:6px"></div></div>'+
-    '<div class="f-acts"><button class="g" data-o="g">✓ Ραντεβού<small>1 · μέρα + ώρα</small></button><button class="ab" data-o="ab">🔥 Σχεδόν<small>5 · πάρε ξανά</small></button><button class="y" data-o="y">✉ Θέλει info<small>2 · στείλε SMS</small></button><button class="r" data-o="r">✕ Όχι<small>3 · δεν ενδιαφέρεται</small></button><button class="n" data-o="n">⌛ Δεν σήκωσε<small>4 · άλλη μέρα</small></button></div>'+
+    '<div class="f-acts"><button class="g" data-o="g">✓ Συνάντηση<small>1 · πού + πότε</small></button><button class="ab" data-o="ab">🔥 Σχεδόν<small>5 · πάρε ξανά</small></button><button class="y" data-o="y">✉ Θέλει info<small>2 · στείλε SMS</small></button><button class="r" data-o="r">✕ Όχι<small>3 · δεν ενδιαφέρεται</small></button><button class="n" data-o="n">⌛ Δεν σήκωσε<small>4 · άλλη μέρα</small></button></div>'+
     '<div id="lfpanel"></div>'+
     '<div class="f-foot"><button data-a="skip">Παράλειψη <kbd>S</kbd></button><button data-a="cb">⏰ Πάρε με στις… <kbd>C</kbd></button><button data-a="memo">✎ Σημείωση <kbd>N</kbd></button><button data-a="obj">Αντιρρήσεις ↗</button>'+(r.tries.length>=3?'<button data-a="x">Σταματάμε (3 φορές)</button>':'')+'<button class="t" data-a="t">Λάθος αριθμός / εκτός</button></div>'+
     upNext(q,l,idx);
@@ -183,12 +183,13 @@ function panelEl(l){
   var box=d.createElement('div'); box.className='pnl'; var r=rec(l.id);
   if(panel.kind==='book'||panel.kind==='cb'){
     var isB=panel.kind==='book';
-    box.innerHTML='<div class="lbl">'+(isB?'Ραντεβού στο Google Meet — πότε;':(panel.ab?'Σχεδόν κλεισμένο — πότε να τον ξαναπάρεις;':'Πάρε με στις… — πότε;'))+'</div>'+
+    box.innerHTML='<div class="lbl">'+(isB?'Συνάντηση μισής ώρας — πού και πότε;':(panel.ab?'Σχεδόν κλεισμένο — πότε να τον ξαναπάρεις;':'Πάρε με στις… — πότε;'))+'</div>'+
       '<div class="row" data-days>'+quickDays().map(function(o){return '<button type="button" data-day="'+o.k+'" class="'+(pick.day===o.k?'on':'')+'">'+o.t+'</button>'}).join('')+'<input type="date" data-di value="'+pick.day+'"></div>'+
-      '<div class="row" data-times>'+TIMES.map(function(t){return '<button type="button" data-time="'+t+'" class="'+(pick.time===t?'on':'')+'">'+t+'</button>'}).join('')+'<input type="time" data-ti value="'+pick.time+'"></div>'+
+      (isB?'<div class="row" data-where><button type="button" data-w="office" class="'+(pick.where!=='meet'?'on':'')+'">Στο γραφείο τους</button><button type="button" data-w="meet" class="'+(pick.where==='meet'?'on':'')+'">Google Meet</button></div>':'')+'<div class="row" data-times>'+TIMES.map(function(t){return '<button type="button" data-time="'+t+'" class="'+(pick.time===t?'on':'')+'">'+t+'</button>'}).join('')+'<input type="time" data-ti value="'+pick.time+'"></div>'+
       '<div class="row"><button type="button" class="go" data-ok>✓ '+(isB?'Κλείσαμε ραντεβού':'Αποθήκευση')+'</button><button type="button" data-cancel style="border:0;background:none;color:var(--mute)">Άκυρο</button></div>';
     $$('[data-day]',box).forEach(function(b){ b.onclick=function(){ pick.day=b.dataset.day; renderLeads(); }; });
     $$('[data-time]',box).forEach(function(b){ b.onclick=function(){ pick.time=b.dataset.time; renderLeads(); }; });
+    $$('[data-w]',box).forEach(function(b){ b.onclick=function(){ pick.where=b.dataset.w; renderLeads(); }; });
     $('[data-di]',box).onchange=function(e){ pick.day=e.target.value; renderLeads(); };
     $('[data-ti]',box).onchange=function(e){ pick.time=e.target.value; renderLeads(); };
     $('[data-ok]',box).onclick=function(){ isB? confirmBook(l) : confirmCb(l); };
@@ -200,7 +201,7 @@ function panelEl(l){
     setTimeout(function(){ var t=$('[data-m]',box); if(t) t.focus(); },30);
   } else if(panel.kind==='after'){
     box.classList.add('after'); var msg=afterMsg(l);
-    box.innerHTML='<div class="lbl">✓ Ραντεβού '+fmtDay(r.book.day)+' '+esc(r.book.time)+' — 3 πράγματα τώρα (20 δευτερόλεπτα)</div>'+
+    box.innerHTML='<div class="lbl">✓ Συνάντηση '+fmtDay(r.book.day)+' '+esc(r.book.time)+(r.book.where==='meet'?' · Google Meet':' · στο γραφείο τους')+' — 3 πράγματα τώρα (20 δευτερόλεπτα)</div>'+
       '<div class="acts" style="margin-bottom:10px"><a class="pri" href="'+esc(calUrl(l))+'" target="_blank" rel="noopener">1 · Βάλ\' το στο Google Calendar ↗</a><a href="'+esc(slidesUrl(l))+'" target="_blank" rel="noopener">2 · Slides με το όνομά τους ↗</a></div>'+
       '<div class="lbl" style="margin-top:4px">3 · Μήνυμα επιβεβαίωσης (Viber / SMS)</div><div class="msg">'+esc(msg)+'</div>'+
       '<div class="acts"><button class="pri" data-cp>Αντιγραφή</button><a href="sms:+30'+esc(l.phone)+'?&body='+encodeURIComponent(msg)+'">Άνοιγμα SMS</a><a href="viber://chat?number=%2B30'+esc(l.phone)+'">Άνοιγμα Viber</a><button data-next>Επόμενος →</button></div>';
@@ -276,7 +277,7 @@ function csv(){ var rows=[['Κλάδος','Όνομα','Πόλη','Τηλέφω�
   L.forEach(function(l){ var r=rec(l.id); rows.push([N[l.n].short,l.name,l.city,fmtPhone(l.phone),l.reviews,{new:'Να καλέσω',na:'Δεν σήκωσε',ab:'Σχεδόν',g:'Ραντεβού',y:'Θέλει info',r:'Όχι',x:'Σταματήσαμε',t:'Εκτός'}[r.st]||r.st, r.book?r.book.day+' '+r.book.time:'', r.cb?r.cb.day+' '+(r.cb.time||''):'', (r.tries||[]).join(' '), r.uses||'', r.who||'', r.contact||'', r.memo||'']); });
   var s='﻿'+rows.map(function(r){return r.map(function(c){ c=String(c==null?'':c); return /[",;\n]/.test(c)? '"'+c.replace(/"/g,'""')+'"' : c; }).join(';')}).join('\n');
   var a=d.createElement('a'); a.href=URL.createObjectURL(new Blob([s],{type:'text/csv;charset=utf-8'})); a.download='tetradio-test-'+TODAY+'.csv'; d.body.appendChild(a); a.click(); setTimeout(function(){ a.remove(); },500); }
-function summary(){ var s=stats(), out=['Τεστ 100 κλήσεων — Τετράδιο · '+fmtDay(TODAY)]; NK.forEach(function(k){ var x=s[k]; out.push(N[k].label+': '+x.calls+' κλήσεις · σήκωσαν '+x.pick+' · ραντεβού '+x.g+' · σχεδόν '+x.ab+' · info '+x.y+' · όχι '+x.r); });
+function summary(){ var s=stats(), out=['Τεστ 100 κλήσεων — ψηφιακός βοηθός (δωρεάν πιλότος) · '+fmtDay(TODAY)]; NK.forEach(function(k){ var x=s[k]; out.push(N[k].label+': '+x.calls+' κλήσεις · σήκωσαν '+x.pick+' · ραντεβού '+x.g+' · σχεδόν '+x.ab+' · info '+x.y+' · όχι '+x.r); });
   var uses={}; L.forEach(function(l){ var r=rec(l.id); if(r.uses){ var k=N[l.n].short+' → '+r.uses; uses[k]=(uses[k]||0)+1; } }); var u=Object.keys(uses); if(u.length){ out.push(''); out.push('Πού τα κρατάνε σήμερα:'); u.sort().forEach(function(k){ out.push('· '+k+': '+uses[k]); }); }
   return out.join('\n'); }
 
