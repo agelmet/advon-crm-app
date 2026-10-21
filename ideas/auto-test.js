@@ -1,4 +1,4 @@
-/* Advon · ψηφιακός βοηθός γραφείου (δωρεάν πιλότος) — the 100-call test page: menu, live scoreboard, CRM-style Leads (call mode), scripts, slide links.
+/* Advon · AI βοηθός γραφείου (δωρεάν πιλότος) — the 100-call test page: menu, live scoreboard, CRM-style Leads (call mode), scripts, slide links.
    Calls are saved in this browser (localStorage «advon_auto_leads_v1»); the CRM on the same address carries them in its
    encrypted state and syncs them across devices whenever it is open (see «Auto-leads bridge» in the CRM). 20 Oct 2026 */
 (function(){
@@ -115,9 +115,9 @@ function confirmCb(l){ var r=R(l.id); if(!pick.day){ toast('Διάλεξε μέ�
 
 /* ---------------- ready texts ---------------- */
 function afterMsg(l){ var r=rec(l.id), b=r.book||{}, dt=b.day? new Date(b.day+'T12:00'):null; var who=(r.contact||'').trim(), meet=b.where==='meet';
-  return 'Καλησπέρα σας'+(who?' '+who:'')+', ευχαριστώ πολύ για την κουβέντα!\n\nΌπως είπαμε, τα λέμε '+(dt? (b.day===TODAY?'σήμερα':DAYS_ACC[dt.getDay()]+' '+dt.getDate()+'/'+(dt.getMonth()+1)) : '')+(b.time?' στις '+b.time:'')+(meet?' στο Google Meet, για μισή ώρα — θα σας στείλω το link λίγο πριν.':' στο γραφείο σας ('+[l.street,l.city].filter(Boolean).join(', ')+'), για μισή ώρα.')+'\n\nΘα σας δείξω πώς θα δούλευε ο ψηφιακός βοηθός στο δικό σας γραφείο και πώς στήνουμε τον δωρεάν πιλότο. Αν θέλετε, έχετε πρόχειρο το τετράδιο ή το Excel σας, για να δούμε μαζί πώς θα φαίνονται τα δικά σας στοιχεία.\n\nΆγγελος Μετρίδης · 6934088046\nAdvon Media · advonmedia.com'; }
+  return 'Καλησπέρα σας'+(who?' '+who:'')+', ευχαριστώ πολύ για την κουβέντα!\n\nΌπως είπαμε, τα λέμε '+(dt? (b.day===TODAY?'σήμερα':DAYS_ACC[dt.getDay()]+' '+dt.getDate()+'/'+(dt.getMonth()+1)) : '')+(b.time?' στις '+b.time:'')+(meet?' στο Google Meet, για μισή ώρα — θα σας στείλω το link λίγο πριν.':' στο γραφείο σας ('+[l.street,l.city].filter(Boolean).join(', ')+'), για μισή ώρα.')+'\n\nΘα σας δείξω πώς θα δούλευε ο AI βοηθός στο δικό σας γραφείο και πώς στήνουμε τον δωρεάν πιλότο. Αν θέλετε, έχετε πρόχειρο το τετράδιο ή το Excel σας, για να δούμε μαζί πώς θα φαίνονται τα δικά σας στοιχεία.\n\nΆγγελος Μετρίδης · 6934088046\nAdvon Media · advonmedia.com'; }
 function calUrl(l){ var r=rec(l.id), b=r.book||{}; if(!b.day||!b.time) return '#'; var s=b.day.replace(/-/g,'')+'T'+b.time.replace(':','')+'00'; var e=new Date(b.day+'T'+b.time+':00'); e.setMinutes(e.getMinutes()+30); var en=iso(e).replace(/-/g,'')+'T'+pad(e.getHours())+pad(e.getMinutes())+'00';
-  var det='Συνάντηση μισής ώρας — δωρεάν πιλότος ψηφιακού βοηθού ('+N[l.n].label+')'+(b.where==='meet'?' · Google Meet':' · στο γραφείο τους')+'\nΤηλ: '+fmtPhone(l.phone)+(r.contact?'\nΕπαφή: '+r.contact:'')+'\nSlides: https://crm.advonmedia.com/ideas/'+slidesUrl(l)+(r.memo?'\nΣημείωση: '+r.memo:'');
+  var det='Συνάντηση μισής ώρας — δωρεάν πιλότος AI βοηθού ('+N[l.n].label+')'+(b.where==='meet'?' · Google Meet':' · στο γραφείο τους')+'\nΤηλ: '+fmtPhone(l.phone)+(r.contact?'\nΕπαφή: '+r.contact:'')+'\nSlides: https://crm.advonmedia.com/ideas/'+slidesUrl(l)+(r.memo?'\nΣημείωση: '+r.memo:'');
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Πιλότος — '+l.name)+'&dates='+s+'/'+en+'&ctz=Europe/Athens'+(b.where==='meet'?'':'&location='+encodeURIComponent([l.street,l.city].filter(Boolean).join(', ')))+'&details='+encodeURIComponent(det); }
 
 /* ---------------- render: banner ---------------- */
@@ -277,7 +277,7 @@ function csv(){ var rows=[['Κλάδος','Όνομα','Πόλη','Τηλέφω�
   L.forEach(function(l){ var r=rec(l.id); rows.push([N[l.n].short,l.name,l.city,fmtPhone(l.phone),l.reviews,{new:'Να καλέσω',na:'Δεν σήκωσε',ab:'Σχεδόν',g:'Ραντεβού',y:'Θέλει info',r:'Όχι',x:'Σταματήσαμε',t:'Εκτός'}[r.st]||r.st, r.book?r.book.day+' '+r.book.time:'', r.cb?r.cb.day+' '+(r.cb.time||''):'', (r.tries||[]).join(' '), r.uses||'', r.who||'', r.contact||'', r.memo||'']); });
   var s='﻿'+rows.map(function(r){return r.map(function(c){ c=String(c==null?'':c); return /[",;\n]/.test(c)? '"'+c.replace(/"/g,'""')+'"' : c; }).join(';')}).join('\n');
   var a=d.createElement('a'); a.href=URL.createObjectURL(new Blob([s],{type:'text/csv;charset=utf-8'})); a.download='tetradio-test-'+TODAY+'.csv'; d.body.appendChild(a); a.click(); setTimeout(function(){ a.remove(); },500); }
-function summary(){ var s=stats(), out=['Τεστ 100 κλήσεων — ψηφιακός βοηθός (δωρεάν πιλότος) · '+fmtDay(TODAY)]; NK.forEach(function(k){ var x=s[k]; out.push(N[k].label+': '+x.calls+' κλήσεις · σήκωσαν '+x.pick+' · ραντεβού '+x.g+' · σχεδόν '+x.ab+' · info '+x.y+' · όχι '+x.r); });
+function summary(){ var s=stats(), out=['Τεστ 100 κλήσεων — AI βοηθός (δωρεάν πιλότος) · '+fmtDay(TODAY)]; NK.forEach(function(k){ var x=s[k]; out.push(N[k].label+': '+x.calls+' κλήσεις · σήκωσαν '+x.pick+' · ραντεβού '+x.g+' · σχεδόν '+x.ab+' · info '+x.y+' · όχι '+x.r); });
   var uses={}; L.forEach(function(l){ var r=rec(l.id); if(r.uses){ var k=N[l.n].short+' → '+r.uses; uses[k]=(uses[k]||0)+1; } }); var u=Object.keys(uses); if(u.length){ out.push(''); out.push('Πού τα κρατάνε σήμερα:'); u.sort().forEach(function(k){ out.push('· '+k+': '+uses[k]); }); }
   return out.join('\n'); }
 
@@ -286,11 +286,11 @@ function showNiche(k){ var n=N[k]; if(!n) return; var v=$('[data-view=script]');
   $$('#ntabs button').forEach(function(b){ b.classList.toggle('on', b.dataset.n===k); });
   var demo={reviews:'Χ', day1:DAY1, day2:DAY2};
   var sc=n.script.replace(/\{reviews\}/g,'{κριτικές}').replace(/\{day1\}/g,demo.day1).replace(/\{day2\}/g,demo.day2);
-  $('#sMain').innerHTML='<div class="lbl">Το τηλεφώνημα · ~40 δευτερόλεπτα · '+esc(n.label)+'</div>'+sc;
+  $('#sMain').innerHTML='<div class="lbl">Το τηλεφώνημα · ~45 δευτερόλεπτα · '+esc(n.label)+'</div>'+sc;
   $('#sGate').innerHTML='<div class="lbl">Αν σηκώσει υπάλληλος / γραμματεία</div>'+esc(n.gate.replace('{owner}','ΕΠΩΝΥΜΟ'));
   $('#sSms').innerHTML='<div class="lbl">«Θέλει info» ή δεν σήκωσε 2 φορές · SMS / Viber</div>'+esc(n.sms);
   $('#objs').innerHTML=n.obj.map(function(o){ return '<div class="fear"><div class="q">'+esc(o[0])+'</div><div class="a">'+esc(o[1].replace(/\{day2\}/g,DAY2))+'</div></div>'; }).join('');
-  $('#sQs').innerHTML=n.qs.map(function(q){return '<li>'+esc(q)+'</li>'}).join('');
+  $('#sQs').innerHTML=(n.ai||[]).map(function(q){return '<li><b>'+esc(q[0])+'</b> — '+esc(q[1])+'</li>'}).join('');
   $$('.bigsay').forEach(addCopy);
   try{ localStorage.setItem('advon_auto_script_n',k); }catch(e){}
 }
