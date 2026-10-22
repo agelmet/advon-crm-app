@@ -3870,6 +3870,107 @@ body.dark .nd-s.pri{background:#E9EDF5;color:#10141F}
 body.dark .chase-row.nd .cr-sub{color:#FFB65C}
 @media(max-width:560px){ .nd-big{grid-template-columns:1fr} .nd-b{font-size:15px;padding:13px 14px} }
 </style>
+<style id="xs-css">
+/* ---------- «Ads & Social» tab (22 Oct 2026) — clients interested in Google Ads / Social media ---------- */
+.tab.tab-xs{display:inline-flex; align-items:center; gap:6px; color:#1A73E8; background:linear-gradient(135deg,rgba(66,133,244,.14),rgba(52,168,83,.12)); border:1px solid rgba(66,133,244,.30);}
+.tab.tab-xs:hover:not(.active){background:linear-gradient(135deg,rgba(66,133,244,.24),rgba(52,168,83,.2));}
+.tab.tab-xs.active{color:#fff; border-color:transparent; background:linear-gradient(135deg,#4285F4 0%,#1A73E8 45%,#0F9D58 100%); box-shadow:0 3px 12px rgba(26,115,232,.35);}
+body.dark .tab.tab-xs:not(.active){color:#8AB4F8;}
+#view-xs{max-width:1600px; margin:0 auto; padding:18px 24px 80px;}
+.xs-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.xs-head h2{font-size:22px; font-weight:800; letter-spacing:-.01em;}
+.xs-sub{color:var(--muted); font-size:13.5px; margin:4px 0 0; max-width:760px;}
+.xs-sp{flex:1;}
+.xs-when{display:inline-flex; align-items:center; gap:8px; padding:7px 13px; border-radius:999px; background:var(--blue-soft); color:#1A5FC4; font-weight:700; font-size:12.5px; border:1px solid rgba(47,127,224,.22); cursor:pointer;}
+.xs-when b{font-weight:800;}
+.xs-when.now{background:var(--red-soft); color:#C8102E; border-color:rgba(255,77,94,.3);}
+body.dark .xs-when{color:#8AB4F8;} body.dark .xs-when.now{color:#ff8a96;}
+.xs-stats{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin:16px 0 14px;}
+.xs-stat{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:13px 15px; box-shadow:var(--shadow); text-align:left; cursor:pointer; transition:transform .12s, box-shadow .12s, border-color .12s;}
+.xs-stat:hover{transform:translateY(-1px); border-color:#BFD4F2;}
+.xs-stat.on{border-color:var(--blue); box-shadow:0 0 0 2px rgba(47,127,224,.25), var(--shadow);}
+.xs-stat .n{font-size:26px; font-weight:800; line-height:1.05; letter-spacing:-.02em;}
+.xs-stat .l{font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-top:3px;}
+.xs-stat.todo .n{color:#C8102E;} .xs-stat.ads .n{color:#1A73E8;} .xs-stat.soc .n{color:#C13584;} .xs-stat.both .n{color:#7C5CFC;} .xs-stat.yes .n{color:var(--deep);}
+.xs-bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+.xs-pill{padding:7px 13px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-weight:700; font-size:12.5px; color:var(--ink);}
+.xs-pill .c{color:var(--muted); font-weight:700; margin-left:4px;}
+.xs-pill.on{background:var(--ink); color:var(--surface); border-color:var(--ink);}
+.xs-pill.on .c{color:inherit; opacity:.7;}
+.xs-sep{width:1px; height:22px; background:var(--line); margin:0 4px;}
+.xs-add{margin-left:auto;}
+.xs-group{margin:6px 0 22px;}
+.xs-gh{display:flex; align-items:center; gap:10px; margin:0 0 10px;}
+.xs-gh h3{font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:.06em;}
+.xs-gh .n{font-size:12px; font-weight:800; color:var(--muted); background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:1px 9px;}
+.xs-gh .ln{flex:1; height:1px; background:var(--line);}
+.xs-gh .dot{width:10px; height:10px; border-radius:50%;}
+.xs-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:12px;}
+.xs-card{position:relative; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 15px 12px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:9px; overflow:hidden;}
+.xs-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--xs-c,#4285F4);}
+.xs-card.st-yes{background:linear-gradient(0deg,var(--green-soft),var(--card) 70%);}
+.xs-card.st-no{opacity:.62;}
+.xs-top{display:flex; align-items:flex-start; gap:10px;}
+.xs-name{font-size:15.5px; font-weight:800; line-height:1.25; cursor:pointer;}
+.xs-name:hover{text-decoration:underline;}
+.xs-meta{font-size:12px; color:var(--muted); margin-top:2px; display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+.xs-meta a{color:var(--blue); font-weight:600;}
+.xs-cols{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; align-items:start; margin-bottom:22px;}
+.xs-col{background:color-mix(in srgb, var(--xs-c) 5%, var(--bg)); border:1px solid color-mix(in srgb, var(--xs-c) 18%, var(--line)); border-radius:18px; padding:12px; display:flex; flex-direction:column; gap:10px; min-height:140px;}
+.xs-ch{display:flex; align-items:center; gap:8px; padding:2px 4px 4px;}
+.xs-ch .ic{width:26px; height:26px; border-radius:8px; display:grid; place-items:center; background:var(--xs-c); color:#fff;}
+.xs-ch .ic svg{width:15px; height:15px;} .xs-ch .ic i{width:9px; height:9px; border-radius:50%; background:#fff;}
+.xs-ch h3{font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--ink);}
+.xs-ch .n{margin-left:auto; font-size:12.5px; font-weight:800; color:var(--xs-c); background:var(--card); border:1px solid var(--line); border-radius:999px; padding:1px 10px;}
+.xs-none{font-size:12.5px; color:var(--muted); text-align:center; padding:18px 6px; border:1px dashed var(--line); border-radius:12px;}
+.xs-st{margin-left:auto; flex:none; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; padding:4px 9px; border-radius:999px; white-space:nowrap;}
+.xs-st.todo{background:var(--yellow-soft); color:#8A6400;} .xs-st.due{background:var(--red-soft); color:#C8102E;}
+.xs-st.contacted{background:var(--blue-soft); color:#1A5FC4;} .xs-st.yes{background:var(--green); color:#fff;} .xs-st.no{background:var(--bg); color:var(--muted); border:1px solid var(--line);}
+body.dark .xs-st.todo{color:#FFD45C;} body.dark .xs-st.contacted{color:#8AB4F8;}
+.xs-svcs{display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+.xs-svc{display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:800; padding:4px 10px; border-radius:9px;}
+.xs-svc svg{width:13px; height:13px;}
+.xs-svc.ads{background:rgba(66,133,244,.12); color:#1A73E8;}
+.xs-svc.soc{background:rgba(221,42,123,.10); color:#C13584;}
+.xs-svc.uns{background:var(--bg); color:var(--muted); border:1px dashed var(--line);}
+body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
+.xs-note{font-size:13px; line-height:1.45; color:var(--ink); white-space:pre-wrap; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+.xs-note.empty{color:var(--muted); font-style:italic;}
+.xs-hist{font-size:11.5px; color:var(--muted);}
+.xs-acts{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr) 34px; gap:6px; margin-top:2px; padding-top:10px; border-top:1px solid var(--line);}
+.xs-acts .msg{grid-column:1/-1; padding:8px 11px;}
+.xs-b{padding:6px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-radius:9px; font-weight:700; font-size:12.5px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
+.xs-b:hover{border-color:#BFD4F2;}
+.xs-b.msg{background:var(--grad); color:#fff; border-color:transparent;}
+.xs-b.ok{color:var(--deep);} .xs-b.mute{color:var(--muted);}
+.xs-b.more{margin-left:auto;}
+.xs-empty{padding:28px; text-align:center; color:var(--muted); background:var(--card); border:1px dashed var(--line); border-radius:16px; font-size:13.5px;}
+.xs-sug{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin:0 0 22px; box-shadow:var(--shadow);}
+.xs-sug h4{font-size:13.5px; font-weight:800; margin-bottom:2px;}
+.xs-sug p{font-size:12.5px; color:var(--muted); margin-bottom:10px;}
+.xs-sr{display:flex; align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--line); flex-wrap:wrap;}
+.xs-sr .who{font-weight:800; font-size:13.5px; min-width:150px;}
+.xs-sr .why{flex:1; min-width:200px; font-size:12.5px; color:var(--muted);}
+.xs-sr .why mark{background:var(--yellow-soft); color:inherit; border-radius:4px; padding:0 2px;}
+.xs-done-t{display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px; color:var(--muted); cursor:pointer; margin:8px 0 10px;}
+.xs-chips{display:flex; gap:8px; flex-wrap:wrap;}
+.xs-chip{padding:8px 13px; border-radius:11px; border:1px solid var(--line); background:var(--bg); font-weight:700; font-size:13px; color:var(--ink);}
+.xs-chip.on{border-color:var(--blue); background:var(--blue-soft); color:#1A5FC4;}
+.xs-chip.on.soc{border-color:#DD2A7B; background:rgba(221,42,123,.1); color:#C13584;}
+.xs-chip.on.uns{border-color:var(--muted); background:var(--bg); color:var(--ink);}
+.xs-msg{width:100%; min-height:250px; border:1px solid var(--line); border-radius:12px; padding:12px; font:inherit; font-size:13.5px; line-height:1.5; background:var(--bg); color:var(--ink); resize:vertical;}
+.xs-sal{display:flex; gap:8px; align-items:center;}
+.xs-sal input{flex:1;}
+#xsOverlay .modal,#xsMsgOverlay .modal{max-width:540px;}
+.xs-hint{font-size:12px; color:var(--muted);}
+@media (max-width:1250px){ .xs-cols{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@media (max-width:1100px){ .xs-stats{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@media (max-width:700px){ .xs-cols{grid-template-columns:1fr;} .xs-col.empty{display:none;} }
+@media (max-width:560px){ #view-xs{padding:12px 12px 90px;} .xs-head h2{font-size:20px;} .xs-sub{font-size:13px;}
+  .xs-stats{display:flex; overflow-x:auto; gap:8px; padding-bottom:4px; margin:12px 0 10px; scrollbar-width:none;} .xs-stat{min-width:96px; padding:9px 11px; border-radius:13px;} .xs-stat .n{font-size:21px;} .xs-stat .l{font-size:10px;}
+  .xs-bar{flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px; scrollbar-width:none;} .xs-pill{flex:none;} .xs-add{order:-1; flex:none; margin-left:0;}
+  .xs-grid{grid-template-columns:1fr;} .xs-sr .who{min-width:0; width:100%;} .xs-sr .why{min-width:0; width:100%;} }
+</style>
 </head>
 <body class="locked">
 
@@ -3911,6 +4012,7 @@ body.dark .chase-row.nd .cr-sub{color:#FFB65C}
       <button class="tab" data-view="year">Year</button>
       <span class="tab-sep" aria-hidden="true"></span>
       <button class="tab tab-meta" data-view="meta"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg>Meta</button>
+      <button class="tab tab-xs" data-view="xs" title="Clients interested in Google Ads / Social media"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9.5 4.5 3.8 14.4a3 3 0 1 0 5.2 3l5.7-9.9"/><path d="m14.5 4.5 5.7 9.9a3 3 0 1 1-5.2 3L9.3 7.5"/></svg>Ads &amp; Social<span class="tab-n" id="xsTabN" hidden>0</span></button>
     </nav>
     <div class="topbar-right">
       <div class="search-wrap">
@@ -4102,6 +4204,70 @@ body.dark .chase-row.nd .cr-sub{color:#FFB65C}
   <div class="mt-help" id="mtHelp"></div>
   <div class="mt-grid" id="mtGrid"><div class="mt-empty">Loading the posts…</div></div>
 </main>
+
+<!-- ADS & SOCIAL (22 Oct 2026) — clients interested in Google Ads / Social media, to contact from November -->
+<main class="view" id="view-xs">
+  <div class="xs-head">
+    <div>
+      <h2>Ads &amp; Social</h2>
+      <p class="xs-sub">Clients who asked about <b>Google Ads</b> or <b>Social media management</b>. You told them you'd get in touch in November — everyone here is waiting for that message.</p>
+    </div>
+    <span class="xs-sp"></span>
+    <button class="xs-when" id="xsWhen" title="When you start contacting them — tap to change"></button>
+  </div>
+  <div class="xs-stats" id="xsStats"></div>
+  <div class="xs-bar" id="xsBar"></div>
+  <div id="xsSug"></div>
+  <div id="xsList"></div>
+</main>
+
+<div class="overlay" id="xsOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="xsMTitle">Add a client</h3><button class="modal-close" data-xs-close>✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Client</label><input id="xsName" list="xsNames" placeholder="Start typing a name from the Board…" autocomplete="off"><datalist id="xsNames"></datalist>
+        <div class="xs-hint" id="xsLinkHint" style="margin-top:5px"></div></div>
+      <div class="field"><label>Interested in</label>
+        <div class="xs-chips">
+          <button type="button" class="xs-chip" data-svc="ads">Google Ads</button>
+          <button type="button" class="xs-chip soc" data-svc="social">Social media</button>
+          <button type="button" class="xs-chip uns" data-svc="unsure">Not sure which yet</button>
+        </div></div>
+      <div class="field-row">
+        <div class="field"><label>Contact them on</label><input type="date" id="xsDay"></div>
+        <div class="field"><label>Status</label><select id="xsSt">
+          <option value="todo">To contact</option><option value="contacted">Contacted — waiting</option><option value="yes">Said yes</option><option value="no">Not now / No</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Phone (if not on the Board)</label><input id="xsPhone" inputmode="tel"></div>
+        <div class="field"><label>E-mail (optional)</label><input id="xsEmail" inputmode="email"></div>
+      </div>
+      <div class="field"><label>Note — what they said</label><textarea id="xsNote" rows="3" placeholder="e.g. very interested, wants calls for the Γλυφάδα office"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="xsDel" style="flex:none;color:var(--red)">Remove</button>
+      <button class="btn btn-ghost" data-xs-close>Cancel</button>
+      <button class="btn btn-brand" id="xsSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="xsMsgOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="xsMsgTitle">Message</h3><button class="modal-close" data-xs-close>✕</button></div>
+    <div class="modal-body">
+      <div class="xs-sal"><div class="xs-chips"><button type="button" class="xs-chip" data-salt="κα">κα</button><button type="button" class="xs-chip" data-salt="κ.">κ.</button></div><div class="field" style="flex:1"><input id="xsSalN" placeholder="Επώνυμο"></div></div>
+      <textarea class="xs-msg" id="xsMsg"></textarea>
+      <div class="xs-hint">Nothing is sent by itself — copy it and send it yourself. «Mark contacted» moves the card to Contacted.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="xsMsgViber">Copy + Viber</button>
+      <button class="btn btn-ghost" id="xsMsgMark">Mark contacted</button>
+      <button class="btn btn-brand" id="xsMsgCopy">Copy message</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="mtOverlay">
   <div class="modal">
     <div class="mt-modal">
@@ -11855,7 +12021,7 @@ function switchView(v){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+v));
   /* the money strip also sits on Home, Calendar and To Do (the Calendar keeps its own month arrows, so the strip's are hidden there via CSS) */
-  $('#strip').style.display = (v==='year'||v==='renewals'||v==='ideas'||v==='monthly'||v==='remaining'||v==='leads'||v==='chats'||v==='meta') ? 'none' : 'flex';
+  $('#strip').style.display = (v==='year'||v==='renewals'||v==='ideas'||v==='monthly'||v==='remaining'||v==='leads'||v==='chats'||v==='meta'||v==='xs') ? 'none' : 'flex';
   if(v==='meta' && Date.now()-Meta.lastAt>20*1000) Meta.pull(false);
   if(v==='chats'){ if(Date.now()-Chats.lastAt>15*1000) Chats.pull(false); if(Chats.cur) Chats.pullThread(false); setTimeout(()=>Chats.seen(),400); }
   if(v==='leads' && Date.now()-Leads.lastAt>10*60*1000) Leads.pull(false);
@@ -12456,7 +12622,8 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(fixJobs20261020()) setTimeout(save,0); }catch(e){}
   try{ if(fixManios20261020()) setTimeout(save,0); }catch(e){ console.warn('manios fix',e); }
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
-  renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); }
+  try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
+  renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); }
 }
 
 /* ---------- export ---------- */
@@ -14608,6 +14775,330 @@ const Meta={ posts:[], all:[], auto:true, showPosted:false, mf:null, meta:{conne
   if(location.hash==='#meta') setTimeout(()=>switchView('meta'),300);
 })();
 
+</script>
+
+<script id="xs-js">
+/* ==================================================================
+   ADS & SOCIAL — clients interested in Google Ads / Social media (Angelo, 22 Oct 2026)
+   «add a menu right of META where we log clients interested in other services — Social media
+    management, Google Ads or both. I told them I'll contact them in November.»
+   ------------------------------------------------------------------
+   state.xsvc = [{id, cid?, rid?, name, phone, email, ads, social, unsure, st, day, note, src, at, updated, log:[{at,st}]}]
+     cid = Board client id, rid = renewal id (old live clients often only exist under Renewals)
+     st  = todo | contacted | yes | no      day = the day to contact them (default state.meta.xsStart)
+   Fed by: (1) the seed below (clients Angelo named), (2) every «Also interested in» Google Ads / Social
+   chip logged in «How did it go?» (c.ups) — added by itself, once per chip, (3) «+ Add client».
+   «Maybe also interested?» lists Board cards whose notes mention ads / social so nobody is forgotten.
+   Marking contacted / yes / no closes the matching «Extras they want» reminder on Home (with Undo).
+   ================================================================== */
+const XS_START_DEF='2026-11-02';                     /* Mon 2 Nov 2026 — «I told them I'll contact them in November» */
+const XS_SEED_VER='v1';
+const XS_SEED=[
+  {key:'bafakis', keys:['bafak','μπαφακ'], name:'BAFAKIS', ads:true, social:false, unsure:false,
+   note:'Παλιός πελάτης — bafakiscardio.gr (καρδιολόγος, live). Το Google Ads το θέλει 100%.\nΜαζί και αλλαγές 50€: νέες φωτογραφίες, νέα τοποθεσία (διεύθυνση + χάρτης), όλη η σελίδα και στα αγγλικά — δουλειά γύρω στα μέσα Νοεμβρίου.'},
+  {key:'pouri', keys:['pouri','πουρη'], name:'POURI', ads:true, social:true, unsure:false,
+   note:'Είπε ναι στην ιστοσελίδα (συνάντηση 8 Οκτ). Πολύ ενδιαφερόμενη για Google Ads — της είπα ότι ξεκινάμε από Νοέμβριο και θα την ενημερώσω. Ενδιαφέρεται για τα δύο (ή όποιο από τα δύο).'},
+  {key:'gkioka', keys:['gkiok','γκιοκ'], name:'GKIOKA', ads:false, social:false, unsure:true,
+   note:'Μαρία Γκιόκα — mariagkioka.gr (live). Ρώτησε για τις νέες υπηρεσίες — δες αν θέλει Google Ads, social ή και τα δύο.'},
+];
+const XS_ST={todo:'To contact', contacted:'Contacted', yes:'Said yes', no:'Not now'};
+const XS_IC={
+  ads:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9.5 4.5 3.8 14.4a3 3 0 1 0 5.2 3l5.7-9.9"/><path d="m14.5 4.5 5.7 9.9a3 3 0 1 1-5.2 3L9.3 7.5"/></svg>',
+  soc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg>',
+};
+let xsF={svc:'all', st:'open'}, xsShowDone=false, xsEditing=null, xsMsgCur=null;
+
+function xsEnsure(){ if(!state) return false; if(!Array.isArray(state.xsvc)) state.xsvc=[]; state.meta||={}; return true; }
+function xsStart(){ return (state && state.meta && state.meta.xsStart) || XS_START_DEF; }
+const xsN=s=>mqNorm(s);
+function xsClient(e){ return e && e.cid ? state.clients.find(c=>c.id===e.cid && !isTrashed(c)) : null; }
+function xsRenewal(e){ return e && e.rid ? (state.renewals||[]).find(r=>r.id===e.rid) : null; }
+function xsName(e){ const c=xsClient(e); if(c) return c.name; const r=xsRenewal(e); if(r) return r.name; return e.name||'—'; }
+function xsPhone(e){ const c=xsClient(e); return (c&&(c.viber||c.phone))||e.phone||''; }
+function xsEmail(e){ const c=xsClient(e); return (c&&c.email)||e.email||''; }
+function xsKind(e){ return e.unsure && !e.ads && !e.social ? 'uns' : (e.ads&&e.social ? 'both' : e.ads ? 'ads' : e.social ? 'soc' : 'uns'); }
+function xsDue(e){ return e.st==='todo' && (e.day||xsStart())<=todayIso(); }
+function xsFind(keys){
+  const ks=keys.map(xsN).filter(Boolean); const hit=s=>{ const n=xsN(s); return ks.some(k=>n.includes(k)); };
+  const cs=state.clients.filter(c=>!isTrashed(c) && hit(c.name)).sort((a,b)=>(b.updated||0)-(a.updated||0));
+  if(cs.length) return {cid:cs[0].id};
+  const rs=(state.renewals||[]).filter(r=>hit(r.name)||hit(r.note||'')).sort((a,b)=>(b.created||0)-(a.created||0));
+  if(rs.length) return {rid:rs[0].id};
+  return {};
+}
+function xsSyncOk(){ try{ return typeof Sync==='undefined' || ['ok','off','idle'].includes(Sync.state); }catch(e){ return true; } }
+
+/* the clients Angelo named on 22 Oct + every Google Ads / Social chip from «How did it go?» */
+function xsAuto(){
+  if(!xsEnsure() || !xsSyncOk()) return false;
+  let ch=false; const M=state.meta;
+  if(M.xsSeed!==XS_SEED_VER){
+    XS_SEED.forEach(s=>{
+      const link=xsFind(s.keys);
+      let e=state.xsvc.find(x=>x.seed===s.key || (link.cid && x.cid===link.cid) || (link.rid && x.rid===link.rid));
+      if(!e){ e={id:uid(), seed:s.key, name:s.name, phone:'', email:'', ads:s.ads, social:s.social, unsure:s.unsure, st:'todo', day:xsStart(), note:s.note, src:'named', at:Date.now(), log:[]}; state.xsvc.push(e); }
+      Object.assign(e, link); ch=true;
+    });
+    M.xsSeed=XS_SEED_VER;
+  }
+  /* a seed that found no Board card yet keeps looking (the card may arrive later from another device) */
+  state.xsvc.forEach(e=>{ if(e.seed && !e.cid && !e.rid){ const s=XS_SEED.find(x=>x.key===e.seed); if(s){ const l=xsFind(s.keys); if(l.cid||l.rid){ Object.assign(e,l); ch=true; } } } });
+  M.xsUps||={};
+  state.clients.forEach(c=>{
+    if(isTrashed(c) || !Array.isArray(c.ups)) return;
+    c.ups.forEach(u=>{
+      if(!u || !u.id || M.xsUps[u.id]) return;
+      const w=(u.what||[]); const ads=w.includes('Google Ads'), soc=w.includes('Social media');
+      if(!ads && !soc) return;
+      M.xsUps[u.id]=1; ch=true;
+      let e=state.xsvc.find(x=>x.cid===c.id);
+      if(e){ e.ads=e.ads||ads; e.social=e.social||soc; if(e.ads||e.social) e.unsure=false; if(u.note && !String(e.note||'').includes(u.note)) e.note=(e.note?e.note+'\n':'')+u.note; e.updated=Date.now(); return; }
+      state.xsvc.push({id:uid(), cid:c.id, name:c.name, phone:'', email:'', ads, social:soc, unsure:false, st:u.done?'contacted':'todo',
+        day:(u.day && u.day>xsStart()) ? u.day : xsStart(), note:u.note||'', src:'meeting', at:u.at||Date.now(), log:[]});
+    });
+  });
+  return ch;
+}
+
+/* «Maybe also interested?» — Board cards whose notes / meeting logs talk about ads or social */
+const XS_RX=/google\s*ads|adwords|διαφημ|social\s*media|σόσιαλ|σοσιαλ|instagram|ινσταγκραμ|facebook|φεισμπουκ|tiktok|μέσα κοινωνικής/i;
+function xsSuggest(){
+  const have=new Set(state.xsvc.map(e=>e.cid).filter(Boolean)), skip=state.meta.xsSkip||{};
+  const out=[];
+  state.clients.forEach(c=>{
+    if(isTrashed(c) || have.has(c.id) || skip[c.id] || c.stage==='lost') return;
+    const txt=[c.notes||'', ...(c.mlog||[]).map(m=>m.note||''), c.lostReason||''].join('\n').replace(/https?:\/\/\S+|\S+\.(com|gr)\/\S*/gi,' ');
+    const m=txt.match(XS_RX); if(!m) return;
+    const i=m.index, a=Math.max(0,i-60), b=Math.min(txt.length,i+m[0].length+70);
+    out.push({c, why:(a?'…':'')+esc(txt.slice(a,i))+'<mark>'+esc(m[0])+'</mark>'+esc(txt.slice(i+m[0].length,b))+(b<txt.length?'…':''),
+      ads:/google|adwords|διαφημ/i.test(m[0]), soc:/social|σόσιαλ|σοσιαλ|insta|ινστα|face|φεισ|tiktok|κοινωνικ/i.test(m[0])});
+  });
+  return out.slice(0,25);
+}
+
+function xsDayLbl(iso){ if(!iso) return ''; const d=new Date(iso+'T12:00'); const t=todayIso(); if(iso===t) return 'today';
+  return d.toLocaleDateString('en-GB',{weekday:'short', day:'numeric', month:'short'}); }
+function xsSvcHtml(e){
+  const h=[]; if(e.ads) h.push(`<span class="xs-svc ads">${XS_IC.ads}Google Ads</span>`); if(e.social) h.push(`<span class="xs-svc soc">${XS_IC.soc}Social media</span>`);
+  if(!h.length) h.push(`<span class="xs-svc uns">Not sure which yet — ask</span>`); return h.join('');
+}
+function xsCard(e){
+  const c=xsClient(e), r=xsRenewal(e), k=xsKind(e);
+  const col={ads:'#4285F4', soc:'#DD2A7B', both:'#7C5CFC', uns:'#8A94A8'}[k];
+  const meta=[];
+  if(c){ const s=STAGES.find(x=>x.id===c.stage); if(s) meta.push('Board · '+s.name); let u=''; try{ u=cDraftUrl(c); }catch(_){} if(u) meta.push(`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').replace(/\/$/,''))}</a>`); }
+  else if(r) meta.push('Renewals'+(r.date?' · renews '+fmtDay(r.date):''));
+  else meta.push('not on the Board');
+  const ph=xsPhone(e); if(ph) meta.push(`<a href="tel:${esc(ph)}">${esc(ph)}</a>`);
+  const due=xsDue(e), stc=e.st==='todo'?(due?'due':'todo'):e.st;
+  const stl=e.st==='todo' ? (due?'Contact now':'Contact '+xsDayLbl(e.day||xsStart())) : XS_ST[e.st];
+  const hist=(e.log||[]).slice(-3).map(l=>XS_ST[l.st]+' '+fmtDay(isoDate(new Date(l.at)))).join(' · ');
+  const src=e.src==='meeting'?'from a meeting log':e.src==='notes'?'found in notes':'';
+  return `<div class="xs-card st-${e.st}" style="--xs-c:${col}" data-xs="${e.id}">
+    <div class="xs-top"><div style="min-width:0"><div class="xs-name" data-xs-open>${esc(xsName(e))}</div><div class="xs-meta">${meta.join('<span>·</span>')}</div></div></div>
+    <div class="xs-svcs">${xsSvcHtml(e)}<span class="xs-st ${stc}">${esc(stl)}</span></div>
+    <div class="xs-note${e.note?'':' empty'}">${e.note?esc(e.note):'No note yet'}</div>
+    ${hist||src?`<div class="xs-hist">${esc(hist||'')}${hist&&src?' · ':''}${esc(src)}</div>`:''}
+    <div class="xs-acts">
+      <button class="xs-b msg" data-xs-msg>Ready message</button>
+      ${e.st==='todo'?'<button class="xs-b" data-xs-st="contacted">Contacted ✓</button>':'<button class="xs-b" data-xs-st="todo">↺ To contact</button>'}
+      ${e.st!=='yes'?'<button class="xs-b ok" data-xs-st="yes">Said yes</button>':'<button class="xs-b" data-xs-st="contacted">Undo yes</button>'}
+      ${e.st!=='no'?'<button class="xs-b mute" data-xs-st="no">Not now</button>':'<button class="xs-b" data-xs-st="contacted">Undo</button>'}
+      <button class="xs-b" data-xs-edit title="Edit">✎</button>
+    </div></div>`;
+}
+function xsMatch(e){
+  const k=xsKind(e);
+  if(xsF.svc==='ads' && !e.ads) return false;
+  if(xsF.svc==='soc' && !e.social) return false;
+  if(xsF.svc==='both' && k!=='both') return false;
+  if(xsF.svc==='uns' && k!=='uns') return false;
+  if(xsF.st==='open') return e.st==='todo'||e.st==='contacted';
+  if(xsF.st!=='all') return e.st===xsF.st;
+  return true;
+}
+function renderXs(){
+  const b=$('#xsTabN'); if(!xsEnsure()) return;
+  const all=state.xsvc;
+  const dueN=all.filter(xsDue).length;
+  if(b){ b.textContent=dueN; b.hidden=!dueN; }
+  if(typeof curView!=='undefined' && curView!=='xs') return;
+  const start=xsStart(), t=todayIso();
+  const days=Math.round((new Date(start+'T12:00')-new Date(t+'T12:00'))/864e5);
+  const w=$('#xsWhen'); w.classList.toggle('now', days<=0);
+  w.innerHTML= days>0 ? `Contact them from <b>${esc(xsDayLbl(start))}</b> · in ${days} day${days===1?'':'s'}` : `Contact time — <b>${dueN} waiting</b>`;
+  const open=all.filter(e=>e.st==='todo'||e.st==='contacted');
+  const cnt={todo:all.filter(e=>e.st==='todo').length, ads:open.filter(e=>e.ads).length, soc:open.filter(e=>e.social).length, both:open.filter(e=>xsKind(e)==='both').length, yes:all.filter(e=>e.st==='yes').length};
+  const tile=(cls,n,l,act)=>`<button class="xs-stat ${cls}${act?' on':''}" data-xs-tile="${cls}"><div class="n">${n}</div><div class="l">${l}</div></button>`;
+  $('#xsStats').innerHTML=tile('todo',cnt.todo,'To contact',xsF.st==='todo'&&xsF.svc==='all')+tile('ads',cnt.ads,'Google Ads',xsF.svc==='ads')+tile('soc',cnt.soc,'Social media',xsF.svc==='soc')+tile('both',cnt.both,'Want both',xsF.svc==='both')+tile('yes',cnt.yes,'Said yes',xsF.st==='yes');
+  const svcN=f=>all.filter(e=>{ const s=xsF.svc; xsF.svc=f; const r=xsMatch(e); xsF.svc=s; return r; }).length;
+  const stN=f=>all.filter(e=>{ const s=xsF.st; xsF.st=f; const r=xsMatch(e); xsF.st=s; return r; }).length;
+  const pill=(grp,v,l,n)=>`<button class="xs-pill${xsF[grp]===v?' on':''}" data-xs-f="${grp}:${v}">${l}<span class="c">${n}</span></button>`;
+  $('#xsBar').innerHTML=pill('svc','all','All',svcN('all'))+pill('svc','ads','Google Ads',svcN('ads'))+pill('svc','soc','Social media',svcN('soc'))+pill('svc','both','Both',svcN('both'))+pill('svc','uns','Not sure yet',svcN('uns'))
+    +'<span class="xs-sep"></span>'+pill('st','open','Open',stN('open'))+pill('st','todo','To contact',stN('todo'))+pill('st','contacted','Contacted',stN('contacted'))+pill('st','yes','Said yes',stN('yes'))+pill('st','no','Not now',stN('no'))+pill('st','all','Everything',stN('all'))
+    +'<button class="btn btn-brand xs-add" id="xsAddBtn">＋ Add client</button>';
+  /* suggestions */
+  const sug=xsSuggest();
+  $('#xsSug').innerHTML= sug.length ? `<div class="xs-sug"><h4>Maybe also interested? · ${sug.length}</h4><p>Board cards whose notes mention ads or social media. Add the ones who asked — dismiss the rest.</p>
+    ${sug.map(s=>`<div class="xs-sr" data-xs-sc="${s.c.id}"><span class="who">${esc(s.c.name)}</span><span class="why">${s.why}</span>
+      <button class="xs-b" data-xs-sadd="ads">+ Google Ads</button><button class="xs-b" data-xs-sadd="soc">+ Social</button><button class="xs-b" data-xs-sadd="both">+ Both</button><button class="xs-b mute" data-xs-sskip>Dismiss</button></div>`).join('')}</div>` : '';
+  /* the list, grouped by what they want */
+  const rows=all.filter(xsMatch).sort((a,b)=>{ const o={todo:0,contacted:1,yes:2,no:3}; return (o[a.st]-o[b.st]) || String(a.day||'').localeCompare(String(b.day||'')) || xsName(a).localeCompare(xsName(b)); });
+  let h='';
+  if(!all.length) h='<div class="xs-empty">Nobody here yet. Press «＋ Add client», or tick Google Ads / Social media in «How did it go?» after a meeting.</div>';
+  else if(!rows.length) h='<div class="xs-empty">Nobody matches this filter.</div>';
+  else if(xsF.svc==='all'){
+    h='<div class="xs-cols">'+[['ads','Google Ads','#4285F4',XS_IC.ads],['soc','Social media','#DD2A7B',XS_IC.soc],['both','Want both','#7C5CFC',''],['uns','Not sure which yet','#8A94A8','']].map(([k,l,col,ic])=>{
+      const g=rows.filter(e=>xsKind(e)===k);
+      return `<section class="xs-col${g.length?'':' empty'}" style="--xs-c:${col}"><div class="xs-ch"><span class="ic">${ic||'<i></i>'}</span><h3>${l}</h3><span class="n">${g.length}</span></div>${g.length?g.map(xsCard).join(''):'<div class="xs-none">Nobody yet</div>'}</section>`;
+    }).join('')+'</div>';
+  } else h=`<div class="xs-grid">${rows.map(xsCard).join('')}</div>`;
+  const doneN=all.filter(e=>e.st==='yes'||e.st==='no').length;
+  if(xsF.st==='open' && doneN) h+=`<div class="xs-done-t" data-xs-done>${xsShowDone?'▾':'▸'} Finished (said yes / not now) · ${doneN}</div>`+(xsShowDone?`<div class="xs-grid">${all.filter(e=>(e.st==='yes'||e.st==='no')&&(()=>{const s=xsF.st; xsF.st='all'; const r=xsMatch(e); xsF.st=s; return r;})()).map(xsCard).join('')}</div>`:'');
+  $('#xsList').innerHTML=h;
+}
+
+/* status changes — also closes the matching «Extras they want» reminder on Home */
+function xsSetSt(id, st){
+  const e=state.xsvc.find(x=>x.id===id); if(!e) return;
+  const before=JSON.stringify(e), c=xsClient(e), upsBefore=c&&c.ups?JSON.stringify(c.ups):null;
+  e.st=st; e.updated=Date.now(); e.log=(e.log||[]).concat({at:Date.now(), st}).slice(-12);
+  if(st!=='todo' && c && Array.isArray(c.ups)) c.ups.forEach(u=>{ if(!u.done && (u.what||[]).length && u.what.every(w=>w==='Google Ads'||w==='Social media')) u.done=Date.now(); });
+  if(c) c.updated=Date.now();
+  save(); renderAll();
+  toastUndo(xsName(e)+' → '+XS_ST[st], ()=>{ Object.assign(e, JSON.parse(before)); if(c && upsBefore!==null) c.ups=JSON.parse(upsBefore); save(); renderAll(); });
+}
+function xsAddFromSug(cid, kind){
+  const c=state.clients.find(x=>x.id===cid); if(!c) return;
+  state.xsvc.push({id:uid(), cid, name:c.name, phone:'', email:'', ads:kind==='ads'||kind==='both', social:kind==='soc'||kind==='both', unsure:false, st:'todo', day:xsStart(), note:'', src:'notes', at:Date.now(), log:[]});
+  save(); renderAll(); toast(c.name+' added');
+}
+
+/* ---- add / edit window ---- */
+function xsNamesList(){
+  const seen=new Set(), opts=[];
+  state.clients.filter(c=>!isTrashed(c)).sort((a,b)=>(b.updated||0)-(a.updated||0)).forEach(c=>{ if(c.name && !seen.has(c.name)){ seen.add(c.name); opts.push(c.name); } });
+  (state.renewals||[]).forEach(r=>{ if(r.name && !seen.has(r.name)){ seen.add(r.name); opts.push(r.name); } });
+  $('#xsNames').innerHTML=opts.slice(0,600).map(n=>`<option value="${esc(n)}">`).join('');
+}
+function xsLinkFor(name){
+  const n=String(name||'').trim(); if(!n) return {};
+  const c=state.clients.find(x=>!isTrashed(x) && x.name===n); if(c) return {cid:c.id};
+  const r=(state.renewals||[]).find(x=>x.name===n); if(r) return {rid:r.id};
+  return xsFind([n]);
+}
+function xsLinkHint(){
+  const l=xsLinkFor($('#xsName').value);
+  const c=l.cid?state.clients.find(x=>x.id===l.cid):null, r=l.rid?(state.renewals||[]).find(x=>x.id===l.rid):null;
+  $('#xsLinkHint').textContent= c ? '✓ Linked to the Board card «'+c.name+'»' : r ? '✓ Linked to Renewals «'+r.name+'»' : ($('#xsName').value.trim()?'Not found on the Board — saved with this name':'');
+}
+let xsSvc={ads:false, social:false, unsure:false};
+function xsPaintSvc(){ document.querySelectorAll('#xsOverlay [data-svc]').forEach(b=>b.classList.toggle('on', !!xsSvc[b.dataset.svc])); }
+function xsOpenEdit(id){
+  xsEnsure(); xsNamesList();
+  const e=id?state.xsvc.find(x=>x.id===id):null; xsEditing=e?e.id:null;
+  $('#xsMTitle').textContent=e?'Edit — '+xsName(e):'Add a client';
+  $('#xsName').value=e?xsName(e):''; $('#xsDay').value=e?(e.day||xsStart()):xsStart(); $('#xsSt').value=e?e.st:'todo';
+  $('#xsPhone').value=e?(e.phone||''):''; $('#xsEmail').value=e?(e.email||''):''; $('#xsNote').value=e?(e.note||''):'';
+  xsSvc={ads:!!(e&&e.ads), social:!!(e&&e.social), unsure:!!(e&&xsKind(e)==='uns')}; xsPaintSvc();
+  $('#xsDel').style.display=e?'':'none'; xsLinkHint();
+  $('#xsOverlay').classList.add('open'); setTimeout(()=>{ if(!e) $('#xsName').focus(); },60);
+}
+function xsSaveEdit(){
+  const name=$('#xsName').value.trim(); if(!name){ toast('Write the client\'s name'); return; }
+  if(!xsSvc.ads && !xsSvc.social && !xsSvc.unsure){ toast('Pick Google Ads, Social media or «Not sure»'); return; }
+  const link=xsLinkFor(name);
+  let e=xsEditing?state.xsvc.find(x=>x.id===xsEditing):null;
+  if(!e && link.cid && state.xsvc.some(x=>x.cid===link.cid)){ e=state.xsvc.find(x=>x.cid===link.cid); toast('Already on the list — updated it'); }
+  const isNew=!e; if(!e){ e={id:uid(), src:'manual', at:Date.now(), log:[]}; state.xsvc.push(e); }
+  const st=$('#xsSt').value;
+  if(!isNew && st!==e.st) e.log=(e.log||[]).concat({at:Date.now(), st}).slice(-12);
+  delete e.cid; delete e.rid;
+  Object.assign(e, link, {name, phone:$('#xsPhone').value.trim(), email:$('#xsEmail').value.trim(), ads:xsSvc.ads, social:xsSvc.social, unsure:!xsSvc.ads&&!xsSvc.social,
+    st, day:$('#xsDay').value||xsStart(), note:$('#xsNote').value.trim(), updated:Date.now()});
+  $('#xsOverlay').classList.remove('open'); save(); renderAll(); toast(isNew?name+' added':'Saved');
+}
+
+/* ---- ready message (his voice, surname greeting) ---- */
+function xsSal(e){ const c=xsClient(e); if(c) return mqGuessSal(c); return mqGuessSal({name:xsName(e)}); }
+function xsMsgText(e, sal){
+  const hi=new Date().getHours()<12?'Καλημέρα':'Καλησπέρα';
+  const who=(sal.t+' '+sal.n).trim();
+  const A='τις διαφημίσεις στο Google (Google Ads)', S='τη διαχείριση των social media (Instagram & Facebook)';
+  const k=xsKind(e);
+  const what= k==='both' ? A+' και '+S : k==='ads' ? A : k==='soc' ? S : A+' και '+S;
+  const L=[hi+' σας '+who+',', 'Όπως είχαμε πει, από τον Νοέμβριο ξεκινάμε '+what+' για τους πελάτες μας.'];
+  if(k==='uns') L.push('Θα θέλατε να σας στείλω τις λεπτομέρειες για κάποιο από τα δύο ή να τα πούμε σε ένα σύντομο τηλεφώνημα;');
+  else L.push('Θα θέλατε να σας στείλω τις λεπτομέρειες ή να τα πούμε σε ένα σύντομο τηλεφώνημα;');
+  L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
+  return L.join('\n\n')+'\n\n'+MQ_SIGN;
+}
+function xsOpenMsg(id){
+  const e=state.xsvc.find(x=>x.id===id); if(!e) return;
+  const c=xsClient(e);
+  xsMsgCur={id, sal:xsSal(e), edited:false};
+  $('#xsMsgTitle').textContent='Message — '+xsName(e);
+  $('#xsSalN').value=xsMsgCur.sal.n;
+  document.querySelectorAll('#xsMsgOverlay [data-salt]').forEach(b=>b.classList.toggle('on', b.dataset.salt===xsMsgCur.sal.t));
+  $('#xsMsg').value=xsMsgText(e, xsMsgCur.sal);
+  $('#xsMsgViber').style.display=xsPhone(e)?'':'none';
+  $('#xsMsgMark').style.display=(e.st==='todo')?'':'none';
+  $('#xsMsgOverlay').classList.add('open');
+  void c;
+}
+function xsCopy(){ const t=$('#xsMsg').value, ta=$('#xsMsg'); const ok=()=>toast('Copied — paste it to '+(xsMsgCur?xsName(state.xsvc.find(x=>x.id===xsMsgCur.id)||{}):''));
+  if(navigator.clipboard && window.isSecureContext!==false) return navigator.clipboard.writeText(t).then(ok).catch(()=>{ ta.select(); try{ document.execCommand('copy'); ok(); }catch(_){} });
+  ta.select(); try{ document.execCommand('copy'); ok(); }catch(_){} return Promise.resolve(); }
+
+/* ---- wiring ---- */
+(function(){
+  const v=$('#view-xs'); if(!v) return;
+  v.addEventListener('click',ev=>{
+    const t=ev.target.closest('button,[data-xs-open],[data-xs-done]'); if(!t || !state) return;
+    if(t.id==='xsAddBtn') return xsOpenEdit(null);
+    if(t.dataset.xsTile){ const k=t.dataset.xsTile;
+      if(k==='todo'){ xsF={svc:'all', st:xsF.st==='todo'?'open':'todo'}; }
+      else if(k==='yes'){ xsF={svc:'all', st:xsF.st==='yes'?'open':'yes'}; }
+      else { xsF.svc= xsF.svc===k?'all':k; if(xsF.st==='yes') xsF.st='open'; }
+      return renderXs(); }
+    if(t.dataset.xsF){ const [g,val]=t.dataset.xsF.split(':'); xsF[g]=val; return renderXs(); }
+    if(t.hasAttribute('data-xs-done')){ xsShowDone=!xsShowDone; return renderXs(); }
+    const sr=t.closest('[data-xs-sc]');
+    if(sr){ const cid=sr.dataset.xsSc;
+      if(t.dataset.xsSadd) return xsAddFromSug(cid, t.dataset.xsSadd);
+      if(t.hasAttribute('data-xs-sskip')){ state.meta.xsSkip||={}; state.meta.xsSkip[cid]=1; save(); renderXs(); toastUndo('Dismissed', ()=>{ delete state.meta.xsSkip[cid]; save(); renderXs(); }); return; }
+    }
+    const card=t.closest('[data-xs]'); if(!card) return; const id=card.dataset.xs;
+    if(t.hasAttribute('data-xs-msg')) return xsOpenMsg(id);
+    if(t.dataset.xsSt) return xsSetSt(id, t.dataset.xsSt);
+    if(t.hasAttribute('data-xs-edit')) return xsOpenEdit(id);
+    if(t.hasAttribute('data-xs-open')){ const e=state.xsvc.find(x=>x.id===id); const c=xsClient(e); if(c && typeof openModal==='function') openModal(c.id); else xsOpenEdit(id); }
+  });
+  $('#xsWhen').addEventListener('click',()=>{
+    const cur=xsStart(); const v2=prompt('From which day do you contact them? (YYYY-MM-DD)', cur); if(!v2) return;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(v2.trim())){ toast('Write the date like 2026-11-02'); return; }
+    const nv=v2.trim(); state.xsvc.forEach(e=>{ if(e.st==='todo' && (e.day||cur)===cur) e.day=nv; }); state.meta.xsStart=nv; save(); renderAll();
+  });
+  document.querySelectorAll('[data-xs-close]').forEach(b=>b.addEventListener('click',()=>{ $('#xsOverlay').classList.remove('open'); $('#xsMsgOverlay').classList.remove('open'); }));
+  ['xsOverlay','xsMsgOverlay'].forEach(o=>$('#'+o).addEventListener('click',ev=>{ if(ev.target.id===o) ev.target.classList.remove('open'); }));
+  document.querySelectorAll('#xsOverlay [data-svc]').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.svc;
+    if(k==='unsure'){ xsSvc={ads:false, social:false, unsure:!xsSvc.unsure}; } else { xsSvc[k]=!xsSvc[k]; xsSvc.unsure=false; } xsPaintSvc(); }));
+  $('#xsName').addEventListener('input',xsLinkHint);
+  $('#xsSave').addEventListener('click',xsSaveEdit);
+  $('#xsDel').addEventListener('click',()=>{ const i=state.xsvc.findIndex(x=>x.id===xsEditing); if(i<0) return; const [e]=state.xsvc.splice(i,1);
+    $('#xsOverlay').classList.remove('open'); save(); renderAll(); toastUndo(xsName(e)+' removed', ()=>{ state.xsvc.splice(i,0,e); save(); renderAll(); }); });
+  /* message window */
+  const regen=()=>{ const e=state.xsvc.find(x=>x.id===xsMsgCur.id); if(e && !xsMsgCur.edited) $('#xsMsg').value=xsMsgText(e, xsMsgCur.sal); };
+  const keepSal=()=>{ const e=state.xsvc.find(x=>x.id===xsMsgCur.id); const c=xsClient(e); if(c){ c.salut={t:xsMsgCur.sal.t, n:xsMsgCur.sal.n}; c.updated=Date.now(); save(); } };
+  document.querySelectorAll('#xsMsgOverlay [data-salt]').forEach(b=>b.addEventListener('click',()=>{ xsMsgCur.sal.t=b.dataset.salt; document.querySelectorAll('#xsMsgOverlay [data-salt]').forEach(x=>x.classList.toggle('on',x===b)); regen(); keepSal(); }));
+  $('#xsSalN').addEventListener('input',()=>{ xsMsgCur.sal.n=$('#xsSalN').value.trim(); regen(); }); $('#xsSalN').addEventListener('change',keepSal);
+  $('#xsMsg').addEventListener('input',()=>{ xsMsgCur.edited=true; });
+  $('#xsMsgCopy').addEventListener('click',()=>{ xsCopy(); const b=$('#xsMsgCopy'); b.textContent='Copied ✓'; setTimeout(()=>{ if(b.isConnected) b.textContent='Copy message'; },1600); });
+  $('#xsMsgViber').addEventListener('click',()=>{ const e=state.xsvc.find(x=>x.id===xsMsgCur.id); const p=String(xsPhone(e)).replace(/[^\d+]/g,''); const vib=p.startsWith('+')?p:(p.startsWith('30')?'+'+p:'+30'+p);
+    xsCopy(); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(vib); },250); });
+  $('#xsMsgMark').addEventListener('click',()=>{ $('#xsMsgOverlay').classList.remove('open'); xsSetSt(xsMsgCur.id,'contacted'); });
+  if(location.hash==='#xs' || location.hash==='#ads-social') setTimeout(()=>switchView('xs'),300);
+})();
 </script>
 
 <script id="design-v5">
