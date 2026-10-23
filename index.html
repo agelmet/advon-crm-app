@@ -2691,6 +2691,62 @@ body.dark .btn-ghost:hover{background:var(--bg);}
   .home-hero .hs .v{font-size:20px;}
 }
 
+/* ---------- Chats «Overview» (Angelo, 23 Oct 2026) — every client chat in one place, by stage, with the next step ---------- */
+.chv-bar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 12px;}
+.chv-seg{display:inline-flex; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:4px; box-shadow:var(--shadow);}
+.chv-seg button{font-size:13.5px; font-weight:800; padding:9px 16px; border-radius:10px; color:var(--muted); transition:all .15s;}
+.chv-seg button.on{background:var(--ink); color:#fff;}
+.chv-off{font-size:12.5px; color:#0B7A47; background:var(--green-soft); border:1px solid rgba(14,198,115,.25); border-radius:12px; padding:8px 12px; line-height:1.4;}
+.chv-off b{font-weight:800;}
+#view-chats.ov .ch-wrap{display:none;}
+#view-chats:not(.ov) .chv-ov{display:none;}
+#view-chats .ch-wrap{height:calc(100dvh - var(--ch-top,150px) - 60px);}
+.chv-sum{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin-bottom:14px;}
+.chv-n{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 14px; box-shadow:var(--shadow); text-align:left; transition:transform .15s, box-shadow .15s;}
+.chv-n:hover{transform:translateY(-1px); box-shadow:var(--shadow-lg);}
+.chv-n b{display:block; font-family:'Sora',sans-serif; font-size:26px; line-height:1.1;}
+.chv-n span{font-size:12px; font-weight:700; color:var(--muted);}
+.chv-n.you{background:linear-gradient(135deg,#FF8A00,#FF5E3A); border:0; color:#fff;}
+.chv-n.you span{color:rgba(255,255,255,.9);}
+.chv-n.you.zero{background:var(--green-soft); color:#0B7A47;}
+.chv-n.you.zero span{color:#0B7A47;}
+.chv-cols{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; align-items:start;}
+.chv-col{background:var(--bg); border:1px solid var(--line); border-radius:18px; padding:10px; min-width:0;}
+.chv-col h4{display:flex; align-items:center; gap:8px; font-size:15px; font-weight:800; padding:4px 6px 10px;}
+.chv-col h4 i{width:24px; height:24px; border-radius:8px; display:grid; place-items:center; font-style:normal; color:#fff; font-size:12px;}
+.chv-col h4 small{margin-left:auto; font-size:12px; color:var(--muted); letter-spacing:0;}
+.chv-col h4 em{font-style:normal; font-size:11px; font-weight:600; color:var(--muted); text-transform:none; letter-spacing:0;}
+.chv-c{background:var(--surface); border:1px solid var(--line); border-left:4px solid #C9D1DF; border-radius:14px; padding:11px 12px; margin-bottom:8px; cursor:pointer; transition:transform .12s, box-shadow .12s;}
+.chv-c:hover{transform:translateY(-1px); box-shadow:var(--shadow);}
+.chv-c.you{border-left-color:var(--orange); background:linear-gradient(0deg,var(--surface),var(--surface)) padding-box;}
+.chv-c.done{border-left-color:var(--green);}
+.chv-c .nm{font-weight:800; font-size:14px; display:flex; gap:6px; align-items:center; min-width:0;}
+.chv-c .nm span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.chv-c .nm .ch-stage{flex:none;}
+.chv-nx{margin-top:7px; font-size:12.5px; line-height:1.4; font-weight:600; padding:6px 9px; border-radius:9px; background:var(--bg); color:var(--muted);}
+.chv-nx b{font-weight:800; text-transform:uppercase; font-size:10.5px; letter-spacing:.05em; margin-right:4px;}
+.chv-c.you .chv-nx{background:var(--orange-soft); color:#9A4A00;}
+.chv-c.done .chv-nx{background:var(--green-soft); color:#0B7A47;}
+.chv-meta{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px; font-size:11.5px; color:var(--muted); font-weight:600;}
+.chv-meta .lk{padding:2px 8px; border-radius:999px; background:var(--green-soft); color:#0B7A47;}
+.chv-meta .lk.no{background:#FFE8EA; color:#C42333;}
+.chv-meta .sl{margin-left:auto; font-size:11.5px; font-weight:800; color:var(--blue); padding:3px 8px; border-radius:8px; background:var(--blue-soft);}
+.chv-empty{font-size:12.5px; color:var(--muted); padding:8px 6px 4px;}
+.chv-test{margin-top:12px; font-size:12.5px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+.chv-test button{font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; background:var(--surface); border:1px solid var(--line);}
+.chv-help{font-size:12.5px; color:var(--muted); margin:-4px 0 12px; line-height:1.5;}
+body.dark .chv-off{color:#7FE3B0;}
+body.dark .chv-c.you .chv-nx{color:#FFC27A;}
+@media(max-width:1100px){ .chv-cols{grid-template-columns:repeat(2,minmax(0,1fr));} }
+.chv-ns{margin-top:14px; background:var(--surface); border:1px dashed #C9D1DF; border-radius:18px; padding:14px 16px;}
+.chv-ns h4{font-size:15px; font-weight:800; margin-bottom:4px;}
+.chv-ns p{font-size:12.5px; color:var(--muted); line-height:1.5; margin-bottom:10px;}
+.chv-ns .g{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:8px;}
+.chv-ns .g > span{font-size:11.5px; font-weight:800; color:var(--muted); min-width:92px;}
+.chv-ns .g button{font-size:12.5px; font-weight:700; padding:6px 11px; border-radius:999px; background:var(--bg); border:1px solid var(--line); color:var(--ink);}
+.chv-ns .g button:hover{background:var(--blue-soft); border-color:var(--blue);}
+.chv-ns .g button.bld{border-color:rgba(255,138,0,.45);}
+@media(max-width:700px){ .chv-cols{grid-template-columns:1fr;} .chv-sum{grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px;} .chv-sum .chv-n.you{grid-column:1/-1;} .chv-n{padding:10px 10px;} .chv-n b{font-size:21px;} .chv-n span{font-size:11px;} .chv-seg button{padding:9px 12px;} .chv-ns .g > span{min-width:100%;} }
 /* ---------- Chats (16 Sept 2026) — client conversations from advonmedia.com/c/<code> ---------- */
 .tab{position:relative;}
 .tab .tab-n[hidden]{display:none;}
@@ -4150,7 +4206,12 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 </main>
 
 <!-- CHATS — every client conversation from advonmedia.com/c/<code> -->
-<main class="view" id="view-chats">
+<main class="view ov" id="view-chats">
+  <div class="chv-bar" id="chvBar">
+    <div class="chv-seg" role="tablist"><button type="button" data-chv="ov" class="on">📋 Overview</button><button type="button" data-chv="talk">💬 Conversations</button></div>
+    <div class="chv-off">✉️ Automatic e-mails &amp; reminders to clients are <b>OFF</b> — nothing reaches a client unless you send it yourself.</div>
+  </div>
+  <section class="chv-ov" id="chOv"></section>
   <div class="ch-wrap" id="chWrap">
     <aside class="ch-list">
       <div class="ch-list-head">
@@ -4186,7 +4247,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
           <div class="ch-input"><textarea id="chTxt" rows="1" placeholder="Write a message…"></textarea></div>
           <button class="ch-send" id="chSend" disabled title="Send"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4l17.45-7.48a1 1 0 0 0 0-1.84L3.4 3.6a1 1 0 0 0-1.38 1.13L3.7 11h7.3a1 1 0 1 1 0 2H3.7l-1.68 6.27A1 1 0 0 0 3.4 20.4z"/></svg></button>
         </div>
-        <div class="ch-hint"><span id="chNotify"></span><button class="ch-savetpl" id="chSaveTpl" hidden title="Keep this text as a template for every client">💾 Save as template</button><span>The client sees it on their page; an e-mail with the text goes out within 5 min (if they have an address)</span></div>
+        <div class="ch-hint"><span id="chNotify"></span><button class="ch-savetpl" id="chSaveTpl" hidden title="Keep this text as a template for every client">💾 Save as template</button><span>The client sees it on their page. Automatic e-mails to clients are off — tell them on Viber if it matters.</span></div>
       </div>
     </section>
   </div>
@@ -14031,7 +14092,65 @@ function chRowMenu(slug, anchor, x, y){
 }
 document.addEventListener('click',e=>{ const m=document.getElementById('chMenu'); if(m && m.classList.contains('open') && !e.target.closest('#chMenu') && !e.target.closest('[data-more]')) m.classList.remove('open'); });
 window.addEventListener('scroll',()=>{ const m=document.getElementById('chMenu'); if(m) m.classList.remove('open'); },true);
-function renderChats(){ renderChatList(); renderChatThread(true); renderChatsBadge(); renderHomeChats();
+/* ---------- Chats «Overview» (Angelo, 23 Oct 2026) ----------
+   «a super easy place where I can view all the chats I sent and know at which stage each one is».
+   Four stage columns (Υλικό → Πρώτο draft → Αλλαγές → Live); every card says in one line WHO acts next and what,
+   and whether the client ever opened their link. Tap a card → the conversation. Test chats sit in one line below.
+   Client e-mails/reminders are OFF on the server (chats/settings.json clientAuto missing = off, 15 Oct 2026):
+   CH_CLIENT_MAIL=false keeps the CRM from promising e-mails. Flip it only together with that server switch. */
+const CH_CLIENT_MAIL=false;
+let chView=(()=>{ try{ return localStorage.getItem('advon-chv')||'ov'; }catch(e){ return 'ov'; } })();
+const CHV_STAGE=[['yliko','Υλικό','Material','#2F7FE0'],['draft','Πρώτο draft','First draft sent','#7B5CFA'],['changes','Αλλαγές','Changes','#FF8A00'],['live','Live','Live','#0EC673']];
+function chvSet(v){ chView=v; try{ localStorage.setItem('advon-chv',v); }catch(e){} const vw=$('#view-chats'); if(vw) vw.classList.toggle('ov',v==='ov'); document.querySelectorAll('[data-chv]').forEach(b=>b.classList.toggle('on',b.dataset.chv===v)); if(v==='ov') renderChatOverview(); }
+function chvAgo(iso){ if(!iso) return ''; const d=(Date.now()-Date.parse(iso))/864e5; return d<1?'today':d<2?'yesterday':Math.round(d)+' days ago'; }
+/* who acts next, in one line: {you:true} = Angelo, otherwise the client (or done) */
+function chvNext(t){
+  const st=chStage(t), r=t.ready;
+  if(t.suggest && t.suggest.text) return {you:1, text:'Claude\'s reply is ready — open and send it'};
+  if(r && r.manual) return {you:1, text:'You are building it (Board → Building)'};
+  if(r && r.kind==='email') return r.got ? {you:1, text:'Material is with Claude — first draft coming'} : {you:1, text:'They e-mailed their material — check advonmd@gmail.com'};
+  if(r && r.kind==='build') return {you:1, text:'Pressed «Ξεκινήστε» — build the first draft'};
+  if(r && r.kind==='changes') return {you:1, text:'Pressed «Έστειλα όλες τις αλλαγές» — do the changes'};
+  if(r && r.kind==='live') return {you:1, text:'Pressed «Πάμε live» — buy + connect the domain'};
+  if(t.lastFrom==='client') return {you:1, text:'They wrote to you — reply'};
+  if(st==='live') return {done:1, text:'Website is live 🎉'};
+  if(st==='draft') return {text:'They check the first draft → changes or «Πάμε live»'};
+  if(st==='changes') return {text:'They check your changes → more changes or «Πάμε live»'};
+  return {text:'Waiting for their photos/material → «Ξεκινήστε»'};
+}
+function renderChatOverview(){
+  const box=$('#chOv'); if(!box || chView!=='ov') return;
+  if(Chats.state==='off'){ box.innerHTML='<div class="chv-help">Sign in with sync to see the chats.</div>'; return; }
+  if(Chats.state==='error' && !Chats.list.length){ box.innerHTML=`<div class="bk-err">Could not read the chats — ${esc(Chats.err)}</div>`; return; }
+  if(!Chats.list.length){ box.innerHTML='<div class="chv-help">'+(Chats.state==='loading'||Chats.state==='idle'?'Loading the chats…':'No chats yet — open «💬 Conversations» → «New».')+'</div>'; return; }
+  const all=Chats.list.filter(t=>!t.archived), tests=all.filter(t=>t.demo), real=all.filter(t=>!t.demo && (t.n||0)>0), unsent=all.filter(t=>!t.demo && !(t.n||0));
+  const nx=new Map(real.map(t=>[t.slug,chvNext(t)]));
+  const youN=real.filter(t=>nx.get(t.slug).you).length, notOpened=real.filter(t=>!t.clientSeenAt && chStage(t)!=='live').length, opened=real.filter(t=>t.clientSeenAt).length;
+  const card=t=>{ const n=nx.get(t.slug), seen=t.clientSeenAt; const c=chClientFor(t);
+    const paid=!c?'':c.stage==='paid'?'<span class="ch-stage paid" title="Paid in full">✓ paid</span>':hasPart(c)?'<span class="ch-stage part">½ paid</span>':'';
+    return `<div class="chv-c${n.you?' you':n.done?' done':''}" data-chvopen="${esc(t.slug)}" title="Open the conversation">
+      <div class="nm"><span>${t.pin?'★ ':''}${esc(t.name)}</span>${paid}</div>
+      <div class="chv-nx"><b>${n.you?'You':n.done?'Done':'Client'}</b>${esc(n.text)}</div>
+      <div class="chv-meta">${seen?`<span class="lk" title="The client opened their chat link">👁 opened ${esc(chvAgo(seen))}</span>`:'<span class="lk no" title="The client has never opened their chat link">link not opened yet</span>'}<span>· last msg ${esc(chvAgo(t.lastAt))}</span>${!seen&&chStage(t)!=='live'?`<button class="sl" data-chvlink="${esc(t.slug)}" title="Copy the Viber message with their link">Send link</button>`:''}</div>
+    </div>`; };
+  const order=(a,b)=>(nx.get(b.slug).you?1:0)-(nx.get(a.slug).you?1:0) || String(b.lastAt).localeCompare(String(a.lastAt));
+  let h=`<div class="chv-sum">
+    <button class="chv-n you${youN?'':' zero'}" data-chvjump="you"><b>${youN}</b><span>${youN?'need you now':'nothing waits for you'}</span></button>
+    ${CHV_STAGE.map(([k,gr,en])=>`<button class="chv-n" data-chvjump="${k}"><b>${real.filter(t=>chStage(t)===k).length}</b><span>${esc(gr)}</span></button>`).join('')}
+  </div>
+  <div class="chv-help"><b>${real.length} chat${real.length===1?'':'s'} sent to clients</b> (${opened} opened their link${notOpened?`, ${notOpened} not yet`:''})${unsent.length?` · ${unsent.length} created but never sent — listed below`:''}. <b style="color:var(--orange)">Orange = your move</b>, grey = waiting for the client. Tap a card to open the conversation.</div>
+  <div class="chv-cols">${CHV_STAGE.map(([k,gr,en,col],i)=>{ const rows=real.filter(t=>chStage(t)===k).sort(order);
+    return `<div class="chv-col" id="chv-${k}"><h4><i style="background:${col}">${i+1}</i>${esc(gr)} <em>${esc(en)}</em><small>${rows.length}</small></h4>${rows.length?rows.map(card).join(''):'<div class="chv-empty">Nobody here.</div>'}</div>`; }).join('')}</div>`;
+  if(unsent.length){ h+=`<div class="chv-ns"><h4>Created but never sent · ${unsent.length}</h4><p>The Board made these chats by itself — the client has <b>nothing</b> there yet and has never seen a link. To start one: tap the name → pick «Υλικό» (or the right first message) → copy the link and send it on Viber.</p>`+CHV_STAGE.map(([k,gr])=>{ const g=unsent.filter(t=>chStage(t)===k).sort((a,b)=>String(b.createdAt||b.lastAt).localeCompare(String(a.createdAt||a.lastAt))); return g.length?`<div class="g"><span>${esc(gr)} · ${g.length}</span>${g.map(t=>`<button data-chvopen="${esc(t.slug)}"${t.ready&&t.ready.manual?' class="bld" title="You are building it (Board → Building)"':''}>${esc(t.name)}${t.ready&&t.ready.manual?' 🔧':''}</button>`).join('')}</div>`:''; }).join('')+`</div>`; }
+  if(tests.length) h+=`<div class="chv-test">🧪 Test chats (only you see them): ${tests.map(t=>`<button data-chvopen="${esc(t.slug)}">${esc(t.name)} · ${esc((CHV_STAGE.find(s=>s[0]===chStage(t))||['','—'])[1])}</button><button data-chvlink="${esc(t.slug)}" title="Open the client page link">🔗</button>`).join('')}</div>`;
+  box.innerHTML=h;
+  box.querySelectorAll('[data-chvopen]').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('[data-chvlink]')) return; chvSet('talk'); Chats.open(el.dataset.chvopen); try{ $('#chWrap').classList.add('open'); }catch(_){} }));
+  box.querySelectorAll('[data-chvlink]').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const t=Chats.list.find(x=>x.slug===el.dataset.chvlink); if(t) chShowLink(t); }));
+  box.querySelectorAll('[data-chvjump]').forEach(el=>el.addEventListener('click',()=>{ const k=el.dataset.chvjump; const tgt=k==='you'?box.querySelector('.chv-c.you'):$('#chv-'+k); if(tgt) tgt.scrollIntoView({behavior:'smooth',block:'center'}); }));
+}
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-chv]'); if(b) chvSet(b.dataset.chv); });
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>chvSet(chView)); else setTimeout(()=>chvSet(chView),0);
+function renderChats(){ renderChatList(); renderChatThread(true); renderChatsBadge(); renderHomeChats(); try{ renderChatOverview(); }catch(e){ console.warn('overview',e); }
   if(Chats.wantOpen && Chats.list.some(t=>t.slug===Chats.wantOpen)){ const sl=Chats.wantOpen; Chats.wantOpen=null; setTimeout(()=>{ switchView('chats'); Chats.open(sl); },0); } }
 function renderChatsBadge(){
   const n=chWaiting().length; const b=$('#chatsTabN'); if(b){ b.textContent=n; b.hidden=!n; b.title=n+' chat'+(n===1?'':'s')+' waiting for your reply'; }
@@ -14120,7 +14239,7 @@ function renderChatThread(keep){
   const out=[]; let lastDay='', prev=null;
   const lg=(t.log||[]).slice(-4); if(lg.length) out.push(`<div class="ch-log">${lg.map(l=>`<span><b>${esc(l.by==='system'?'auto':l.by)}</b> ${esc(chWhen(l.at))} · ${esc(l.text)}</span>`).join('')}</div>`);
   /* no e-mail on the card → ask for it right here (the client is never told about answers until it is there) */
-  if(!t.email && !t.archived && !t.demo) out.push(`<div class="ch-askmail"><span>📧 I need ${esc(t.name.split(' ')[0])}'s e-mail — without it they get no alerts and no reminders.</span><input id="chMailIn" type="email" placeholder="name@example.gr" autocomplete="off"><button id="chMailSave">Save</button></div>`);
+  if(CH_CLIENT_MAIL && !t.email && !t.archived && !t.demo) out.push(`<div class="ch-askmail"><span>📧 I need ${esc(t.name.split(' ')[0])}'s e-mail — without it they get no alerts and no reminders.</span><input id="chMailIn" type="email" placeholder="name@example.gr" autocomplete="off"><button id="chMailSave">Save</button></div>`);
   const sentAny=Chats.msgs.some(m=>m.from!=='client');
   if(!sentAny && !t.demo && !t.archived){
     const ylk=chStage(t)==='yliko';
@@ -14153,7 +14272,7 @@ function renderChatThread(keep){
   if(!keep || nearBottom) feed.scrollTop=feed.scrollHeight;
   if(!keep){ const sm=$('#chSugMsg'); if(sm) feed.scrollTop=Math.max(0, feed.scrollTop + sm.getBoundingClientRect().top - feed.getBoundingClientRect().top - Math.round(feed.clientHeight*0.45)); }
   feed.querySelectorAll('.ch-pics img[data-path]').forEach(async im=>{ if(im.getAttribute('src')) return; try{ const u=await Chats.fileUrl(im.dataset.path); if(u) im.src=u; }catch(e){} });
-  const n=$('#chNotify'); if(n) n.textContent=Chats.notify?(Chats.notify.email?'E-mail alerts on':'E-mail alerts off — add RESEND_API_KEY in Netlify')+(Chats.notify.telegram?' · Telegram on':''):'';
+  const n=$('#chNotify'); if(n) n.textContent=CH_CLIENT_MAIL ? (Chats.notify?(Chats.notify.email?'E-mail alerts on':'E-mail alerts off — add RESEND_API_KEY in Netlify')+(Chats.notify.telegram?' · Telegram on':''):'') : 'Client e-mails: off'+(Chats.notify&&Chats.notify.telegram?' · Telegram to you: on':'');
 }
 /* Claude's suggested reply (written by the chat agent into the card as t.suggest = {text, plan, stage, at}).
    Nothing reaches the client until Angelo presses Send here. */
