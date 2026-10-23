@@ -1619,6 +1619,11 @@ body.dark .bk-act button,body.dark .bk-tag{background:var(--surface);}
 /* ---------- Modal ---------- */
 .overlay{position:fixed; inset:0; background:rgba(10,18,34,.5); backdrop-filter:blur(3px); display:none; place-items:center; z-index:100; padding:20px;}
 .overlay.open{display:grid;}
+/* 23 Oct 2026 — conflict guard: warn when this device's copy is older/smaller, two-step «keep mine» */
+.cf-warn{background:#FDECEC;border:1.5px solid #E5484D;color:#9B1C1F;border-radius:12px;padding:12px 14px;margin:10px 0;font-size:14px;line-height:1.45}
+.cf-warn b{color:#B4161B}
+#conflictOverlay .modal-foot{flex-wrap:wrap}#conflictOverlay .modal-foot .btn{flex:1 1 auto}
+#cfKeepMine.cf-arm{background:#E5484D;color:#fff;border-color:#E5484D}
 /* «In the bank» → who paid, how much, when (12 Oct 2026) */
 #statEarnedPill{cursor:pointer;}
 @media (hover:hover){#statEarnedPill:hover{transform:translateY(-1px); box-shadow:0 12px 26px rgba(16,20,31,.42);}}
@@ -4743,12 +4748,13 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
       <p><strong>Nothing has been overwritten.</strong> The copy on the server was changed
          after this device loaded its data — probably from your phone or another browser.</p>
       <p id="conflictDetail" style="color:var(--muted);"></p>
+      <div id="cfWarn" class="cf-warn" hidden></div>
       <p>Choose what to keep. Whichever you pick, a backup file of <em>both</em> versions is
          downloaded first, so nothing is lost either way.</p>
     </div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" id="cfKeepRemote">Use the server copy</button>
-      <button class="btn btn-brand" id="cfKeepMine">Keep what's on this device</button>
+      <button class="btn btn-ghost" id="cfKeepMine">Keep what's on this device</button>
+      <button class="btn btn-brand" id="cfKeepRemote">Use the server copy</button>
     </div>
   </div>
 </div>
@@ -5418,6 +5424,34 @@ const Sync={
         (remote.deviceId?(' from '+remote.deviceId):'')+
         '.  This device: '+relTime(LOCAL_UPDATED_AT)+'.';
     }
+    /* 23 Oct 2026 guard: an old browser pressed «keep this device» and wiped the server copy.
+       Compare both copies and warn in red when this device's one is older or clearly smaller. */
+    try{
+      const w=$('#cfWarn'), km=$('#cfKeepMine');
+      if(km){ km.classList.remove('cf-arm'); km.textContent="Keep what's on this device"; km.dataset.arm=''; }
+      if(w){ w.hidden=true; w.innerHTML=''; }
+      (async()=>{
+        try{
+          const plain=await aesDec(CUR_KEY, remote.data.iv, remote.data.ct);
+          const rs=JSON.parse(plain);
+          const mine=JSON.stringify(syncState()).length, theirs=plain.length;
+          const nMine=(state&&state.clients||[]).length, nThem=(rs.clients||[]).length;
+          const older = LOCAL_UPDATED_AT && remote.updatedAt && LOCAL_UPDATED_AT < remote.updatedAt;
+          const smaller = theirs>0 && mine < theirs*0.9;
+          const fewer = nMine < nThem;
+          this._cfRisk = !!(older||smaller||fewer);
+          if(this._cfRisk && w){
+            const bits=[];
+            if(older) bits.push('it is <b>OLDER</b> (last changed '+relTime(LOCAL_UPDATED_AT)+', the server '+relTime(remote.updatedAt)+')');
+            if(fewer) bits.push('it has <b>'+nMine+' clients</b>, the server has <b>'+nThem+'</b>');
+            if(smaller) bits.push('it holds only <b>'+Math.round(mine/theirs*100)+'%</b> of the server\'s data');
+            w.innerHTML='<b>⚠ Careful — this device has an old copy.</b> '+bits.join('; ')+
+              '.<br>Keeping it would wipe your newer work on every device. Press <b>«Use the server copy»</b>.';
+            w.hidden=false;
+          }
+        }catch(e){ this._cfRisk=true; }
+      })();
+    }catch(e){}
     $('#conflictOverlay').classList.add('open');
     this.setState('pending');
   },
@@ -13455,7 +13489,18 @@ function wireSyncEvents(){
     Sync.retryDelay=5000;
     if(Sync.pendingFlag()) Sync.push(false); else Sync.pull(false);
   });
-  $('#cfKeepMine').addEventListener('click',()=>Sync.resolve('mine'));
+  /* two-step: the first tap only arms the button (red, stronger wording), the second within 8 s keeps this device */
+  $('#cfKeepMine').addEventListener('click',e=>{
+    const b=e.currentTarget;
+    if(b.dataset.arm!=='1'){
+      b.dataset.arm='1'; b.classList.add('cf-arm');
+      b.textContent = Sync._cfRisk ? 'Yes, replace the server with this OLDER copy' : 'Tap again to keep this device';
+      clearTimeout(b._t); b._t=setTimeout(()=>{ b.dataset.arm=''; b.classList.remove('cf-arm'); b.textContent="Keep what's on this device"; },8000);
+      return;
+    }
+    clearTimeout(b._t); b.dataset.arm='';
+    Sync.resolve('mine');
+  });
   $('#cfKeepRemote').addEventListener('click',()=>Sync.resolve('remote'));
   $('#syncSetupClose').addEventListener('click',closeSyncSetup);
   $('#syncCopyHash').addEventListener('click',async()=>{
