@@ -4209,7 +4209,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 <main class="view ov" id="view-chats">
   <div class="chv-bar" id="chvBar">
     <div class="chv-seg" role="tablist"><button type="button" data-chv="ov" class="on">📋 Overview</button><button type="button" data-chv="talk">💬 Conversations</button></div>
-    <div class="chv-off">✉️ Automatic e-mails &amp; reminders to clients are <b>OFF</b> — nothing reaches a client unless you send it yourself.</div>
+    <div class="chv-off" id="chvMail">✉️ Automatic e-mails &amp; reminders to clients are <b>OFF</b> — nothing reaches a client unless you send it yourself.</div>
   </div>
   <section class="chv-ov" id="chOv"></section>
   <div class="ch-wrap" id="chWrap">
@@ -4247,7 +4247,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
           <div class="ch-input"><textarea id="chTxt" rows="1" placeholder="Write a message…"></textarea></div>
           <button class="ch-send" id="chSend" disabled title="Send"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.4 20.4l17.45-7.48a1 1 0 0 0 0-1.84L3.4 3.6a1 1 0 0 0-1.38 1.13L3.7 11h7.3a1 1 0 1 1 0 2H3.7l-1.68 6.27A1 1 0 0 0 3.4 20.4z"/></svg></button>
         </div>
-        <div class="ch-hint"><span id="chNotify"></span><button class="ch-savetpl" id="chSaveTpl" hidden title="Keep this text as a template for every client">💾 Save as template</button><span>The client sees it on their page. Automatic e-mails to clients are off — tell them on Viber if it matters.</span></div>
+        <div class="ch-hint"><span id="chNotify"></span><button class="ch-savetpl" id="chSaveTpl" hidden title="Keep this text as a template for every client">💾 Save as template</button><span id="chComposeHint">The client sees it on their page. Automatic e-mails to clients are off — tell them on Viber if it matters.</span></div>
       </div>
     </section>
   </div>
@@ -13644,7 +13644,7 @@ const Chats={ list:[], head:null, cur:null, msgs:[], thread:null, thead:null, ca
       if(!res.ok || !p.ok){ this.state='error'; this.err=(p&&p.error)||('the server answered '+res.status); }
       else if(!p.same){
         const before=new Map(this.list.map(t=>[t.slug,t.unreadAdmin||0]));
-        this.list=Array.isArray(p.threads)?p.threads:[]; this.head=p.head; this.notify=p.notify||null; this.caps=Array.isArray(p.caps)?p.caps:(this.caps||[]); this.online=p.onlineSlugs||[]; this.state='ok'; this.err=''; this.lastAt=Date.now();
+        this.list=Array.isArray(p.threads)?p.threads:[]; this.head=p.head; this.clientMail=p.clientMail||'off'; this.notify=p.notify||null; this.caps=Array.isArray(p.caps)?p.caps:(this.caps||[]); this.online=p.onlineSlugs||[]; this.state='ok'; this.err=''; this.lastAt=Date.now();
         const fresh=this.list.filter(t=>(t.unreadAdmin||0)>(before.get(t.slug)||0) && before.size);
         if(fresh.length && typeof Reminders!=='undefined' && Date.now()-Reminders.lastAt>20000) setTimeout(()=>Reminders.pull(false),4000);
         if(fresh.length){ toast('💬 '+fresh.map(t=>t.name).join(', ')+' wrote to you', true); if(this.cur && fresh.some(t=>t.slug===this.cur)) this.pullThread(true); }
@@ -14097,8 +14097,13 @@ window.addEventListener('scroll',()=>{ const m=document.getElementById('chMenu')
    Four stage columns (Υλικό → Πρώτο draft → Αλλαγές → Live); every card says in one line WHO acts next and what,
    and whether the client ever opened their link. Tap a card → the conversation. Test chats sit in one line below.
    Client e-mails/reminders are OFF on the server (chats/settings.json clientAuto missing = off, 15 Oct 2026):
-   CH_CLIENT_MAIL=false keeps the CRM from promising e-mails. Flip it only together with that server switch. */
-const CH_CLIENT_MAIL=false;
+   The green line + composer hint follow the server's mode (chMailMode, from /api/chat list «clientMail»). */
+/* 'off' | 'reply' (only our messages are e-mailed, no reminders) | 'auto' (everything) — told by /api/chat?list=1 from chats/settings.json */
+const chMailMode=()=>Chats.clientMail||'off';
+const CHV_MAIL={off:['✉️ Automatic e-mails &amp; reminders to clients are <b>OFF</b> — nothing reaches a client unless you send it yourself.','The client sees it on their page. Automatic e-mails to clients are off — tell them on Viber if it matters.'],
+  reply:['✉️ Clients get an e-mail <b>only when you write to them</b> in the chat — no reminders, no automatic messages.','The client sees it on their page and gets it by e-mail within ~5 min (if their e-mail is on the card).'],
+  auto:['✉️ Client e-mails <b>ALL ON</b>: your messages + reminders after 3 silent days + automatic «Λάβαμε».','The client sees it on their page; an e-mail with the text goes out within 5 min (if they have an address).']};
+function chvMailLine(){ const m=CHV_MAIL[chMailMode()]||CHV_MAIL.off; const a=$('#chvMail'), b=$('#chComposeHint'); if(a) a.innerHTML=m[0]; if(b) b.textContent=m[1]; }
 let chView=(()=>{ try{ return localStorage.getItem('advon-chv')||'ov'; }catch(e){ return 'ov'; } })();
 const CHV_STAGE=[['yliko','Υλικό','Material','#2F7FE0'],['draft','Πρώτο draft','First draft sent','#7B5CFA'],['changes','Αλλαγές','Changes','#FF8A00'],['live','Live','Live','#0EC673']];
 function chvSet(v){ chView=v; try{ localStorage.setItem('advon-chv',v); }catch(e){} const vw=$('#view-chats'); if(vw) vw.classList.toggle('ov',v==='ov'); document.querySelectorAll('[data-chv]').forEach(b=>b.classList.toggle('on',b.dataset.chv===v)); if(v==='ov') renderChatOverview(); }
@@ -14119,7 +14124,7 @@ function chvNext(t){
   return {text:'Waiting for their photos/material → «Ξεκινήστε»'};
 }
 function renderChatOverview(){
-  const box=$('#chOv'); if(!box || chView!=='ov') return;
+  chvMailLine(); const box=$('#chOv'); if(!box || chView!=='ov') return;
   if(Chats.state==='off'){ box.innerHTML='<div class="chv-help">Sign in with sync to see the chats.</div>'; return; }
   if(Chats.state==='error' && !Chats.list.length){ box.innerHTML=`<div class="bk-err">Could not read the chats — ${esc(Chats.err)}</div>`; return; }
   if(!Chats.list.length){ box.innerHTML='<div class="chv-help">'+(Chats.state==='loading'||Chats.state==='idle'?'Loading the chats…':'No chats yet — open «💬 Conversations» → «New».')+'</div>'; return; }
@@ -14239,7 +14244,7 @@ function renderChatThread(keep){
   const out=[]; let lastDay='', prev=null;
   const lg=(t.log||[]).slice(-4); if(lg.length) out.push(`<div class="ch-log">${lg.map(l=>`<span><b>${esc(l.by==='system'?'auto':l.by)}</b> ${esc(chWhen(l.at))} · ${esc(l.text)}</span>`).join('')}</div>`);
   /* no e-mail on the card → ask for it right here (the client is never told about answers until it is there) */
-  if(CH_CLIENT_MAIL && !t.email && !t.archived && !t.demo) out.push(`<div class="ch-askmail"><span>📧 I need ${esc(t.name.split(' ')[0])}'s e-mail — without it they get no alerts and no reminders.</span><input id="chMailIn" type="email" placeholder="name@example.gr" autocomplete="off"><button id="chMailSave">Save</button></div>`);
+  if(chMailMode()!=='off' && !t.email && !t.archived && !t.demo) out.push(`<div class="ch-askmail"><span>📧 I need ${esc(t.name.split(' ')[0])}'s e-mail — without it they get no e-mail when you write to them.</span><input id="chMailIn" type="email" placeholder="name@example.gr" autocomplete="off"><button id="chMailSave">Save</button></div>`);
   const sentAny=Chats.msgs.some(m=>m.from!=='client');
   if(!sentAny && !t.demo && !t.archived){
     const ylk=chStage(t)==='yliko';
@@ -14272,7 +14277,7 @@ function renderChatThread(keep){
   if(!keep || nearBottom) feed.scrollTop=feed.scrollHeight;
   if(!keep){ const sm=$('#chSugMsg'); if(sm) feed.scrollTop=Math.max(0, feed.scrollTop + sm.getBoundingClientRect().top - feed.getBoundingClientRect().top - Math.round(feed.clientHeight*0.45)); }
   feed.querySelectorAll('.ch-pics img[data-path]').forEach(async im=>{ if(im.getAttribute('src')) return; try{ const u=await Chats.fileUrl(im.dataset.path); if(u) im.src=u; }catch(e){} });
-  const n=$('#chNotify'); if(n) n.textContent=CH_CLIENT_MAIL ? (Chats.notify?(Chats.notify.email?'E-mail alerts on':'E-mail alerts off — add RESEND_API_KEY in Netlify')+(Chats.notify.telegram?' · Telegram on':''):'') : 'Client e-mails: off'+(Chats.notify&&Chats.notify.telegram?' · Telegram to you: on':'');
+  const n=$('#chNotify'); if(n) n.textContent=chMailMode()!=='off' ? (Chats.notify?(Chats.notify.email?'E-mail alerts on':'E-mail alerts off — add RESEND_API_KEY in Netlify')+(Chats.notify.telegram?' · Telegram on':''):'') : 'Client e-mails: off'+(Chats.notify&&Chats.notify.telegram?' · Telegram to you: on':'');
 }
 /* Claude's suggested reply (written by the chat agent into the card as t.suggest = {text, plan, stage, at}).
    Nothing reaches the client until Angelo presses Send here. */
