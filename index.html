@@ -11394,7 +11394,10 @@ function ldMerge(list, src){
     if(!phone && !lk) return;   /* harvest leads must carry a phone; names on Angelo's own lists may still be looked up */
     have.add(p.key); n++;
     const added=String(p.added||todayIso()).slice(0,10);
-    state.leads.push({id:uid(), key:p.key, name:String(p.name).trim(), spec:String(p.spec||'').trim(), city:String(p.city||'').trim(), addr:String(p.addr||'').trim(), phone, reviews:+p.reviews||0, score:p.score!=null?+p.score:null, url:String(p.url||''), added, src:p.src||src||'import', list:lk||'new', batch:(lk||'new')==='new'?added:undefined, at:p.at||'', ord:p.ord!=null?+p.ord:null, note:String(p.note||'').trim(), status:'new', tries:[], created:Date.now()});
+    state.leads.push({id:uid(), key:p.key, name:String(p.name).trim(), spec:String(p.spec||'').trim(), city:String(p.city||'').trim(), addr:String(p.addr||'').trim(), phone, reviews:+p.reviews||0, score:p.score!=null?+p.score:null, url:String(p.url||''), added, src:p.src||src||'import', list:lk||'new', batch:(lk||'new')==='new'?added:undefined, at:p.at||'', ord:p.ord!=null?+p.ord:null, note:String(p.note||'').trim(), status:'new', tries:[], created:Date.now(),
+      /* 26 Oct 2026: a lead dropped in by Claude can already carry its call-back (Callbacks · that day), e-mail and memo */
+      ...(p.cb&&p.cb.day?{cb:Object.assign({day:String(p.cb.day).slice(0,10), how:CA_HOW[p.cb.how]?p.cb.how:'call'}, p.cb.time?{time:String(p.cb.time)}:{}, p.cb.pr?{pr:String(p.cb.pr)}:{})}:{}),
+      ...(p.email?{email:String(p.email).trim()}:{}), ...(p.memo?{memo:String(p.memo).trim()}:{})});
   });
   return n;
 }
