@@ -1,0 +1,273 @@
+<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="light only">
+<title>Advon — Πρόσληψη caller: όλα τα βήματα</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/advon-mark-32.png?v=20261018"><link rel="apple-touch-icon" href="img/advon-mark-180.png?v=20261018">
+<style>
+:root{color-scheme:light only;--paper:#F7F5EF;--paper2:#F1EEE5;--ink:#15201E;--ink2:#3A4542;--mute:#717B77;--line:#E5E0D4;--a:#2F6FE0;--asoft:#E8F0FD;--cyan:#47C8F5;--gold:#B8862B;--goldlt:#FBF1DC;--green:#0F7A5C;--greenlt:#E1F3EC;--red:#D14A36;--redlt:#FBE7E3;--violet:#6C4FD8;--violetlt:#EDE8FA;--sh1:0 1px 0 rgba(21,32,30,.03),0 10px 30px -18px rgba(21,32,30,.22);--r:22px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}html,body{overflow-x:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.65 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--a)}img,svg{display:block;max-width:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{line-height:1.14;letter-spacing:-.02em;margin:0;font-weight:800}
+h1{font-size:clamp(36px,5.2vw,64px);letter-spacing:-.03em}h2{font-size:clamp(26px,3.2vw,40px);margin-bottom:10px}h3{font-size:19px;margin-bottom:8px}
+p{margin:0 0 14px}
+.k{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--a);margin-bottom:14px}.k i{width:18px;height:2px;background:var(--a);border-radius:2px}
+.lead{font-size:18.5px;color:var(--ink2);max-width:760px}
+section{padding:72px 0;position:relative}.band{background:var(--paper2)}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:var(--sh1)}
+.num{font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1.05}.sub{color:var(--mute);font-size:14px}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.p-b{background:var(--asoft);color:var(--a)}.p-g{background:var(--goldlt);color:var(--gold)}.p-gr{background:var(--greenlt);color:var(--green)}.p-r{background:var(--redlt);color:var(--red)}.p-v{background:var(--violetlt);color:var(--violet)}
+ul,ol{padding-left:20px;margin:0 0 12px}li{margin:6px 0}
+.tick{padding-left:0}.tick li{list-style:none;position:relative;padding-left:26px}.tick li::before{content:"";position:absolute;left:0;top:7px;width:15px;height:15px;border-radius:50%;background:var(--green)}.tick li::after{content:"";position:absolute;left:4px;top:11px;width:6px;height:3px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+.no{padding-left:0}.no li{list-style:none;position:relative;padding-left:26px}.no li::before,.no li::after{content:"";position:absolute;left:3px;top:6px;width:8px;height:14px;border-right:2px solid var(--red)}.no li::before{transform:rotate(45deg)}.no li::after{transform:rotate(-45deg)}
+.rv{opacity:1;transform:none}html.js .rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)}html.js .rv.in{opacity:1;transform:none}
+.top{position:sticky;top:0;z-index:30;background:rgba(247,245,239,.88);backdrop-filter:saturate(1.5) blur(12px);-webkit-backdrop-filter:saturate(1.5) blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}.top.sc{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}.brand img{height:36px;width:auto}.sep{width:1px;height:26px;background:var(--line)}.bt{font-weight:800;font-size:15px;letter-spacing:-.01em}
+.top nav{display:flex;gap:4px;align-items:center}.top nav a{text-decoration:none;font-size:14px;font-weight:700;color:var(--ink2);padding:8px 12px;border-radius:999px}.top nav a:hover{background:#fff}
+.toc{position:sticky;top:62px;background:rgba(247,245,239,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:29;font-size:13px}.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding:8px 24px;scrollbar-width:none}.toc .wrap::-webkit-scrollbar{display:none}.toc a{white-space:nowrap;text-decoration:none;color:var(--ink2);padding:6px 12px;border-radius:999px;font-weight:600}.toc a:hover,.toc a.on{background:#fff}
+.prog{position:fixed;left:0;top:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 0;background:linear-gradient(90deg,var(--a),var(--cyan));z-index:50}
+.foot{padding:40px 0 70px;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}.foot a{color:var(--ink2)}
+.hero{padding:70px 0 40px}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}
+.facts .card{padding:18px 20px}.facts b{display:block;font-size:20px;letter-spacing:-.02em}.facts span{color:var(--mute);font-size:13.5px}
+.say{background:#FFFDF6;border:1px dashed #DCCFAE;border-radius:16px;padding:16px 18px;white-space:pre-wrap;font-size:15.5px;line-height:1.6;position:relative;margin:14px 0}
+.say .lbl{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--mute);margin-bottom:8px;white-space:normal}
+.say .cp{border:0;background:var(--ink);color:#fff;font:700 12px/1 inherit;font-family:inherit;padding:7px 11px;border-radius:999px;cursor:pointer;letter-spacing:0;text-transform:none}.say .cp.ok{background:#137344}
+.steps{counter-reset:s;display:grid;gap:12px;margin:18px 0 0;padding:0}
+.steps>li{list-style:none;counter-increment:s;position:relative;padding:16px 18px 16px 62px;background:#fff;border:1px solid var(--line);border-radius:16px;margin:0}
+.steps>li::before{content:counter(s);position:absolute;left:16px;top:14px;width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;display:grid;place-items:center;font-size:14px}
+.steps>li b{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:15px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--sh1)}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--paper2);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+tr:last-child td{border-bottom:0}
+.tw{overflow-x:auto;border-radius:16px}
+.note{background:var(--goldlt);border-left:4px solid var(--gold);border-radius:12px;padding:14px 16px;margin:16px 0;font-size:15.5px}
+.note.b{background:var(--asoft);border-left-color:var(--a)}.note.r{background:var(--redlt);border-left-color:var(--red)}
+.tl{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.tl .card{border-top:4px solid var(--a)}.tl .card:nth-child(2){border-top-color:var(--violet)}.tl .card:nth-child(3){border-top-color:var(--gold)}.tl .card:nth-child(4){border-top-color:var(--green)}
+.tl small{display:block;font-weight:800;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;font-size:11.5px;margin-bottom:6px}
+@media (max-width:900px){.g3,.g4,.facts,.tl{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.top nav a.hs{display:none}}
+@media (max-width:560px){.g3,.g4,.facts,.tl{grid-template-columns:1fr}section{padding:54px 0}.wrap{padding:0 16px}.steps>li{padding-left:56px}.bt{font-size:13.5px}}
+@media (max-width:560px){.stack,.stack tbody,.stack tr,.stack td{display:block;width:100%}.stack tr:first-child{display:none}.stack tr{border-bottom:1px solid var(--line);padding:10px 0}.stack tr:last-child{border-bottom:0}.stack td{border:0;padding:3px 16px}.stack td::before{content:attr(data-l);display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}}
+</style></head><body>
+<div class="prog"></div>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="img/advon-logo.webp?v=20261018" width="87" height="44" alt="Advon Media"><span class="sep"></span><span class="bt">Πρόσληψη · Caller</span></a>
+  <nav><a href="plan.html#hire" class="hs">Το πλάνο</a><a href="./" class="hs">Όλες οι ιδέες</a><a href="https://crm.advonmedia.com/">CRM ↗</a></nav>
+</div></header>
+
+<section class="hero"><div class="wrap">
+<span class="k"><i></i>Πρόσληψη #1 · 30 Οκτ 2026</span>
+<h1>Ο πρώτος σου caller, σε 3 εβδομάδες.</h1>
+<p class="lead" style="margin-top:18px">Ένας άνθρωπος που κάνει τα τηλέφωνα που κάνεις σήμερα — εσύ κρατάς μόνο τις συναντήσεις και το κλείσιμο. Εδώ είναι όλα: η αγγελία έτοιμη για αντιγραφή, πού την ανεβάζεις, πώς διαλέγεις, τι στέλνεις στον Χιώτη και πώς τον εκπαιδεύεις.</p>
+<div class="facts">
+ <div class="card"><b>Πλήρης, από το σπίτι</b><span>Δευ–Παρ 10:00–18:00</span></div>
+ <div class="card"><b>≈1.300€/μήνα</b><span>κόστος βασικού (μαζί με εισφορές, δώρα, άδεια) + μπόνους</span></div>
+ <div class="card"><b>≈57€</b><span>αγγελίες 1ης εβδομάδας (skywalker + jobfind)</span></div>
+ <div class="card"><b>≈6–8 ώρες</b><span>δικός σου χρόνος συνολικά</span></div>
+</div>
+</div></section>
+
+<nav class="toc"><div class="wrap"><a href="#when">Χρονοδιάγραμμα</a><a href="#before">0 · Πριν</a><a href="#ad">1 · Η αγγελία</a><a href="#post">2 · Πού την ανεβάζεις</a><a href="#filter">3 · Φιλτράρισμα</a><a href="#call">4 · Τηλέφωνο 10′</a><a href="#roleplay">5 · Role-play</a><a href="#offer">6 · Πρόταση & χαρτιά</a><a href="#start">7 · Οι 2 πρώτες εβδομάδες</a><a href="#numbers">8 · Νούμερα & μπόνους</a></div></nav>
+
+<section id="when"><div class="wrap">
+<span class="k"><i></i>Το χρονοδιάγραμμα</span>
+<h2 class="rv">Τέσσερις εβδομάδες, από σήμερα μέχρι την πρώτη του μέρα.</h2>
+<div class="tl">
+ <div class="card rv"><small>Αυτή την εβδομάδα</small><h3>Χιώτης + αποφάσεις</h3><p class="sub">Στέλνεις το μήνυμα στον Χιώτη, κλειδώνεις μισθό και μπόνους, ανοίγεις λογαριασμούς στα sites.</p></div>
+ <div class="card rv"><small>Εβδομάδα 1</small><h3>Αγγελία online</h3><p class="sub">skywalker + jobfind + δωρεάν κανάλια. Ρωτάς το kariera για τη δωρεάν πρώτη αγγελία.</p></div>
+ <div class="card rv"><small>Εβδομάδα 2</small><h3>Τηλέφωνα & role-play</h3><p class="sub">Ο Claude κατατάσσει τα βιογραφικά. Εσύ μιλάς με 5–6 άτομα, κάνεις role-play με τους 2–3 καλύτερους.</p></div>
+ <div class="card rv"><small>Εβδομάδα 3</small><h3>Πρόταση & ΕΡΓΑΝΗ</h3><p class="sub">Πρόταση στον καλύτερο, στοιχεία στον Χιώτη, ξεκινά Δευτέρα.</p></div>
+</div>
+</div></section>
+
+<section id="before" class="band"><div class="wrap">
+<span class="k"><i></i>0 · Πριν ανεβάσεις την αγγελία</span>
+<h2 class="rv">Τρία πράγματα, μία μέρα.</h2>
+<ol class="steps">
+ <li class="rv"><b>Στείλε στον Χιώτη το μήνυμα παρακάτω.</b>Θα σου πει το ακριβές κόστος, αν τρέχει τώρα πρόγραμμα ΔΥΠΑ που πληρώνει μέρος του μισθού, και τι χρειάζεται για εργασία από το σπίτι (τηλεργασία).</li>
+ <li class="rv"><b>Κλείδωσε μισθό και μπόνους.</b>Πρόταση: κατώτατος 920€ μικτά + 5€ για κάθε ραντεβού που έγινε + 20€ για κάθε πελάτη που πλήρωσε (τα νούμερα στο βήμα 8). Μπορείς να τα αλλάξεις — αλλά γράψε τα στην αγγελία.</li>
+ <li class="rv"><b>Ετοίμασε τα εργαλεία του.</b>Μια εταιρική γραμμή (κινητό με εταιρική κάρτα SIM ≈10–15€/μήνα, ώστε ο γιατρός να βλέπει τον αριθμό της Advon και όχι τον προσωπικό του), ακουστικά με μικρόφωνο (≈30€), και πρόσβαση στις λίστες και στο call mode του CRM (το στήνει ο Claude).</li>
+</ol>
+<div class="say rv"><div class="lbl">Μήνυμα στον Χιώτη</div>Καλησπέρα Μάριε, τι κάνεις;
+Θέλω να προσλάβω τον πρώτο υπάλληλο της Advon, για τηλεφωνικές πωλήσεις. Θα ξεκινήσει μέσα σε 3–4 εβδομάδες. Σκέφτομαι:
+– πλήρης απασχόληση, Δευτέρα–Παρασκευή 10:00–18:00, από το σπίτι του (τηλεργασία)
+– βασικός μισθός ο κατώτατος (920€ μικτά) + μηνιαίο μπόνους ανάλογα με τα ραντεβού και τους πελάτες που φέρνει
+Θα ήθελα να μου πεις:
+1. Πόσο ακριβώς θα μου κοστίζει τον μήνα (μαζί με εισφορές, δώρα, άδεια) και πώς δηλώνεται το μπόνους
+2. Αν υπάρχει τώρα ανοιχτό πρόγραμμα της ΔΥΠΑ που επιδοτεί τον μισθό, και τι προϋποθέσεις έχει για τον υποψήφιο
+3. Τι χρειάζεται για την τηλεργασία (συμφωνία, έξοδα που καλύπτω)
+4. Πόση δοκιμαστική περίοδο μπορούμε να βάλουμε στη σύμβαση
+5. Τι στοιχεία θα χρειαστείς από αυτόν και πόσες μέρες πριν την έναρξη
+Ευχαριστώ πολύ!</div>
+<div class="note b"><b>Αν τρέχει πρόγραμμα ΔΥΠΑ:</b> ο υποψήφιος πρέπει να είναι γραμμένος άνεργος στη ΔΥΠΑ <i>πριν</i> τον προσλάβεις. Τότε πρόσθεσε στην αγγελία μια γραμμή «Προτιμώνται εγγεγραμμένοι άνεργοι στη ΔΥΠΑ».</div>
+</div></section>
+
+<section id="ad"><div class="wrap">
+<span class="k"><i></i>1 · Η αγγελία</span>
+<h2 class="rv">Έτοιμη για αντιγραφή — ίδια σε όλα τα sites.</h2>
+<p class="lead rv">Δύο πράγματα κάνουν τη διαφορά: ο μισθός γραμμένος καθαρά (φέρνει πολύ περισσότερες σοβαρές αιτήσεις) και το φωνητικό μήνυμα (όποιος δεν μπαίνει στον κόπο, φεύγει μόνος του — και για δουλειά στο τηλέφωνο, η φωνή μετράει περισσότερο από το βιογραφικό).</p>
+<div class="say rv"><div class="lbl">Τίτλος</div>Τηλεφωνικές Πωλήσεις (Inside Sales) – Πλήρης απασχόληση – Από το σπίτι</div>
+<div class="say rv"><div class="lbl">Κείμενο αγγελίας</div>Η Advon Media φτιάχνει ιστοσελίδες για γιατρούς, ψυχολόγους, οδοντιάτρους και άλλους επαγγελματίες σε όλη την Ελλάδα. Έχουμε πάνω από 220 ιστοσελίδες online και πάνω από 120 κριτικές 5 αστέρων στο Google. Μεγαλώνουμε γρήγορα και ψάχνουμε τον πρώτο άνθρωπο της ομάδας πωλήσεών μας.
+
+Τι θα κάνετε
+• Θα τηλεφωνείτε σε επαγγελματίες υγείας από έτοιμες λίστες — δεν χρειάζεται να ψάχνετε επαφές
+• Θα παρουσιάζετε σύντομα την πρότασή μας και θα κλείνετε ένα online ραντεβού 15 λεπτών με τον ιδρυτή
+• Θα κρατάτε σημειώσεις και follow-ups στο CRM μας
+• Δεν κάνετε συναντήσεις και δεν κλείνετε συμφωνίες: αυτό το αναλαμβάνουμε εμείς. Η δουλειά σας είναι να γεμίζει το ημερολόγιο.
+
+Τι ζητάμε
+• Εμπειρία σε τηλεφωνικές πωλήσεις ή εξυπηρέτηση πελατών (τηλεπικοινωνίες, ενέργεια, ασφάλειες, call center) — αποτελεί μεγάλο πλεονέκτημα
+• Άψογα ελληνικά, ευγένεια και σιγουριά στο τηλέφωνο
+• Να μη σας πτοεί το «όχι»
+• Οργάνωση, συνέπεια και άνεση με υπολογιστή
+• Ήσυχο χώρο και σταθερή σύνδεση στο ίντερνετ για εργασία από το σπίτι
+
+Τι προσφέρουμε
+• Σύμβαση πλήρους απασχόλησης με ασφάλιση από την πρώτη μέρα
+• Βασικός μισθός 920€ μικτά + μπόνους για κάθε ραντεβού που πραγματοποιείται και για κάθε νέο πελάτη, χωρίς ανώτατο όριο
+• Εργασία 100% από το σπίτι, Δευτέρα–Παρασκευή, 10:00–18:00
+• Εταιρική γραμμή, ακουστικά, έτοιμες λίστες, σενάριο και πλήρη εκπαίδευση
+• Ένα προϊόν που πουλιέται εύκολα: η κατασκευή της ιστοσελίδας είναι δωρεάν και ο πελάτης πληρώνει μόνο τη φιλοξενία
+
+Πώς κάνετε αίτηση
+Στείλτε το βιογραφικό σας από εδώ ΚΑΙ ένα φωνητικό μήνυμα έως 1 λεπτού στο advonmd@gmail.com, με θέμα «Πωλήσεις – Ονοματεπώνυμο». Πείτε μας ποιοι είστε και γιατί σας ταιριάζει αυτή η δουλειά. Σε μια δουλειά στο τηλέφωνο, η φωνή σας μας λέει περισσότερα από το βιογραφικό — αιτήσεις χωρίς φωνητικό μήνυμα δεν θα εξεταστούν.</div>
+<div class="grid g2" style="margin-top:8px">
+ <div class="card rv"><span class="pill p-gr">Γράψε</span><ul class="tick"><li>Τον μισθό καθαρά (920€ μικτά + μπόνους)</li><li>«Από το σπίτι» στον τίτλο — ανοίγει την αγγελία σε όλη την Ελλάδα</li><li>Την πραγματική δουλειά: τηλέφωνα από λίστες</li></ul></div>
+ <div class="card rv"><span class="pill p-r">Μη γράψεις</span><ul class="no"><li>Ηλικία ή φύλο («νέος/νέα έως 30») — απαγορεύεται από τον νόμο</li><li>«Υψηλές αποδοχές» χωρίς νούμερα — τραβάει λάθος κόσμο</li><li>Υποσχέσεις για μπόνους που δεν έχεις κλειδώσει</li></ul></div>
+</div>
+<div class="note">Αν θέλεις τα φωνητικά σε ξεχωριστό inbox, φτιάξε ένα δωρεάν Gmail (π.χ. advon.jobs@gmail.com) και άλλαξε τη διεύθυνση στο κείμενο πριν το ανεβάσεις.</div>
+</div></section>
+
+<section id="post" class="band"><div class="wrap">
+<span class="k"><i></i>2 · Πού την ανεβάζεις</span>
+<h2 class="rv">Ξεκίνα φθηνά. Πλήρωσε το ακριβό μόνο αν χρειαστεί.</h2>
+<div class="tw rv" style="margin-top:22px"><table class="stack">
+<tr><th>Πότε</th><th>Πού</th><th>Κόστος</th><th>Τι κάνεις</th></tr>
+<tr><td data-l="Πότε"><b>Εβδ. 1</b></td><td data-l="Πού">skywalker.gr</td><td data-l="Κόστος">26€ (15ήμερη, προσφορά)</td><td data-l="Τι κάνεις">Λογαριασμός εταιρείας με ΑΦΜ → E-shop → «15ήμερη Αγγελία» → επικόλληση τίτλου & κειμένου → περιοχή «Όλη η Ελλάδα / Τηλεργασία», κατηγορία «Πωλήσεις»</td></tr>
+<tr><td data-l="Πότε"><b>Εβδ. 1</b></td><td data-l="Πού">jobfind.gr</td><td data-l="Κόστος">25€ + ΦΠΑ (30 μέρες)</td><td data-l="Τι κάνεις">Εγγραφή → «Καταχώρηση Αγγελίας» → πακέτο 1 → κατηγορία «Πωλήσεις / Τηλεπωλήσεις»</td></tr>
+<tr><td data-l="Πότε"><b>Εβδ. 1</b></td><td data-l="Πού">kariera.gr</td><td data-l="Κόστος">0€ — ζήτα τη δωρεάν 1η αγγελία</td><td data-l="Τι κάνεις">Φόρμα επικοινωνίας στο employers.kariera.gr: «Πρώτη αγγελία της εταιρείας μας, είδαμε την προσφορά για δωρεάν πρώτη αγγελία 30 ημερών»</td></tr>
+<tr><td data-l="Πότε"><b>Εβδ. 1</b></td><td data-l="Πού">LinkedIn · Facebook groups</td><td data-l="Κόστος">0€</td><td data-l="Τι κάνεις">LinkedIn → «Δημοσίευση θέσης» (δωρεάν). Facebook: «Αγγελίες εργασίας Αθήνα», «Εργασία από το σπίτι», «Θέσεις εργασίας Θεσσαλονίκη»</td></tr>
+<tr><td data-l="Πότε"><b>Εβδ. 1</b></td><td data-l="Πού">Οι πελάτες σου</td><td data-l="Κόστος">0€</td><td data-l="Τι κάνεις">Ένα μήνυμα σε 10 φιλικούς πελάτες (παρακάτω)</td></tr>
+<tr><td data-l="Πότε"><b>Εβδ. 2</b></td><td data-l="Πού">kariera.gr Standard</td><td data-l="Κόστος">190€ + ΦΠΑ (30 μέρες)</td><td data-l="Τι κάνεις"><b>Μόνο αν</b> δεν έχεις 3–5 καλούς υποψήφιους και το kariera δεν έδωσε τη δωρεάν</td></tr>
+</table></div>
+<div class="say rv"><div class="lbl">Μήνυμα σε φιλικούς πελάτες (Viber)</div>Καλησπέρα σας! Μια μικρή ερώτηση εκτός ιστοσελίδας: ψάχνω τον πρώτο συνεργάτη της Advon για τηλεφωνικές πωλήσεις, πλήρης απασχόληση από το σπίτι, με ασφάλιση. Αν γνωρίζετε κάποιον οργανωμένο και ευγενικό που ψάχνει δουλειά, θα σας ήμουν ευγνώμων αν του προωθούσατε το μήνυμά μου. Ευχαριστώ πολύ!</div>
+<div class="note b"><b>Τι να περιμένεις:</b> οι περισσότερες αιτήσεις έρχονται τις πρώτες 3–5 μέρες. Περίπου οι μισές θα είναι άσχετες — είναι φυσιολογικό. Αν την 7η μέρα έχεις λιγότερες από 15 αιτήσεις συνολικά, πες το στον Claude: αλλάζουμε τίτλο ή κείμενο πριν πληρώσεις κάτι άλλο.</div>
+</div></section>
+
+<section id="filter"><div class="wrap">
+<span class="k"><i></i>3 · Φιλτράρισμα</span>
+<h2 class="rv">Δεν διαβάζεις 80 βιογραφικά. Διαβάζεις 10.</h2>
+<ol class="steps">
+ <li class="rv"><b>Κάθε 2 μέρες κατέβασε τα βιογραφικά</b>από κάθε site (πίνακας αιτήσεων → λήψη) και άκου πρώτα τα φωνητικά στο email — 1 λεπτό το καθένα.</li>
+ <li class="rv"><b>Δώσ' τα στον Claude</b>(βιογραφικά + λίστα με όσα φωνητικά σου άρεσαν). Παίρνεις πίσω top 10 με μία γραμμή για τον καθένα και βαθμό στα 5 κριτήρια.</li>
+ <li class="rv"><b>Διάλεξε 5–6 για τηλέφωνο 10 λεπτών</b>(βήμα 4).</li>
+</ol>
+<div class="tw rv" style="margin-top:22px"><table class="stack">
+<tr><th>Κριτήριο</th><th>Τι κοιτάς</th></tr>
+<tr><td data-l="Κριτήριο"><b>Φωνή</b></td><td data-l="Τι κοιτάς">Ζεστή, καθαρή, σίγουρη; Θα την άκουγες 2 λεπτά αν ήσουν ψυχολόγος ανάμεσα σε δύο συνεδρίες;</td></tr>
+<tr><td data-l="Κριτήριο"><b>Τηλέφωνο</b></td><td data-l="Τι κοιτάς">Έχει δουλέψει σε πωλήσεις ή εξυπηρέτηση από τηλέφωνο; Με στόχους;</td></tr>
+<tr><td data-l="Κριτήριο"><b>Σταθερότητα</b></td><td data-l="Τι κοιτάς">Έμεινε τουλάχιστον 1 χρόνο κάπου; Πολλές δουλειές των 2 μηνών = κόκκινη σημαία</td></tr>
+<tr><td data-l="Κριτήριο"><b>Γραπτά</b></td><td data-l="Τι κοιτάς">Το email του έχει λάθη; Θα γράφει SMS και σημειώσεις στο όνομα της Advon</td></tr>
+<tr><td data-l="Κριτήριο"><b>Ακολουθεί οδηγίες</b></td><td data-l="Τι κοιτάς">Έστειλε φωνητικό με το σωστό θέμα; Αυτό είναι ήδη το πρώτο τεστ</td></tr>
+</table></div>
+</div></section>
+
+<section id="call" class="band"><div class="wrap">
+<span class="k"><i></i>4 · Τηλέφωνο 10 λεπτών</span>
+<h2 class="rv">Πέντε ερωτήσεις. Ακούς περισσότερο απ' όσο μιλάς.</h2>
+<div class="say rv"><div class="lbl">Το σενάριό σου</div>«Καλησπέρα, είμαι ο Άγγελος από την Advon Media, για την αγγελία τηλεφωνικών πωλήσεων. Έχετε 10 λεπτά τώρα;»
+
+1. «Πείτε μου λίγο για την τελευταία σας δουλειά στο τηλέφωνο. Τι πουλούσατε και πόσες κλήσεις κάνατε τη μέρα;»
+2. «Ποια ήταν η πιο δύσκολη μέρα που είχατε εκεί και τι κάνατε;»
+3. «Πώς νιώθετε όταν σας κλείνουν το τηλέφωνο 20 φορές στη σειρά;»
+4. «Έχετε ήσυχο χώρο στο σπίτι από τις 10 ως τις 6; Πότε θα μπορούσατε να ξεκινήσετε;»
+5. «Ο βασικός είναι 920€ μικτά και από πάνω μπόνους για κάθε ραντεβού και κάθε πελάτη. Σας ταιριάζει;»
+
+«Τέλεια. Το επόμενο βήμα είναι μια σύντομη online συνάντηση 20 λεπτών όπου θα κάνουμε μια δοκιμαστική κλήση: εγώ θα είμαι ο γιατρός, εσείς θα με καλέσετε. Πότε σας βολεύει;»</div>
+<div class="grid g2">
+ <div class="card rv"><span class="pill p-gr">Καλό σημάδι</span><ul class="tick"><li>Δίνει νούμερα («80 κλήσεις, 5–6 πωλήσεις την εβδομάδα»)</li><li>Για το «όχι» λέει κάτι σαν «μέρος της δουλειάς, πάω στο επόμενο»</li><li>Κάνει κι εκείνος ερωτήσεις για τη δουλειά</li></ul></div>
+ <div class="card rv"><span class="pill p-r">Κόκκινη σημαία</span><ul class="no"><li>Μιλάει άσχημα για όλους τους προηγούμενους εργοδότες</li><li>Ρωτάει μόνο για ρεπό και άδειες</li><li>Δεν απαντά στο τηλέφωνο ή αργεί πολύ να σε καλέσει πίσω</li></ul></div>
+</div>
+</div></section>
+
+<section id="roleplay"><div class="wrap">
+<span class="k"><i></i>5 · Role-play (το πιο σημαντικό βήμα)</span>
+<h2 class="rv">Εσύ είσαι η ψυχολόγος. Αυτός σε καλεί.</h2>
+<p class="lead rv">20 λεπτά σε Google Meet με τους 2–3 καλύτερους. Του στέλνεις από πριν 3 γραμμές για την προσφορά (παρακάτω) και του δίνεις 10 λεπτά να τις διαβάσει. Μετά παίζετε την κλήση δύο φορές. Θα καταλάβεις μέσα σε 2 λεπτά.</p>
+<div class="say rv"><div class="lbl">Τι του στέλνεις πριν (η προσφορά σε 3 γραμμές)</div>• Φτιάχνουμε επαγγελματική ιστοσελίδα για ιατρεία και ψυχολόγους. Η κατασκευή δεν χρεώνεται· ο πελάτης πληρώνει μόνο φιλοξενία και domain, 130€ + ΦΠΑ τον χρόνο (≈10,83€ τον μήνα).
+• Πάνω από 220 ιστοσελίδες online, πάνω από 120 κριτικές 5★ στο Google.
+• Στόχος της κλήσης: ένα online ραντεβού 15 λεπτών με τον Άγγελο, όχι πώληση στο τηλέφωνο.</div>
+<div class="grid g3">
+ <div class="card rv"><span class="pill p-b">Ένσταση 1</span><h3>«Δεν χρειάζομαι, έχω doctoranytime.»</h3><p class="sub">Καλή απάντηση: συμφωνεί και ρωτάει («Πολύ ωραία, εκεί σας βρίσκουν πώς;»), μετά εξηγεί ότι το doctoranytime δεν είναι δική της σελίδα, και ζητά 15 λεπτά.</p></div>
+ <div class="card rv"><span class="pill p-v">Ένσταση 2</span><h3>«Πόσο κοστίζει;»</h3><p class="sub">Καλή απάντηση: λέει την τιμή απλά και αμέσως πάει στο ραντεβού («…γι' αυτό σας προτείνω 15 λεπτά να σας δείξει ο Άγγελος παραδείγματα. Τρίτη ή Πέμπτη;»).</p></div>
+ <div class="card rv"><span class="pill p-g">Ένσταση 3</span><h3>«Στείλτε μου ένα email.»</h3><p class="sub">Καλή απάντηση: «Βεβαίως» + μία ερώτηση που κρατάει την κουβέντα ζωντανή, και ξαναδοκιμάζει για συγκεκριμένη μέρα και ώρα.</p></div>
+</div>
+<div class="tw rv" style="margin-top:22px"><table class="stack">
+<tr><th>Βαθμολόγησε 1–5</th><th>Τι κοιτάς</th></tr>
+<tr><td data-l="Βαθμολόγησε 1–5">Ηρεμία</td><td data-l="Τι κοιτάς">Μένει ήρεμος και ευγενικός όταν πιέζεις;</td></tr>
+<tr><td data-l="Βαθμολόγησε 1–5">Ερωτήσεις</td><td data-l="Τι κοιτάς">Ρωτάει, ή μόνο μιλάει;</td></tr>
+<tr><td data-l="Βαθμολόγησε 1–5">Στόχος</td><td data-l="Τι κοιτάς">Ζητάει καθαρά μέρα και ώρα για το ραντεβού;</td></tr>
+<tr><td data-l="Βαθμολόγησε 1–5">Φυσικότητα</td><td data-l="Τι κοιτάς">Ακούγεται σαν άνθρωπος ή σαν να διαβάζει;</td></tr>
+<tr><td data-l="Βαθμολόγησε 1–5">Μάθηση</td><td data-l="Τι κοιτάς">Στη 2η φορά, αφού του πεις ένα σχόλιο, το κάνει καλύτερα;</td></tr>
+</table></div>
+<div class="note">Το τελευταίο κριτήριο μετράει περισσότερο απ' όλα. Κάποιον που μαθαίνει γρήγορα τον εκπαιδεύεις· κάποιον που δεν ακούει, όχι.</div>
+</div></section>
+
+<section id="offer" class="band"><div class="wrap">
+<span class="k"><i></i>6 · Πρόταση & χαρτιά</span>
+<h2 class="rv">Διαλέγεις, του το λες, τα χαρτιά τα κάνει ο Χιώτης.</h2>
+<div class="say rv"><div class="lbl">Πρόταση στον υποψήφιο που διάλεξες</div>Καλησπέρα [Όνομα],
+Σας ευχαριστώ πολύ για τη συνάντηση. Θα χαρώ πολύ να ξεκινήσουμε να δουλεύουμε μαζί!
+Η πρότασή μας: πλήρης απασχόληση, Δευτέρα–Παρασκευή 10:00–18:00, από το σπίτι, με βασικό μισθό 920€ μικτά + μπόνους 5€ για κάθε ραντεβού που πραγματοποιείται και 20€ για κάθε νέο πελάτη. Η σύμβαση έχει δοκιμαστική περίοδο [Χ] μηνών.
+Αν συμφωνείτε, θα χρειαστώ για τη σύμβαση: ΑΦΜ, ΑΜΚΑ, ΑΜΑ ΕΦΚΑ, IBAN, αριθμό ταυτότητας και διεύθυνση κατοικίας. Ημερομηνία έναρξης: Δευτέρα [ημερομηνία].
+Είμαι στη διάθεσή σας για οτιδήποτε!
+Άγγελος Μετρίδης – Advon Media</div>
+<div class="say rv"><div class="lbl">Στους υπόλοιπους (ευγενικό «όχι»)</div>Καλησπέρα [Όνομα], σας ευχαριστώ πολύ για τον χρόνο σας και τη συνάντηση. Αυτή τη φορά προχωρήσαμε με άλλον υποψήφιο, αλλά θα κρατήσουμε το βιογραφικό σας για τις επόμενες θέσεις που θα ανοίξουμε. Σας εύχομαι καλή συνέχεια!
+Άγγελος Μετρίδης – Advon Media</div>
+<ol class="steps">
+ <li class="rv"><b>Στείλε τα στοιχεία στον Χιώτη</b>μαζί με ημερομηνία έναρξης, ώρες και μισθό.</li>
+ <li class="rv"><b>Ο Χιώτης κάνει τη δήλωση στο ΕΡΓΑΝΗ πριν την πρώτη ώρα δουλειάς,</b>τη σύμβαση, τη συμφωνία τηλεργασίας και την ψηφιακή κάρτα εργασίας.</li>
+ <li class="rv"><b>Κανένα «δοκιμαστικό πρωινό» πριν τη δήλωση.</b>Ακόμα κι αν είναι 2 ώρες, είναι αδήλωτη εργασία με βαρύ πρόστιμο. Τη δοκιμή την κάνεις μέσα στη σύμβαση — γι' αυτό υπάρχει η δοκιμαστική περίοδος.</li>
+</ol>
+<div class="note r"><b>Κράτα τις παλιές αιτήσεις.</b> Αν ο πρώτος δεν πάει καλά μέσα στη δοκιμαστική, ο 2ος και ο 3ος του role-play είναι έτοιμοι — χωρίς νέα αγγελία.</div>
+</div></section>
+
+<section id="start"><div class="wrap">
+<span class="k"><i></i>7 · Οι 2 πρώτες εβδομάδες</span>
+<h2 class="rv">1 ώρα τη μέρα δική σου. Μετά τρέχει μόνος του.</h2>
+<div class="tw rv" style="margin-top:22px"><table class="stack">
+<tr><th>Πότε</th><th>Τι κάνει</th><th>Εσύ</th><th>Στόχος κλήσεων</th></tr>
+<tr><td data-l="Πότε"><b>Μέρα 1</b></td><td data-l="Τι κάνει">Διαβάζει σενάριο & ενστάσεις, μαθαίνει το CRM, σε ακούει να κάνεις 10 κλήσεις</td><td data-l="Εσύ">2 ώρες</td><td data-l="Στόχος κλήσεων">—</td></tr>
+<tr><td data-l="Πότε"><b>Μέρες 2–3</b></td><td data-l="Τι κάνει">Πρώτες κλήσεις ενώ εσύ ακούς (Meet). Σχόλιο μετά από κάθε 5</td><td data-l="Εσύ">1 ώρα/μέρα</td><td data-l="Στόχος κλήσεων">30/μέρα</td></tr>
+<tr><td data-l="Πότε"><b>Μέρες 4–10</b></td><td data-l="Τι κάνει">Μόνος του. 15 λεπτά μαζί σου στο τέλος της μέρας</td><td data-l="Εσύ">15′/μέρα</td><td data-l="Στόχος κλήσεων">50/μέρα</td></tr>
+<tr><td data-l="Πότε"><b>Από εβδ. 3</b></td><td data-l="Τι κάνει">Πλήρης ρυθμός. Παρασκευή 20′: τα νούμερα της εβδομάδας</td><td data-l="Εσύ">20′/εβδ.</td><td data-l="Στόχος κλήσεων">60–80/μέρα</td></tr>
+</table></div>
+<div class="grid g2" style="margin-top:18px">
+ <div class="card rv"><h3>Τι ετοιμάζει ο Claude πριν ξεκινήσει</h3><ul class="tick"><li>Σενάριο κλήσης + φύλλο με τις 10 συχνότερες ενστάσεις</li><li>Πρόσβαση στις λίστες και στο call mode του CRM</li><li>Ημερήσια αναφορά: κλήσεις, συζητήσεις, ραντεβού</li><li>Το μήνυμα επιβεβαίωσης ραντεβού που στέλνει μετά την κλήση</li></ul></div>
+ <div class="card rv"><h3>Η μέρα του</h3><ul class="tick"><li>10:00–13:00 κλήσεις (οι γιατροί απαντούν ανάμεσα σε ασθενείς)</li><li>13:00–14:00 διάλειμμα + SMS/follow-ups</li><li>14:00–17:00 κλήσεις</li><li>17:00–18:00 CRM, επιβεβαιώσεις ραντεβού για αύριο, αναφορά</li></ul></div>
+</div>
+</div></section>
+
+<section id="numbers" class="band"><div class="wrap">
+<span class="k"><i></i>8 · Νούμερα & μπόνους</span>
+<h2 class="rv">Πότε σου βγάζει λεφτά — και πότε σταματάς.</h2>
+<div class="tw rv" style="margin-top:22px"><table class="stack">
+<tr><th>Μήνας</th><th>Ραντεβού που έγιναν</th><th>Νέοι πελάτες (≈45%)</th><th>Νέα έσοδα (130€)</th><th>Μπόνους caller</th><th>Συνολικό κόστος caller</th></tr>
+<tr><td data-l="Μήνας">Αδύναμος</td><td data-l="Ραντεβού που έγιναν">20 (1/μέρα)</td><td data-l="Νέοι πελάτες (≈45%)">9</td><td data-l="Νέα έσοδα (130€)">1.170€</td><td data-l="Μπόνους caller">280€</td><td data-l="Συνολικό κόστος caller">≈1.600€</td></tr>
+<tr><td data-l="Μήνας">Καλός</td><td data-l="Ραντεβού που έγιναν">40 (2/μέρα)</td><td data-l="Νέοι πελάτες (≈45%)">18</td><td data-l="Νέα έσοδα (130€)">2.340€</td><td data-l="Μπόνους caller">560€</td><td data-l="Συνολικό κόστος caller">≈2.000€</td></tr>
+<tr><td data-l="Μήνας">Πολύ καλός</td><td data-l="Ραντεβού που έγιναν">60 (3/μέρα)</td><td data-l="Νέοι πελάτες (≈45%)">27</td><td data-l="Νέα έσοδα (130€)">3.510€</td><td data-l="Μπόνους caller">840€</td><td data-l="Συνολικό κόστος caller">≈2.300€</td></tr>
+</table></div>
+<p class="sub" style="margin-top:10px">Μπόνους = 5€ × ραντεβού + 20€ × πελάτη. Το «συνολικό κόστος» βάζει ≈1.300€ βασικό + μπόνους με τις εισφορές — το ακριβές νούμερο το δίνει ο Χιώτης. Και κάθε πελάτης ξαναπληρώνει 130€ κάθε χρόνο: ο «αδύναμος» μήνας φαίνεται οριακός μόνο τον πρώτο χρόνο.</p>
+<div class="grid g3" style="margin-top:18px">
+ <div class="card rv"><span class="pill p-gr">Εβδ. 4–6</span><h3>2+ ραντεβού τη μέρα</h3><p class="sub">Κράτα τον. Συζήτησε αν θέλει να ανέβει το μπόνους όσο ανεβαίνει κι αυτός.</p></div>
+ <div class="card rv"><span class="pill p-g">Εβδ. 4–6</span><h3>1–2 τη μέρα</h3><p class="sub">Άκου 10 κλήσεις του μαζί με τον Claude, βρείτε τι χάνεται, δώσε του 2 εβδομάδες ακόμα.</p></div>
+ <div class="card rv"><span class="pill p-r">Εβδ. 6</span><h3>Κάτω από 1 τη μέρα</h3><p class="sub">Σταματάς μέσα στη δοκιμαστική και καλείς τον 2ο από το role-play.</p></div>
+</div>
+</div></section>
+
+<footer class="foot"><div class="wrap">Advon Media · ιδιωτική σελίδα · 30 Οκτ 2026 · <a href="plan.html#hire">Πίσω στο πλάνο</a> · <a href="./">Όλες οι ιδέες</a> · <a href="https://crm.advonmedia.com/">CRM</a><br><span style="font-size:12px">Τιμές αγγελιών όπως ήταν στις 30 Οκτ 2026 (skywalker 15ήμερη 26€, jobfind 25€ + ΦΠΑ, kariera Standard 190€ + ΦΠΑ). Κατώτατος 920€ μικτά από 1 Απρ 2026. Κόστη, ΔΥΠΑ, τηλεργασία και δοκιμαστική περίοδο: επιβεβαίωσε με τον Χιώτη.</span></div></footer>
+<script src="ideas.js?v=20261030"></script>
+</body></html>
