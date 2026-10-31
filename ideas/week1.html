@@ -1,0 +1,287 @@
+<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="light only">
+<title>Advon — Εβδομάδα 1: ξεκινάμε</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/advon-mark-32.png?v=20261018"><link rel="apple-touch-icon" href="img/advon-mark-180.png?v=20261018">
+<style>
+:root{color-scheme:light only;--paper:#F7F5EF;--paper2:#F1EEE5;--ink:#15201E;--ink2:#3A4542;--mute:#717B77;--line:#E5E0D4;--a:#2F6FE0;--asoft:#E8F0FD;--cyan:#47C8F5;--gold:#B8862B;--goldlt:#FBF1DC;--green:#0F7A5C;--greenlt:#E1F3EC;--red:#D14A36;--redlt:#FBE7E3;--violet:#6C4FD8;--violetlt:#EDE8FA;--sh1:0 1px 0 rgba(21,32,30,.03),0 10px 30px -18px rgba(21,32,30,.22);--r:22px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}html,body{overflow-x:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.65 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--a)}img,svg{display:block;max-width:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{line-height:1.14;letter-spacing:-.02em;margin:0;font-weight:800}
+h1{font-size:clamp(36px,5.2vw,64px);letter-spacing:-.03em}h2{font-size:clamp(26px,3.2vw,40px);margin-bottom:10px}h3{font-size:19px;margin-bottom:8px}
+p{margin:0 0 14px}
+.k{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--a);margin-bottom:14px}.k i{width:18px;height:2px;background:var(--a);border-radius:2px}
+.lead{font-size:18.5px;color:var(--ink2);max-width:760px}
+section{padding:68px 0;position:relative}.band{background:var(--paper2)}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px;box-shadow:var(--sh1)}
+.sub{color:var(--mute);font-size:14px}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.p-b{background:var(--asoft);color:var(--a)}.p-g{background:var(--goldlt);color:var(--gold)}.p-gr{background:var(--greenlt);color:var(--green)}.p-r{background:var(--redlt);color:var(--red)}.p-v{background:var(--violetlt);color:var(--violet)}
+ul,ol{padding-left:20px;margin:0 0 12px}li{margin:6px 0}
+.tick{padding-left:0}.tick li{list-style:none;position:relative;padding-left:26px}.tick li::before{content:"";position:absolute;left:0;top:7px;width:15px;height:15px;border-radius:50%;background:var(--green)}.tick li::after{content:"";position:absolute;left:4px;top:11px;width:6px;height:3px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+.rv{opacity:1;transform:none}html.js .rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)}html.js .rv.in{opacity:1;transform:none}
+.top{position:sticky;top:0;z-index:30;background:rgba(247,245,239,.88);backdrop-filter:saturate(1.5) blur(12px);-webkit-backdrop-filter:saturate(1.5) blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}.top.sc{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}.brand img{height:36px;width:auto}.sep{width:1px;height:26px;background:var(--line)}.bt{font-weight:800;font-size:15px;letter-spacing:-.01em}
+.top nav{display:flex;gap:4px;align-items:center}.top nav a{text-decoration:none;font-size:14px;font-weight:700;color:var(--ink2);padding:8px 12px;border-radius:999px}.top nav a:hover{background:#fff}
+.toc{position:sticky;top:62px;background:rgba(247,245,239,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:29;font-size:13px}.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding:8px 24px;scrollbar-width:none}.toc .wrap::-webkit-scrollbar{display:none}.toc a{white-space:nowrap;text-decoration:none;color:var(--ink2);padding:6px 12px;border-radius:999px;font-weight:600}.toc a:hover,.toc a.on{background:#fff}
+.prog{position:fixed;left:0;top:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 0;background:linear-gradient(90deg,var(--a),var(--cyan));z-index:50}
+.foot{padding:40px 0 70px;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}.foot a{color:var(--ink2)}
+.hero{padding:64px 0 36px}
+.tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.tracks .card{padding:20px;border-top:4px solid var(--a)}.tracks .card:nth-child(2){border-top-color:var(--violet)}.tracks .card:nth-child(3){border-top-color:var(--green)}
+.tracks b{display:block;font-size:19px;letter-spacing:-.02em;margin-bottom:4px}
+.say{background:#FFFDF6;border:1px dashed #DCCFAE;border-radius:16px;padding:16px 18px;white-space:pre-wrap;font-size:15.5px;line-height:1.6;position:relative;margin:14px 0}
+.say .lbl{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--mute);margin-bottom:8px;white-space:normal}
+.say .cp{border:0;background:var(--ink);color:#fff;font:700 12px/1 inherit;font-family:inherit;padding:7px 11px;border-radius:999px;cursor:pointer;letter-spacing:0;text-transform:none}.say .cp.ok{background:#137344}
+.note{background:var(--goldlt);border-left:4px solid var(--gold);border-radius:12px;padding:14px 16px;margin:16px 0;font-size:15.5px}
+.note.b{background:var(--asoft);border-left-color:var(--a)}.note.g{background:var(--greenlt);border-left-color:var(--green)}
+/* decisions */
+.dec{display:grid;gap:12px;margin-top:20px;counter-reset:d}
+.dec .card{padding:18px 20px 18px 66px;position:relative;counter-increment:d}
+.dec .card::before{content:counter(d);position:absolute;left:18px;top:18px;width:32px;height:32px;border-radius:50%;background:var(--gold);color:#fff;font-weight:800;display:grid;place-items:center;font-size:14px}
+.dec h3{font-size:17px;margin-bottom:4px}.dec .rec{font-size:14.5px;color:var(--green);font-weight:700}
+/* days */
+.day{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh1);margin-top:18px;overflow:hidden}
+.day-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,#fff,var(--paper))}
+.day-h h3{font-size:21px;margin:0}.day-h .tm{font-size:13px;font-weight:800;color:var(--mute);white-space:nowrap}
+.day.big .day-h{background:linear-gradient(90deg,var(--asoft),#fff)}.day.big .day-h h3::after{content:"ΞΕΚΙΝΟΥΝ ΟΙ ΔΙΑΦΗΜΙΣΕΙΣ";margin-left:10px;font-size:11px;letter-spacing:.08em;background:var(--a);color:#fff;padding:3px 9px;border-radius:999px;vertical-align:middle}
+.day-b{display:grid;grid-template-columns:1.35fr 1fr;gap:0}
+.col{padding:18px 22px}.col+.col{border-left:1px solid var(--line);background:#FCFBF8}
+.col h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.chk{list-style:none;padding:0;margin:0}
+.chk li{margin:0;border-bottom:1px dashed var(--line)}.chk li:last-child{border-bottom:0}
+.chk label{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:start;padding:9px 0;cursor:pointer}
+.chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:2px solid #C9C2B2;border-radius:7px;margin:1px 0 0;cursor:pointer;position:relative;background:#fff;transition:background .2s,border-color .2s}
+.chk input:checked{background:var(--green);border-color:var(--green)}.chk input:checked::after{content:"";position:absolute;left:6px;top:2px;width:6px;height:11px;border-right:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(45deg)}
+.chk input:checked~span{color:var(--mute);text-decoration:line-through;text-decoration-color:#B9B2A2}
+.chk .mn{font-size:12px;font-weight:800;color:var(--a);background:var(--asoft);padding:2px 8px;border-radius:999px;white-space:nowrap;margin-top:2px}
+.chk small{display:block;color:var(--mute);font-size:13.5px;text-decoration:none}
+.cl{list-style:none;padding:0;margin:0}.cl li{position:relative;padding-left:20px;margin:7px 0;font-size:15px;color:var(--ink2)}.cl li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--violet)}
+.bar{display:flex;align-items:center;gap:12px;margin-top:22px;font-size:14px;color:var(--ink2);font-weight:700}
+.bar .t{flex:1;height:10px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden}.bar .t i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),#34B386);transition:width .4s}
+table{width:100%;border-collapse:collapse;font-size:15px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--sh1)}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--paper2);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+tr:last-child td{border-bottom:0}
+.links a{display:block;text-decoration:none;color:var(--ink)}.links a b{display:block;font-size:17px}.links a span{color:var(--mute);font-size:14px}.links a:hover{border-color:var(--a)}
+@media (max-width:900px){.g3,.tracks{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.day-b{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}.top nav a.hs{display:none}}
+@media (max-width:560px){.g3,.tracks{grid-template-columns:1fr}section{padding:52px 0}.wrap{padding:0 16px}.dec .card{padding-left:60px}.day-h{flex-direction:column;gap:2px}.col{padding:16px}.bt{font-size:13.5px}
+.stack,.stack tbody,.stack tr,.stack td{display:block;width:100%}.stack tr:first-child{display:none}.stack tr{border-bottom:1px solid var(--line);padding:10px 0}.stack tr:last-child{border-bottom:0}.stack td{border:0;padding:3px 16px}.stack td::before{content:attr(data-l);display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}}
+</style></head><body>
+<div class="prog"></div>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="img/advon-logo.webp?v=20261018" width="87" height="44" alt="Advon Media"><span class="sep"></span><span class="bt">Εβδομάδα 1 · 2–8 Νοε</span></a>
+  <nav><a href="plan.html" class="hs">Το πλάνο</a><a href="hire-caller.html" class="hs">Πρόσληψη caller</a><a href="ads-nov/" class="hs">Διαφημίσεις</a><a href="https://crm.advonmedia.com/">CRM ↗</a></nav>
+</div></header>
+
+<section class="hero"><div class="wrap">
+<span class="k"><i></i>Δευτέρα 2 – Κυριακή 8 Νοεμβρίου 2026</span>
+<h1>Η εβδομάδα που ξεκινούν όλα.</h1>
+<p class="lead" style="margin-top:18px">Τρία πράγματα ξεκινούν μαζί: οι διαφημίσεις, οι δύο πρώτες προσλήψεις και οι προτάσεις για Google Ads / social στους πελάτες σου. Όλα είναι έτοιμα. Εσύ ακολουθείς τη λίστα της κάθε μέρας και τσεκάρεις — <b>περίπου 1 ώρα τη μέρα</b>, πέρα από τα τηλέφωνα και τις συναντήσεις σου.</p>
+<div class="tracks">
+ <div class="card rv"><span class="pill p-b">Διαφημίσεις</span><b>Ξεκινούν Πέμπτη 5/11</b><span class="sub">8 διαφημίσεις έτοιμες στο Meta, 30€/μέρα, όριο 900€ τον Νοέμβριο. Η σελίδα προορισμού είναι ήδη online.</span></div>
+ <div class="card rv"><span class="pill p-v">Προσλήψεις</span><b>2 αγγελίες τη Δευτέρα</b><span class="sub">Caller (πλήρης) + υποστήριξη πελατών (4ωρη). Στόχος: ξεκινούν μέσα στον Νοέμβριο.</span></div>
+ <div class="card rv"><span class="pill p-gr">Πελάτες</span><b>Google Ads & social</b><span class="sub">Το tab «Ads &amp; Social» του CRM έχει τη λίστα και τα έτοιμα μηνύματα. 10 τη μέρα.</span></div>
+</div>
+</div></section>
+
+<nav class="toc"><div class="wrap"><a href="#decide">Πριν τη Δευτέρα</a><a href="#mon">Δευτέρα</a><a href="#tue">Τρίτη</a><a href="#wed">Τετάρτη</a><a href="#thu">Πέμπτη</a><a href="#fri">Παρασκευή</a><a href="#wkn">Σαββατοκύριακο</a><a href="#leads">Όταν έρχεται lead</a><a href="#texts">Έτοιμα κείμενα</a><a href="#numbers">Τα νούμερα</a></div></nav>
+
+<section id="decide" class="band"><div class="wrap">
+<span class="k"><i></i>Πριν τη Δευτέρα · 5 λεπτά</span>
+<h2 class="rv">Έξι απαντήσεις από σένα.</h2>
+<p class="lead rv">Δίπλα σε καθεμία είναι η πρότασή μου. Αν συμφωνείς με όλες, γράψε μου απλώς <b>«ok σε όλα»</b>. Αλλιώς γράψε μόνο ό,τι αλλάζεις (π.χ. «3: όχι, 4: 30 σελίδες»).</p>
+<div class="dec">
+ <div class="card rv"><h3>Ξεκινάμε διαφημίσεις Πέμπτη 5/11 με 30€/μέρα και όριο 900€ τον Νοέμβριο;</h3><p class="sub">Η καμπάνια είναι στημένη και δεν έχει δημοσιευτεί. Με το «ναι» σου τη δημοσιεύω την Τετάρτη και ανάβει μόνη της Πέμπτη πρωί.</p><div class="rec">Πρόταση: ναι.</div></div>
+ <div class="card rv"><h3>Μπαίνει η εγγύηση «Δεν σας αρέσει το δείγμα; Δεν πληρώνετε τίποτα.» στις διαφημίσεις;</h3><p class="sub">Ισχύει ήδη (πληρώνουν μόνο αφού δουν τη σελίδα), απλώς το λέμε καθαρά.</p><div class="rec">Πρόταση: ναι.</div></div>
+ <div class="card rv"><h3>«Όλες, 0€ κατασκευή» ή «Σήμερα, 0€ κατασκευή»;</h3><p class="sub">Στην εικόνα «Δωρεάν». Αν κάποιοι παλιοί πελάτες πλήρωσαν κατασκευή, το «Όλες» δεν είναι ακριβές.</p><div class="rec">Πρόταση: «Σήμερα» — είναι ασφαλές σε κάθε περίπτωση.</div></div>
+ <div class="card rv"><h3>Όριο ιστοσελίδων τον Νοέμβριο («αναλαμβάνουμε έως Χ»);</h3><p class="sub">Δίνει λόγο να κλείσουν τώρα — μόνο με νούμερο που θα τηρήσεις. Αλλιώς δεν το βάζουμε καθόλου.</p><div class="rec">Πρόταση: έως 40 — ή καθόλου, αν δεν θέλεις να το δεσμευτείς.</div></div>
+ <div class="card rv"><h3>Μισθοί στις αγγελίες: caller 920€ μικτά + 5€/ραντεβού + 20€/πελάτη · υποστήριξη 500€ μικτά (4ωρη);</h3><p class="sub">Ό,τι γράψουμε στις αγγελίες, το κρατάς. Ο Χιώτης επιβεβαιώνει το κόστος τη Δευτέρα.</p><div class="rec">Πρόταση: ναι και στα δύο.</div></div>
+ <div class="card rv"><h3>Τιμές για Google Ads & social στους πελάτες;</h3><p class="sub">Το πλάνο λέει Google Ads 190€/μήνα (+ η διαφημιστική δαπάνη του πελάτη, από 300€) και social 149€ (8 posts) / 249€ (16 + reels). Στις 15 Οκτ είχες πει social 49/79/99€. Τα πρώτα μηνύματα δεν γράφουν τιμή — τη χρειάζεσαι όταν πει κάποιος «ναι».</p><div class="rec">Πρόταση: Google Ads 190€/μήνα · social 99€ (8 posts) και 149€ (12 posts + reels) για τους πρώτους 10 πελάτες, μετά ανεβαίνουν.</div></div>
+</div>
+</div></section>
+
+<section id="days"><div class="wrap">
+<span class="k"><i></i>Μέρα με μέρα</span>
+<h2 class="rv">Τσεκάρεις ό,τι κάνεις. Τα υπόλοιπα τα κάνω εγώ.</h2>
+<p class="lead rv">Τα τικ μένουν αποθηκευμένα σε αυτή τη συσκευή. Κάθε κείμενο που χρειάζεσαι είναι πιο κάτω, στα «Έτοιμα κείμενα», με κουμπί αντιγραφής.</p>
+<div class="bar rv"><span id="done">0 από 0 έγιναν</span><span class="t"><i id="doneBar"></i></span></div>
+
+<div class="day rv" id="mon"><div class="day-h"><h3>Δευτέρα 2/11 — ανοίγουμε τις προσλήψεις</h3><span class="tm">εσύ ≈ 75′</span></div><div class="day-b">
+ <div class="col"><h4>Εσύ</h4><ul class="chk">
+  <li><label><input type="checkbox" data-k="m1"><span>Στείλε στον Χιώτη το μήνυμα για τις προσλήψεις<small>«Έτοιμα κείμενα» → Χιώτης. Ρωτάει κόστος, ΔΥΠΑ, τηλεργασία, ΙΚΕ και το ΑΦΜ στο Meta.</small></span><span class="mn">2′</span></label></li>
+  <li><label><input type="checkbox" data-k="m2"><span>Βάλε το ΑΦΜ στη χρέωση του Meta<small>Business Suite → Billing &amp; payments → Advon Media → Business info → Edit → «ΜΕΤΡΙΔΗΣ ΑΓΓΕΛΟΣ - ADVON MEDIA», Tax ID: EL + ΑΦΜ. Χωρίς αυτό πληρώνεις +24% ΦΠΑ.</small></span><span class="mn">2′</span></label></li>
+  <li><label><input type="checkbox" data-k="m3"><span>Επιβεβαίωσε την Advon ως διαφημιστή στο Meta<small>Ads Manager → το ad set → «Ad transparency» → Verify now. Δωρεάν, για να μη σταματήσουν οι διαφημίσεις στη μέση.</small></span><span class="mn">5′</span></label></li>
+  <li><label><input type="checkbox" data-k="m4"><span>Ανέβασε τις 2 αγγελίες στο skywalker.gr<small>Λογαριασμός εταιρείας με ΑΦΜ → E-shop → «15ήμερη Αγγελία» ×2 (26€ η καθεμία) → επικόλληση τίτλου + κειμένου → περιοχή «Όλη η Ελλάδα», κατηγορία «Πωλήσεις» / «Εξυπηρέτηση πελατών».</small></span><span class="mn">20′</span></label></li>
+  <li><label><input type="checkbox" data-k="m5"><span>Ανέβασε τις 2 αγγελίες στο jobfind.gr<small>Εγγραφή → «Καταχώρηση Αγγελίας» → 2 × πακέτο 1 (25€ + ΦΠΑ η καθεμία).</small></span><span class="mn">15′</span></label></li>
+  <li><label><input type="checkbox" data-k="m6"><span>Ζήτα από το kariera.gr τη δωρεάν πρώτη αγγελία<small>employers.kariera.gr → φόρμα επικοινωνίας → «Έτοιμα κείμενα» → kariera.</small></span><span class="mn">3′</span></label></li>
+  <li><label><input type="checkbox" data-k="m7"><span>Ανέβασε τις αγγελίες στο LinkedIn (δωρεάν) και σε 2–3 Facebook groups<small>LinkedIn → «Δημοσίευση θέσης». Groups: «Αγγελίες εργασίας Αθήνα», «Εργασία από το σπίτι», «Θέσεις εργασίας Θεσσαλονίκη».</small></span><span class="mn">15′</span></label></li>
+  <li><label><input type="checkbox" data-k="m8"><span>Viber σε 10 φιλικούς πελάτες για τις θέσεις<small>«Έτοιμα κείμενα» → μήνυμα σε πελάτες.</small></span><span class="mn">10′</span></label></li>
+ </ul></div>
+ <div class="col"><h4>Εγώ (Claude)</h4><ul class="cl">
+  <li>Αλλάζω τις 8 διαφημίσεις να στέλνουν στη νέα σελίδα advonmedia.com/istoselida (ίδια tracking links). Δωρεάν, είναι ακόμα πρόχειρες.</li>
+  <li>Περνάω τις απαντήσεις σου (εγγύηση, «Σήμερα», όριο) στα κείμενα των διαφημίσεων.</li>
+  <li>Αν κάποιο site ζητήσει κάτι που δεν ξέρεις, στέλνεις screenshot και σου λέω τι να πατήσεις.</li>
+ </ul></div>
+</div></div>
+
+<div class="day rv" id="tue"><div class="day-h"><h3>Τρίτη 3/11 — πελάτες για Google Ads & social</h3><span class="tm">εσύ ≈ 30′</span></div><div class="day-b">
+ <div class="col"><h4>Εσύ</h4><ul class="chk">
+  <li><label><input type="checkbox" data-k="t1"><span>CRM → «Ads &amp; Social» → στείλε τα πρώτα 10 μηνύματα<small>Κάθε κάρτα έχει «Ready message» → «Copy + Viber». Μετά πατάς «Contacted». Πρώτα όσοι το ζήτησαν (BAFAKIS, POURI, GKIOKA…).</small></span><span class="mn">15′</span></label></li>
+  <li><label><input type="checkbox" data-k="t2"><span>Άκου τα φωνητικά των υποψηφίων στο advonmd@gmail.com<small>1 λεπτό το καθένα. Βάλε αστεράκι σε όσα σου άρεσαν.</small></span><span class="mn">10′</span></label></li>
+  <li><label><input type="checkbox" data-k="t3"><span>Κατέβασε τα βιογραφικά από skywalker / jobfind και δώσ' τα μου<small>Από τον πίνακα αιτήσεων κάθε site → λήψη. Μου τα στέλνεις εδώ στο chat.</small></span><span class="mn">5′</span></label></li>
+ </ul></div>
+ <div class="col"><h4>Εγώ</h4><ul class="cl">
+  <li>Σου δίνω top λίστα υποψηφίων με μία γραμμή για τον καθένα.</li>
+  <li>Γράφω τη σελίδα «αν πει ναι στο Google Ads»: τι του απαντάς, τι χρειαζόμαστε από αυτόν, πώς στήνεται, πώς βγαίνει η μηνιαία αναφορά.</li>
+  <li>Ετοιμάζω το σενάριο κλήσης και το φύλλο ενστάσεων για τον caller.</li>
+ </ul></div>
+</div></div>
+
+<div class="day rv" id="wed"><div class="day-h"><h3>Τετάρτη 4/11 — τελικός έλεγχος διαφημίσεων</h3><span class="tm">εσύ ≈ 30′</span></div><div class="day-b">
+ <div class="col"><h4>Εσύ</h4><ul class="chk">
+  <li><label><input type="checkbox" data-k="w1"><span>Κοίτα τα screenshots που σου στέλνω και πες «ναι, δημοσίευσε»<small>Θα δεις κάθε διαφήμιση όπως εμφανίζεται στο κινητό (Reels, Stories, Feed) και τη δοκιμαστική φόρμα.</small></span><span class="mn">10′</span></label></li>
+  <li><label><input type="checkbox" data-k="w2"><span>Έλεγξε ότι σου ήρθε η ειδοποίηση της δοκιμαστικής φόρμας<small>Telegram / e-mail + στο CRM «From the ads». Αν δεν ήρθε, πες μου — το φτιάχνουμε πριν την Πέμπτη.</small></span><span class="mn">2′</span></label></li>
+  <li><label><input type="checkbox" data-k="w3"><span>Άνοιξε τις ειδοποιήσεις του Telegram στο κινητό σου<small>Από την Πέμπτη, κάθε φόρμα = καλείς μέσα σε 10 λεπτά.</small></span><span class="mn">1′</span></label></li>
+  <li><label><input type="checkbox" data-k="w4"><span>Άλλα 10 μηνύματα από το «Ads &amp; Social»</span><span class="mn">15′</span></label></li>
+ </ul></div>
+ <div class="col"><h4>Εγώ</h4><ul class="cl">
+  <li>Στέλνω μια δοκιμαστική φόρμα στο /istoselida → ελέγχω CRM, ειδοποίηση και το «Lead» στο Meta → τη σβήνω.</li>
+  <li>Μετά το «ναι» σου δημοσιεύω την καμπάνια. Ανάβει μόνη της Πέμπτη πρωί.</li>
+  <li>Νέα βιογραφικά → ενημερωμένη top λίστα.</li>
+ </ul></div>
+</div></div>
+
+<div class="day big rv" id="thu"><div class="day-h"><h3>Πέμπτη 5/11</h3><span class="tm">εσύ: κάθε lead σε 10′</span></div><div class="day-b">
+ <div class="col"><h4>Εσύ</h4><ul class="chk">
+  <li><label><input type="checkbox" data-k="h1"><span>Κάθε νέα φόρμα: τηλέφωνο μέσα σε 10 λεπτά<small>Αν είσαι σε συνάντηση, στείλε αμέσως το SMS «Μόλις ήρθε lead» και πάρε μέσα στην ώρα. Δες «Όταν έρχεται lead».</small></span><span class="mn">όλη μέρα</span></label></li>
+  <li><label><input type="checkbox" data-k="h2"><span>Άφησε κενά 10–15 λεπτών ανάμεσα στις συναντήσεις<small>Εκεί καλείς τα leads.</small></span><span class="mn">—</span></label></li>
+  <li><label><input type="checkbox" data-k="h3"><span>Μην αλλάξεις τίποτα στο Meta<small>Κάθε αλλαγή ξαναξεκινά τη «μάθηση» του Meta. Τα κοιτάζω εγώ.</small></span><span class="mn">—</span></label></li>
+  <li><label><input type="checkbox" data-k="h4"><span>Νέα βιογραφικά → σε μένα</span><span class="mn">5′</span></label></li>
+ </ul></div>
+ <div class="col"><h4>Εγώ</h4><ul class="cl">
+  <li>Το πρωί ελέγχω ότι τρέχουν όλες οι διαφημίσεις και δεν απορρίφθηκε καμία.</li>
+  <li>Απόγευμα: σου γράφω σε 3 γραμμές πόσα ξοδεύτηκαν και πόσα leads ήρθαν.</li>
+  <li>Αν έρθουν σχόλια («πόσο κοστίζει;»), σου δίνω την έτοιμη απάντηση.</li>
+ </ul></div>
+</div></div>
+
+<div class="day rv" id="fri"><div class="day-h"><h3>Παρασκευή 6/11 — τηλέφωνα σε υποψηφίους</h3><span class="tm">εσύ ≈ 60′</span></div><div class="day-b">
+ <div class="col"><h4>Εσύ</h4><ul class="chk">
+  <li><label><input type="checkbox" data-k="f1"><span>Τηλέφωνο 10 λεπτών σε 5–6 υποψηφίους caller<small>Σενάριο: <a href="hire-caller.html#call">Πρόσληψη caller → Τηλέφωνο 10′</a>. Κλείνεις role-play για Τρίτη–Τετάρτη.</small></span><span class="mn">60′</span></label></li>
+  <li><label><input type="checkbox" data-k="f2"><span>Γράψε μου ποιους κράτησες για υποστήριξη πελατών<small>Αυτούς τους παίρνεις τηλέφωνο τη Δευτέρα 9/11.</small></span><span class="mn">5′</span></label></li>
+  <li><label><input type="checkbox" data-k="f3"><span>Leads: όσα δεν σήκωσαν χθες → δεύτερη κλήση + SMS</span><span class="mn">15′</span></label></li>
+ </ul></div>
+ <div class="col"><h4>Εγώ</h4><ul class="cl">
+  <li>Ετοιμάζω τα 3 σενάρια role-play και τη φόρμα βαθμολογίας.</li>
+  <li>Αν το kariera δεν έδωσε δωρεάν αγγελία και έχουμε λιγότερους από 3–5 καλούς, σου λέω αν αξίζει το πληρωμένο (236€).</li>
+ </ul></div>
+</div></div>
+
+<div class="day rv" id="wkn"><div class="day-h"><h3>Σαββατοκύριακο 7–8/11</h3><span class="tm">εσύ ≈ 10′</span></div><div class="day-b">
+ <div class="col"><h4>Εσύ</h4><ul class="chk">
+  <li><label><input type="checkbox" data-k="s1"><span>Τα leads του Σαββατοκύριακου: SMS την ίδια μέρα, τηλέφωνο Δευτέρα πρωί<small>Ή τηλέφωνο αμέσως, αν σου βολεύει — οι γιατροί συχνά απαντούν το Σάββατο.</small></span><span class="mn">10′</span></label></li>
+  <li><label><input type="checkbox" data-k="s2"><span>Τίποτα άλλο. Ξεκουράσου.</span><span class="mn">—</span></label></li>
+ </ul></div>
+ <div class="col"><h4>Εγώ</h4><ul class="cl">
+  <li>Κυριακή βράδυ: η εβδομάδα σε 5 αριθμούς και το σχέδιο της Εβδομάδας 2 (role-play, πρόταση, ΕΡΓΑΝΗ, πρώτη αλλαγή στις διαφημίσεις αν χρειάζεται).</li>
+ </ul></div>
+</div></div>
+</div></section>
+
+<section id="leads" class="band"><div class="wrap">
+<span class="k"><i></i>Όταν έρχεται lead από τις διαφημίσεις</span>
+<h2 class="rv">Αυτό κρίνει τα μισά λεφτά.</h2>
+<div class="grid g3" style="margin-top:20px">
+ <div class="card rv"><span class="pill p-b">1</span><h3>Σου έρχεται ειδοποίηση</h3><p class="sub">Telegram / e-mail και κάρτα στο CRM («From the ads») με όνομα, τηλέφωνο, ειδικότητα και ποια διαφήμιση είδε.</p></div>
+ <div class="card rv"><span class="pill p-v">2</span><h3>Καλείς σε 10 λεπτά</h3><p class="sub">Τώρα θυμάται γιατί συμπλήρωσε τη φόρμα. Την επόμενη μέρα, οι μισοί δεν σηκώνουν. Μιλάς όπως στις κρύες κλήσεις σου — μόνο πιο εύκολα: σε ζήτησαν αυτοί.</p></div>
+ <div class="card rv"><span class="pill p-gr">3</span><h3>Κλείνεις τη 15λεπτη</h3><p class="sub">Όπως πάντα. Μετά τη συνάντηση, «How did it go?» στο CRM όπως κάνεις ήδη.</p></div>
+</div>
+<div class="say rv"><div class="lbl">SMS / Viber όταν δεν μπορείς να καλέσεις αμέσως</div>Καλησπέρα [όνομα], είμαι ο Άγγελος από την Advon Media. Είδα ότι ενδιαφέρεστε για την ιστοσελίδα σας. Σας καλώ σε λίγα λεπτά για να σας πω πώς δουλεύουμε, ή πείτε μου ποια ώρα σας βολεύει.</div>
+<div class="say rv"><div class="lbl">Απάντηση σε σχόλιο κάτω από τη διαφήμιση («Πόσο κοστίζει;», «Πού είναι το κόλπο;»)</div>Η κατασκευή είναι 0€. Πληρώνετε μόνο φιλοξενία και domain, 130€ τον χρόνο, και μόνο αφού δείτε τη σελίδα σας έτοιμη. Στείλτε μας μήνυμα και σας εξηγούμε.</div>
+</div></section>
+
+<section id="texts"><div class="wrap">
+<span class="k"><i></i>Έτοιμα κείμενα</span>
+<h2 class="rv">Πατάς «Αντιγραφή» και επικολλάς.</h2>
+
+<h3 class="rv" style="margin-top:28px">Χιώτης (Δευτέρα)</h3>
+<div class="say rv"><div class="lbl">Μήνυμα στον Χιώτη</div>Καλημέρα Μάριε, τι κάνεις;
+Από αυτή την εβδομάδα μεγαλώνουμε: ξεκινάμε διαφημίσεις και θέλω να κάνω τις δύο πρώτες προσλήψεις της Advon, με έναρξη μέσα στον Νοέμβριο:
+1) Τηλεφωνικές πωλήσεις — πλήρης απασχόληση, Δευτέρα–Παρασκευή 10:00–18:00, από το σπίτι του, με τον κατώτατο (920€ μικτά) + μηνιαίο μπόνους για κάθε ραντεβού και κάθε νέο πελάτη που φέρνει.
+2) Εξυπηρέτηση πελατών — μερική απασχόληση 4 ώρες, Δευτέρα–Παρασκευή, από το σπίτι, 500€ μικτά.
+Θα ήθελα να μου πεις:
+1. Πόσο ακριβώς θα μου κοστίζει ο καθένας τον μήνα (με εισφορές, δώρα, άδεια) και πώς δηλώνεται το μπόνους
+2. Αν τρέχει τώρα πρόγραμμα της ΔΥΠΑ που επιδοτεί μισθό, και τι προϋποθέσεις έχει για τον υποψήφιο
+3. Τι χρειάζεται για την τηλεργασία (συμφωνία, έξοδα που καλύπτω)
+4. Πόση δοκιμαστική περίοδο μπορούμε να βάλουμε στις συμβάσεις
+5. Τι στοιχεία θα χρειαστείς από αυτούς και πόσες μέρες πριν την έναρξη
+6. Τώρα που προσλαμβάνω, πότε με συμφέρει να γίνω ΙΚΕ
+7. Για τις διαφημίσεις στο Meta: πώς να βάλω το ΑΦΜ στη χρέωση, ώστε να μη μου χρεώνουν 24% ΦΠΑ
+Ευχαριστώ πολύ!</div>
+
+<h3 class="rv" style="margin-top:28px">Αγγελία 1 · Caller</h3>
+<p class="sub rv">Ο τίτλος και το κείμενο είναι στη σελίδα <a href="hire-caller.html#ad">Πρόσληψη caller → Η αγγελία</a>, με κουμπιά αντιγραφής. Εκεί είναι και όλα τα επόμενα βήματα (φιλτράρισμα, τηλέφωνο, role-play, πρόταση).</p>
+
+<h3 class="rv" style="margin-top:28px">Αγγελία 2 · Υποστήριξη πελατών (4ωρη)</h3>
+<div class="say rv"><div class="lbl">Τίτλος</div>Εξυπηρέτηση Πελατών & Υποστήριξη Ιστοσελίδων – Μερική απασχόληση 4 ώρες – Από το σπίτι</div>
+<div class="say rv"><div class="lbl">Κείμενο αγγελίας</div>Η Advon Media φτιάχνει ιστοσελίδες για γιατρούς, ψυχολόγους, οδοντιάτρους και άλλους επαγγελματίες σε όλη την Ελλάδα. Έχουμε πάνω από 220 ιστοσελίδες online και πάνω από 120 κριτικές 5 αστέρων στο Google. Μεγαλώνουμε γρήγορα και ψάχνουμε τον άνθρωπο που θα φροντίζει τους πελάτες μας.
+
+Τι θα κάνετε
+• Θα απαντάτε στους πελάτες μας (chat, Viber, email) για το υλικό, τις αλλαγές και τις ανανεώσεις τους
+• Θα παρακολουθείτε τις εκκρεμότητες στο CRM μας και θα στέλνετε τις υπενθυμίσεις
+• Θα ελέγχετε κάθε ιστοσελίδα πριν φτάσει στον πελάτη: κείμενα, φωτογραφίες, κινητό και υπολογιστή
+• Με εργαλεία τεχνητής νοημοσύνης θα κάνετε αλλαγές στις ιστοσελίδες — σας εκπαιδεύουμε πλήρως, δεν χρειάζεται να ξέρετε προγραμματισμό
+
+Τι ζητάμε
+• Άψογα ελληνικά, ειδικά στον γραπτό λόγο
+• Οργάνωση, συνέπεια και προσοχή στη λεπτομέρεια
+• Άνεση με υπολογιστή και διάθεση να μάθετε νέα εργαλεία
+• Ευγένεια και υπομονή με τους πελάτες
+• Εμπειρία σε εξυπηρέτηση πελατών ή γραμματειακή υποστήριξη και καλά Αγγλικά αποτελούν πλεονέκτημα
+
+Τι προσφέρουμε
+• Σύμβαση μερικής απασχόλησης (4 ώρες) με ασφάλιση από την πρώτη μέρα
+• 500€ μικτά τον μήνα, Δευτέρα–Παρασκευή
+• Εργασία 100% από το σπίτι
+• Πλήρη εκπαίδευση και προοπτική για πλήρη απασχόληση καθώς μεγαλώνουμε
+
+Πώς κάνετε αίτηση
+Στείλτε το βιογραφικό σας από εδώ ΚΑΙ ένα σύντομο email (5–6 γραμμές) στο advonmd@gmail.com, με θέμα «Υποστήριξη – Ονοματεπώνυμο», όπου μας λέτε γιατί σας ταιριάζει αυτή η δουλειά. Σε αυτή τη θέση γράφετε κάθε μέρα στους πελάτες μας, γι' αυτό το email σας μετράει όσο και το βιογραφικό — αιτήσεις χωρίς email δεν θα εξεταστούν.</div>
+<div class="note b">Για αυτή τη θέση το φίλτρο είναι <b>γραπτό</b> (email 5–6 γραμμών), όχι φωνητικό: θα γράφει στους πελάτες σου κάθε μέρα. Ένα email με λάθη = όχι.</div>
+
+<h3 class="rv" style="margin-top:28px">kariera.gr — αίτημα για δωρεάν πρώτη αγγελία</h3>
+<div class="say rv"><div class="lbl">Φόρμα επικοινωνίας kariera.gr</div>Καλησπέρα σας, είμαστε η Advon Media (web agency) και θέλουμε να δημοσιεύσουμε την πρώτη μας αγγελία στο kariera.gr, για θέση τηλεφωνικών πωλήσεων πλήρους απασχόλησης, εργασία από το σπίτι. Είδαμε την προσφορά για δωρεάν πρώτη αγγελία 30 ημερών — θα θέλαμε να την αξιοποιήσουμε. Μπορείτε να μας ενημερώσετε για τα επόμενα βήματα; Ευχαριστώ, Άγγελος Μετρίδης, 6934088046</div>
+
+<h3 class="rv" style="margin-top:28px">Μήνυμα σε φιλικούς πελάτες</h3>
+<div class="say rv"><div class="lbl">Viber</div>Καλησπέρα σας! Μια μικρή ερώτηση εκτός ιστοσελίδας: ψάχνω δύο συνεργάτες για την Advon, από το σπίτι και με ασφάλιση — έναν για τηλεφωνικές πωλήσεις (πλήρης απασχόληση) και έναν για εξυπηρέτηση πελατών (4 ώρες). Αν γνωρίζετε κάποιον οργανωμένο και ευγενικό που ψάχνει δουλειά, θα σας ήμουν ευγνώμων αν του προωθούσατε το μήνυμά μου. Ευχαριστώ πολύ!</div>
+</div></section>
+
+<section id="numbers" class="band"><div class="wrap">
+<span class="k"><i></i>Τα νούμερα της εβδομάδας</span>
+<h2 class="rv">Τι κοστίζει και τι περιμένουμε μέχρι την Κυριακή.</h2>
+<div class="rv" style="margin-top:20px"><table class="stack">
+<tr><th>Τι</th><th>Κόστος εβδομάδας</th><th>Τι περιμένουμε</th></tr>
+<tr><td data-l="Τι"><b>Διαφημίσεις Meta</b> (Πέμ–Κυρ)</td><td data-l="Κόστος εβδομάδας">≈120€ (4 μέρες × 30€)</td><td data-l="Τι περιμένουμε">8–15 leads. Τις πρώτες 3 μέρες το Meta «μαθαίνει» — τα πραγματικά νούμερα φαίνονται από την 7η μέρα.</td></tr>
+<tr><td data-l="Τι"><b>Αγγελίες</b> (2 θέσεις)</td><td data-l="Κόστος εβδομάδας">≈114€ (skywalker 2×26€ + jobfind 2×31€)</td><td data-l="Τι περιμένουμε">30–80 βιογραφικά. 5–6 καλοί για caller, 3–4 για υποστήριξη.</td></tr>
+<tr><td data-l="Τι"><b>Ads &amp; Social</b></td><td data-l="Κόστος εβδομάδας">0€</td><td data-l="Τι περιμένουμε">20 πελάτες ενημερωμένοι, 2–5 «ναι, πείτε μου περισσότερα».</td></tr>
+<tr><td data-l="Τι"><b>Ο χρόνος σου</b></td><td data-l="Κόστος εβδομάδας">≈4 ώρες συνολικά</td><td data-l="Τι περιμένουμε">Πέρα από τα τηλέφωνα και τις συναντήσεις σου.</td></tr>
+</table></div>
+<div class="note g"><b>Και μετά;</b> Εβδομάδα 2: role-play (Τρ–Τετ), πρόταση στον caller (Πέμπτη), στοιχεία στον Χιώτη, έναρξη Δευτέρα 16/11 ή 23/11. Οι διαφημίσεις: την Πέμπτη 12/11 κλείνω ό,τι ξόδεψε 40€ χωρίς lead και σου στέλνω την πρώτη εβδομαδιαία αναφορά.</div>
+<div class="grid g3 links" style="margin-top:22px">
+ <a class="card rv" href="hire-caller.html"><b>Πρόσληψη caller →</b><span>Όλα τα βήματα: αγγελία, φιλτράρισμα, τηλέφωνο, role-play, πρόταση, πρώτες 2 εβδομάδες.</span></a>
+ <a class="card rv" href="ads-nov/"><b>Διαφημίσεις Νοεμβρίου →</b><span>Οι 8 διαφημίσεις, τα κείμενα, ο προϋπολογισμός και οι κανόνες που ακολουθώ κάθε μέρα.</span></a>
+ <a class="card rv" href="plan.html"><b>Το πλάνο ανάπτυξης →</b><span>Η μεγάλη εικόνα: 20k → 100k → εξαγορές.</span></a>
+</div>
+</div></section>
+
+<footer class="foot"><div class="wrap">Advon Media · ιδιωτική σελίδα · 31 Οκτ 2026 · <a href="plan.html">Το πλάνο</a> · <a href="./">Όλες οι ιδέες</a> · <a href="https://crm.advonmedia.com/">CRM</a><br><span style="font-size:12px">Τιμές αγγελιών όπως ήταν στις 30 Οκτ 2026. Κόστη προσλήψεων, ΔΥΠΑ, τηλεργασία και ΙΚΕ: επιβεβαίωσε με τον Χιώτη. Οι εκτιμήσεις για leads είναι εκτιμήσεις — τα πραγματικά νούμερα έρχονται από την 7η μέρα.</span></div></footer>
+<script src="ideas.js?v=20261031"></script>
+<script>
+(function(){var K='advon-week1',st={};try{st=JSON.parse(localStorage.getItem(K)||'{}')}catch(e){}
+var bx=[].slice.call(document.querySelectorAll('.chk input[data-k]')),lbl=document.getElementById('done'),bar=document.getElementById('doneBar');
+function upd(){var n=bx.filter(function(b){return b.checked}).length;lbl.textContent=n+' από '+bx.length+' έγιναν';bar.style.width=(bx.length?n/bx.length*100:0)+'%'}
+bx.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}upd()})});upd()})();
+</script>
+</body></html>
