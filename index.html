@@ -2447,6 +2447,70 @@ body.dark .tab.tab-meta:not(.active){color:#ff7ab8;}
 .mt-modal .row{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;}
 .mt-modal .note{font-size:12px; color:var(--muted);}
 @media (max-width:560px){ #view-meta{padding:12px 12px 90px;} .mt-grid{grid-template-columns:1fr;} .mt-stats{flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px;} .mt-stat{min-width:104px;} }
+
+/* ===== NOT SURE they will pay (Angelo, 5 Nov 2026) ===== */
+.card.unsure{box-shadow:inset 0 0 0 1.5px rgba(214,48,49,.5)}
+.card.unsure .chip.money{background:repeating-linear-gradient(135deg,#FDE2E2 0 4px,#FFF3F3 4px 8px);color:#B42318}
+.card.unsure .chip.money::after{content:' ?';font-weight:800}
+.c-doubt{display:flex;align-items:flex-start;gap:6px;margin-top:7px;padding:6px 9px;border-radius:9px;background:#FFF1F1;color:#B42318;border:1.5px dashed rgba(214,48,49,.55);font-size:11.5px;font-weight:600;line-height:1.3;cursor:pointer}
+.c-doubt i{font-style:normal;flex:none}
+.c-doubt b{font-weight:800;letter-spacing:.04em}
+.c-doubt em{display:block;font-style:normal;font-weight:800;font-size:10.5px;opacity:.85;margin-top:2px;letter-spacing:.02em}
+.c-doubt.due{background:#FFF4E5;color:#9A4A00;border-color:#FF8A00;animation:dbPulse 1.8s ease-in-out infinite}
+@keyframes dbPulse{50%{box-shadow:0 0 0 4px rgba(255,138,0,.2)}}
+@media (prefers-reduced-motion:reduce){.c-doubt.due{animation:none}}
+.card.doubt-soft .c-doubt{opacity:.8}
+body.dark .c-doubt{background:rgba(214,48,49,.14);color:#FF9B93}
+body.dark .c-doubt.due{background:rgba(255,138,0,.14);color:#FFB65C}
+body.dark .card.unsure .chip.money{background:repeating-linear-gradient(135deg,rgba(214,48,49,.28) 0 4px,rgba(214,48,49,.1) 4px 8px);color:#FF9B93}
+.card .c-unsure{position:absolute;top:7px;right:61px;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:13px;font-weight:800;opacity:0;transition:opacity .12s;border:0;background:none;cursor:pointer;font-family:inherit;padding:0}
+.card:hover .c-unsure{opacity:1}
+.card .c-unsure:hover{background:#FFF1F1;color:#B42318}
+.col-sum small.un,.tsum small.un{color:#C0303D;font-weight:800;font-size:.82em;margin-left:5px;white-space:nowrap}
+.mx-bar .un{background:repeating-linear-gradient(135deg,#F09A93 0 4px,#FCE0DD 4px 8px)}
+.mx-legend .un{color:#B42318;font-weight:600;cursor:pointer}
+.mx-legend .un b{color:#B42318}
+.mx-legend .un i{background:repeating-linear-gradient(135deg,#F09A93 0 2px,#FCE0DD 2px 4px)}
+.mx-split .un{background:#FFF1F1;color:#B42318;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(214,48,49,.45)}
+.mx-unsure{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px;padding:7px 10px;border-radius:10px;background:#FFF1F1;border:1px dashed rgba(214,48,49,.55);color:#B42318;font-size:12px;font-weight:600;cursor:pointer}
+.mx-unsure span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mx-unsure b{white-space:nowrap;font-weight:800;font-variant-numeric:tabular-nums}
+.mx-unsure small{font-weight:600;opacity:.8}
+body.dark .mx-unsure,body.dark .mx-split .un{background:rgba(214,48,49,.14);color:#FF9B93}
+body.dark .mx-legend .un,body.dark .mx-legend .un b{color:#FF9B93}
+#dbTopChip{display:contents}
+.db-bchip{display:inline-flex;align-items:center;gap:6px;margin:0 0 0 6px;padding:6px 12px;border-radius:999px;border:1.5px dashed rgba(214,48,49,.55);background:#FFF1F1;color:#B42318;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+body.dark .db-bchip{background:rgba(214,48,49,.14);color:#FF9B93}
+.db-modal{max-width:540px;width:100%}
+.db-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.db-opt{display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center;text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;color:var(--ink)}
+.db-opt i{font-style:normal;font-size:18px;grid-row:span 2}
+.db-opt b{font-size:13.5px}
+.db-opt small{color:var(--muted);font-size:11.5px;line-height:1.3}
+.db-opt.on{border-color:#D63031;background:#FFF1F1}
+.db-opt.sure.on{border-color:#0EC673;background:var(--green-soft)}
+body.dark .db-opt.on{background:rgba(214,48,49,.14)}
+body.dark .db-opt.sure.on{background:var(--green-soft)}
+.db-more{margin-top:14px}
+.db-when{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.db-when input{max-width:170px}
+.db-chip{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:none;font:inherit;font-size:12px;cursor:pointer;color:var(--ink)}
+.db-chip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.db-hint{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.45}
+.db-foot{display:flex;gap:8px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.db-lbl{font-weight:400;text-transform:none;letter-spacing:0}
+.m-doubt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);font-size:13px}
+.m-doubt.on{background:#FFF1F1;border:1.5px dashed rgba(214,48,49,.55);color:#B42318}
+body.dark .m-doubt.on{background:rgba(214,48,49,.14);color:#FF9B93}
+.db-list{display:flex;flex-direction:column;gap:8px}
+.db-row{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);cursor:pointer;text-align:left;background:var(--surface);font:inherit;color:var(--ink)}
+.db-row:hover{border-color:#D63031}
+.db-row .n{font-weight:800}
+.db-row .v{font-weight:800;color:#B42318;text-align:right;white-space:nowrap}
+.db-row .v small{font-weight:600;color:var(--muted)}
+.db-row .s{grid-column:1/-1;font-size:12px;color:var(--muted);line-height:1.35}
+.db-row.due{border-color:#FF8A00}
+@media(max-width:480px){.db-opts{grid-template-columns:1fr}}
 </style>
 <style>
 /* ---------- sync status + conflict UI ---------- */
@@ -4135,6 +4199,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
     <button id="nextM" aria-label="Next month">›</button>
   </div>
   <button class="today-btn" id="todayBtn">Today</button>
+  <span id="dbTopChip"></span>
   <div class="stat-pills mx">
     <!-- 1 · IN THE BANK — the only real money -->
     <div class="stat-pill mx-card mx-bank earned-pill" id="statEarnedPill" role="button" tabindex="0" aria-label="In the bank — who paid">
@@ -4687,6 +4752,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
         <div class="field"><label>Value (€)</label><input id="mValue" type="number" min="0"></div>
         <div class="field"><label>Stage</label><select id="mStage"></select></div>
       </div>
+      <div class="field" id="mDoubtF" hidden><label>Will they pay? <span style="font-weight:400;text-transform:none;letter-spacing:0;">(not sure = left out of New money until they pay)</span></label><div id="mDoubt"></div></div>
       <div class="field">
         <label>Extra services sold <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional — added on top of the value)</span></label>
         <div class="xtra-list" id="mXtraList"></div>
@@ -5689,7 +5755,7 @@ const XTRA_PRESETS=['NFC review stand','Google Business Profile','Λογότυπ
    for the period — matches the Year tab's "Money made" figure. */
 function newPaidForMonth(key){ return state.clients.filter(c=>c.month===key).reduce((a,c)=>a+cpaid(c),0); }   /* Paid cards in full + every deposit */
 function jobsPaidForMonth(key){ return state.clients.filter(c=>c.month===key && isJob(c)).reduce((a,c)=>a+cpaid(c),0); }   /* the extra-work part of it */
-function newBookedForMonth(key){ return state.clients.filter(c=>c.month===key && notLost(c) && c.stage!=='booked').reduce((a,c)=>a+cval(c),0) + lostPaidForMonth(key); }
+function newBookedForMonth(key){ return state.clients.filter(c=>c.month===key && notLost(c) && c.stage!=='booked').reduce((a,c)=>a+(notSure(c)?cpaid(c):cval(c)),0) + lostPaidForMonth(key); }
 function subsPaidForMonth(key){ return state.subs.reduce((a,s)=>a+((s.paid && s.paid[key])?(+s.value||0):0),0); }
 /* The three pots of money actually EARNED in a month — new websites (paid stage), renewals
    (pressed «Renewed») and monthly subscriptions (month box ticked) — and their total.
@@ -5809,14 +5875,14 @@ function monthMoney(key){
   const isPot=c=>c.stage==='booked'||c.stage==='thinking';
   const sum=arr=>arr.reduce((a,c)=>a+cowed(c),0);   /* only what is still owed — deposits are already in «earned» */
   const earned=earnedForMonth(key);
-  const working=live.filter(c=>!isPot(c));
+  const working=live.filter(c=>!isPot(c) && !notSure(c)), unsL=live.filter(notSure);
   const collect=sum(working.filter(c=>c.stage!=='paid'));
   const pot={ booked:sum(live.filter(c=>c.stage==='booked')), think:sum(live.filter(c=>c.stage==='thinking')), risk:sum(all.filter(c=>c.trashed)) };
   pot.total=pot.booked+pot.think+pot.risk;
   pot.n=live.filter(isPot).length+all.filter(c=>c.trashed).length;
-  return { earned, collect, collectN:working.filter(c=>c.stage!=='paid').length, pot,
+  return { earned, collect, collectN:working.filter(c=>c.stage!=='paid').length, pot, unsure:{sum:sum(unsL), n:unsL.length, list:unsL},
            generated:earned.total+collect, withPotential:earned.total+collect+pot.total,
-           riskN:all.filter(c=>c.trashed).length, n:live.filter(c=>c.stage!=='booked' && isSiteCard(c)).length, xtraOwed:live.filter(c=>isJob(c) && c.stage!=='booked' && c.stage!=='thinking').reduce((a,c)=>a+cowed(c),0) };
+           riskN:all.filter(c=>c.trashed).length, n:live.filter(c=>c.stage!=='booked' && isSiteCard(c)).length, xtraOwed:live.filter(c=>isJob(c) && c.stage!=='booked' && c.stage!=='thinking' && !notSure(c)).reduce((a,c)=>a+cowed(c),0) };
 }
 function renderStats(){
   $('#monthLabel').textContent=fmtMonth(curMonth);
@@ -5940,7 +6006,152 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#bankOverlay'
 const GOAL_PRICE_FALLBACK=130;
 function ensureNewTargets(){ ensureTargets(); if(!state.targets.newMonthly || typeof state.targets.newMonthly!=='object') state.targets.newMonthly={}; }
 function newGoal(key){ ensureNewTargets(); const v=state.targets.newMonthly[key]; return v!=null && v!=='' ? (+v||0) : 0; }
-const goalWorking = c => !c.trashed && c.stage!=='lost' && c.stage!=='booked' && c.stage!=='thinking';
+
+/* ---------- NOT SURE they will pay (Angelo, 5 Nov 2026) ----------
+   TRAKI ghosting for over a month, GEORGIADI «money problem — pays and starts in January», Αγγελοπούλου «takes the
+   whole month». A card marked «Not sure» (c.doubt = {kind, note, until:'YYYY-MM-DD', at}) — or coloured orange/red in
+   Remaining, which is the same thing — stays on the Board with a red dashed badge, but its UNPAID money leaves
+   New money, To collect, Total generated, the goal and the Year «generated» until they pay; it shows beside them as
+   «not sure». Money already paid stays counted. Booked / Thinking money is never counted anyway. Paid → the mark is ignored. */
+var DOUBT_KINDS=[
+  {id:'ghost', n:'Not answering', d:'Messages and calls, no reply', ic:'👻'},
+  {id:'later', n:'Says later', d:'Money problem, or wants to start later', ic:'⏳'},
+  {id:'slow',  n:'Delaying', d:'Will probably pay, but slowly', ic:'🐢'},
+  {id:'other', n:'Other reason', d:'Something else feels off', ic:'⚠'}
+];
+var dbCur=null;
+function dbKind(id){ return DOUBT_KINDS.find(k=>k.id===id)||DOUBT_KINDS[3]; }
+function cDoubt(c){ return (c && c.doubt && typeof c.doubt==='object' && c.stage!=='paid' && c.stage!=='lost' && !c.trashed) ? c.doubt : null; }
+function notSure(c){
+  if(!c || c.trashed || c.stage==='lost' || c.stage==='paid' || c.stage==='booked' || c.stage==='thinking') return false;
+  if(c.doubt) return true;
+  try{ const f=remFlag(c); return f==='orange' || f==='red'; }catch(e){ return false; }
+}
+function dbDue(c){ const d=cDoubt(c); return !!(d && d.until && d.until<=todayIso()); }
+function dbShort(c){ return String(c&&c.name||'').trim().split(/\s+/)[0]||''; }
+function dbBadge(c){
+  const d=cDoubt(c);
+  if(!d){ if(!notSure(c)) return ''; return `<div class="c-doubt" data-doubt="${c.id}" title="Not counted in New money until they pay — tap to change"><i>⚠</i><span><b>NOT SURE</b> · marked ${esc(remFlag(c))} in Remaining</span></div>`; }
+  const k=dbKind(d.kind), due=dbDue(c);
+  return `<div class="c-doubt${due?' due':''}" data-doubt="${c.id}" title="${notSure(c)?'Not counted in New money / To collect / the goal until they pay':'Booked / Thinking money is not counted anyway'} — tap to change"><i>${k.ic}</i><span><b>NOT SURE</b> · ${esc(k.n)}${d.note?' — '+esc(d.note):''}${d.until?`<em>${due?'⏰ CHECK AGAIN TODAY':'check again '+fmtDay(d.until)}</em>`:''}</span></div>`;
+}
+function dbBoardChip(){
+  try{ const L=(state.clients||[]).filter(notSure); if(!L.length) return '';
+    const t=L.reduce((a,c)=>a+cowed(c),0), due=(state.clients||[]).filter(dbDue).length;
+    return `<button type="button" class="db-bchip" data-dblist title="Clients you are not sure will pay — all months">⚠ ${L.length} not sure they'll pay · ${fmtMoney(t)} not counted${due?` · ${due} to check today`:''}</button>`; }catch(e){ return ''; }
+}
+function dbEnsure(){
+  if($('#dbOverlay')) return;
+  const o=document.createElement('div'); o.className='overlay'; o.id='dbOverlay';
+  o.innerHTML=`<div class="modal db-modal" role="dialog" aria-modal="true" aria-labelledby="dbTitle"><div class="modal-head"><div><h3 id="dbTitle">Will they pay?</h3><small id="dbSub"></small></div><button class="modal-close" id="dbClose" title="Close">✕</button></div><div class="modal-body" id="dbBody"></div></div>`;
+  document.body.appendChild(o);
+  o.addEventListener('click',e=>{ if(e.target===o) dbClose(); });
+  o.querySelector('#dbClose').addEventListener('click',dbClose);
+  o.querySelector('#dbBody').addEventListener('click',e=>{
+    const r=e.target.closest('[data-dbo]'); if(r){ dbOpen(r.dataset.dbo); return; }
+    const op=e.target.closest('.db-opt'); if(op && dbCur){ dbKeep(); dbCur.kind=op.dataset.k; dbRender(); return; }
+    const ch=e.target.closest('.db-chip'); if(ch && dbCur){ dbKeep(); dbCur.until=ch.dataset.u; dbRender(); return; }
+    if(e.target.closest('#dbCancel')){ dbClose(); return; }
+    if(e.target.closest('#dbSave')){ dbSave(); return; }
+    if(e.target.closest('.db-trash') && dbCur){ const id=dbCur.id; dbClose(); trashClient(id); }
+  });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#dbOverlay').classList.contains('open')) dbClose(); });
+}
+function dbClose(){ const o=$('#dbOverlay'); if(o) o.classList.remove('open'); dbCur=null; }
+function dbAddDays(n){ const d=new Date(); d.setDate(d.getDate()+n); return isoDate(d); }
+function dbNextMonth1(){ const d=new Date(); return isoDate(new Date(d.getFullYear(), d.getMonth()+1, 1)); }
+function dbKeep(){ if(!dbCur) return; const n=$('#dbNote'), u=$('#dbUntil'); if(n) dbCur.note=n.value.trim(); if(u) dbCur.until=u.value; }
+function dbOpen(id){
+  const c=state.clients.find(x=>x.id===id); if(!c) return;
+  dbEnsure(); const d=c.doubt||{};
+  dbCur={id, kind:d.kind||'', note:d.note||'', until:d.until||''};
+  if(!d.kind && notSure(c)) dbCur.kind='other';
+  dbRender(); $('#dbOverlay').classList.add('open');
+}
+function dbRender(){
+  const c=dbCur && state.clients.find(x=>x.id===dbCur.id); if(!c) return dbClose();
+  const owed=cowed(c), paid=cpaid(c), pot=c.stage==='booked'||c.stage==='thinking';
+  $('#dbTitle').textContent='Will '+c.name+' pay?';
+  $('#dbSub').textContent=stageById(c.stage).name+' · '+fmtMoney(owed)+' still owed'+(paid?' · '+fmtMoney(paid)+' already paid':'');
+  const opt=k=>`<button type="button" class="db-opt${dbCur.kind===k.id?' on':''}" data-k="${k.id}"><i>${k.ic}</i><b>${esc(k.n)}</b><small>${esc(k.d)}</small></button>`;
+  const chips=[['In 1 week',dbAddDays(7)],['In 2 weeks',dbAddDays(14)],['1st of next month',dbNextMonth1()]];
+  $('#dbBody').innerHTML=`
+    <div class="db-opts">
+      <button type="button" class="db-opt sure${!dbCur.kind?' on':''}" data-k=""><i>✓</i><b>Yes — sure</b><small>Counted as normal</small></button>
+      ${DOUBT_KINDS.map(opt).join('')}
+    </div>
+    <div class="db-more"${dbCur.kind?'':' hidden'}>
+      <div class="field"><label>Short note <span class="db-lbl">(shows on the card)</span></label><input id="dbNote" type="text" maxlength="90" value="${esc(dbCur.note)}" placeholder="e.g. Pays in January — no pressure"></div>
+      <div class="field"><label>Check again on <span class="db-lbl">(that day the badge turns orange)</span></label>
+        <div class="db-when"><input id="dbUntil" type="date" value="${esc(dbCur.until)}">${chips.map(([l,v])=>`<button type="button" class="db-chip${dbCur.until===v?' on':''}" data-u="${v}">${l}</button>`).join('')}<button type="button" class="db-chip${!dbCur.until?' on':''}" data-u="">No date</button></div></div>
+    </div>
+    <p class="db-hint">${dbCur.kind
+      ? (pot ? 'This card is in '+esc(stageById(c.stage).name)+' — that money is not counted yet anyway. The mark stays on the card for when it moves on.'
+             : 'Its <b>'+fmtMoney(owed)+'</b> leaves <b>New money</b>, <b>To collect</b> and the <b>goal</b>, and shows beside them in red as «not sure» — until they pay.'+(paid?' The '+fmtMoney(paid)+' already paid stays counted.':''))
+      : 'Counted as normal money.'}</p>
+    <div class="db-foot">
+      ${(!pot && dbCur.kind)?`<button type="button" class="btn btn-ghost db-trash" title="The money is truly gone — move it to the Trash (Remaining tab)">${IC.trash} Give up → Trash</button>`:''}
+      <span style="flex:1"></span>
+      <button type="button" class="btn btn-ghost" id="dbCancel">Cancel</button>
+      <button type="button" class="btn btn-brand" id="dbSave">Save</button>
+    </div>`;
+}
+function dbSave(){
+  dbKeep(); const cur=dbCur; const c=cur && state.clients.find(x=>x.id===cur.id); if(!c) return dbClose();
+  const prev=c.doubt?JSON.parse(JSON.stringify(c.doubt)):null, prevRf=c.remFlag, prevRfs=c.remFlagStage;
+  if(cur.kind){ const d={kind:cur.kind, at:(prev&&prev.at)||Date.now()}; if(cur.note) d.note=cur.note; if(cur.until) d.until=cur.until; c.doubt=d; }
+  else { delete c.doubt; if(c.remFlag==='orange'||c.remFlag==='red'){ delete c.remFlag; delete c.remFlagStage; } }
+  c.updated=Date.now(); save(); dbClose(); renderAll(); try{ mDoubtRender(); }catch(e){}
+  toastUndo(cur.kind ? c.name+' · not sure · '+fmtMoney(cowed(c))+' left out of New money' : c.name+' · sure — counted again', ()=>{
+    const t=state.clients.find(x=>x.id===c.id); if(!t) return;
+    if(prev) t.doubt=prev; else delete t.doubt;
+    if(prevRf===undefined){ delete t.remFlag; delete t.remFlagStage; } else { t.remFlag=prevRf; t.remFlagStage=prevRfs; }
+    t.updated=Date.now(); save(); renderAll(); try{ mDoubtRender(); }catch(e){} });
+}
+function dbListOpen(){
+  dbEnsure(); dbCur=null;
+  const L=state.clients.filter(c=>cDoubt(c)||notSure(c)).sort((a,b)=>(dbDue(b)-dbDue(a))||(cowed(b)-cowed(a)));
+  const tot=L.filter(notSure).reduce((a,c)=>a+cowed(c),0);
+  $('#dbTitle').textContent='Not sure they will pay';
+  $('#dbSub').textContent= L.length ? fmtMoney(tot)+' not counted · '+L.length+' client'+(L.length===1?'':'s') : 'Nobody — everyone is counted';
+  $('#dbBody').innerHTML=`<div class="db-list">${L.map(c=>{ const d=cDoubt(c), k=d?dbKind(d.kind):null, due=dbDue(c);
+      return `<button type="button" class="db-row${due?' due':''}" data-dbo="${c.id}"><span class="n">${k?k.ic:'⚠'} ${esc(c.name)}</span><span class="v">${fmtMoney(cowed(c))}${notSure(c)?'':' <small>· not counted anyway</small>'}</span><span class="s">${esc(fmtMonth(c.month||curMonth))} · ${esc(stageById(c.stage).name)} · ${k?esc(k.n):'orange/red in Remaining'}${d&&d.note?' — '+esc(d.note):''}${d&&d.until?' · '+(due?'<b>check again today</b>':'check again '+fmtDay(d.until)):''}</span></button>`; }).join('')
+    || '<p class="db-hint">Nobody is marked. Open a card → «Will they pay?» (or the «?» on a card) to mark someone.</p>'}</div>
+    <p class="db-hint">Tap a name to change it. When someone pays, press Paid as usual — the money counts again by itself.</p>`;
+  $('#dbOverlay').classList.add('open');
+}
+function mDoubtRender(){
+  const f=$('#mDoubtF'), el=$('#mDoubt'); if(!f||!el) return;
+  const c=editingId ? state.clients.find(x=>x.id===editingId) : null;
+  if(!c || c.stage==='paid' || c.stage==='lost' || c.trashed){ f.hidden=true; return; }
+  f.hidden=false; const d=cDoubt(c), ns=notSure(c);
+  el.innerHTML=(d||ns)
+    ? `<div class="m-doubt on"><span>${d?dbKind(d.kind).ic+' <b>Not sure</b> · '+esc(dbKind(d.kind).n)+(d.note?' — '+esc(d.note):'')+(d.until?' · check again '+fmtDay(d.until):''):'⚠ <b>Not sure</b> · marked '+esc(remFlag(c))+' in Remaining'}</span><button type="button" class="btn btn-ghost" data-doubt="${c.id}">Change…</button></div>`
+    : `<div class="m-doubt"><span>✓ Sure — counted as normal</span><button type="button" class="btn btn-ghost" data-doubt="${c.id}">Not sure…</button></div>`;
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('[data-doubt],[data-dblist]'); if(!b) return;
+  e.stopPropagation(); e.preventDefault();
+  if(b.dataset.doubt) dbOpen(b.dataset.doubt); else dbListOpen();
+},true);
+['mousedown','pointerdown','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{ if(e.target.closest&&e.target.closest('[data-doubt]')) e.stopPropagation(); },true));
+/* one-time: the three Angelo named on 5 Nov 2026 */
+function seedDoubt20261105(){
+  if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
+  if(!state.meta) state.meta={};
+  if(state.meta.doubtSeed) return false;
+  const nm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  const pick=re=>state.clients.filter(c=>c && c.stage!=='paid' && c.stage!=='lost' && !c.trashed && !isJob(c) && re.test(nm(c.name))).sort((a,b)=>(b.created||0)-(a.created||0))[0];
+  [[/τρακη|traki/, {kind:'ghost', note:'10+ μηνύματα & κλήσεις σε πάνω από έναν μήνα — καμία απάντηση'}],
+   [/γεωργιαδ|georgiad/, {kind:'later', note:'Οικονομικό θέμα — λέει θα πληρώσει & θα ξεκινήσει τον Ιανουάριο', until:'2027-01-04'}],
+   [/αγγελοπουλ|angelopoul/, {kind:'slow', note:'Καθυστερεί — θέλει όλο τον μήνα, όχι πίεση', until:'2026-11-30'}]
+  ].forEach(([re,d])=>{ const c=pick(re); if(!c || c.doubt) return;
+    c.doubt=Object.assign({at:Date.now()}, d);
+    try{ if(/καθυστερ/.test(nm(cContactNote(c)))) c.cnote=''; }catch(e){}
+    c.updated=Date.now(); });
+  state.meta.doubtSeed=1; return true;
+}
+const goalWorking = c => !c.trashed && c.stage!=='lost' && c.stage!=='booked' && c.stage!=='thinking' && !notSure(c);
 function goalWonGuess(c){
   const yes=(c.mlog||[]).filter(l=>l && l.out==='yes' && l.at).pop(); if(yes) return +yes.at;
   if(c.day){ const t=Date.parse(c.day+'T12:00'); if(!isNaN(t)) return t; }
@@ -5979,7 +6190,7 @@ function goalRows(key){
   const [y,m]=key.split('-').map(Number), last=new Date(y,m,0).getDate();
   const dayOf=t=>{ if(!t) return 1; const d=new Date(t); if(isNaN(d)) return 1;
     const k=d.getFullYear()+'-'+pad(d.getMonth()+1); if(k<key) return 1; if(k>key) return last; return d.getDate(); };
-  const rows=[], pot=[];
+  const rows=[], pot=[], risk=[];
   state.clients.filter(c=>c.month===key).forEach(c=>{
     if(goalWorking(c)){
       const when=c.wonAt||goalWonGuess(c), paid=cpaid(c), owed=cowed(c);
@@ -5989,11 +6200,12 @@ function goalRows(key){
       if(paid>0){ const p=cpays(c).slice().sort((a,b)=>(a.date||'')<(b.date||'')?-1:1)[0]; const when=p&&p.date?Date.parse(p.date+'T12:00'):(c.stageAt||c.created);
         rows.push({c, when, day:dayOf(when), amount:paid, paid, owed:0, kind:'paid', kept:true}); }
       if(!c.trashed && (c.stage==='booked'||c.stage==='thinking') && cowed(c)>0) pot.push({c, amount:cowed(c)});
+      if(notSure(c) && cowed(c)>0) risk.push({c, amount:cowed(c)});
     }
   });
   rows.sort((a,b)=>(b.when||0)-(a.when||0));
   pot.sort((a,b)=>(a.c.day||'9')<(b.c.day||'9')?-1:1);
-  return {rows, pot};
+  return {rows, pot, risk};
 }
 function goalPrice(key){
   const vals=state.clients.filter(c=>c.month===key && goalWorking(c) && isSiteCard(c)).map(cval);
@@ -6007,8 +6219,8 @@ function goalPrice(key){
 }
 function goalPlan(key){
   const goal=newGoal(key), W=goalWeeks(key), N=W.length, per=goal/N;
-  const {rows,pot}=goalRows(key);
-  const done=rows.reduce((a,r)=>a+r.amount,0), potSum=pot.reduce((a,r)=>a+r.amount,0);
+  const {rows,pot,risk}=goalRows(key);
+  const done=rows.reduce((a,r)=>a+r.amount,0), potSum=pot.reduce((a,r)=>a+r.amount,0), riskSum=risk.reduce((a,r)=>a+r.amount,0);
   const now=new Date(), nowKey=todayIso().slice(0,7), today=now.getDate();
   const [y,m]=key.split('-').map(Number);
   let wi, frac=0;
@@ -6034,7 +6246,7 @@ function goalPlan(key){
   const price=goalPrice(key);
   const cpNow = wi>=0 && wi<N ? cp(wi) : goal;
   const needWeek=Math.max(0, cpNow-done), needAll=Math.max(0, goal-done);
-  return {key, goal, W, N, per, wi, frac, pace, cp, done, rows, pot, potSum, wk, cum, st, price,
+  return {key, goal, W, N, per, wi, frac, pace, cp, done, rows, pot, potSum, risk, riskSum, wk, cum, st, price,
     needWeek, needAll, clientsWeek:Math.ceil(needWeek/price), clientsAll:Math.ceil(needAll/price),
     clientsPerWeek:Math.ceil(per/price), weeksAfter: wi>=0 && wi<N ? N-1-wi : 0};
 }
@@ -6065,9 +6277,11 @@ function renderGoalPill(m){
   const pill=$('#statTargetPill'); if(!pill) return;
   const key=curMonth, g=goalPlan(key), mt=monthTarget(key), earned=m.earned;
   const newPaid=earned.new, newOwed=m.collect, soonNew=m.pot.booked+m.pot.think;
+  const un=m.unsure||{sum:0,n:0,list:[]}, unT=`Not sure they will pay — not counted until they do (${un.list.map(dbShort).join(', ')}). Tap for the list.`;
+  const unRow=un.sum>0.004 ? `<div class="mx-unsure" data-dblist title="${esc(unT)}"><span>⚠ Not sure: ${esc(un.list.map(dbShort).join(', '))}</span><b>${fmtMoney(un.sum)} <small>not counted</small></b></div>` : '';
   const cl=n=>n+' client'+(n===1?'':'s');
   const seg=(cls,v,tot)=>{ const w=tot>0 ? Math.max(0,Math.min(100,v/tot*100)) : 0; return w>0.01 ? `<i class="${cls}" style="width:${w.toFixed(2)}%"></i>` : ''; };
-  const split=`<div class="mx-split"><span class="paid" title="New websites already paid">${fmtMoney(newPaid)} paid</span><span class="owed" id="statNewPill" title="Agreed work still unpaid — click for Remaining">${fmtMoney(newOwed)} to collect${m.collectN?' · '+m.collectN+(m.collectN===1?' client':' clients'):''}</span>${soonNew?`<span class="pot" title="Not agreed yet: ${fmtMoney(m.pot.booked)} booked · ${fmtMoney(m.pot.think)} thinking">+${fmtMoney(soonNew)} waiting in Booked / Thinking</span>`:''}</div>`;
+  const split=`<div class="mx-split"><span class="paid" title="New websites already paid">${fmtMoney(newPaid)} paid</span><span class="owed" id="statNewPill" title="Agreed work still unpaid — click for Remaining">${fmtMoney(newOwed)} to collect${m.collectN?' · '+m.collectN+(m.collectN===1?' client':' clients'):''}</span>${un.sum>0.004?`<span class="un" data-dblist title="${esc(unT)}">⚠ ${fmtMoney(un.sum)} not sure · ${un.n}</span>`:''}${soonNew?`<span class="pot" title="Not agreed yet: ${fmtMoney(m.pot.booked)} booked · ${fmtMoney(m.pot.think)} thinking">+${fmtMoney(soonNew)} waiting in Booked / Thinking</span>`:''}</div>`;
   /* status chip */
   let chip='';
   if(!g.goal) chip='<span class="mx-chip">No goal yet</span>';
@@ -6083,13 +6297,13 @@ function renderGoalPill(m){
     pill.classList.add('unset');
     pill.innerHTML=`<div class="mx-k">New money ${chip}</div>
       <div class="mx-big">${fmtMoney(Math.round(g.done))}<small>new websites this month</small></div>
-      ${split}
+      ${split}${unRow}
       <div class="mx-unset">Tap to set a goal for new money →</div>`;
   } else {
     pill.classList.remove('unset');
     /* ONE month bar: solid blue = paid, blue stripes = agreed but still to collect, grey = Booked / Thinking (not counted) */
-    const bar=`<div class="mx-bar">${seg('nb',Math.min(newPaid,g.goal),g.goal)}${seg('ns',Math.max(0,Math.min(g.done,g.goal)-newPaid),g.goal)}${seg('gh',Math.max(0,Math.min(g.done+soonNew,g.goal)-Math.min(g.done,g.goal)),g.goal)}</div>`;
-    const legend=`<div class="mx-legend"><span class="nb" title="New websites already paid"><i></i><b>${fmtMoney(newPaid)}</b> paid</span><span class="ns owed" id="statNewPill" title="Agreed work still unpaid — click for Remaining"><i></i><b>${fmtMoney(newOwed)}</b> to collect${m.collectN?' · '+m.collectN:''}</span>${soonNew?`<span class="wt" title="Not agreed yet: ${fmtMoney(m.pot.booked)} booked · ${fmtMoney(m.pot.think)} thinking — not counted">+${fmtMoney(soonNew)} in Booked / Thinking</span>`:''}</div>`;
+    const bar=`<div class="mx-bar">${seg('nb',Math.min(newPaid,g.goal),g.goal)}${seg('ns',Math.max(0,Math.min(g.done,g.goal)-newPaid),g.goal)}${seg('un',Math.max(0,Math.min(g.done+un.sum,g.goal)-Math.min(g.done,g.goal)),g.goal)}${seg('gh',Math.max(0,Math.min(g.done+un.sum+soonNew,g.goal)-Math.min(g.done+un.sum,g.goal)),g.goal)}</div>`;
+    const legend=`<div class="mx-legend"><span class="nb" title="New websites already paid"><i></i><b>${fmtMoney(newPaid)}</b> paid</span><span class="ns owed" id="statNewPill" title="Agreed work still unpaid — click for Remaining"><i></i><b>${fmtMoney(newOwed)}</b> to collect${m.collectN?' · '+m.collectN:''}</span>${un.sum>0.004?`<span class="un" data-dblist title="${esc(unT)}"><i></i><b>${fmtMoney(un.sum)}</b> not sure · ${un.n}</span>`:''}${soonNew?`<span class="wt" title="Not agreed yet: ${fmtMoney(m.pot.booked)} booked · ${fmtMoney(m.pot.think)} thinking — not counted">+${fmtMoney(soonNew)} in Booked / Thinking</span>`:''}</div>`;
     /* THIS WEEK — one track: a slot per client (green ✓ = won this week, orange = still needed by Sunday) */
     let wk='';
     if(g.wi>=0 && g.wi<g.N && g.st!=='won'){
@@ -6114,7 +6328,7 @@ function renderGoalPill(m){
     else row=`<div class="mx-goalrow"><span>To reach ${fmtMoney(g.goal)}</span><b>${fmtMoney(Math.round(g.needAll))} <small>≈ ${cl(g.clientsAll)}</small></b></div>`;
     pill.innerHTML=`<div class="mx-k">New money ${chip}</div>
       <div class="mx-big">${fmtMoney(Math.round(g.done))}<small>/ ${fmtMoney(g.goal)} goal</small><span class="mx-pct${g.st==='won'?' won':''}">${progPct(g.done,g.goal)}%</span></div>
-      ${bar}${legend}${wk}${row}`;
+      ${bar}${legend}${wk}${row}${unRow}`;
   }
   pill.title='Click to open the goal — weeks, what you still need and where the money comes from';
   /* ---- 3 · TOTAL GENERATED ---- */
@@ -6132,7 +6346,7 @@ function renderGoalPill(m){
       <div class="mx-big">${fmtMoney(tot)}${T?`<small>/ ${fmtMoney(T)}</small><span class="mx-pct${tot>=T?' won':''}">${progPct(tot,T)}%</span>`:''}</div>
       <div class="mx-sub">${sub}</div>
       ${bar}
-      <div class="mx-legend"><span class="g"><i></i><b>${fmtMoney(earned.total)}</b> in the bank</span><span class="ns"><i></i><b>${fmtMoney(m.collect)}</b> to collect</span>${soonNew?`<span class="gh"><i></i><b>${fmtMoney(soonNew)}</b> not counted yet</span>`:''}</div>
+      <div class="mx-legend"><span class="g"><i></i><b>${fmtMoney(earned.total)}</b> in the bank</span><span class="ns"><i></i><b>${fmtMoney(m.collect)}</b> to collect</span>${un.sum>0.004?`<span class="un" data-dblist title="${esc(unT)}"><i></i><b>${fmtMoney(un.sum)}</b> not sure</span>`:''}${soonNew?`<span class="gh"><i></i><b>${fmtMoney(soonNew)}</b> not counted yet</span>`:''}</div>
       <div class="mx-if">${ifl}</div>
       <div class="mx-foot"><span>New websites <b>${fmtMoney(newPaid+newOwed-(earned.xtra||0)-(m.xtraOwed||0))}</b>${(earned.xtra||m.xtraOwed)?` · extras <b>${fmtMoney((earned.xtra||0)+(m.xtraOwed||0))}</b>`:''} · renewals <b>${fmtMoney(earned.renew)}</b> · monthly <b>${fmtMoney(earned.subs)}</b></span></div>`;
     gen.title=fmtMoney(tot)+' generated in '+fmtMonth(key)+' = '+fmtMoney(earned.total)+' in the bank + '+fmtMoney(m.collect)+' still to collect'+(T?' · goal '+fmtMoney(T):'')+'. Click to open the goal window.';
@@ -6141,9 +6355,10 @@ function renderGoalPill(m){
 }
 function goalMsg(g){
   const mon=goalMonthShort(g.key), cl=n=>n+' client'+(n===1?'':'s');
+  const rk=g.riskSum>0 ? `<p class="gw-note" style="color:#B42318">⚠ <b>${fmtMoney(Math.round(g.riskSum))}</b> not counted — ${g.risk.length} not sure they'll pay (${g.risk.map(r=>esc(dbShort(r.c))).join(', ')}). It counts again the day they pay.</p>` : '';
   if(!g.goal) return `<b class="gw-big2">Set a goal for new money below.</b><p>Then this window shows, week by week, how much you need and how many clients that is.</p>`;
-  if(g.st==='won') return `<b class="gw-big2">Goal reached — ${fmtMoney(Math.round(g.done-g.goal))} over.</b><p>Every client from here on is extra for ${mon}.</p>`;
-  if(g.st==='missed') return `<b class="gw-big2">${mon} ended ${fmtMoney(Math.round(g.goal-g.done))} short (${progPct(g.done,g.goal)}%).</b>`;
+  if(g.st==='won') return `<b class="gw-big2">Goal reached — ${fmtMoney(Math.round(g.done-g.goal))} over.</b><p>Every client from here on is extra for ${mon}.</p>`+rk;
+  if(g.st==='missed') return `<b class="gw-big2">${mon} ended ${fmtMoney(Math.round(g.goal-g.done))} short (${progPct(g.done,g.goal)}%).</b>`+rk;
   if(g.st==='soon') return `<b class="gw-big2">${g.N} weeks in ${mon}: ${fmtMoney(Math.round(g.per))} a week ≈ ${cl(g.clientsPerWeek)} a week.</b>`;
   const w=g.W[g.wi], sun=goalDayLbl(g.key,w.to);
   const diff=Math.round(g.done-g.pace);
@@ -6161,7 +6376,7 @@ function goalMsg(g){
   h+=`<p>For the whole goal: <b>${fmtMoney(Math.round(g.needAll))} left ≈ ${cl(g.clientsAll)}</b> <span class="gw-note">(at ~${fmtMoney(g.price)} a client, your average)</span></p>`;
   if(g.potSum>0){ const n=g.pot.length, cover=Math.min(n, Math.max(g.clientsWeek,0));
     h+=`<p class="gw-note">${fmtMoney(Math.round(g.potSum))} is waiting in Booked / Thinking (${n} ${n===1?'person':'people'}, not counted)${g.needWeek>0 && cover?` — closing ${cover} of them would cover this week`:''}.</p>`; }
-  return h;
+  return h+rk;
 }
 function openGoalWin(key, keepScroll){
   key=key||curMonth;
@@ -6344,13 +6559,13 @@ function renderBoard(){
   const tray=(sel,stageId,label,hint)=>{
     const st=stageById(stageId);
     const items=mc.filter(c=>c.stage===stageId).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
-    const sum=items.reduce((a,c)=>a+cval(c),0);
+    const sum=items.filter(c=>!notSure(c)).reduce((a,c)=>a+cval(c),0), unS=items.filter(notSure).reduce((a,c)=>a+cowed(c),0);
     const el=$(sel);
     el.innerHTML=`
       <div class="tray-head">
         <span class="name">${label}</span>
         <span class="count" style="background:${st.cs};color:${st.hex}">${items.length}</span>
-        <span class="tsum">${sum? fmtMoney(sum):''}</span>
+        <span class="tsum">${sum? fmtMoney(sum):''}${unS?`<small class="un" title="Not sure they will pay — not counted">+${fmtMoney(unS)} ?</small>`:''}</span>
       </div>
       <div class="tray-body">${items.length?'':'<div class="tray-empty">'+hint+'</div>'}</div>`;
     const body=el.querySelector('.tray-body');
@@ -6363,7 +6578,7 @@ function renderBoard(){
   const board=$('#board'); board.innerHTML='';
   FLOW.filter(s=>s.id!=='booked'&&s.id!=='changes').forEach(st=>{
     const items=mc.filter(c=>c.stage===st.id).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
-    const sum=items.reduce((a,c)=>a+cval(c),0);
+    const sum=items.filter(c=>!notSure(c)).reduce((a,c)=>a+cval(c),0), unS=items.filter(notSure).reduce((a,c)=>a+cowed(c),0);
     const col=document.createElement('div');
     col.className='col'; col.style.setProperty('--c',st.c); col.style.setProperty('--cs',st.cs);
     col.innerHTML=`
@@ -6371,7 +6586,7 @@ function renderBoard(){
         <span class="name">${st.name}</span>
         <span class="count" style="background:${st.cs};color:${st.hex}">${items.length}</span>
       </div>
-      <div class="col-sum">${sum? fmtMoney(sum):'—'}</div>
+      <div class="col-sum">${sum? fmtMoney(sum):'—'}${unS?`<small class="un" title="Not sure they will pay — not counted">+${fmtMoney(unS)} ?</small>`:''}</div>
       <div class="col-body" data-stage="${st.id}">${items.length?'':'<div class="empty-col">Drop cards here</div>'}</div>`;
     const body=col.querySelector('.col-body');
     items.forEach(c=>body.appendChild(cardEl(c,st)));
@@ -6758,6 +6973,7 @@ function cardEl(c,st){
   const prio= c.prio&&PRIO_COLOR[c.prio] ? c.prio : '';
   if(prio==='high') el.classList.add('pr-high');
   if(isJob(c)) el.classList.add('is-job');
+  if(notSure(c)) el.classList.add('unsure'); else if(cDoubt(c)) el.classList.add('doubt-soft');
   el.innerHTML=`
     <div class="c-name">${prio?`<span class="c-prio ${prio}" title="Priority: ${prio}"><i></i>${prio}</span>`:''}${esc(c.name)}${addedTxt?`<span class="c-added" title="Added ${addedTxt}">${addedTxt}</span>`:''}</div>
     <div class="c-meta">
@@ -6771,6 +6987,7 @@ function cardEl(c,st){
       ${c.email?`<a class="chip contact" href="mailto:${esc(c.email)}" title="${esc(c.email)}" onclick="event.stopPropagation()">${IC.mail}</a>`:''}
       ${(()=>{ const th=chThreadFor(c); if(!th) return ''; const w=th.lastFrom==='client'; return `<span class="chip chat${w?' wait':''}" data-chat="${esc(th.slug)}" title="${w?'The client wrote and is waiting for an answer':'Open the chat with this client'}">${IC.message} ${w?'waiting':'chat'}</span>`; })()}
     </div>
+    ${dbBadge(c)}
     ${(()=>{ const n=cContactNote(c); return n?`<div class="c-cnote" title="Contact note"><i>⚠</i><span>${esc(n)}</span></div>`:''; })()}
     ${(c.stage!=='paid'&&!isLost)?ndLineHtml(c,'c'):''}
     ${(()=>{ const u=cDraftUrl(c); const d=!u?'':(()=>{ const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Open draft':'▶ Open website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })();
@@ -6778,6 +6995,7 @@ function cardEl(c,st){
       return (d||rv) ? `<div class="c-acts">${d}${rv}</div>` : ''; })()}
     
     ${isLost&&c.lostReason?`<div class="c-reason" title="Reason">${IC.ban} ${esc(c.lostReason)}</div>`:''}
+    ${(!isLost && c.stage!=='paid' && !cDoubt(c) && !notSure(c))?`<button type="button" class="c-unsure" data-doubt="${c.id}" title="Not sure they will pay? Mark it — the money leaves New money until they pay">?</button>`:''}
     ${!isLost?`<button class="c-lost" title="Didn't convert — move to Lost">${IC.ban}</button>`:''}
     ${nextName?`<button class="c-next" title="Move to ${nextName}">${IC.arrowRight}</button>`:''}`;
   el.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',c.id); el.classList.add('dragging'); });
@@ -7887,7 +8105,7 @@ function renderCalExtras(){
   }
   const st=$('#calStats'); if(st) st.innerHTML=monthStatsHtml(monthLogStats(curMonth),curMonth);
 }
-function renderBoardStats(){ const el=$('#boardStats'); if(el) el.innerHTML=monthStatsHtml(monthLogStats(curMonth),curMonth); }
+function renderBoardStats(){ const el=$('#boardStats'); if(el) el.innerHTML=monthStatsHtml(monthLogStats(curMonth),curMonth); try{ const t=$('#dbTopChip'); if(t) t.innerHTML=dbBoardChip(); }catch(e){} }
 /* ---------- calendar ---------- */
 /* the day's number counts only meetings still on — a cancelled one (Lost, shown faded) is left out (20 Oct 2026) */
 const meetLive=items=>items.filter(c=>meetOut(c)!=='lost');
@@ -9430,6 +9648,7 @@ const REM_STAGE_RANK={pay:0,changes:1,review:2,building:3,needinfo:4,booked:5,th
 const REM_AUTO_GREEN=['needinfo','building','review','changes','pay'];
 const remAutoFlag=c=> c.stage==='thinking' ? 'orange' : (REM_AUTO_GREEN.includes(c.stage) ? 'green' : '');
 const remFlag=c=>{
+  if(c.doubt && c.stage!=='paid' && c.stage!=='lost' && !c.trashed && c.stage!=='booked' && c.stage!=='thinking') return c.doubt.kind==='ghost' ? 'red' : 'orange';   /* «Not sure» on the Board = orange/red here (5 Nov 2026) */
   const m=c.remFlag;
   if(m && c.remFlagStage===c.stage && (m==='none' || REM_FLAGS[m])) return m==='none' ? '' : m;
   if(m==='red' && !c.remFlagStage) return 'red';
@@ -9455,6 +9674,7 @@ function remAgeDays(c){
 }
 function setRemFlag(id, flag){
   const c=state.clients.find(x=>x.id===id); if(!c) return;
+  if(c.doubt){ delete c.doubt; if(flag===remAutoFlag(c)){ delete c.remFlag; delete c.remFlagStage; } else { c.remFlag=flag; c.remFlagStage=c.stage; } c.updated=Date.now(); save(); renderAll(); toast(c.name+' · '+REM_FLAGS[flag].name+(flag==='green'?' — counted again':'')); return; }
   const cleared = remFlag(c)===flag;
   c.remFlag = cleared ? 'none' : flag; c.remFlagStage = c.stage;
   if(!cleared && flag===remAutoFlag(c)){ delete c.remFlag; delete c.remFlagStage; }   /* back to the automatic colour */
@@ -9495,7 +9715,7 @@ function remRowEl(c){
       ${Object.keys(REM_FLAGS).map(k=>`<button class="rem-dot ${k}${f===k?' on':''}" data-flag="${k}" title="${REM_FLAGS[k].name}" aria-label="${REM_FLAGS[k].name}"></button>`).join('')}
     </div>
     <div class="rem-main" data-open="${c.id}">
-      <div class="rem-name">${esc(c.name)}${isJob(c)?`<span class="rem-job">★ ${esc(jobLbl(c))}</span>`:''}${fm?`<span class="rem-flag-lbl ${f}">${fm.name}</span>`:''}</div>
+      <div class="rem-name">${esc(c.name)}${isJob(c)?`<span class="rem-job">★ ${esc(jobLbl(c))}</span>`:''}${fm?`<span class="rem-flag-lbl ${f}">${cDoubt(c)?'Not sure · '+esc(dbKind(c.doubt.kind).n):fm.name}</span>`:''}</div>
       <div class="rem-meta">
         <span class="rem-stage" style="background:${st.cs};color:${st.hex}">${st.name}</span>
         <span class="rem-age${c.stage==='pay'&&age>=7?' late':''}">${IC.hourglass} ${ageTxt}</span>
@@ -11141,6 +11361,7 @@ function openModal(id, presetDay){
   $('#mDay').value=c?(c.day||''):(presetDay||''); $('#mTime').value=c?(c.time||''):'';
   $('#mMonth').value=c?c.month:(presetDay?presetDay.slice(0,7):curMonth);
   $('#mNotes').value=c?(c.notes||''):'';
+  try{ mDoubtRender(); }catch(e){}
   $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
   const sel=$('#mStage'); sel.innerHTML=STAGES.map(s=>`<option value="${s.id}" ${c&&s.id===c.stage?'selected':''}>${s.name}</option>`).join('');
   modalColor = c ? (c.color||'') : '';
@@ -12719,6 +12940,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(fixSalakou20261009()) setTimeout(save,0); }catch(e){}
   try{ if(fixJobs20261020()) setTimeout(save,0); }catch(e){}
   try{ if(fixManios20261020()) setTimeout(save,0); }catch(e){ console.warn('manios fix',e); }
+  try{ if(seedDoubt20261105()) setTimeout(save,0); }catch(e){ console.warn('doubt seed',e); }
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); }
