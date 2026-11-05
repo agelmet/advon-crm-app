@@ -6168,6 +6168,36 @@ document.addEventListener('click',e=>{
   if(b.dataset.doubt) dbOpen(b.dataset.doubt, b.dataset.dbk||'c'); else dbListOpen();
 },true);
 ['mousedown','pointerdown','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{ if(e.target.closest&&e.target.closest('[data-doubt]')) e.stopPropagation(); },true));
+/* 5 Nov 2026 (Angelo): the first seed put the «Delaying» mark on Αγγελοπούλου MARIA (Thinking) — it was meant for
+   Αγγελοπούλου KALLIOPI (Need info). Kalliopi gets the mark; Maria moves to Need info and keeps hers (she might not pay);
+   Νικολάου Ζένια goes to Need info as «not sure» too (card created if there is none). Runs once (meta.doubtFixC). */
+function fixDoubt20261105c(){
+  if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
+  if(!state.meta) state.meta={};
+  if(state.meta.doubtFixC) return false;
+  const nm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  const live=c=>c && c.stage!=='paid' && c.stage!=='lost' && !c.trashed && !isJob(c);
+  const newest=(a,b)=>(b.created||0)-(a.created||0);
+  const toNeed=c=>{ if(c.stage!=='needinfo'){ c.stage='needinfo'; c.stageAt=Date.now(); c.thinkAt=null; delete c.thinkAck; } if(c.trashed){ delete c.trashed; delete c.trashedAt; delete c.trashReason; delete c.trashStage; } delete c.lostReason; c.lostAt=null; };
+  const now=Date.now(), done=[];
+  const ang=c=>/αγγελοπουλ|angelopoul|aggelopoul/.test(nm(c.name));
+  const kal=state.clients.filter(c=>live(c) && ang(c) && /καλλιοπ|kalliop|kaliop/.test(nm(c.name))).sort(newest)[0];
+  if(kal){ if(!kal.doubt) kal.doubt={kind:'slow', note:'Καθυστερεί — θέλει όλο τον μήνα, όχι πίεση', until:'2026-11-30', at:now};
+    try{ if(/καθυστερ/.test(nm(cContactNote(kal)))) kal.cnote=''; }catch(e){}
+    kal.updated=now; done.push(kal.name+' → not sure'); }
+  const mar=state.clients.filter(c=>live(c) && ang(c) && /μαρια|maria/.test(nm(c.name))).sort(newest)[0];
+  if(mar){ toNeed(mar); if(!mar.doubt) mar.doubt={kind:'slow', note:'Καθυστερεί — θέλει όλο τον μήνα, όχι πίεση', until:'2026-11-30', at:now};
+    mar.updated=now; done.push(mar.name+' → Need info, not sure'); }
+  const zen=c=>/νικολαου|nikolaou|nikolaoy/.test(nm(c.name)) && /ζενια|zenia|ξενια|xenia/.test(nm(c.name));
+  let z=state.clients.filter(c=>live(c) && zen(c)).sort(newest)[0] || state.clients.filter(c=>c && !isJob(c) && c.stage!=='paid' && zen(c)).sort(newest)[0];
+  if(!z){ z={id:uid(), name:'Νικολάου Ζένια', value:130, stage:'needinfo', month:todayIso().slice(0,7), notes:'', created:now, updated:now, v130:1}; state.clients.push(z); done.push('Νικολάου Ζένια → new card in Need info, not sure'); }
+  else { toNeed(z); done.push(z.name+' → Need info, not sure'); }
+  if(!z.doubt) z.doubt={kind:'other', note:'Μπορεί να μην πληρώσει', at:now};
+  z.updated=now;
+  state.meta.doubtFixC=1;
+  setTimeout(()=>{ try{ toast(done.join(' · ')); }catch(e){} },1600);
+  return true;
+}
 /* one-time: the five Angelo named on 5 Nov 2026 afternoon — renewal rows AND unpaid Board cards with that name */
 function seedDoubt20261105b(){
   if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
@@ -13003,6 +13033,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(fixManios20261020()) setTimeout(save,0); }catch(e){ console.warn('manios fix',e); }
   try{ if(seedDoubt20261105()) setTimeout(save,0); }catch(e){ console.warn('doubt seed',e); }
   try{ if(seedDoubt20261105b()) setTimeout(save,0); }catch(e){ console.warn('doubt seed b',e); }
+  try{ if(fixDoubt20261105c()) setTimeout(save,0); }catch(e){ console.warn('doubt fix c',e); }
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); }
