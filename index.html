@@ -2511,6 +2511,25 @@ body.dark .m-doubt.on{background:rgba(214,48,49,.14);color:#FF9B93}
 .db-row .s{grid-column:1/-1;font-size:12px;color:var(--muted);line-height:1.35}
 .db-row.due{border-color:#FF8A00}
 @media(max-width:480px){.db-opts{grid-template-columns:1fr}}
+
+/* ===== NOT SURE — renewals too (5 Nov 2026, afternoon) ===== */
+.rn-row.rn-unsure{border-color:rgba(214,48,49,.55);border-style:dashed;background:#FFF8F8}
+.rn-row.rn-unsure .rn-val{color:#B42318}
+.rn-row.rn-unsure .rn-val::after{content:' ?';font-weight:800}
+.rn-row.rn-unsure:not(.lost):not(.paid){grid-template-areas:"main val" "db db" "nd nd" "date days" "acts acts"}
+.rn-row .rn-db{grid-area:db;min-width:0}
+.rn-row .rn-db .c-doubt{margin-top:0}
+.rn-unsure-btn{white-space:nowrap;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:9px;min-width:30px;height:30px;padding:0 9px;font:inherit;font-weight:800;font-size:12.5px;cursor:pointer}
+.rn-row.rn-unsure .rn-unsure-btn{color:#B42318;border-color:rgba(214,48,49,.55);background:#FFF1F1}
+.rn-unsure-btn:hover{border-color:#D63031;color:#B42318;background:#FFF1F1}
+.rn-unsure-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;padding:11px 14px;border-radius:14px;background:#FFF1F1;border:1.5px dashed rgba(214,48,49,.55);color:#B42318;font-size:13.5px;font-weight:600;cursor:pointer}
+.rn-unsure-bar b{font-weight:800;white-space:nowrap}
+.rn-unsure-bar span{min-width:0}
+.asap-row .un-tag{color:#B42318;font-weight:700}
+body.dark .rn-row.rn-unsure{background:rgba(214,48,49,.08)}
+body.dark .rn-unsure-bar{background:rgba(214,48,49,.14);color:#FF9B93}
+.db-sec{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.db-sec:first-child{margin-top:0}
 </style>
 <style>
 /* ---------- sync status + conflict UI ---------- */
@@ -6017,10 +6036,17 @@ var DOUBT_KINDS=[
   {id:'ghost', n:'Not answering', d:'Messages and calls, no reply', ic:'👻'},
   {id:'later', n:'Says later', d:'Money problem, or wants to start later', ic:'⏳'},
   {id:'slow',  n:'Delaying', d:'Will probably pay, but slowly', ic:'🐢'},
+  {id:'promise', n:'Promised a date', d:'Said they will pay on a set day', ic:'📅'},
   {id:'other', n:'Other reason', d:'Something else feels off', ic:'⚠'}
 ];
 var dbCur=null;
-function dbKind(id){ return DOUBT_KINDS.find(k=>k.id===id)||DOUBT_KINDS[3]; }
+function dbKind(id){ return DOUBT_KINDS.find(k=>k.id===id)||DOUBT_KINDS.find(k=>k.id==='other'); }
+function rnDoubt(r){ return (r && r.doubt && typeof r.doubt==='object' && !r.lost) ? r.doubt : null; }
+function dbObj(id,k){ return k==='rn' ? (state.renewals||[]).find(x=>x.id===id) : (state.clients||[]).find(x=>x.id===id); }
+function dbWhen(d,due){ if(!d||!d.until) return ''; const t=todayIso(); if(d.kind==='promise') return d.until===t ? '⏰ PROMISED FOR TODAY' : d.until<t ? '⏰ PROMISED '+fmtDay(d.until)+' — CHASE NOW' : 'promised for '+fmtDay(d.until); return due ? '⏰ CHECK AGAIN TODAY' : 'check again '+fmtDay(d.until); }
+function rnDue(r){ const d=rnDoubt(r); return !!(d && d.until && d.until<=todayIso()); }
+function rnBadge(r){ const d=rnDoubt(r); if(!d) return ''; const k=dbKind(d.kind), due=rnDue(r);
+  return `<div class="c-doubt${due?' due':''}" data-doubt="${r.id}" data-dbk="rn" title="Not counted in Overdue / Due / the forecast until they renew — tap to change"><i>${k.ic}</i><span><b>NOT SURE</b> · ${esc(k.n)}${d.note?' — '+esc(d.note):''}${d.until?`<em>${dbWhen(d,due)}</em>`:''}</span></div>`; }
 function cDoubt(c){ return (c && c.doubt && typeof c.doubt==='object' && c.stage!=='paid' && c.stage!=='lost' && !c.trashed) ? c.doubt : null; }
 function notSure(c){
   if(!c || c.trashed || c.stage==='lost' || c.stage==='paid' || c.stage==='booked' || c.stage==='thinking') return false;
@@ -6033,12 +6059,12 @@ function dbBadge(c){
   const d=cDoubt(c);
   if(!d){ if(!notSure(c)) return ''; return `<div class="c-doubt" data-doubt="${c.id}" title="Not counted in New money until they pay — tap to change"><i>⚠</i><span><b>NOT SURE</b> · marked ${esc(remFlag(c))} in Remaining</span></div>`; }
   const k=dbKind(d.kind), due=dbDue(c);
-  return `<div class="c-doubt${due?' due':''}" data-doubt="${c.id}" title="${notSure(c)?'Not counted in New money / To collect / the goal until they pay':'Booked / Thinking money is not counted anyway'} — tap to change"><i>${k.ic}</i><span><b>NOT SURE</b> · ${esc(k.n)}${d.note?' — '+esc(d.note):''}${d.until?`<em>${due?'⏰ CHECK AGAIN TODAY':'check again '+fmtDay(d.until)}</em>`:''}</span></div>`;
+  return `<div class="c-doubt${due?' due':''}" data-doubt="${c.id}" title="${notSure(c)?'Not counted in New money / To collect / the goal until they pay':'Booked / Thinking money is not counted anyway'} — tap to change"><i>${k.ic}</i><span><b>NOT SURE</b> · ${esc(k.n)}${d.note?' — '+esc(d.note):''}${d.until?`<em>${dbWhen(d,due)}</em>`:''}</span></div>`;
 }
 function dbBoardChip(){
-  try{ const L=(state.clients||[]).filter(notSure); if(!L.length) return '';
-    const t=L.reduce((a,c)=>a+cowed(c),0), due=(state.clients||[]).filter(dbDue).length;
-    return `<button type="button" class="db-bchip" data-dblist title="Clients you are not sure will pay — all months">⚠ ${L.length} not sure they'll pay · ${fmtMoney(t)} not counted${due?` · ${due} to check today`:''}</button>`; }catch(e){ return ''; }
+  try{ const L=(state.clients||[]).filter(notSure), R=(state.renewals||[]).filter(rnDoubt); if(!L.length && !R.length) return '';
+    const t=L.reduce((a,c)=>a+cowed(c),0)+R.reduce((a,r)=>a+(+r.value||0),0), due=(state.clients||[]).filter(dbDue).length+R.filter(rnDue).length;
+    return `<button type="button" class="db-bchip" data-dblist title="Clients and renewals you are not sure will pay">⚠ ${L.length+R.length} not sure they'll pay${R.length?` (${R.length} renewal${R.length===1?'':'s'})`:''} · ${fmtMoney(t)}${due?` · ${due} to chase today`:''}</button>`; }catch(e){ return ''; }
 }
 function dbEnsure(){
   if($('#dbOverlay')) return;
@@ -6048,12 +6074,13 @@ function dbEnsure(){
   o.addEventListener('click',e=>{ if(e.target===o) dbClose(); });
   o.querySelector('#dbClose').addEventListener('click',dbClose);
   o.querySelector('#dbBody').addEventListener('click',e=>{
-    const r=e.target.closest('[data-dbo]'); if(r){ dbOpen(r.dataset.dbo); return; }
+    const r=e.target.closest('[data-dbo]'); if(r){ dbOpen(r.dataset.dbo, r.dataset.dbk||'c'); return; }
     const op=e.target.closest('.db-opt'); if(op && dbCur){ dbKeep(); dbCur.kind=op.dataset.k; dbRender(); return; }
     const ch=e.target.closest('.db-chip'); if(ch && dbCur){ dbKeep(); dbCur.until=ch.dataset.u; dbRender(); return; }
     if(e.target.closest('#dbCancel')){ dbClose(); return; }
     if(e.target.closest('#dbSave')){ dbSave(); return; }
-    if(e.target.closest('.db-trash') && dbCur){ const id=dbCur.id; dbClose(); trashClient(id); }
+    if(e.target.closest('.db-trash') && dbCur){ const id=dbCur.id; dbClose(); trashClient(id); return; }
+    if(e.target.closest('.db-rnlost') && dbCur){ const r=dbObj(dbCur.id,'rn'); dbClose(); if(r && confirm(`Move "${r.name}" to Lost · won't renew?\n\nThey leave every renewal total. You can restore them any time.`)){ r.lost=true; r.lostAt=todayIso(); r.updated=Date.now(); save(); renderAll(); toast(r.name+' moved to Lost · won\'t renew'); } }
   });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#dbOverlay').classList.contains('open')) dbClose(); });
 }
@@ -6061,20 +6088,21 @@ function dbClose(){ const o=$('#dbOverlay'); if(o) o.classList.remove('open'); d
 function dbAddDays(n){ const d=new Date(); d.setDate(d.getDate()+n); return isoDate(d); }
 function dbNextMonth1(){ const d=new Date(); return isoDate(new Date(d.getFullYear(), d.getMonth()+1, 1)); }
 function dbKeep(){ if(!dbCur) return; const n=$('#dbNote'), u=$('#dbUntil'); if(n) dbCur.note=n.value.trim(); if(u) dbCur.until=u.value; }
-function dbOpen(id){
-  const c=state.clients.find(x=>x.id===id); if(!c) return;
+function dbOpen(id,k){
+  k=k||'c'; const c=dbObj(id,k); if(!c) return;
   dbEnsure(); const d=c.doubt||{};
-  dbCur={id, kind:d.kind||'', note:d.note||'', until:d.until||''};
-  if(!d.kind && notSure(c)) dbCur.kind='other';
+  dbCur={id, k, kind:d.kind||'', note:d.note||'', until:d.until||''};
+  if(!d.kind && k==='c' && notSure(c)) dbCur.kind='other';
   dbRender(); $('#dbOverlay').classList.add('open');
 }
 function dbRender(){
-  const c=dbCur && state.clients.find(x=>x.id===dbCur.id); if(!c) return dbClose();
-  const owed=cowed(c), paid=cpaid(c), pot=c.stage==='booked'||c.stage==='thinking';
+  const isR=dbCur && dbCur.k==='rn';
+  const c=dbCur && dbObj(dbCur.id,dbCur.k); if(!c) return dbClose();
+  const owed=isR?(+c.value||0):cowed(c), paid=isR?0:cpaid(c), pot=!isR && (c.stage==='booked'||c.stage==='thinking');
   $('#dbTitle').textContent='Will '+c.name+' pay?';
-  $('#dbSub').textContent=stageById(c.stage).name+' · '+fmtMoney(owed)+' still owed'+(paid?' · '+fmtMoney(paid)+' already paid':'');
+  $('#dbSub').textContent= isR ? 'Renewal · '+fmtMoney(owed)+' · '+(c.date?'due '+fmtDate(c.date):'no date') : stageById(c.stage).name+' · '+fmtMoney(owed)+' still owed'+(paid?' · '+fmtMoney(paid)+' already paid':'');
   const opt=k=>`<button type="button" class="db-opt${dbCur.kind===k.id?' on':''}" data-k="${k.id}"><i>${k.ic}</i><b>${esc(k.n)}</b><small>${esc(k.d)}</small></button>`;
-  const chips=[['In 1 week',dbAddDays(7)],['In 2 weeks',dbAddDays(14)],['1st of next month',dbNextMonth1()]];
+  const chips=[['Tomorrow',dbAddDays(1)],['In 1 week',dbAddDays(7)],['In 2 weeks',dbAddDays(14)],['1st of next month',dbNextMonth1()]];
   $('#dbBody').innerHTML=`
     <div class="db-opts">
       <button type="button" class="db-opt sure${!dbCur.kind?' on':''}" data-k=""><i>✓</i><b>Yes — sure</b><small>Counted as normal</small></button>
@@ -6082,42 +6110,47 @@ function dbRender(){
     </div>
     <div class="db-more"${dbCur.kind?'':' hidden'}>
       <div class="field"><label>Short note <span class="db-lbl">(shows on the card)</span></label><input id="dbNote" type="text" maxlength="90" value="${esc(dbCur.note)}" placeholder="e.g. Pays in January — no pressure"></div>
-      <div class="field"><label>Check again on <span class="db-lbl">(that day the badge turns orange)</span></label>
+      <div class="field"><label>${dbCur.kind==='promise'?'Promised for':'Check again on'} <span class="db-lbl">(that day the badge turns orange)</span></label>
         <div class="db-when"><input id="dbUntil" type="date" value="${esc(dbCur.until)}">${chips.map(([l,v])=>`<button type="button" class="db-chip${dbCur.until===v?' on':''}" data-u="${v}">${l}</button>`).join('')}<button type="button" class="db-chip${!dbCur.until?' on':''}" data-u="">No date</button></div></div>
     </div>
     <p class="db-hint">${dbCur.kind
-      ? (pot ? 'This card is in '+esc(stageById(c.stage).name)+' — that money is not counted yet anyway. The mark stays on the card for when it moves on.'
+      ? (isR ? 'Its <b>'+fmtMoney(owed)+'</b> leaves <b>Overdue</b>, <b>Due this month</b> and the <b>cash forecast</b>, and shows in red as «not sure» — until you press <b>Renewed</b>.'
+       : pot ? 'This card is in '+esc(stageById(c.stage).name)+' — that money is not counted yet anyway. The mark stays on the card for when it moves on.'
              : 'Its <b>'+fmtMoney(owed)+'</b> leaves <b>New money</b>, <b>To collect</b> and the <b>goal</b>, and shows beside them in red as «not sure» — until they pay.'+(paid?' The '+fmtMoney(paid)+' already paid stays counted.':''))
       : 'Counted as normal money.'}</p>
     <div class="db-foot">
-      ${(!pot && dbCur.kind)?`<button type="button" class="btn btn-ghost db-trash" title="The money is truly gone — move it to the Trash (Remaining tab)">${IC.trash} Give up → Trash</button>`:''}
+      ${(isR && dbCur.kind)?`<button type="button" class="btn btn-ghost db-rnlost" title="They will not renew — move to Lost (domain can expire)">${IC.ban} Won't renew → Lost</button>`:(!pot && dbCur.kind)?`<button type="button" class="btn btn-ghost db-trash" title="The money is truly gone — move it to the Trash (Remaining tab)">${IC.trash} Give up → Trash</button>`:''}
       <span style="flex:1"></span>
       <button type="button" class="btn btn-ghost" id="dbCancel">Cancel</button>
       <button type="button" class="btn btn-brand" id="dbSave">Save</button>
     </div>`;
 }
 function dbSave(){
-  dbKeep(); const cur=dbCur; const c=cur && state.clients.find(x=>x.id===cur.id); if(!c) return dbClose();
+  dbKeep(); const cur=dbCur; const c=cur && dbObj(cur.id,cur.k); if(!c) return dbClose(); const isR=cur.k==='rn';
   const prev=c.doubt?JSON.parse(JSON.stringify(c.doubt)):null, prevRf=c.remFlag, prevRfs=c.remFlagStage;
   if(cur.kind){ const d={kind:cur.kind, at:(prev&&prev.at)||Date.now()}; if(cur.note) d.note=cur.note; if(cur.until) d.until=cur.until; c.doubt=d; }
-  else { delete c.doubt; if(c.remFlag==='orange'||c.remFlag==='red'){ delete c.remFlag; delete c.remFlagStage; } }
+  else { delete c.doubt; if(!isR && (c.remFlag==='orange'||c.remFlag==='red')){ delete c.remFlag; delete c.remFlagStage; } }
   c.updated=Date.now(); save(); dbClose(); renderAll(); try{ mDoubtRender(); }catch(e){}
-  toastUndo(cur.kind ? c.name+' · not sure · '+fmtMoney(cowed(c))+' left out of New money' : c.name+' · sure — counted again', ()=>{
-    const t=state.clients.find(x=>x.id===c.id); if(!t) return;
+  toastUndo(cur.kind ? c.name+' · not sure · '+fmtMoney(isR?(+c.value||0):cowed(c))+(isR?' left out of renewals due':' left out of New money') : c.name+' · sure — counted again', ()=>{
+    const t=dbObj(c.id,cur.k); if(!t) return;
     if(prev) t.doubt=prev; else delete t.doubt;
-    if(prevRf===undefined){ delete t.remFlag; delete t.remFlagStage; } else { t.remFlag=prevRf; t.remFlagStage=prevRfs; }
+    if(!isR){ if(prevRf===undefined){ delete t.remFlag; delete t.remFlagStage; } else { t.remFlag=prevRf; t.remFlagStage=prevRfs; } }
     t.updated=Date.now(); save(); renderAll(); try{ mDoubtRender(); }catch(e){} });
 }
 function dbListOpen(){
   dbEnsure(); dbCur=null;
   const L=state.clients.filter(c=>cDoubt(c)||notSure(c)).sort((a,b)=>(dbDue(b)-dbDue(a))||(cowed(b)-cowed(a)));
-  const tot=L.filter(notSure).reduce((a,c)=>a+cowed(c),0);
+  const R=(state.renewals||[]).filter(rnDoubt).sort((a,b)=>(rnDue(b)-rnDue(a))||((a.date||'9')<(b.date||'9')?-1:1));
+  const tot=L.filter(notSure).reduce((a,c)=>a+cowed(c),0)+R.reduce((a,r)=>a+(+r.value||0),0), N=L.length+R.length;
   $('#dbTitle').textContent='Not sure they will pay';
-  $('#dbSub').textContent= L.length ? fmtMoney(tot)+' not counted · '+L.length+' client'+(L.length===1?'':'s') : 'Nobody — everyone is counted';
-  $('#dbBody').innerHTML=`<div class="db-list">${L.map(c=>{ const d=cDoubt(c), k=d?dbKind(d.kind):null, due=dbDue(c);
+  $('#dbSub').textContent= N ? fmtMoney(tot)+' not counted · '+(L.length?L.length+' new client'+(L.length===1?'':'s'):'')+(L.length&&R.length?' + ':'')+(R.length?R.length+' renewal'+(R.length===1?'':'s'):'') : 'Nobody — everyone is counted';
+  const rRows=R.map(r=>{ const d=rnDoubt(r), k=dbKind(d.kind), due=rnDue(r);
+      return `<button type="button" class="db-row${due?' due':''}" data-dbo="${r.id}" data-dbk="rn"><span class="n">${k.ic} ${esc(r.name)}</span><span class="v">${fmtMoney(+r.value||0)}</span><span class="s">Renewal · ${r.date?(r.date<todayIso()?'<b>overdue</b> since '+fmtDay(r.date):'due '+fmtDay(r.date)):'no date'} · ${esc(k.n)}${d.note?' — '+esc(d.note):''}${d.until?' · '+dbWhen(d,due):''}</span></button>`; }).join('');
+  $('#dbBody').innerHTML=`${L.length&&R.length?'<div class="db-sec">New clients · Board</div>':''}<div class="db-list">${L.map(c=>{ const d=cDoubt(c), k=d?dbKind(d.kind):null, due=dbDue(c);
       return `<button type="button" class="db-row${due?' due':''}" data-dbo="${c.id}"><span class="n">${k?k.ic:'⚠'} ${esc(c.name)}</span><span class="v">${fmtMoney(cowed(c))}${notSure(c)?'':' <small>· not counted anyway</small>'}</span><span class="s">${esc(fmtMonth(c.month||curMonth))} · ${esc(stageById(c.stage).name)} · ${k?esc(k.n):'orange/red in Remaining'}${d&&d.note?' — '+esc(d.note):''}${d&&d.until?' · '+(due?'<b>check again today</b>':'check again '+fmtDay(d.until)):''}</span></button>`; }).join('')
-    || '<p class="db-hint">Nobody is marked. Open a card → «Will they pay?» (or the «?» on a card) to mark someone.</p>'}</div>
-    <p class="db-hint">Tap a name to change it. When someone pays, press Paid as usual — the money counts again by itself.</p>`;
+    || (R.length?'':'<p class="db-hint">Nobody is marked. Open a card → «Will they pay?» (or the «?» on a card / renewal row) to mark someone.</p>')}</div>
+    ${R.length?`<div class="db-sec">Renewals</div><div class="db-list">${rRows}</div>`:''}
+    <p class="db-hint">Tap a name to change it. When someone pays, press Paid / Renewed as usual — the money counts again by itself.</p>`;
   $('#dbOverlay').classList.add('open');
 }
 function mDoubtRender(){
@@ -6132,9 +6165,31 @@ function mDoubtRender(){
 document.addEventListener('click',e=>{
   const b=e.target.closest&&e.target.closest('[data-doubt],[data-dblist]'); if(!b) return;
   e.stopPropagation(); e.preventDefault();
-  if(b.dataset.doubt) dbOpen(b.dataset.doubt); else dbListOpen();
+  if(b.dataset.doubt) dbOpen(b.dataset.doubt, b.dataset.dbk||'c'); else dbListOpen();
 },true);
 ['mousedown','pointerdown','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{ if(e.target.closest&&e.target.closest('[data-doubt]')) e.stopPropagation(); },true));
+/* one-time: the five Angelo named on 5 Nov 2026 afternoon — renewal rows AND unpaid Board cards with that name */
+function seedDoubt20261105b(){
+  if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
+  if(!state.meta) state.meta={};
+  if(state.meta.doubtSeedB) return false;
+  const nm=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const S=[
+    [/στυλιανιδ|stylianid|stilianid/, {kind:'slow', note:'Λέει «την άλλη εβδομάδα» εδώ και 3 εβδομάδες', until:'2026-11-12'}],
+    [/τσεκουρακ|tsekourak/, {kind:'ghost', note:'Ήθελε να ρωτήσει κάτι, ήταν να πληρώσει — τώρα δεν απαντά σε κλήσεις & μηνύματα'}],
+    [/δανεζ|danez/, {kind:'ghost', note:'Δεν απαντά'}],
+    [/(παπα|pappa|papa)\S*\s+(εμμανουελ|emman)|(εμμανουελ|emman)\S*\s+(παπα|pappa|papa)\b|pappaem/, {kind:'ghost', note:'Δεν απαντά'}],
+    [/χατζηευφρ|χατζιευφρ|xatziefr|chatziefr|hatziefr|chatzieff|hatzieff/, {kind:'promise', note:'Είπε ότι θα πληρώσει στις 9/11', until:'2026-11-09'}]
+  ];
+  const hit=[];
+  S.forEach(([re,d])=>{
+    (state.renewals||[]).filter(r=>r && !r.lost && !r.doubt && re.test(nm(r.name))).forEach(r=>{ r.doubt=Object.assign({at:Date.now()},d); r.updated=Date.now(); hit.push(r.name+' (renewal)'); });
+    (state.clients||[]).filter(c=>c && notLost(c) && c.stage!=='paid' && !isJob(c) && !c.doubt && re.test(nm(c.name))).forEach(c=>{ c.doubt=Object.assign({at:Date.now()},d); c.updated=Date.now(); hit.push(c.name); });
+  });
+  state.meta.doubtSeedB=1;
+  if(hit.length) setTimeout(()=>{ try{ toast('Marked «not sure»: '+hit.join(', ')); }catch(e){} },1200);
+  return true;
+}
 /* one-time: the three Angelo named on 5 Nov 2026 */
 function seedDoubt20261105(){
   if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
@@ -9438,7 +9493,7 @@ function renderRenewals(){
   const due90=withDate.filter(r=>r.date>=today && r.date<=in90);
   const thisM=today.slice(0,7);
   const dueThisM=withDate.filter(r=>r.date.slice(0,7)===thisM && r.date>=today);
-  const sum=arr=>arr.reduce((a,r)=>a+(+r.value||0),0);
+  const sum=arr=>arr.reduce((a,r)=>a+(rnDoubt(r)?0:(+r.value||0)),0);   /* «not sure» renewals are shown but not counted (5 Nov 2026) */
   const yS=String(rnYear);
   const dueYear=withDate.filter(r=>r.date.startsWith(yS));
   const paidYear=renewalsPaidForYear(rnYear), paidCount=renewalsPaidCountForYear(rnYear);
@@ -9470,6 +9525,11 @@ function renderRenewals(){
     let k=b.dataset.key, el=null; for(let i=0;i<12 && !el;i++){ el=document.getElementById('rnm-'+k); if(!el){ let [y,m]=k.split('-').map(Number); m--; if(m<1) break; k=y+'-'+pad(m); } }
     if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
   }));
+  /* «not sure» bar — every renewal marked as doubtful, one tap for the list */
+  { const ov0=$('#rnOverdue'); let ub=$('#rnUnsure');
+    if(!ub && ov0){ ub=document.createElement('div'); ub.id='rnUnsure'; ov0.parentNode.insertBefore(ub, ov0); }
+    if(ub){ const U=all.filter(rnDoubt), uS=U.reduce((a,r)=>a+(+r.value||0),0), uD=U.filter(rnDue).length;
+      ub.innerHTML = U.length ? `<div class="rn-unsure-bar" data-dblist title="Tap for the list"><span>⚠ Not sure they'll renew: ${esc(U.map(r=>dbShort(r)).join(', '))}${uD?` · <b>${uD} to chase today</b>`:''}</span><b>${fmtMoney(uS)} not counted</b></div>` : ''; } }
   /* overdue drawer — always on top, whatever year is shown */
   const ov=$('#rnOverdue');
   if(overdue.length){
@@ -9584,17 +9644,18 @@ function renderRenewals(){
 function rnRow(r,today){
   const row=document.createElement('div');
   const chip=rnDaysChip(r,today);
-  row.className='rn-row'+(chip.cls?' '+chip.cls:'');
+  row.className='rn-row'+(chip.cls?' '+chip.cls:'')+(rnDoubt(r)?' rn-unsure':'');
   const n=(r.history||[]).length;
   const hist= n ? `<span class="hist" title="Renewed ${n} time${n===1?'':'s'}">${IC.repeat} renewed ${n}×${r.lastRenewed?' · last '+fmtDate(r.lastRenewed):''}</span>` : `<span class="hist">first renewal</span>`;
   const su=rnSiteUrl(r);
-  row.innerHTML=`<div class="rn-main"><div class="rn-name">${esc(r.name)}</div><div class="rn-sub">${su?siteChipHtml(su):''}<button class="site-edit" type="button" title="${su?'Change this client’s website / draft link':'Add the website / draft link'}">${su?'✎':'＋ link'}</button>${hist}${r.note?`<span>${esc(r.note)}</span>`:''}</div></div>
+  row.innerHTML=`<div class="rn-main"><div class="rn-name">${esc(r.name)}</div><div class="rn-sub">${su?siteChipHtml(su):''}<button class="site-edit" type="button" title="${su?'Change this client’s website / draft link':'Add the website / draft link'}">${su?'✎':'＋ link'}</button>${hist}${r.note?`<span>${esc(r.note)}</span>`:''}</div></div>${rnDoubt(r)?`<div class="rn-db">${rnBadge(r)}</div>`:''}
     <div class="rn-nd">${ndLineHtml(r,'rn')}</div>
     <span class="rn-val" title="Click to edit the amount">${fmtMoney(r.value||0)}</span>
     <button class="rn-date" title="Click to change the renewal date">${IC.calendar} ${r.date? fmtDate(r.date) : 'set date'}</button>
     <span class="rn-days">${chip.txt}</span>
     <div class="rn-acts">
       <button class="rn-done" title="They paid — collect ${fmtMoney(r.value||0)} and move them one year ahead">${IC.check} Renewed</button>
+      <button type="button" class="rn-unsure-btn" data-doubt="${r.id}" data-dbk="rn" title="Not sure they will pay? Mark it — it leaves the renewal totals until they renew">${rnDoubt(r)?'⚠':'?'}</button>
       <button class="rn-lostbtn" title="Won't renew — move to Lost">${IC.ban}</button>
       <button class="item-x" title="Remove this client from renewals">${IC.x}</button>
     </div>`;
@@ -11157,7 +11218,7 @@ function renderAsap(){
     const when= late ? (d===-1?'1 day late':(-d)+' days late') : d===0?'renews today':d===1?'renews tomorrow':'renews in '+d+' days';
     return `<li class="asap-row auto${late?' hot':''}" data-goto="renewals">
       <span class="n">${IC.repeat}</span>
-      <span class="atxt">Call <b>${esc(r.name)}</b> — ${when}${r.phone?` · <a href="tel:${esc(r.phone)}" onclick="event.stopPropagation()">${esc(r.phone)}</a>`:''}</span>
+      <span class="atxt">Call <b>${esc(r.name)}</b> — ${when}${rnDoubt(r)?` <span class="un-tag">· ⚠ not sure: ${esc(dbKind(r.doubt.kind).n)}${r.doubt.until?' ('+dbWhen(r.doubt,rnDue(r))+')':''}</span>`:''}${r.phone?` · <a href="tel:${esc(r.phone)}" onclick="event.stopPropagation()">${esc(r.phone)}</a>`:''}</span>
       <span class="aval">${fmtMoney2(r.value||0)}</span>
     </li>`;
   }).join('');
@@ -12256,7 +12317,7 @@ function cashForecast(){
     else if(c.stage==='review'||c.stage==='changes'){ [60,90].forEach(w=>add(w,'draft','draft out · changes',v,1)); }
     else { const e=Math.round(v*0.7); add(90,'build','building · booked (70%)',e,1); }
   });
-  liveRenewals().forEach(r=>{ if(!r.date || !(+r.value)) return; if(r.date<todayI){ [30,60,90].forEach(w=>add(w,'ren','renewals',+r.value,1)); return; } [30,60,90].forEach(w=>{ if(r.date<=win[w]) add(w,'ren','renewals',+r.value,1); }); });
+  liveRenewals().forEach(r=>{ if(!r.date || !(+r.value) || rnDoubt(r)) return; if(r.date<todayI){ [30,60,90].forEach(w=>add(w,'ren','renewals',+r.value,1)); return; } [30,60,90].forEach(w=>{ if(r.date<=win[w]) add(w,'ren','renewals',+r.value,1); }); });
   const subs=(state.subs||[]).reduce((a,s)=>a+(+s.value||0),0); const subsN=(state.subs||[]).length;
   if(subs){ const m=t.getMonth(); const paidNow=(state.subs||[]).filter(s=>s.paid&&s.paid[curMonth]).reduce((a,s)=>a+(+s.value||0),0);
     add(30,'subs','subscriptions',Math.max(0,subs-paidNow),subsN); add(60,'subs','subscriptions',Math.max(0,subs-paidNow)+subs,subsN); add(90,'subs','subscriptions',Math.max(0,subs-paidNow)+subs*2,subsN); }
@@ -12941,6 +13002,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(fixJobs20261020()) setTimeout(save,0); }catch(e){}
   try{ if(fixManios20261020()) setTimeout(save,0); }catch(e){ console.warn('manios fix',e); }
   try{ if(seedDoubt20261105()) setTimeout(save,0); }catch(e){ console.warn('doubt seed',e); }
+  try{ if(seedDoubt20261105b()) setTimeout(save,0); }catch(e){ console.warn('doubt seed b',e); }
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); }
