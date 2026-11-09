@@ -2530,6 +2530,18 @@ body.dark .rn-row.rn-unsure{background:rgba(214,48,49,.08)}
 body.dark .rn-unsure-bar{background:rgba(214,48,49,.14);color:#FF9B93}
 .db-sec{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
 .db-sec:first-child{margin-top:0}
+
+/* ===== FROM A META AD (9 Nov 2026) — cards from the ads stand out at a glance ===== */
+.card.from-ad{background:linear-gradient(135deg,#F2EFFF 0%,#E8F2FF 100%)!important;box-shadow:inset 0 0 0 1.5px rgba(109,93,246,.6)}
+.card.from-ad.unsure{box-shadow:inset 0 0 0 1.5px rgba(214,48,49,.5)}
+.c-ad{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:3px 0 4px}
+.c-ad .ad-pill{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;letter-spacing:.07em;color:#fff;background:linear-gradient(90deg,#1877F2,#8B5CF6);border-radius:999px;padding:2px 8px;line-height:1.4}
+.c-ad .ad-about{font-size:11.5px;font-weight:700;color:#4C3FB8;line-height:1.3}
+body.dark .card.from-ad{background:linear-gradient(135deg,rgba(139,92,246,.18) 0%,rgba(24,119,242,.14) 100%)!important;box-shadow:inset 0 0 0 1.5px rgba(167,139,250,.55)}
+body.dark .c-ad .ad-about{color:#C4B5FD}
+.m-adrow{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.m-adrow .chk{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13px;white-space:nowrap;padding-bottom:9px;cursor:pointer}
+.m-adrow .field{flex:1;min-width:200px;margin:0}
 </style>
 <style>
 /* ---------- sync status + conflict UI ---------- */
@@ -4809,6 +4821,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
       <div class="field"><label>Email <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label><input id="mEmail" type="email" placeholder="name@email.gr"></div>
       <div class="field"><label>Draft / website link <span style="font-weight:400;text-transform:none;letter-spacing:0;">(shows a big «Open draft» button on the card)</span></label><input id="mDraft" type="url" placeholder="https://drafts.advonmedia.com/NAME/"><div id="mDraftAuto" class="m-site-auto"></div></div>
       <div class="field"><label>Contact note <span style="font-weight:400;text-transform:none;letter-spacing:0;">(always visible on the card — e.g. «No Viber — SMS & e-mail only»)</span></label><input id="mCnote" type="text" maxlength="140" placeholder="No Viber — SMS & e-mail only"></div>
+      <div class="m-adrow"><label class="chk" title="Shows the card in the ad colours on the Board"><input id="mAd" type="checkbox"> From a Meta ad</label><div class="field"><label>What the website is about</label><input id="mAbout" type="text" maxlength="80" placeholder="e.g. Τουριστικό κατάλυμα"></div></div>
       <div class="field"><label>Notes</label><textarea id="mNotes" placeholder="Viber, needs images, waiting for logo…"></textarea></div>
       <div class="field"><label>Card color</label><div class="swatches" id="mColors"></div>
         <label class="remember" style="margin:10px 0 0;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:500;cursor:pointer;"><input type="checkbox" id="mFill"> Fill the whole card with a light shade</label>
@@ -6221,6 +6234,29 @@ function seedDoubt20261105b(){
   return true;
 }
 /* one-time: the three Angelo named on 5 Nov 2026 */
+function seedAds20261109(){
+  if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
+  if(!state.meta) state.meta={};
+  if(state.meta.adSeed) return false;
+  const nm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  const dg=x=>String(x||'').replace(/\D/g,'').slice(-9);
+  const list=[
+    {re:/γαλανακ|galanak/, name:'Γαλανάκης Κωνσταντίνος', phone:'6945268085', email:'galko64@yahoo.com', day:'2026-11-10', time:'09:00', about:'Τουριστικό κατάλυμα'},
+    {re:/ανδρουλακ|androulak/, name:'Ανδρουλάκης Γιώργος', phone:'6977654114', email:'nutsandsnack@gmail.com', day:'2026-11-10', time:'11:00', about:'Τουριστικό κατάλυμα'},
+    {re:/γεωργιαδου|georgiadou/, name:'Γεωργιάδου Χριστίνα', phone:'6971909089', email:'georgiadouc4@gmail.com', day:'2026-11-10', time:'17:00', about:'Νυχάδικο'},
+    {re:/γεωργαντα|georganta/, name:'Γεωργαντάς Περικλής', phone:'6973373050', email:'pigammma@yahoo.com', day:'2026-11-12', time:'16:00', about:'Γιατρός'}
+  ];
+  const now=Date.now(); let made=0, marked=0;
+  list.forEach(d=>{
+    let c=state.clients.find(x=>x && !x.trashed && x.stage!=='lost' && (d.re.test(nm(x.name)) || (x.phone&&dg(x.phone)===dg(d.phone)) || (x.email&&nm(x.email)===d.email)));
+    if(!c){ c={id:uid(), name:d.name, stage:'booked', day:d.day, time:d.time, month:d.day.slice(0,7), phone:d.phone, email:d.email, notes:'Από τις διαφημίσεις στο Meta (9/11)', created:now, updated:now}; state.clients.push(c); made++; }
+    else { if(!c.phone) c.phone=d.phone; if(!c.email) c.email=d.email; marked++; }
+    c.ad='meta'; if(!c.about) c.about=d.about; c.updated=now;
+  });
+  state.meta.adSeed=1;
+  setTimeout(()=>{ try{ toast('Meta ads: '+marked+' card(s) marked'+(made?', '+made+' added to Booked':'')); }catch(e){} },1500);
+  return true;
+}
 function seedDoubt20261105(){
   if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
   if(!state.meta) state.meta={};
@@ -7058,9 +7094,11 @@ function cardEl(c,st){
   const prio= c.prio&&PRIO_COLOR[c.prio] ? c.prio : '';
   if(prio==='high') el.classList.add('pr-high');
   if(isJob(c)) el.classList.add('is-job');
+  if(cFromAd(c)) el.classList.add('from-ad');
   if(notSure(c)) el.classList.add('unsure'); else if(cDoubt(c)) el.classList.add('doubt-soft');
   el.innerHTML=`
     <div class="c-name">${prio?`<span class="c-prio ${prio}" title="Priority: ${prio}"><i></i>${prio}</span>`:''}${esc(c.name)}${addedTxt?`<span class="c-added" title="Added ${addedTxt}">${addedTxt}</span>`:''}</div>
+    ${(()=>{ const ad=cFromAd(c), ab=cAbout(c); if(!ad&&!ab) return ''; return `<div class="c-ad">${ad?'<span class="ad-pill" title="This client came from the Meta ads">META AD</span>':''}${ab?`<span class="ad-about" title="What the website is about">${esc(ab)}</span>`:''}</div>`; })()}
     <div class="c-meta">
       ${isJob(c)?`<span class="chip job" title="Extra work — counts as money, not as a new client or a renewal">★ ${esc(jobLbl(c))}</span>`:''}
       ${cval(c)?(hasPart(c)?`<span class="chip money part" title="${fmtMoney2(cpaid(c))} already paid · ${fmtMoney2(cowed(c))} still owed"><b>${fmtMoney(cpaid(c))}</b> / ${fmtMoney(cval(c))}<i style="width:${Math.round(cpaid(c)/cval(c)*100)}%"></i></span>`:`<span class="chip money">${fmtMoney(cval(c))}</span>`):''}
@@ -11453,7 +11491,7 @@ function openModal(id, presetDay){
   $('#mMonth').value=c?c.month:(presetDay?presetDay.slice(0,7):curMonth);
   $('#mNotes').value=c?(c.notes||''):'';
   try{ mDoubtRender(); }catch(e){}
-  $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
+  $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; $('#mAd').checked=!!(c&&cFromAd(c)); $('#mAbout').value=c?cAbout(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
   const sel=$('#mStage'); sel.innerHTML=STAGES.map(s=>`<option value="${s.id}" ${c&&s.id===c.stage?'selected':''}>${s.name}</option>`).join('');
   modalColor = c ? (c.color||'') : '';
   $('#mFill').checked = c ? !!c.fill : false;
@@ -11548,18 +11586,19 @@ $('#mSave').addEventListener('click',()=>{
     if(tot>0 && got>=tot && data.stage!=='paid' && data.stage!=='lost'){ data.stage='paid'; autoPaid=true; } }
   { const cn=$('#mCnote').value.trim(), th=window._mCnoteTh||''; if(cn===th) data.cnote=undefined; else data.cnote=cn; }   /* same as the chat's note → keep following it; cleared while the chat has one → '' = off */
   data.job=$('#mJob').value||'';
+  { const was=editingId?cFromAd(state.clients.find(x=>x.id===editingId)):false, now=$('#mAd').checked; data.ad= now ? (was&&state.clients.find(x=>x.id===editingId).ad ? state.clients.find(x=>x.id===editingId).ad : 'meta') : (was ? false : undefined); data.about=$('#mAbout').value.trim(); }
   if(data.job){ data.chatOff=true; data.v130=1; }
   if(editingId){
     const tgt=state.clients.find(x=>x.id===editingId)||{};
     const wasLost=tgt.stage==='lost';
     const wasJob=!!tgt.job;
-    const stageWas=tgt.stage; Object.assign(tgt, data, {updated:Date.now()}); if(tgt.cnote===undefined) delete tgt.cnote; if(!tgt.job){ delete tgt.job; if(wasJob) delete tgt.chatOff; } if(data.stage && data.stage!==stageWas) tgt.stageAt=Date.now();
+    const stageWas=tgt.stage; Object.assign(tgt, data, {updated:Date.now()}); if(tgt.cnote===undefined) delete tgt.cnote; if(tgt.ad===undefined) delete tgt.ad; if(!tgt.about) delete tgt.about; if(!tgt.job){ delete tgt.job; if(wasJob) delete tgt.chatOff; } if(data.stage && data.stage!==stageWas) tgt.stageAt=Date.now();
     if(data.stage==='lost' && !wasLost){ tgt.lostAt=Date.now(); }
     else if(data.stage!=='lost' && wasLost){ delete tgt.lostReason; tgt.lostAt=null; }
     if(data.stage==='thinking'){ if(!tgt.thinkAt) tgt.thinkAt=Date.now(); }
     else { tgt.thinkAt=null; delete tgt.thinkAck; }
   }
-  else { const nc={id:uid(), ...data, created:Date.now(), updated:Date.now()}; if(nc.cnote===undefined||nc.cnote==='') delete nc.cnote; if(!nc.job) delete nc.job; state.clients.push(nc); }
+  else { const nc={id:uid(), ...data, created:Date.now(), updated:Date.now()}; if(nc.cnote===undefined||nc.cnote==='') delete nc.cnote; if(!nc.ad) delete nc.ad; if(!nc.about) delete nc.about; if(!nc.job) delete nc.job; state.clients.push(nc); }
   save(); renderAll(); closeModal(); toast(autoPaid ? name+' paid in full → moved to Paid' : 'Saved');
   try{ chSyncBoard(); renderChats(); }catch(err){}
 });
@@ -13034,6 +13073,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(seedDoubt20261105()) setTimeout(save,0); }catch(e){ console.warn('doubt seed',e); }
   try{ if(seedDoubt20261105b()) setTimeout(save,0); }catch(e){ console.warn('doubt seed b',e); }
   try{ if(fixDoubt20261105c()) setTimeout(save,0); }catch(e){ console.warn('doubt fix c',e); }
+  try{ if(seedAds20261109()) setTimeout(save,0); }catch(e){ console.warn('ads seed',e); }
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); }
@@ -14144,6 +14184,9 @@ function chClientFor(t){
 }
 /* the client's draft / website link for the Board card button: the card's own «Draft link» field, else the chat's «draft» (set by Claude with chat.py meta <slug> draft=…, never shown to the client), else the website on its chat, else a drafts.advonmedia.com link in the notes */
 /* Board cards show NO notes under the name (Angelo, 8 Oct 2026) — booking lines, meeting logs and links are read inside the card */
+/* From a Meta ad (9 Nov 2026): set on the card (`c.ad`), or found from the «From the ads» lead the card was booked from */
+function cFromAd(c){ try{ if(!c) return false; if(c.ad===false||c.ad==='no') return false; if(c.ad) return true; if(c.leadId){ const l=(state.leads||[]).find(x=>x.id===c.leadId); if(l && (l.list==='ads'||l.src==='ads')) return true; } return false; }catch(e){ return false; } }
+function cAbout(c){ try{ if(!c) return ''; if(c.about) return String(c.about).trim(); if(c.leadId){ const l=(state.leads||[]).find(x=>x.id===c.leadId); if(l&&l.spec) return String(l.spec).trim(); } return ''; }catch(e){ return ''; } }
 function cContactNote(c){ try{ if(!c) return ''; if(typeof c.cnote==='string') return c.cnote.trim(); const th=chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } }   /* card's own note wins (even empty = turned off); else the chat's `cnote` set by Claude (chat.py meta <slug> cnote=…) */
 function cDraftUrl(c){ try{ if(!c) return '';
   const ok=u=>{ u=String(u||'').trim(); return !u?'':(/^https?:\/\//i.test(u)?u:'https://'+u); };
