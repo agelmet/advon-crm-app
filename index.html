@@ -3447,6 +3447,23 @@ body.dark .gm-day.hit .m{color:var(--green);}
 .day-row .tag{font-size:10.5px; font-weight:800; border-radius:99px; padding:2px 8px; background:#fff; white-space:nowrap;}
 .gm-weektot{display:flex; justify-content:space-between; align-items:baseline; margin-top:10px; font-size:12.5px; color:var(--muted); font-weight:600;}
 .gm-weektot b{font:800 16px/1 'Sora',sans-serif; color:var(--ink);}
+/* 9 Nov 2026: meetings from Meta ads + the day's total, under the week (no target for ads) */
+.gm-adwk{margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);}
+.gm-adh,.gm-toth{display:flex; align-items:center; gap:7px; font:800 10.5px/1.2 'Inter',sans-serif; letter-spacing:.07em; text-transform:uppercase; margin-bottom:6px;}
+.gm-adh{color:#5B45D6;} .gm-toth{color:var(--muted); margin-top:10px;}
+.gm-adh .dot{width:9px; height:9px; border-radius:50%; background:linear-gradient(135deg,#1877F2,#8B5CF6); flex:none;}
+.gm-adh .n,.gm-toth .n{margin-left:auto; letter-spacing:0; text-transform:none; font-weight:700;}
+.gm-adh .n b{font:800 15px/1 'Sora',sans-serif; color:#5B45D6;} .gm-toth .n b{font:800 15px/1 'Sora',sans-serif; color:var(--ink);}
+.gm-adh small{font-size:10.5px; color:var(--muted); font-weight:600;}
+.gm-adc,.gm-totc{border-radius:9px; padding:6px 4px; text-align:center; font:800 15px/1.1 'Sora',sans-serif; font-variant-numeric:tabular-nums; border:1.5px solid transparent;}
+.gm-adc{background:#F3F0FF; color:#9A8CE0;}
+.gm-adc.has{background:linear-gradient(135deg,#EFEAFF 0%,#E3EEFF 100%); color:#4C34B8; box-shadow:inset 0 0 0 1px rgba(124,92,246,.4);}
+.gm-adc.today{border-color:#8B5CF6;}
+.gm-adc[data-gm="day"]{cursor:pointer;}
+.gm-totc{background:var(--bg); color:var(--ink);} .gm-totc.today{border-color:var(--brand);}
+.gm-adc.future,.gm-totc.future{opacity:.5;}
+body.dark .gm-adc{background:rgba(139,92,246,.1); color:#9F8FE8;} body.dark .gm-adc.has{background:linear-gradient(135deg,rgba(139,92,246,.26),rgba(24,119,242,.18)); color:#DDD6FE;}
+body.dark .gm-adh,body.dark .gm-adh .n b{color:#C4B5FD;}
 .gm-fuel{margin-top:14px; padding:10px 12px; border-radius:12px; background:var(--bg); font-size:12.5px; line-height:1.45; color:var(--ink);}
 .gm-fuel b{font-weight:800;}
 .gm-fuel.low{background:var(--orange-soft);}
@@ -12574,18 +12591,33 @@ function gmCallsTarget(g){ return Math.max(1, Math.round(g.meet*g.cpm)); }
 function gmPerCall(g){ return (g.close/100)*g.value/Math.max(1,g.cpm); }
 /* date → what happened that day */
 function gmDayMap(){
-  const g=gmCfg(), m={};
-  const d=k=>m[k]||(m[k]={calls:0, meet:0, sms:0, no:0, na:0, extra:0, names:[], ids:[]});
+  const g=gmCfg(), m={}, A=gmAdSets(), seen=new Set();
+  const d=k=>m[k]||(m[k]={calls:0, meet:0, sms:0, no:0, na:0, extra:0, names:[], ids:[], ad:0, adNames:[], adIds:[]});
   (state.logs||[]).forEach(l=>{ if(!l || !/^\d{4}-\d{2}-\d{2}$/.test(l.date||'')) return; const o=d(l.date);
-    if(l.type==='g'){ o.meet++; o.names.push(l.name||''); o.ids.push(l.id||''); }
+    if(l.type==='g'){ if(l.clientId) seen.add(l.clientId);
+      if(gmLogIsAd(l,A)){ o.ad++; o.adNames.push(l.name||''); o.adIds.push(l.clientId||''); }   /* 9 Nov 2026: ad meetings never count toward the cold-calling target */
+      else { o.meet++; o.names.push(l.name||''); o.ids.push(l.id||''); } }
     if((l.source||'cold')==='cold'){ o.calls++; if(l.type==='y') o.sms++; else if(l.type==='r') o.no++; } });
   if(g.na){
     (state.leads||[]).forEach(l=>(Array.isArray(l.tries)?l.tries:[]).forEach(t=>{ const o=d(t); o.calls++; o.na++; }));
     ['warm','sched','prio'].forEach(k=>(state[k]||[]).forEach(it=>(Array.isArray(it.tries)?it.tries:[]).forEach(t=>{ const o=d(t); o.calls++; o.na++; })));
   }
   Object.keys(g.extra).forEach(k=>{ const n=+g.extra[k]||0; if(!n) return; const o=d(k); o.calls+=n; o.extra+=n; });
+  /* ad meetings that came in by themselves (online booking, added by hand) — counted on the day the card was made */
+  A.C.forEach(c=>{ if(seen.has(c.id) || !c.created) return; const k=isoDate(new Date(c.created)); const o=d(k); o.ad++; o.adNames.push(c.name||''); o.adIds.push(c.id); });
   return m;
 }
+/* Meetings from Meta ads (9 Nov 2026) — the ad leads and the ad cards */
+function gmAdSets(){
+  const L=new Set(), C=new Map();
+  (state.leads||[]).forEach(l=>{ if(l && (l.list==='ads'||l.src==='ads')) L.add(l.id); });
+  (state.clients||[]).forEach(c=>{ if(c && gmCardIsAd(c,L)) C.set(c.id,c); });
+  return {L,C};
+}
+function gmCardIsAd(c,L){ if(!c || c.trashed || c.stage==='trash' || isJob(c)) return false; if(c.ad===false||c.ad==='no') return false;
+  return cFromAd(c) || !!(c.fromLead && L.has(c.fromLead)); }
+function gmLogIsAd(l,A){ if(l.clientId){ const c=(state.clients||[]).find(x=>x && x.id===l.clientId); if(c){ if(c.ad===false||c.ad==='no') return false; if(A.C.has(c.id)) return true; } }
+  return !!(l.leadId && A.L.has(l.leadId)); }
 /* Angelo, 9 Oct 2026: the streak = calling days in a row on which the MEETINGS goal was hit (5 booked), not 20+ calls.
    Today adds 1 once the goal is hit; a today that is not there yet never breaks the streak. Rest days are skipped. */
 function gmStreak(m, g){
@@ -12620,11 +12652,13 @@ function gmDayDetail(k){
   const g=gmCfg(), m=gmDayMap(), o=m[k]||{calls:0, meet:0, sms:0, no:0, na:0, extra:0};
   const logs=(state.logs||[]).filter(l=>l && l.date===k).sort((a,b)=>(a.created||0)-(b.created||0));
   const cold=l=>(l.source||'cold')==='cold';
-  const booked=logs.filter(l=>l.type==='g'), sms=logs.filter(l=>l.type==='y'&&cold(l)), no=logs.filter(l=>l.type==='r'&&cold(l));
+  const booked=logs.filter(l=>l.type==='g'), A=gmAdSets(), sms=logs.filter(l=>l.type==='y'&&cold(l)), no=logs.filter(l=>l.type==='r'&&cold(l));
   const na=[];
   (state.leads||[]).forEach(l=>{ if(Array.isArray(l.tries) && l.tries.includes(k)) na.push({name:l.name, sub:[ldSpecShort(l), l.city].filter(Boolean).join(' · '), phone:l.phone, now:l.status==='na'? (l.cb?'call-back set':'still to call') : ({g:'booked later',y:'SMS later',r:'said no later',x:'dropped',np:'no phone'}[l.status]||'')}); });
   ['warm','sched','prio'].forEach(key=>(state[key]||[]).forEach(it=>{ if(Array.isArray(it.tries) && it.tries.includes(k)) na.push({name:it.name, sub:'callback list', phone:it.phone}); }));
-  return {k, o, booked, sms, no, na, extra:+g.extra[k]||0, g};
+  booked.forEach(l=>{ l._ad=gmLogIsAd(l,A); });
+  const adOnly=[]; A.C.forEach(c=>{ if(c.created && isoDate(new Date(c.created))===k && !(state.logs||[]).some(l=>l&&l.type==='g'&&l.clientId===c.id)) adOnly.push(c); });
+  return {k, o, booked, adOnly, sms, no, na, extra:+g.extra[k]||0, g};
 }
 function gmDayOverlay(){
   let ov=$('#gmDayOv'); if(ov) return ov;
@@ -12641,7 +12675,7 @@ function gmOpenDay(k){
   if(!state || !k) return; const ov=gmDayOverlay(); const D=gmDayDetail(k), o=D.o, g=D.g, t=todayIso();
   const dt=new Date(k+'T12:00');
   $('#gmDayTitle').textContent=dt.toLocaleDateString('en-GB',{weekday:'long', day:'numeric', month:'long'})+(k===t?' · today':'');
-  $('#gmDaySub').textContent=(gmWorkday(k)?'':'Rest day · ')+o.calls+' call'+(o.calls===1?'':'s')+' · '+o.meet+' meeting'+(o.meet===1?'':'s')+' booked';
+  $('#gmDaySub').textContent=(gmWorkday(k)?'':'Rest day · ')+o.calls+' call'+(o.calls===1?'':'s')+' · '+o.meet+' meeting'+(o.meet===1?'':'s')+' from calls'+((o.ad||0)?' · '+o.ad+' from Meta ads':'');
   const step=n=>{ const x=new Date(k+'T12:00'); x.setDate(x.getDate()+n); return isoDate(x); };
   const prev=ov.querySelector('#gmDayPrev'), next=ov.querySelector('#gmDayNext');
   /* ‹ › jump to the previous / next CALLING day (weekends and rest days are skipped) */
@@ -12657,8 +12691,9 @@ function gmOpenDay(k){
   h+= D.booked.length? D.booked.map(l=>{ const c=l.clientId? state.clients.find(x=>x.id===l.clientId) : null;
       const when=c&&c.day? 'meeting '+DOW[(new Date(c.day+'T12:00').getDay()+6)%7]+' '+fmtDay(c.day)+(c.time?' · '+esc(c.time):'') : 'no meeting day set';
       const st=c? ((typeof STAGES!=='undefined' && (STAGES.find(s=>s.id===c.stage)||{}).name) || c.stage) : '';
-      return row(l.name, [when, esc(l.note||''), st?('now: '+esc(st)):''].filter(Boolean).join(' · '), mv(l)+(c?`<button class="go" data-gdopen="${esc(c.id)}">Open</button>`:'')); }).join('')
+      return row((l._ad?'[AD] ':'')+l.name, [when, esc(l.note||''), st?('now: '+esc(st)):''].filter(Boolean).join(' · '), mv(l)+(c?`<button class="go" data-gdopen="${esc(c.id)}">Open</button>`:'')); }).join('')
     : `<div class="home-empty" style="padding:6px 2px">No meetings booked that day.</div>`;
+  if(D.adOnly.length) h+=`<div class="day-h meet">From Meta ads · came in by themselves · ${D.adOnly.length}</div>`+D.adOnly.map(c=>row('[AD] '+c.name, c.day? 'meeting '+DOW[(new Date(c.day+'T12:00').getDay()+6)%7]+' '+fmtDay(c.day)+(c.time?' · '+esc(c.time):'') : 'no meeting day set', `<button class="go" data-gdopen="${esc(c.id)}">Open</button>`)).join('');
   if(D.sms.length) h+=`<div class="day-h">SMS / e-mail sent · ${D.sms.length}</div>`+D.sms.map(l=>row(l.name, esc(l.note||''), mv(l))).join('');
   if(D.no.length) h+=`<div class="day-h">Said no · ${D.no.length}</div>`+D.no.map(l=>row(l.name, esc(l.note||''), mv(l))).join('');
   if(D.na.length) h+=`<div class="day-h">No answer · ${D.na.length}</div>`+D.na.map(x=>row(x.name, esc(x.sub||''), x.now?`<span class="tag">${esc(x.now)}</span>`:'')).join('');
@@ -12763,9 +12798,12 @@ function renderGoalCard(p){
       <div class="gm-lvl"><div class="row">Level ${lv.n} · ${lv.name}<span>${lv.to? (lv.to-p.life)+' calls to '+lv.nextName : 'top level'}</span></div><div class="bar"><i style="width:${lvPct.toFixed(0)}%"></i></div></div>
     </div>`;
   /* this week */
-  const ws=mondayOf(new Date()); ws.setDate(ws.getDate()+7*gmWeekOff); let days='', wMeet=0, wCalls=0, wDays=0;
-  for(let i=0;i<7;i++){ const d=new Date(ws); d.setDate(d.getDate()+i); const k=isoDate(d); const o=p.m[k]||{meet:0,calls:0};
-    const work=g.days.includes(d.getDay()); if(!work) continue; wDays++; wMeet+=o.meet; wCalls+=o.calls;
+  const ws=mondayOf(new Date()); ws.setDate(ws.getDate()+7*gmWeekOff); let days='', wMeet=0, wCalls=0, wDays=0, wAd=0, wAdRest=0, adCells='', totCells='';
+  for(let i=0;i<7;i++){ const d=new Date(ws); d.setDate(d.getDate()+i); const k=isoDate(d); const o=p.m[k]||{meet:0,calls:0,ad:0};
+    const work=g.days.includes(d.getDay()); wAd+=(o.ad||0); if(!work){ wAdRest+=(o.ad||0); continue; } wDays++; wMeet+=o.meet; wCalls+=o.calls;
+    { const fut2=k>p.date, tod2=k===p.date, a=o.ad||0, tt=o.meet+a;
+      adCells+=`<div class="gm-adc${tod2?' today':''}${fut2?' future':''}${a?' has':''}"${fut2?'':` data-gm="day" data-k="${k}" role="button" tabindex="0"`} title="${a? esc(o.adNames.join(', ')) : 'No meetings from the ads'}">${fut2?'–':a}</div>`;
+      totCells+=`<div class="gm-totc${tod2?' today':''}${fut2?' future':''}">${fut2?'–':tt}</div>`; }
     const fut=k>p.date, today=k===p.date, hit=o.meet>=p.M;
     days+=`<div class="gm-day${today?' today':''}${hit?' hit':''}${fut?' future':' pick'}"${fut?'':` data-gm="day" data-k="${k}" role="button" tabindex="0" title="See ${DOW[(d.getDay()+6)%7]} ${fmtDay(k)} — who you booked, SMS, no, no answer"`}><div class="d">${DOW[(d.getDay()+6)%7]}${gmWeekOff?' '+d.getDate():''}</div><div class="m">${fut?'–':o.meet}</div><div class="c">${fut?'':o.calls+' calls'}</div></div>`; }
   let fuel=0; try{ const lc=ldCounts(); fuel=(lc.new||0)+(lc.na||0); }catch(e){}
@@ -12775,6 +12813,12 @@ function renderGoalCard(p){
       <div class="gm-k">${IC.calendar.replace('<svg','<svg width="13" height="13"')} ${gmWeekOff===0?'This week':gmWeekOff===-1?'Last week':'Week of '+fmtDay(isoDate(ws))}<span class="gm-wknav"><button type="button" data-gm="wk-prev" title="Previous week">‹</button>${gmWeekOff?'<button type="button" data-gm="wk-now" title="Back to this week" style="width:auto;padding:0 6px;font-size:11px">Today</button>':''}<button type="button" data-gm="wk-next" title="Next week" ${gmWeekOff>=0?'disabled':''}>›</button></span></div>
       <div class="gm-week" style="--d:${Math.max(1,wDays)}">${days}</div>
       <div class="gm-weektot"><span>Meetings ${gmWeekOff===0?'this week':'that week'} · tap a day to see it</span><span><b>${wMeet}</b> / ${p.M*g.days.length}</span></div>
+      <div class="gm-adwk">
+        <div class="gm-adh"><span class="dot"></span>From Meta ads<span class="n"><b>${wAd}</b>${wAdRest?` <small>incl. ${wAdRest} at the weekend</small>`:''}</span></div>
+        <div class="gm-week gm-adrow" style="--d:${Math.max(1,wDays)}">${adCells}</div>
+        <div class="gm-toth">Total meetings · calls + ads<span class="n"><b>${wMeet+wAd}</b></span></div>
+        <div class="gm-week gm-totrow" style="--d:${Math.max(1,wDays)}">${totCells}</div>
+      </div>
       <div class="gm-fuel${low?' low':''}"><b>${(fuel+cbn).toLocaleString('en-US')}</b> people waiting for your call (${fuel.toLocaleString('en-US')} leads · ${cbn} callbacks) — enough for <b>${fuelDays} day${fuelDays===1?'':'s'}</b> at ${p.T} calls a day.${low?' <b>Time for new leads</b> — ask Claude for a fresh harvest.':''}
         <div class="fb"><i style="width:${Math.min(100,fuelDays/20*100).toFixed(0)}%"></i></div></div>
     </div>`;
