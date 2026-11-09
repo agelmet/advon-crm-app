@@ -2542,6 +2542,28 @@ body.dark .c-ad .ad-about{color:#C4B5FD}
 .m-adrow{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
 .m-adrow .chk{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13px;white-space:nowrap;padding-bottom:9px;cursor:pointer}
 .m-adrow .field{flex:1;min-width:200px;margin:0}
+
+/* ===== Calendar: meetings from Meta ads + ads vs cold-calling stats (9 Nov 2026) ===== */
+.meet.ad{background:linear-gradient(135deg,#EFEAFF 0%,#E3EEFF 100%);border-left-color:#7C5CF6;box-shadow:inset 0 0 0 1px rgba(124,92,246,.45)}
+.meet.ad.o-won{box-shadow:inset 3px 0 0 var(--green),inset 0 0 0 1px rgba(124,92,246,.45)}
+.meet .adm{display:inline-block;font:800 8.5px/1.5 'Inter',sans-serif;letter-spacing:.07em;color:#fff;background:linear-gradient(90deg,#1877F2,#8B5CF6);border-radius:999px;padding:0 6px;margin-right:4px;vertical-align:1px}
+.meet .mab{font-size:10.5px;font-weight:700;color:#5B45D6;line-height:1.25;margin-top:1px}
+.mcell .meet.mini.ad .adm{padding:0 4px;font-size:7.5px;margin-right:2px}
+body.dark .meet.ad{background:linear-gradient(135deg,rgba(139,92,246,.22),rgba(24,119,242,.16))}
+body.dark .meet .mab{color:#C4B5FD}
+.src-board{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)}
+.src-board h3{margin:0 0 10px;font:800 11px/1.2 'Inter',sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.src-row{display:grid;grid-template-columns:minmax(150px,1.3fr) repeat(6,minmax(70px,1fr));gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.src-row:first-of-type{border-top:0}
+.src-row .who{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13.5px}
+.src-row .who i{width:10px;height:10px;border-radius:50%;flex:none}
+.src-row .who.ad i{background:linear-gradient(135deg,#1877F2,#8B5CF6)} .src-row .who.cold i{background:var(--brand)}
+.src-row .n{font-family:'Sora';font-weight:800;font-size:18px;line-height:1.1}
+.src-row .n small{display:block;font:700 9.5px/1.3 'Inter',sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.src-row .n.conv{color:var(--deep)}
+.src-row.ad .n.conv{color:#5B45D6}
+.src-note{font-size:11px;color:var(--muted);font-weight:600;margin-top:8px}
+@media (max-width:760px){.src-row{grid-template-columns:repeat(3,1fr)}.src-row .who{grid-column:1/-1}}
 </style>
 <style>
 /* ---------- sync status + conflict UI ---------- */
@@ -4488,6 +4510,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
   </div>
   <div id="calBody"></div>
   <section class="mo-board" id="calOutcomes"></section>
+  <section class="src-board" id="calSources"></section>
   <section class="ql-stats" id="calStats"></section>
 </main>
 
@@ -8227,6 +8250,32 @@ function renderCalExtras(){
     el.querySelectorAll('[data-ns]').forEach(x=>x.addEventListener('click',()=>nsOpen()));
   }
   const st=$('#calStats'); if(st) st.innerHTML=monthStatsHtml(monthLogStats(curMonth),curMonth);
+  try{ renderCalSources(list); }catch(e){ console.warn('cal sources',e); }
+}
+/* Meta ads vs cold calling — the month's meetings split by where they came from (9 Nov 2026) */
+function renderCalSources(list){
+  const el=$('#calSources'); if(!el) return;
+  const row=(key,label,items)=>{
+    const n=o=>items.filter(c=>meetOut(c)===o).length;
+    const won=n('won'), think=n('think'), lost=n('lost'), ns=n('noshow'), open=items.filter(c=>!meetOut(c)).length;
+    const held=won+think+lost;                      /* meetings that happened and have an outcome */
+    const conv=held? Math.round(won/held*100) : null;
+    const money=items.filter(c=>meetOut(c)==='won').reduce((a,c)=>a+cval(c),0);
+    return `<div class="src-row ${key}">
+      <div class="who ${key}"><i></i>${label}</div>
+      <div class="n">${items.length}<small>meetings</small></div>
+      <div class="n" style="color:var(--deep)">${won}<small>won</small></div>
+      <div class="n" style="color:#B8860B">${think}<small>thinking</small></div>
+      <div class="n" style="color:var(--muted)">${lost}<small>lost${ns?' · '+ns+' no-show':''}</small></div>
+      <div class="n">${open}<small>no outcome yet</small></div>
+      <div class="n conv" title="Won ÷ meetings that happened and have an outcome (no-shows and open ones left out)">${conv===null?'—':conv+'%'}<small>conversion${money?' · '+fmtMoney(money):''}</small></div>
+    </div>`;
+  };
+  const ads=list.filter(c=>cFromAd(c)), cold=list.filter(c=>!cFromAd(c));
+  el.innerHTML=`<h3>Where ${fmtMonth(curMonth)}'s meetings came from</h3>
+    ${row('ad','Meta ads',ads)}
+    ${row('cold','Cold calling & other',cold)}
+    <div class="src-note">Conversion = won ÷ meetings that happened and got an outcome. Mark a card «From a Meta ad» in its window to move it to the ads row.</div>`;
 }
 function renderBoardStats(){ const el=$('#boardStats'); if(el) el.innerHTML=monthStatsHtml(monthLogStats(curMonth),curMonth); try{ const t=$('#dbTopChip'); if(t) t.innerHTML=dbBoardChip(); }catch(e){} }
 /* ---------- calendar ---------- */
@@ -8236,19 +8285,19 @@ function meetingsOn(iso){
   return state.clients.filter(c=>c.day===iso && !isTrashed(c)).sort((a,b)=>(a.time||'99')<(b.time||'99')?-1:1);
 }
 function meetHtml(c){
-  const o=meetOut(c);
-  return `<div class="meet${o?' o-'+o:''}" data-id="${c.id}" title="${o?MEET_OUT[o].name+' — click to change':'Click to say how it went'}">
+  const o=meetOut(c), ad=cFromAd(c), ab=cAbout(c);
+  return `<div class="meet${o?' o-'+o:''}${ad?' ad':''}" data-id="${c.id}" title="${ad?'From the Meta ads · ':''}${o?MEET_OUT[o].name+' — click to change':'Click to say how it went'}">
     ${o?`<span class="mo">${MEET_OUT[o].name}</span>`:''}
     ${c.time?`<div class="mt">${esc(c.time)}</div>`:''}
-    <div class="mn">${esc(c.name)}</div>
+    <div class="mn">${ad?'<span class="adm">AD</span>':''}${esc(c.name)}</div>${ab?`<div class="mab">${esc(ab)}</div>`:''}
     ${cval(c)?`<div class="mv">${fmtMoney(cval(c))}</div>`:''}
     <button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button>
     <button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button>
   </div>`;
 }
 function meetMini(c){
-  const o=meetOut(c);
-  return `<div class="meet mini${o?' o-'+o:''}" data-id="${c.id}" title="${esc((c.time?c.time+' · ':'')+c.name)}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${esc(c.name)}</span><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button></div>`;
+  const o=meetOut(c), ad=cFromAd(c);
+  return `<div class="meet mini${o?' o-'+o:''}${ad?' ad':''}" data-id="${c.id}" title="${ad?'Meta ad · ':''}${esc((c.time?c.time+' · ':'')+c.name)}${cAbout(c)?' · '+esc(cAbout(c)):''}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${ad?'<span class="adm">AD</span>':''}${esc(c.name)}</span><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button></div>`;
 }
 function renderCalendar(){
   const body=$('#calBody');
