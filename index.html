@@ -4166,6 +4166,65 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
   .xs-bar{flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px; scrollbar-width:none;} .xs-pill{flex:none;} .xs-add{order:-1; flex:none; margin-left:0;}
   .xs-grid{grid-template-columns:1fr;} .xs-sr .who{min-width:0; width:100%;} .xs-sr .why{min-width:0; width:100%;} }
 </style>
+<style id="adl-css">
+/* ===== AD LEADS tab (9 Nov 2026) ===== */
+.tab.tab-adl{display:inline-flex;align-items:center;gap:6px;color:#E0452B;background:linear-gradient(135deg,rgba(255,107,61,.16),rgba(255,77,94,.10));border:1px solid rgba(255,107,61,.35);font-weight:800}
+.tab.tab-adl.active{background:linear-gradient(135deg,#FF6B3D,#FF4D5E);color:#fff;border-color:transparent}
+#view-adl{max-width:1180px;margin:0 auto}
+.adl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:6px 0 16px}
+.adl-head h2{margin:0;font-size:26px;letter-spacing:-.02em}
+.adl-head p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:640px}
+.adl-head .adl-acts{display:flex;gap:8px;flex-wrap:wrap}
+.adl-btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;min-height:36px}
+.adl-btn:hover{border-color:#c9d2e3}
+.adl-btn.adl-pri{background:#0EC673;border-color:#0EC673;color:#fff}
+.adl-btn.adl-hot{background:#FF5A3C;border-color:#FF5A3C;color:#fff}
+.adl-btn.adl-ghost{background:transparent}
+.adl-btn.adl-mute{color:var(--muted)}
+.adl-tiles{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.adl-tile{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:12px 12px 10px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);position:relative;overflow:hidden}
+.adl-tile b{display:block;font-size:26px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.adl-tile span{display:block;font-size:12px;color:var(--muted);margin-top:6px;font-weight:600}
+.adl-tile::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--tc,#c9d2e3)}
+.adl-tile.adl-on{outline:2px solid var(--tc,#10141F);outline-offset:-2px}
+.adl-tile.adl-z b{color:var(--muted)}
+.adl-byad{font-size:12.5px;color:var(--muted);margin:-4px 0 16px}
+.adl-byad b{color:var(--ink)}
+.adl-ask{border:1px dashed #FF8A00;background:rgba(255,138,0,.06);border-radius:16px;padding:12px 14px;margin-bottom:18px}
+.adl-ask h4{margin:0 0 8px;font-size:14px}
+.adl-ask .adl-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 0;border-top:1px solid rgba(255,138,0,.18)}
+.adl-ask .adl-r:first-of-type{border-top:0}
+.adl-ask .adl-r .adl-n{font-weight:700;flex:1;min-width:180px}
+.adl-ask .adl-r small{color:var(--muted);font-weight:500}
+.adl-day{margin:22px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:2;background:var(--bg);padding:8px 0}
+.adl-day h3{margin:0;font-size:18px;letter-spacing:-.01em}
+.adl-day .adl-cnt{background:#10141F;color:#fff;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:800}
+.adl-day .adl-mini{display:flex;gap:6px;flex-wrap:wrap}
+.adl-day .adl-mini i{font-style:normal;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--surface);border:1px solid var(--line)}
+.adl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.adl-card{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--sc,#c9d2e3);border-radius:16px;padding:14px 16px 12px;box-shadow:0 1px 2px rgba(16,20,31,.04);display:flex;flex-direction:column;gap:8px}
+.adl-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.adl-name{font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.adl-spec{font-size:13px;color:var(--muted);font-weight:600;margin-top:2px}
+.adl-st{flex:none;font-size:12px;font-weight:800;border-radius:999px;padding:4px 10px;background:var(--sb,#eef1f7);color:var(--sc,#10141F);white-space:nowrap}
+.adl-st.adl-pulse{animation:adlp 1.8s ease-in-out infinite}
+@keyframes adlp{50%{box-shadow:0 0 0 5px rgba(255,90,60,.14)}}
+.adl-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px}
+.adl-meta a{color:var(--ink);text-decoration:none;font-weight:700}
+.adl-meta a:hover{text-decoration:underline}
+.adl-meta span{color:var(--muted)}
+.adl-when{font-size:13px;font-weight:700;color:var(--sc,#10141F)}
+.adl-msg{font-size:13px;background:var(--bg);border-radius:10px;padding:7px 10px;color:var(--ink)}
+.adl-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.adl-row .adl-sep{flex:1}
+.adl-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);border-radius:12px;padding:10px}
+.adl-form label{font-size:12px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.adl-form input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:var(--surface);color:var(--ink);min-height:36px}
+.adl-form .adl-q{display:flex;gap:4px;flex-wrap:wrap}
+.adl-empty{padding:40px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+@media(max-width:1100px){.adl-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:760px){.adl-grid{grid-template-columns:1fr}.adl-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.adl-head h2{font-size:22px}}
+</style>
 </head>
 <body class="locked">
 
@@ -4198,6 +4257,7 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
       <button class="tab" data-view="chats">Chats<span class="tab-n" id="chatsTabN" hidden>0</span></button>
       <button class="tab" data-view="quicklog">Quick Log</button>
       <button class="tab" data-view="leads">Leads</button>
+      <button class="tab tab-adl" data-view="adl" title="Everyone who came from the Facebook / Instagram ads">🔥 Ad leads<span class="tab-n" id="adlTabN" hidden>0</span></button>
       <button class="tab" data-view="board">Board</button>
       <button class="tab" data-view="calendar">Calendar</button>
       <button class="tab" data-view="callbacks">Callbacks<span class="tab-n" id="cbTabN" hidden>0</span></button>
@@ -4405,6 +4465,9 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
   <div class="mt-help" id="mtHelp"></div>
   <div class="mt-grid" id="mtGrid"><div class="mt-empty">Loading the posts…</div></div>
 </main>
+
+<!-- AD LEADS (9 Nov 2026) — everyone who came from the Meta ads, by day -->
+<main class="view" id="view-adl"><div id="adlBody"></div></main>
 
 <!-- ADS & SOCIAL (22 Oct 2026) — clients interested in Google Ads / Social media, to contact from November -->
 <main class="view" id="view-xs">
@@ -8670,7 +8733,9 @@ function wsInbox(box){
 /* Callback inbox (Angelo, 9 Nov 2026): Claude drops callbacks into leads/lists.json → lists._crm.cb = [{id,name,phone,email,note,day,how,pr}].
    Each id is added ONCE (state.meta.cbIn, synced). If a lead with the same phone is already in Leads, the callback goes on that lead. */
 function cbInbox(box){
-  if(!box || !Array.isArray(box.cb) || !box.cb.length) return false;
+  let adQ=false; try{ if(box && Array.isArray(box.ad)){ ensureMeta(); const q=state.meta.adMarkQ||(state.meta.adMarkQ=[]); const dn=state.meta.adMarkIn||(state.meta.adMarkIn={});
+    box.ad.forEach(a=>{ if(a && a.id && !dn[a.id] && !q.some(x=>x.id===a.id)){ q.push(a); adQ=true; } }); } }catch(e){}
+  if(!box || !Array.isArray(box.cb) || !box.cb.length) return adQ;
   ensureMeta(); const seen=state.meta.cbIn||(state.meta.cbIn={}); const names=[];
   const p9=v=>String(v||'').replace(/\D/g,'').slice(-9);
   box.cb.forEach(o=>{
@@ -8679,7 +8744,7 @@ function cbInbox(box){
     const r=caAdd(Object.assign({}, o, l?{leadId:l.id}:{}));
     if(r){ seen[o.id]=Date.now(); names.push(o.name); }
   });
-  if(!names.length) return false;
+  if(!names.length) return adQ;
   setTimeout(()=>{ try{ renderAll(); }catch(e){} toast('Callbacks: '+names.join(', ')+' added'); },60);
   return true;
 }
@@ -12552,7 +12617,7 @@ function switchView(v){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+v));
   /* the money strip also sits on Home, Calendar and To Do (the Calendar keeps its own month arrows, so the strip's are hidden there via CSS) */
-  $('#strip').style.display = (v==='year'||v==='renewals'||v==='ideas'||v==='monthly'||v==='remaining'||v==='leads'||v==='chats'||v==='meta'||v==='xs') ? 'none' : 'flex';
+  $('#strip').style.display = (v==='year'||v==='renewals'||v==='ideas'||v==='monthly'||v==='remaining'||v==='leads'||v==='chats'||v==='meta'||v==='xs'||v==='adl') ? 'none' : 'flex';
   if(v==='meta' && Date.now()-Meta.lastAt>20*1000) Meta.pull(false);
   if(v==='chats'){ if(Date.now()-Chats.lastAt>15*1000) Chats.pull(false); if(Chats.cur) Chats.pullThread(false); setTimeout(()=>Chats.seen(),400); }
   if(v==='leads' && Date.now()-Leads.lastAt>10*60*1000) Leads.pull(false);
@@ -13171,6 +13236,7 @@ function alSync(){
 window.addEventListener('storage',e=>{ if(e.key===AL_KEY){ try{ alSync(); }catch(err){} } });
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ try{ alSync(); }catch(e){} } });
 function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e){}
+  setTimeout(()=>{ try{ if(typeof renderAdl==='function') renderAdl(); }catch(e){ console.warn('ad leads',e); } },0);
   if(!state) return;
   try{ alSync(); }catch(e){}
   try{ if(applyBookedDefault()) setTimeout(save,0); }catch(e){}
@@ -15750,6 +15816,174 @@ function xsCopy(){ const t=$('#xsMsg').value, ta=$('#xsMsg'); const ok=()=>toast
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(m);
   setTimeout(m,1200);
 })();
+</script>
+<script id="adl-js">
+/* ===== AD LEADS tab (Angelo, 9 Nov 2026) =====
+   «a clear different menu for ad leads, nicely structured, how many came each day, their full card with name and details,
+   and easily navigate to booked, callbacks, need to call asap». One entry per person who came from the Meta ads:
+   • every lead in Leads with list 'ads' (the /istoselida form — the server writes them to leads/pool.json), and
+   • every Board card marked as from the ads (c.ad — e.g. an online Zoho booking made from the ad page).
+   A form lead and its Board card (same phone / e-mail, or booked from the lead) are ONE entry.
+   Statuses come from the real data — nothing is stored by this tab except the «from the ads?» answer on a card (c.ad). */
+const ADL_AD_NAMES={AD1_master:'Master video', N_dent:'Dentist video', N_psy:'Psychologist video'};
+const ADL_COL={call:['#FF5A3C','rgba(255,90,60,.12)'], cb:['#2F7FE0','rgba(47,127,224,.12)'], na:['#F5A623','rgba(245,166,35,.15)'],
+  book:['#0EC673','rgba(14,198,115,.13)'], won:['#7C5CFC','rgba(124,92,252,.13)'], no:['#8A94A8','rgba(138,148,168,.15)']};
+let adlF='all', adlOpenF=null;
+const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
+const adlNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+function adlIsTest(n){ return /δοκιμ|dokimi/i.test(adlNorm(n)); }
+function adlEmailOf(l){ if(l.email) return String(l.email); const m=String(l.note||'').match(/[\w.+-]+@[\w-]+(\.[\w-]+)+/); return m?m[0]:''; }
+function adlAdOf(l){ const m=String(l.note||'').match(/meta\s*\/\s*[^\/·]+\/\s*([A-Za-z0-9_\-]+)/); return m?m[1]:''; }
+function adlMsgOf(l){ return String(l.note||'').split(' · ').map(x=>x.trim()).filter(x=>x && !/@/.test(x) && !/^meta\s*\//.test(x) && !/^Καλέστε στο/.test(x)).join(' · '); }
+function adlTel(p){ let d=String(p||'').replace(/\D/g,''); if(d.length===10) d='30'+d; return d; }
+function adlPhoneTxt(p){ const d=String(p||'').replace(/\D/g,'').slice(-10); return d.replace(/(\d{3})(\d{3})(\d{4})/,'$1 $2 $3'); }
+const ADL_DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function adlDay(d){ if(!d) return ''; const x=new Date(d+'T00:00'); return ADL_DOW[x.getDay()]+' '+fmtDay(d); }
+function adlDayWord(d){ const t=todayIso(); if(d===t) return 'today'; if(d===isoDate(new Date(Date.now()+864e5))) return 'tomorrow'; if(d===isoDate(new Date(Date.now()-864e5))) return 'yesterday'; return adlDay(d); }
+function adlAgo(ts){ const m=Math.max(0,Math.round((Date.now()-ts)/60000)); return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'; }
+function adlHM(ts){ const d=new Date(ts); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function adlCardFor(l){
+  const cs=state.clients||[];
+  if(l.clientId){ const c=cs.find(x=>x.id===l.clientId); if(c) return c; }
+  const p=adlP9(l.phone), e=adlEmailOf(l).toLowerCase(), since=(Date.parse(l.at||'')||l.created||0)-36*3600e3;
+  return cs.find(c=>c && ((p.length===9 && adlP9(c.phone)===p) || (e && String(c.email||'').toLowerCase()===e)) && (c.created||0)>=since) || null;
+}
+/* «From the ads» marks Claude drops in (leads/lists.json → _crm.ad) wait here until the Board card exists */
+function adlMarkApply(){
+  ensureMeta(); const q=state.meta.adMarkQ; if(!Array.isArray(q)||!q.length) return;
+  const dn=state.meta.adMarkIn||(state.meta.adMarkIn={}); let ch=false;
+  state.meta.adMarkQ=q.filter(a=>{
+    const p=adlP9(a.phone), e=String(a.email||'').toLowerCase(), sur=adlNorm(a.surname||'');
+    const c=(state.clients||[]).find(x=>x && ((p.length===9 && adlP9(x.phone)===p) || (e && String(x.email||'').toLowerCase()===e) || (sur && adlNorm(x.name).includes(sur) && x.fromBooking)));
+    if(!c) return true;
+    if(c.ad!=='no' && c.ad!==false){ c.ad=true; if(!c.adAt) c.adAt=a.at?Date.parse(a.at):(c.created||Date.now()); c.updated=Date.now(); }
+    dn[a.id]=Date.now(); ch=true; return false;
+  });
+  if(ch) setTimeout(save,0);
+}
+function adlStatus(e){
+  const l=e.l, c=e.c, t=todayIso();
+  if(c){
+    if(c.stage==='lost') return {k:'no', t:'Lost', d:'on the Board as Lost'};
+    if(c.stage==='thinking') return {k:'book', t:'Thinking', d:'met · thinking about it'+(c.day?' (met '+adlDay(c.day)+')':'')};
+    if(c.stage==='booked'){ const past=c.day && c.day<t; return {k:'book', t:past?'Met?':'Booked', d:c.day?('meeting '+adlDayWord(c.day)+(c.day!==t&&!/^\w{3} /.test(adlDayWord(c.day))?' '+adlDay(c.day):'')+(c.time?' · '+c.time:'')):'on the Board · no day yet'}; }
+    const s=STAGES.find(x=>x.id===c.stage); return {k:'won', t:'Client', d:s?s.name:''};
+  }
+  if(!l) return {k:'call', t:'Call now', d:''};
+  if(l.status==='r'||l.status==='x') return {k:'no', t:'Not interested', d:''};
+  if(l.status==='g') return {k:'book', t:'Booked', d:'booked from Leads'};
+  if(l.cb && l.cb.day){
+    if(l.cb.day<t) return {k:'call', t:'Call now', d:'callback was '+adlDay(l.cb.day)+' — late'};
+    return {k:'cb', t:l.cb.day===t?'Callback today':'Callback', d:'call back '+adlDayWord(l.cb.day)+(l.cb.day!==t&&!/^\w{3} /.test(adlDayWord(l.cb.day))?' · '+adlDay(l.cb.day):'')+(l.cb.time?' · '+l.cb.time:''), today:l.cb.day===t};
+  }
+  if(l.status==='y') return {k:'na', t:'SMS sent', d:'waiting for an answer'};
+  if(l.status==='na'){ const n=(l.tries||[]).length; return {k:'na', t:'No answer', d:n+(n===1?' try':' tries')+(l.tries&&l.tries.length?' · last '+adlDayWord(l.tries[l.tries.length-1]):'')}; }
+  return {k:'call', t:'Call now', d:'not called yet'};
+}
+function adlEntries(){
+  ensureLeads(); const out=[], used=new Set();
+  state.leads.forEach(l=>{
+    if(!l || !(l.list==='ads'||l.src==='ads') || adlIsTest(l.name)) return;
+    const c=adlCardFor(l); if(c) used.add(c.id);
+    const ts=Date.parse(l.at||'')||l.created||Date.parse((l.added||todayIso())+'T12:00');
+    out.push({k:'l', id:l.id, l, c, ts, name:l.name, spec:l.spec||'', phone:l.phone||(c&&c.phone)||'', email:adlEmailOf(l)||(c&&c.email)||'', ad:adlAdOf(l), msg:adlMsgOf(l), memo:l.memo||'', src:'Form on the ad page'});
+  });
+  (state.clients||[]).forEach(c=>{
+    if(!c || used.has(c.id) || !cFromAd(c)) return;
+    out.push({k:'c', id:c.id, l:null, c, ts:c.adAt||c.created||Date.now(), name:c.name, spec:'', phone:c.phone||'', email:c.email||'', ad:'', msg:'', memo:'', src:c.fromBooking?'Booked online (calendar)':'Board'});
+  });
+  out.forEach(e=>{ e.st=adlStatus(e); e.day=isoDate(new Date(e.ts)); });
+  out.sort((a,b)=>b.ts-a.ts); return out;
+}
+/* online bookings since the ads started that nobody has answered «from the ads?» for */
+function adlAskList(){
+  const from=Date.parse('2026-11-09T00:00'); const linked=new Set(adlEntries().map(e=>e.c&&e.c.id).filter(Boolean));
+  return (state.clients||[]).filter(c=>c && c.fromBooking && (c.created||0)>=from && c.ad===undefined && !linked.has(c.id) && c.stage!=='lost');
+}
+function adlBadge(all){
+  const n=all.filter(e=>e.st.k==='call' || (e.st.k==='cb' && e.st.today)).length;
+  const b=$('#adlTabN'); if(b){ b.textContent=n; b.hidden=!n; }
+}
+const ADL_F=[['all','All ad leads'],['today','Came today'],['call','Call now'],['cb','Callbacks'],['na','No answer'],['book','Booked'],['won','Became clients'],['no','Not interested']];
+function adlCardHtml(e){
+  const s=e.st, col=ADL_COL[s.k]||ADL_COL.no, l=e.l, c=e.c;
+  const tel=adlTel(e.phone), adn=e.ad?(ADL_AD_NAMES[e.ad]||e.ad):'';
+  const open=adlOpenF && adlOpenF.id===e.id ? adlOpenF.kind : '';
+  const tom=isoDate(new Date(Date.now()+864e5));
+  let form='';
+  if(open==='book') form=`<div class="adl-form" data-f="${e.id}"><label>Meeting day<input type="date" data-fd value="${tom}"></label><label>Time<input type="time" data-ft step="900"></label><label>Value €<input type="number" data-fv value="130" style="width:90px"></label><span class="adl-sep"></span><button class="adl-btn adl-pri" data-adl="bookok" data-id="${e.id}">Save · Booked</button><button class="adl-btn adl-ghost adl-mute" data-adl="close">Cancel</button></div>`;
+  if(open==='cb') form=`<div class="adl-form" data-f="${e.id}"><label>Call back on<input type="date" data-fd value="${(l&&l.cb&&l.cb.day)||tom}"></label><label>Time (optional)<input type="time" data-ft step="900" value="${(l&&l.cb&&l.cb.time)||''}"></label><div class="adl-q"><button class="adl-btn adl-ghost" data-adl="cbq" data-d="${todayIso()}">Today</button><button class="adl-btn adl-ghost" data-adl="cbq" data-d="${tom}">Tomorrow</button></div><span class="adl-sep"></span><button class="adl-btn adl-pri" data-adl="cbok" data-id="${e.id}">Save callback</button><button class="adl-btn adl-ghost adl-mute" data-adl="close">Cancel</button></div>`;
+  const acts=[];
+  if(l && (s.k==='call'||s.k==='cb'||s.k==='na')){
+    acts.push(`<button class="adl-btn adl-pri" data-adl="book" data-id="${e.id}">📅 Booked</button>`,`<button class="adl-btn" data-adl="cb" data-id="${e.id}">☎ Callback</button>`,`<button class="adl-btn" data-adl="na" data-id="${e.id}">No answer</button>`,`<button class="adl-btn adl-ghost adl-mute" data-adl="no" data-id="${e.id}">Not interested</button>`);
+  }
+  if(l && s.k==='no') acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="undo" data-id="${e.id}">↺ Back to call list</button>`);
+  if(c) acts.push(`<button class="adl-btn" data-adl="open" data-id="${c.id}">Open card ›</button>`);
+  if(c && c.stage==='booked') acts.push(`<button class="adl-btn adl-ghost" data-adl="go" data-v="calendar">Calendar ›</button>`);
+  if(s.k==='cb') acts.push(`<button class="adl-btn adl-ghost" data-adl="go" data-v="callbacks">Callbacks ›</button>`);
+  if(l && !c) acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="lead" data-id="${e.id}">In Leads ›</button>`);
+  return `<article class="adl-card" style="--sc:${col[0]};--sb:${col[1]}">
+    <div class="adl-top"><div><div class="adl-name">${esc(e.name)}</div>${e.spec?`<div class="adl-spec">${esc(e.spec)}</div>`:''}</div><span class="adl-st${s.k==='call'?' adl-pulse':''}">${esc(s.t)}</span></div>
+    ${s.d?`<div class="adl-when">${esc(s.d)}</div>`:''}
+    <div class="adl-meta">${e.phone?`<a href="tel:+${tel}">📞 ${esc(adlPhoneTxt(e.phone))}</a>`:''}${e.email?`<a href="mailto:${esc(e.email)}">✉ ${esc(e.email)}</a>`:''}</div>
+    <div class="adl-meta"><span>${esc(e.src)} · ${adlHM(e.ts)} · ${adlAgo(e.ts)}</span>${adn?`<span>Ad: <b style="color:var(--ink)">${esc(adn)}</b></span>`:''}</div>
+    ${e.msg?`<div class="adl-msg">«${esc(e.msg)}»</div>`:''}
+    ${e.memo&&e.memo!==e.msg?`<div class="adl-msg">📝 ${esc(e.memo)}</div>`:''}
+    <div class="adl-row">${e.phone?`<a class="adl-btn adl-hot" href="tel:+${tel}">📞 Call</a><a class="adl-btn" href="viber://chat?number=%2B${tel}">Viber</a>`:''}${acts.join('')}</div>
+    ${form}
+  </article>`;
+}
+function renderAdl(){
+  if(!state) return;
+  try{ adlMarkApply(); }catch(e){}
+  const all=adlEntries(); adlBadge(all);
+  if(curView!=='adl') return;
+  const box=$('#adlBody'); if(!box) return;
+  const t=todayIso(), cnt={all:all.length, today:all.filter(e=>e.day===t).length};
+  ['call','cb','na','book','won','no'].forEach(k=>cnt[k]=all.filter(e=>e.st.k===k).length);
+  const tc={all:'#10141F',today:'#FF8A00',call:ADL_COL.call[0],cb:ADL_COL.cb[0],na:ADL_COL.na[0],book:ADL_COL.book[0],won:ADL_COL.won[0],no:ADL_COL.no[0]};
+  const tiles=ADL_F.map(([k,lab])=>`<button class="adl-tile${adlF===k?' adl-on':''}${cnt[k]?'':' adl-z'}" style="--tc:${tc[k]}" data-adl="f" data-k="${k}"><b>${cnt[k]}</b><span>${lab}</span></button>`).join('');
+  const byAd={}; all.forEach(e=>{ const k=e.ad?(ADL_AD_NAMES[e.ad]||e.ad):(e.k==='c'?'Booked online':'Other'); byAd[k]=(byAd[k]||0)+1; });
+  const byAdTxt=Object.entries(byAd).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<b>${esc(k)}</b> ${n}`).join(' · ');
+  const ask=adlAskList();
+  const askHtml=ask.length?`<div class="adl-ask"><h4>Booked online since the ads started — did they come from the ads?</h4>${ask.map(c=>`<div class="adl-r"><span class="adl-n">${esc(c.name)} <small>· ${c.day?'meeting '+esc(adlDay(c.day))+(c.time?' '+esc(c.time):''):'no day'}${c.phone?' · '+esc(adlPhoneTxt(c.phone)):''}</small></span><button class="adl-btn adl-hot" data-adl="mark" data-v="1" data-id="${c.id}">🔥 From the ads</button><button class="adl-btn adl-ghost adl-mute" data-adl="mark" data-v="0" data-id="${c.id}">Not from the ads</button></div>`).join('')}</div>`:'';
+  let list=all;
+  if(adlF==='today') list=all.filter(e=>e.day===t); else if(adlF!=='all') list=all.filter(e=>e.st.k===adlF);
+  const days={}; list.forEach(e=>(days[e.day]=days[e.day]||[]).push(e));
+  const dayLab=d=>{ const x=new Date(d+'T00:00'); const w=x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}); return d===t?'Today · '+w:d===isoDate(new Date(Date.now()-864e5))?'Yesterday · '+w:w; };
+  const mini=arr=>{ const m={}; arr.forEach(e=>m[e.st.k]=(m[e.st.k]||0)+1); return [['call','call now'],['cb','callback'],['na','no answer'],['book','booked'],['won','client'],['no','not interested']].filter(([k])=>m[k]).map(([k,w])=>`<i style="color:${ADL_COL[k][0]}">${m[k]} ${w}</i>`).join(''); };
+  const groups=Object.keys(days).sort().reverse().map(d=>`<div class="adl-day"><h3>${esc(dayLab(d))}</h3><span class="adl-cnt">${days[d].length} ${days[d].length===1?'lead':'leads'}</span><span class="adl-mini">${mini(days[d])}</span></div><div class="adl-grid">${days[d].map(adlCardHtml).join('')}</div>`).join('');
+  box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads — form on the ad page or booked online. Newest first, grouped by day. Call the red ones first.</p></div>
+    <div class="adl-acts"><button class="adl-btn" data-adl="go" data-v="callbacks">☎ Callbacks</button><button class="adl-btn" data-adl="go" data-v="calendar">📅 Calendar</button><button class="adl-btn" data-adl="pull">↻ Check for new</button></div></div>
+    <div class="adl-tiles">${tiles}</div>
+    ${byAdTxt?`<div class="adl-byad">By ad: ${byAdTxt}</div>`:''}
+    ${askHtml}
+    ${groups||`<div class="adl-empty">${adlF==='all'?'No ad leads yet.':'Nobody here right now.'}</div>`}`;
+}
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest && ev.target.closest('#view-adl [data-adl]'); if(!b) return;
+  const a=b.dataset.adl, id=b.dataset.id;
+  const L=()=>(state.leads||[]).find(x=>x.id===id);
+  if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; renderAdl(); return; }
+  if(a==='go'){ switchView(b.dataset.v); window.scrollTo(0,0); return; }
+  if(a==='pull'){ try{ Leads.pull(true); }catch(e){} try{ Bookings.pull(true); }catch(e){} return; }
+  if(a==='open'){ openModal(id); return; }
+  if(a==='lead'){ const l=L(); if(!l) return; ldFilter.list='ads'; ldFilter.q=''; switchView('leads'); setTimeout(()=>{ const el=document.querySelector('[data-lid="'+l.id+'"],[data-id="'+l.id+'"]'); if(el) try{ el.scrollIntoView({block:'center'}); }catch(e){} },120); return; }
+  if(a==='close'){ adlOpenF=null; renderAdl(); return; }
+  if(a==='book'||a==='cb'){ adlOpenF=(adlOpenF&&adlOpenF.id===id&&adlOpenF.kind===a)?null:{id,kind:a}; renderAdl(); return; }
+  if(a==='cbq'){ const f=b.closest('.adl-form'); const i=f&&f.querySelector('[data-fd]'); if(i) i.value=b.dataset.d; return; }
+  if(a==='na'){ const l=L(); if(l) ldOutcome(l,'n'); renderAdl(); return; }
+  if(a==='no'){ const l=L(); if(l && confirm(l.name+' — not interested?')){ ldOutcome(l,'r'); renderAdl(); } return; }
+  if(a==='undo'){ const l=L(); if(l){ ldUndo(l); renderAdl(); } return; }
+  if(a==='bookok'){ const l=L(); const f=b.closest('.adl-form'); if(!l||!f) return;
+    ldBookPick={day:f.querySelector('[data-fd]').value||'', time:f.querySelector('[data-ft]').value||'', value:f.querySelector('[data-fv]').value||''};
+    adlOpenF=null; ldBookConfirm(l); const c=(state.clients||[]).find(x=>x.id===l.clientId); if(c && !c.ad){ c.ad=true; c.adAt=c.adAt||Date.parse(l.at||'')||l.created; save(); } renderAdl(); return; }
+  if(a==='cbok'){ const l=L(); const f=b.closest('.adl-form'); if(!l||!f) return; const d=f.querySelector('[data-fd]').value, tm=f.querySelector('[data-ft]').value;
+    if(!d){ toast('Pick the day to call back'); return; }
+    ldCbPick={day:d, time:tm||'', memo:l.memo||'', how:'call', hot:false}; adlOpenF=null; ldSetCb(l,d,tm,null,'call'); renderAdl(); return; }
+  if(a==='mark'){ const c=(state.clients||[]).find(x=>x.id===id); if(!c) return; if(b.dataset.v==='1'){ c.ad=true; c.adAt=c.adAt||c.created||Date.now(); } else c.ad='no'; c.updated=Date.now(); save(); renderAdl(); toast(c.name+(c.ad===true?' → from the ads':' → not from the ads')); return; }
+});
+
 </script>
 </body>
 </html>
