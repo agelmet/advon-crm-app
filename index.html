@@ -15855,6 +15855,8 @@ function adlMarkApply(){
   state.meta.adMarkQ=q.filter(a=>{
     const p=adlP9(a.phone), e=String(a.email||'').toLowerCase(), sur=adlNorm(a.surname||'');
     const c=(state.clients||[]).find(x=>x && ((p.length===9 && adlP9(x.phone)===p) || (e && String(x.email||'').toLowerCase()===e) || (sur && adlNorm(x.name).includes(sur) && x.fromBooking)));
+    if(a.no){ const lds=(state.leads||[]).filter(x=>x && (x.list==='ads'||x.src==='ads') && p.length===9 && adlP9(x.phone)===p); lds.forEach(x=>{ x.adNo=true; x.updated=Date.now(); });
+      if(c && c.ad===undefined){ c.ad='no'; c.updated=Date.now(); } if(!lds.length && !c) return true; dn[a.id]=Date.now(); ch=true; return false; }
     if(!c) return true;
     if(c.ad!=='no' && c.ad!==false){ c.ad=true; if(!c.adAt) c.adAt=a.at?Date.parse(a.at):(c.created||Date.now()); c.updated=Date.now(); }
     dn[a.id]=Date.now(); ch=true; return false;
@@ -15885,6 +15887,7 @@ function adlEntries(){
   state.leads.forEach(l=>{
     if(!l || !(l.list==='ads'||l.src==='ads') || adlIsTest(l.name)) return;
     const c=adlCardFor(l); if(c) used.add(c.id);
+    if(l.adNo || (c && (c.ad==='no'||c.ad===false))) return;
     const ts=Date.parse(l.at||'')||l.created||Date.parse((l.added||todayIso())+'T12:00');
     out.push({k:'l', id:l.id, l, c, ts, name:l.name, spec:l.spec||'', phone:l.phone||(c&&c.phone)||'', email:adlEmailOf(l)||(c&&c.email)||'', ad:adlAdOf(l), msg:adlMsgOf(l), memo:l.memo||'', src:'Form on the ad page'});
   });
@@ -15922,6 +15925,7 @@ function adlCardHtml(e){
   if(c && c.stage==='booked') acts.push(`<button class="adl-btn adl-ghost" data-adl="go" data-v="calendar">Calendar ›</button>`);
   if(s.k==='cb') acts.push(`<button class="adl-btn adl-ghost" data-adl="go" data-v="callbacks">Callbacks ›</button>`);
   if(l && !c) acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="lead" data-id="${e.id}">In Leads ›</button>`);
+  acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="notad" data-id="${e.id}" title="Take this person out of Ad leads">Not from the ads</button>`);
   return `<article class="adl-card" style="--sc:${col[0]};--sb:${col[1]}">
     <div class="adl-top"><div><div class="adl-name">${esc(e.name)}</div>${e.spec?`<div class="adl-spec">${esc(e.spec)}</div>`:''}</div><span class="adl-st${s.k==='call'?' adl-pulse':''}">${esc(s.t)}</span></div>
     ${s.d?`<div class="adl-when">${esc(s.d)}</div>`:''}
@@ -15981,6 +15985,9 @@ document.addEventListener('click',ev=>{
   if(a==='cbok'){ const l=L(); const f=b.closest('.adl-form'); if(!l||!f) return; const d=f.querySelector('[data-fd]').value, tm=f.querySelector('[data-ft]').value;
     if(!d){ toast('Pick the day to call back'); return; }
     ldCbPick={day:d, time:tm||'', memo:l.memo||'', how:'call', hot:false}; adlOpenF=null; ldSetCb(l,d,tm,null,'call'); renderAdl(); return; }
+  if(a==='notad'){ const e=adlEntries().find(x=>x.id===id); if(!e) return; const l=e.l, c=e.c, prevC=c?c.ad:undefined;
+    if(l){ l.adNo=true; l.updated=Date.now(); } if(c){ c.ad='no'; c.updated=Date.now(); } save(); renderAdl();
+    toastUndo(e.name+' → not from the ads', ()=>{ if(l){ delete l.adNo; l.updated=Date.now(); } if(c){ if(prevC===undefined) delete c.ad; else c.ad=prevC; c.updated=Date.now(); } save(); renderAdl(); }); return; }
   if(a==='mark'){ const c=(state.clients||[]).find(x=>x.id===id); if(!c) return; if(b.dataset.v==='1'){ c.ad=true; c.adAt=c.adAt||c.created||Date.now(); } else c.ad='no'; c.updated=Date.now(); save(); renderAdl(); toast(c.name+(c.ad===true?' → from the ads':' → not from the ads')); return; }
 });
 
