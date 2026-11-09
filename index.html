@@ -8667,6 +8667,22 @@ function wsInbox(box){
   setTimeout(()=>{ try{ renderAll(); }catch(e){} toast('Total profit: breakdown added (Year tab)'); },50);
   return true;
 }
+/* Callback inbox (Angelo, 9 Nov 2026): Claude drops callbacks into leads/lists.json → lists._crm.cb = [{id,name,phone,email,note,day,how,pr}].
+   Each id is added ONCE (state.meta.cbIn, synced). If a lead with the same phone is already in Leads, the callback goes on that lead. */
+function cbInbox(box){
+  if(!box || !Array.isArray(box.cb) || !box.cb.length) return false;
+  ensureMeta(); const seen=state.meta.cbIn||(state.meta.cbIn={}); const names=[];
+  const p9=v=>String(v||'').replace(/\D/g,'').slice(-9);
+  box.cb.forEach(o=>{
+    if(!o || !o.id || seen[o.id] || !o.name) return;
+    const ph=p9(o.phone); const l=ph.length===9 ? (state.leads||[]).find(x=>x && p9(x.phone)===ph) : null;
+    const r=caAdd(Object.assign({}, o, l?{leadId:l.id}:{}));
+    if(r){ seen[o.id]=Date.now(); names.push(o.name); }
+  });
+  if(!names.length) return false;
+  setTimeout(()=>{ try{ renderAll(); }catch(e){} toast('Callbacks: '+names.join(', ')+' added'); },60);
+  return true;
+}
 document.addEventListener('input',e=>{ const ed=e.target.closest&&e.target.closest('#finWealth .fw-ed'); if(!ed) return; wsLiveSums(ed); });
 function wsLiveSums(ed){
   const num=v=>{ const n=parseFloat(String(v||'').replace(/[€\s,]/g,'')); return isNaN(n)?0:n; };
@@ -11828,7 +11844,7 @@ const Leads={
       if(!res.ok) throw new Error('server '+res.status);
       const data=await res.json();
       ensureLeads(); let changed=false;
-      if(data.lists && typeof data.lists==='object' && data.lists._crm){ try{ if(wsInbox(data.lists._crm)) changed=true; }catch(e){ console.warn('ws inbox',e); } data.lists=Object.assign({},data.lists); delete data.lists._crm; }
+      if(data.lists && typeof data.lists==='object' && data.lists._crm){ try{ if(wsInbox(data.lists._crm)) changed=true; }catch(e){ console.warn('ws inbox',e); } try{ if(cbInbox(data.lists._crm)) changed=true; }catch(e){ console.warn('cb inbox',e); } data.lists=Object.assign({},data.lists); delete data.lists._crm; }
       if(data.lists && typeof data.lists==='object' && JSON.stringify(data.lists)!==JSON.stringify(state.meta.ld.lists||{})){ state.meta.ld.lists=data.lists; changed=true; }
       const n=ldMerge(data.leads||[], 'harvest');
       this.lastAt=Date.now();
