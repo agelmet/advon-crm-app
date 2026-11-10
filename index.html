@@ -8860,6 +8860,11 @@ function cbInbox(box){
   let adQ=false; try{ if(box && box.adSpend && box.adSpend.id){ ensureMeta(); const A=state.meta.adl||(state.meta.adl={}); if(A.spendId!==box.adSpend.id){ A.spendId=box.adSpend.id; A.spend=+box.adSpend.amount||0; A.spendAt=String(box.adSpend.at||''); adQ=true; } } }catch(e){}
   try{ if(box && Array.isArray(box.ad)){ ensureMeta(); const q=state.meta.adMarkQ||(state.meta.adMarkQ=[]); const dn=state.meta.adMarkIn||(state.meta.adMarkIn={});
     box.ad.forEach(a=>{ if(a && a.id && !dn[a.id] && !q.some(x=>x.id===a.id)){ q.push(a); adQ=true; } }); } }catch(e){}
+  /* 10 Nov 2026: lists._crm.upd = [{id, key|phone, spec?, memo?, email?, name?}] — Claude corrects a lead the CRM already holds; each id applied ONCE (state.meta.ldUpdIn), waits until the lead exists */
+  try{ if(box && Array.isArray(box.upd)){ ensureMeta(); const dn=state.meta.ldUpdIn||(state.meta.ldUpdIn={}); const q9=v=>String(v||'').replace(/\D/g,'').slice(-9);
+    box.upd.forEach(u=>{ if(!u || !u.id || dn[u.id]) return; const ph=q9(u.phone);
+      const l=(state.leads||[]).find(x=>x && ((u.key && x.key===u.key) || (ph.length===9 && q9(x.phone)===ph))); if(!l) return;
+      ['spec','memo','email','name'].forEach(k=>{ if(u[k]!=null && String(u[k]).trim()) l[k]=String(u[k]).trim(); }); l.updated=Date.now(); dn[u.id]=Date.now(); adQ=true; }); } }catch(e){}
   if(!box || !Array.isArray(box.cb) || !box.cb.length) return adQ;
   ensureMeta(); const seen=state.meta.cbIn||(state.meta.cbIn={}); const names=[];
   const p9=v=>String(v||'').replace(/\D/g,'').slice(-9);
