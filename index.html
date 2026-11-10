@@ -4222,6 +4222,33 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 .adl-form input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:var(--surface);color:var(--ink);min-height:36px}
 .adl-form .adl-q{display:flex;gap:4px;flex-wrap:wrap}
 .adl-empty{padding:40px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+
+/* Ad leads — calendar (10 Nov 2026) */
+.adl-mode{display:flex;gap:6px;margin:0 0 12px}
+.adl-cal{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:8px;box-shadow:0 1px 2px rgba(16,20,31,.04)}
+.adl-calnav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.adl-calnav h3{flex:1;text-align:center;margin:0;font-size:16px;letter-spacing:-.01em}
+.adl-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.adl-col{background:var(--bg);border-radius:14px;padding:6px;min-height:150px;display:flex;flex-direction:column;gap:6px;border:2px solid transparent;min-width:0}
+.adl-col.adl-today{background:rgba(255,138,0,.07)}
+.adl-col.adl-sel{border-color:#FF5A3C;background:rgba(255,90,60,.06)}
+.adl-colh{appearance:none;border:0;background:transparent;font:inherit;cursor:pointer;display:grid;text-align:left;padding:4px 6px;color:var(--ink);border-radius:10px}
+.adl-colh:hover{background:rgba(16,20,31,.04)}
+.adl-colh span{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.adl-colh b{font-size:24px;line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.adl-colh em{font-style:normal;font-size:12px;font-weight:700;color:var(--muted)}
+.adl-colh em.adl-has{color:#FF5A3C}
+.adl-today .adl-colh span::after{content:" · today";color:#FF8A00}
+.adl-chips{display:flex;flex-direction:column;gap:5px}
+.adl-chip{appearance:none;text-align:left;border:0;border-left:4px solid var(--sc,#c9d2e3);background:var(--surface);border-radius:10px;padding:6px 8px;font:inherit;cursor:pointer;display:grid;gap:1px;box-shadow:0 1px 2px rgba(16,20,31,.07);min-width:0;color:var(--ink)}
+.adl-chip:hover{box-shadow:0 3px 10px rgba(16,20,31,.12)}
+.adl-chip b,.adl-chip span,.adl-chip i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adl-chip b{font-size:12.5px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.25}
+.adl-chip span{font-size:11px;color:var(--muted)}
+.adl-chip i{font-style:normal;font-size:11px;font-weight:800;color:var(--sc,#10141F)}
+.adl-flash{animation:adlfl 1.8s ease-out}
+@keyframes adlfl{0%,40%{box-shadow:0 0 0 5px rgba(255,90,60,.35)}100%{box-shadow:0 1px 2px rgba(16,20,31,.04)}}
+@media(max-width:980px){.adl-week{grid-template-columns:repeat(7,minmax(148px,1fr));overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:4px}.adl-col{scroll-snap-align:start}}
 @media(max-width:1100px){.adl-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.adl-grid{grid-template-columns:1fr}.adl-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.adl-head h2{font-size:22px}}
 </style>
@@ -15828,7 +15855,10 @@ function xsCopy(){ const t=$('#xsMsg').value, ta=$('#xsMsg'); const ok=()=>toast
 const ADL_AD_NAMES={AD1_master:'Master video', N_dent:'Dentist video', N_psy:'Psychologist video'};
 const ADL_COL={call:['#FF5A3C','rgba(255,90,60,.12)'], cb:['#2F7FE0','rgba(47,127,224,.12)'], na:['#F5A623','rgba(245,166,35,.15)'],
   book:['#0EC673','rgba(14,198,115,.13)'], won:['#7C5CFC','rgba(124,92,252,.13)'], no:['#8A94A8','rgba(138,148,168,.15)']};
-let adlF='all', adlOpenF=null;
+let adlF='all', adlOpenF=null, adlWk=null, adlSel=null;
+let adlMode=(()=>{ try{ return localStorage.getItem('advon-adl-mode')||'cal'; }catch(e){ return 'cal'; } })();
+function adlMonday(d){ const x=new Date(d+'T12:00'); const k=(x.getDay()+6)%7; return isoDate(new Date(x.getTime()-k*864e5)); }
+const adlAdd=(d,n)=>isoDate(new Date(new Date(d+'T12:00').getTime()+n*864e5));
 const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
 const adlNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 function adlIsTest(n){ return /δοκιμ|dokimi/i.test(adlNorm(n)); }
@@ -15926,7 +15956,7 @@ function adlCardHtml(e){
   if(s.k==='cb') acts.push(`<button class="adl-btn adl-ghost" data-adl="go" data-v="callbacks">Callbacks ›</button>`);
   if(l && !c) acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="lead" data-id="${e.id}">In Leads ›</button>`);
   acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="notad" data-id="${e.id}" title="Take this person out of Ad leads">Not from the ads</button>`);
-  return `<article class="adl-card" style="--sc:${col[0]};--sb:${col[1]}">
+  return `<article class="adl-card" id="adl-${e.id}" style="--sc:${col[0]};--sb:${col[1]}">
     <div class="adl-top"><div><div class="adl-name">${esc(e.name)}</div>${e.spec?`<div class="adl-spec">${esc(e.spec)}</div>`:''}</div><span class="adl-st${s.k==='call'?' adl-pulse':''}">${esc(s.t)}</span></div>
     ${s.d?`<div class="adl-when">${esc(s.d)}</div>`:''}
     <div class="adl-meta">${e.phone?`<a href="tel:+${tel}">📞 ${esc(adlPhoneTxt(e.phone))}</a>`:''}${e.email?`<a href="mailto:${esc(e.email)}">✉ ${esc(e.email)}</a>`:''}</div>
@@ -15957,18 +15987,38 @@ function renderAdl(){
   const dayLab=d=>{ const x=new Date(d+'T00:00'); const w=x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}); return d===t?'Today · '+w:d===isoDate(new Date(Date.now()-864e5))?'Yesterday · '+w:w; };
   const mini=arr=>{ const m={}; arr.forEach(e=>m[e.st.k]=(m[e.st.k]||0)+1); return [['call','call now'],['cb','callback'],['na','no answer'],['book','booked'],['won','client'],['no','not interested']].filter(([k])=>m[k]).map(([k,w])=>`<i style="color:${ADL_COL[k][0]}">${m[k]} ${w}</i>`).join(''); };
   const groups=Object.keys(days).sort().reverse().map(d=>`<div class="adl-day"><h3>${esc(dayLab(d))}</h3><span class="adl-cnt">${days[d].length} ${days[d].length===1?'lead':'leads'}</span><span class="adl-mini">${mini(days[d])}</span></div><div class="adl-grid">${days[d].map(adlCardHtml).join('')}</div>`).join('');
-  box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads — form on the ad page or booked online. Newest first, grouped by day. Call the red ones first.</p></div>
+  box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads — form on the ad page or booked online. Pick a day in the calendar to see everyone who came that day. Call the red ones first.</p></div>
     <div class="adl-acts"><button class="adl-btn" data-adl="go" data-v="callbacks">☎ Callbacks</button><button class="adl-btn" data-adl="go" data-v="calendar">📅 Calendar</button><button class="adl-btn" data-adl="pull">↻ Check for new</button></div></div>
     <div class="adl-tiles">${tiles}</div>
     ${byAdTxt?`<div class="adl-byad">By ad: ${byAdTxt}</div>`:''}
     ${askHtml}
-    ${groups||`<div class="adl-empty">${adlF==='all'?'No ad leads yet.':'Nobody here right now.'}</div>`}`;
+    <div class="adl-mode"><button class="adl-btn${adlMode==='cal'?' adl-pri':''}" data-adl="mode" data-v="cal">📅 Calendar</button><button class="adl-btn${adlMode==='list'?' adl-pri':''}" data-adl="mode" data-v="list">☰ All days as a list</button></div>
+    ${adlMode==='cal'?adlCalHtml(days,dayLab,mini):(groups||`<div class="adl-empty">${adlF==='all'?'No ad leads yet.':'Nobody here right now.'}</div>`)}`;
+  const sc=box.querySelector('.adl-col.adl-sel'); if(sc){ const w=sc.parentElement; if(w.scrollWidth>w.clientWidth+4) w.scrollLeft=Math.max(0,sc.offsetLeft-w.offsetLeft-8); }
+}
+function adlCalHtml(days,dayLab,mini){
+  const t=todayIso(), has=Object.keys(days).sort();
+  if(!adlSel) adlSel= days[t]? t : (has[has.length-1]||t);
+  const ws=adlMonday(adlWk||adlSel), wd=[0,1,2,3,4,5,6].map(i=>adlAdd(ws,i));
+  const f=d=>new Date(d+'T12:00'), we=wd[6];
+  const wl=f(ws).getMonth()===f(we).getMonth()? f(ws).getDate()+' – '+f(we).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : f(ws).toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' – '+f(we).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const chip=e=>{ const col=ADL_COL[e.st.k]||ADL_COL.no; return `<button class="adl-chip" style="--sc:${col[0]}" data-adl="pick" data-d="${e.day}" data-id="${e.id}" title="${esc(e.name)}"><b>${esc(e.name)}</b><span>${esc(e.spec||e.src)}</span><i>${adlHM(e.ts)} · ${esc(e.st.t)}</i></button>`; };
+  const cols=wd.map(d=>{ const arr=(days[d]||[]).slice().sort((a,b)=>a.ts-b.ts); const x=f(d);
+    return `<div class="adl-col${d===t?' adl-today':''}${d===adlSel?' adl-sel':''}"><button class="adl-colh" data-adl="day" data-d="${d}"><span>${x.toLocaleDateString('en-GB',{weekday:'short'})}</span><b>${x.getDate()}</b><em class="${arr.length?'adl-has':''}">${arr.length?arr.length+(arr.length===1?' lead':' leads'):'—'}</em></button><div class="adl-chips">${arr.map(chip).join('')}</div></div>`; }).join('');
+  const sel=(days[adlSel]||[]).slice().sort((a,b)=>b.ts-a.ts);
+  return `<div class="adl-cal"><div class="adl-calnav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${esc(wl)}</h3><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week">›</button><button class="adl-btn adl-ghost" data-adl="day" data-d="${t}">Today</button></div><div class="adl-week">${cols}</div></div>
+    <div class="adl-day" id="adlSelDay"><h3>${esc(dayLab(adlSel))}</h3><span class="adl-cnt">${sel.length} ${sel.length===1?'lead':'leads'}</span><span class="adl-mini">${mini(sel)}</span></div>
+    ${sel.length?`<div class="adl-grid">${sel.map(adlCardHtml).join('')}</div>`:`<div class="adl-empty">No ad leads on this day${adlF!=='all'?' with this filter':''}.</div>`}`;
 }
 document.addEventListener('click',ev=>{
   const b=ev.target.closest && ev.target.closest('#view-adl [data-adl]'); if(!b) return;
   const a=b.dataset.adl, id=b.dataset.id;
   const L=()=>(state.leads||[]).find(x=>x.id===id);
-  if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; renderAdl(); return; }
+  if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; if(adlF==='today'){ adlSel=todayIso(); adlWk=null; } renderAdl(); return; }
+  if(a==='mode'){ adlMode=b.dataset.v; try{ localStorage.setItem('advon-adl-mode',adlMode); }catch(e){} renderAdl(); return; }
+  if(a==='wk'){ adlWk=b.dataset.d; renderAdl(); return; }
+  if(a==='day'){ adlSel=b.dataset.d; adlWk=null; adlOpenF=null; renderAdl(); const h=$('#adlSelDay'); if(h) try{ h.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} return; }
+  if(a==='pick'){ adlSel=b.dataset.d; adlWk=null; renderAdl(); const el=document.getElementById('adl-'+id); if(el){ try{ el.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} el.classList.add('adl-flash'); setTimeout(()=>el.classList.remove('adl-flash'),1900); } return; }
   if(a==='go'){ switchView(b.dataset.v); window.scrollTo(0,0); return; }
   if(a==='pull'){ try{ Leads.pull(true); }catch(e){} try{ Bookings.pull(true); }catch(e){} return; }
   if(a==='open'){ openModal(id); return; }
