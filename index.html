@@ -4354,123 +4354,203 @@ body.adl-mopen{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.adl-st.adl-pulse,.adl-flash{animation:none}}
 </style>
 <style id="adb-css">
-/* ===== AD LEADS v4 — pipeline board (10 Nov 2026) ===== */
-.adb-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px}
-.adb-seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;gap:2px;flex-wrap:wrap}
-.adb-seg button{appearance:none;border:0;background:transparent;font:inherit;font-size:13.5px;font-weight:700;color:var(--muted);padding:8px 14px;border-radius:10px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;min-height:40px}
+/* ===== AD LEADS v5 — «To do» + pipeline (10 Nov 2026) ===== */
+#view-adl{--late:#D93A20;--late-bg:#FFF0EC;--today:#B86E00;--today-bg:#FFF4DC;--tom:#1F5FBF;--tom-bg:#E9F1FF;--lat:#5B6578;--lat-bg:#EEF1F6;--ok:#0E9F5B}
+.adb-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 12px}
+.adb-top h2{margin:0 6px 0 0;font-size:22px;letter-spacing:-.02em;white-space:nowrap}
+.adb-top .adl-btn{min-height:38px;padding:7px 11px;font-size:12.5px}
+.adb-seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:3px;gap:2px}
+.adb-seg button{appearance:none;border:0;background:transparent;font:inherit;font-size:13.5px;font-weight:700;color:var(--muted);padding:7px 13px;border-radius:10px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;min-height:36px;white-space:nowrap}
 .adb-seg button:hover{color:var(--ink)}
 .adb-seg button.on{background:#10141F;color:#fff}
 body.dark .adb-seg button.on{background:#E9EDF5;color:#10141F}
-.adb-seg button i{font-style:normal;background:#F0522E;color:#fff;border-radius:999px;padding:0 7px;font-size:11.5px;line-height:19px;font-variant-numeric:tabular-nums}
-.adb-q{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-height:40px;width:min(300px,100%);background:var(--surface);color:var(--ink);margin-left:auto}
-.adb-focus{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-.adb-fc{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:7px 13px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;color:var(--ink);display:inline-flex;gap:7px;align-items:baseline}
-.adb-fc b{font-size:18px;font-variant-numeric:tabular-nums}
-.adb-fc.late{border-color:#F3B4A6;background:#FFF1EE;color:#B4301A}
-.adb-fc.today{border-color:#F6D49A;background:#FFF8EA;color:#94560A}
-.adb-fc.none{border-style:dashed;color:#B4301A}
-.adb-fc.ok{cursor:default;color:#0B7A47;background:rgba(14,198,115,.10);border-color:rgba(14,198,115,.3)}
-/* board */
-.adb-board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(248px,1fr);gap:10px;overflow-x:auto;padding:2px 2px 12px;align-items:start;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
-.adb-col{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px;min-height:160px;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px;min-width:0}
-.adb-ch{display:flex;align-items:center;gap:7px;padding:4px 4px 8px;border-bottom:3px solid var(--sc)}
-.adb-ch b{font-size:13.5px;flex:1;min-width:0;letter-spacing:-.005em}
-.adb-ch i{font-style:normal;font-weight:800;font-size:12px;background:var(--bg);border-radius:999px;padding:1px 8px;font-variant-numeric:tabular-nums}
-.adb-ch em{font-style:normal;font-weight:800;font-size:11px;color:#fff;background:#E0452B;border-radius:999px;padding:1px 7px}
-.adb-dot{width:9px;height:9px;border-radius:50%;background:var(--sc);flex:none}
-.adb-cl{display:flex;flex-direction:column;gap:8px}
-.adb-card{appearance:none;font:inherit;text-align:left;color:var(--ink);background:var(--bg);border:1px solid transparent;border-left:4px solid var(--sc);border-radius:12px;padding:9px 10px 10px;display:flex;flex-direction:column;gap:5px;cursor:pointer;width:100%;min-width:0;transition:box-shadow .15s,background-color .15s,border-color .15s}
-@media(hover:hover){.adb-card:hover{border-color:var(--line);border-left-color:var(--sc);background:var(--surface);box-shadow:0 4px 14px rgba(16,20,31,.08)}}
-.adb-card:active{transform:scale(.99)}
-.adb-card.adb-on{outline:2px solid var(--sc);outline-offset:-1px;background:var(--surface)}
-.adb-ct{display:flex;gap:8px;align-items:baseline;min-width:0}
-.adb-ct b{flex:1;min-width:0;font-size:14px;line-height:1.25;overflow-wrap:anywhere}
-.adb-ct small{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
-.adb-sp{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.adb-last{font-size:12.5px;line-height:1.38;color:var(--ink);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.adb-last.adb-lm{color:var(--muted);font-style:italic}
-.adb-nx{font-size:12px;font-weight:700;border-radius:8px;padding:4px 8px;background:#EEF1F6;color:#4A5468;align-self:flex-start;max-width:100%;line-height:1.35}
-.adb-nx b{font-weight:800;white-space:nowrap}
-.adb-d-late{background:#FFE4DD!important;color:#B4301A!important}
-.adb-d-today{background:#FFEFCC!important;color:#8A5000!important}
-.adb-d-tom{background:#E3EEFF!important;color:#1F4E9A!important}
-.adb-d-week,.adb-d-later{background:#EEF1F6;color:#4A5468}
-.adb-d-none{background:transparent!important;color:#B4301A!important;border:1px dashed #F0A898}
-.adb-empty{font-size:13px;color:#C0C7D4;text-align:center;padding:14px 6px}
+.adb-seg button i{font-style:normal;background:var(--late);color:#fff;border-radius:999px;padding:0 7px;font-size:11.5px;line-height:19px;font-variant-numeric:tabular-nums}
+.adb-seg button i.soft{background:#E89A1C}
+.adb-q{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:12px;padding:7px 12px;min-height:38px;width:190px;background:var(--surface);color:var(--ink)}
+.adb-nm{appearance:none;font:inherit;font-size:12.5px;font-weight:600;color:#0B6E78;background:rgba(14,154,167,.10);border:1px solid rgba(14,154,167,.28);border-radius:999px;padding:7px 12px;cursor:pointer;white-space:nowrap;max-width:270px;overflow:hidden;text-overflow:ellipsis}
+.adb-kbtn.on{background:#10141F;color:#fff;border-color:#10141F}
+.adb-help{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin:-4px 0 12px;font-size:12.5px;color:var(--muted)}
+.adb-help b{color:var(--ink);font-size:13px;margin-right:4px}
+.adb-help span{display:inline-flex;gap:6px;align-items:center}
+kbd{font:inherit;font-size:11px;font-weight:800;background:var(--bg);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 6px;color:var(--ink);white-space:nowrap}
+@media(hover:none){.adb-kbtn,.adb-help{display:none}}
+/* small action buttons */
+.adb-ib{appearance:none;font:inherit;font-size:12.5px;font-weight:700;line-height:1;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:0 9px;min-height:34px;display:inline-flex;align-items:center;gap:5px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-color .12s,border-color .12s,transform .08s}
+.adb-ib:hover{border-color:#B9C3D6}
+.adb-ib:active{transform:scale(.96)}
+.adb-ib.adb-call{background:#FF5A3C;border-color:#FF5A3C;color:#fff}
+.adb-ib.adb-ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.adb-ib.on{background:#10141F;border-color:#10141F;color:#fff}
+.adb-ib.adb-quiet{border-color:transparent;background:transparent;color:var(--muted)}
+.adb-ib.adb-quiet:hover{color:var(--ink);background:var(--bg)}
+.adb-ta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.adb-ta .adl-sep{flex:1;min-width:2px}
+.adb-ta.adb-big .adb-ib{min-height:42px;font-size:14px;padding:0 13px}
+.adb-hint{font-size:12px;color:var(--muted);margin-left:4px}
+.adb-stp{font-size:11px;font-weight:800;border-radius:999px;padding:3px 8px;color:var(--sc);background:color-mix(in srgb,var(--sc) 13%,transparent);white-space:nowrap;flex:none}
+/* ---------- TO DO ---------- */
+.adb-todo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 240px;gap:10px;align-items:start;margin-bottom:16px}
+.adb-tc{background:var(--cb,var(--lat-bg));border-radius:18px;padding:8px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.adb-tc-late{--cc:var(--late);--cb:var(--late-bg)}.adb-tc-today{--cc:var(--today);--cb:var(--today-bg)}.adb-tc-tom{--cc:var(--tom);--cb:var(--tom-bg)}.adb-tc-later{--cc:var(--lat);--cb:var(--lat-bg)}
+body.dark .adb-tc{background:var(--surface);outline:1px solid var(--line)}
+.adb-tc>header,.adb-none>header{display:flex;align-items:baseline;gap:8px;padding:6px 8px 2px}
+.adb-tc>header b{font-size:17px;letter-spacing:-.01em;color:var(--cc)}
+.adb-tc>header i,.adb-none>header i{font-style:normal;font-weight:800;font-size:12.5px;color:#fff;background:var(--cc,var(--late));border-radius:999px;padding:1px 8px;font-variant-numeric:tabular-nums;align-self:center}
+.adb-tc>header small,.adb-none>header small{font-size:12px;color:var(--muted);font-weight:600;margin-left:auto;text-align:right}
+.adb-tcl{display:flex;flex-direction:column;gap:8px}
+.adb-dsep{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--lat);padding:6px 8px 0}
+.adb-empty{font-size:13px;color:var(--muted);text-align:center;padding:18px 6px;opacity:.75}
+.adb-t{container-type:inline-size;background:var(--surface);border-radius:13px;padding:10px 9px 10px 13px;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative;box-shadow:0 1px 2px rgba(16,20,31,.05),0 0 0 1px rgba(16,20,31,.05)}
+.adb-t::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:0 4px 4px 0;background:var(--cc,#C9D2E3)}
+.adb-t.adb-kb,.adb-card.adb-kb{box-shadow:0 0 0 2px #10141F,0 6px 18px rgba(16,20,31,.12)}
+.adb-t.adb-open{box-shadow:0 0 0 2px var(--ok),0 10px 28px rgba(16,20,31,.14)}
+.adb-th{display:flex;align-items:flex-start;gap:8px;cursor:pointer;min-width:0}
+.adb-tn{flex:1;min-width:0;display:flex;flex-direction:column}
+.adb-tn b{font-size:14.5px;line-height:1.25;overflow-wrap:anywhere}
+.adb-tn small{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adb-tw{flex:none;font-size:12px;font-weight:800;color:var(--cc);font-variant-numeric:tabular-nums;white-space:nowrap;padding-top:2px}
+.adb-tc-today .adb-tw b,.adb-tc-tom .adb-tw b,.adb-tc-later .adb-tw b{font-size:15px}
+.adb-tk{font-size:14.5px;font-weight:700;line-height:1.35;cursor:pointer;overflow-wrap:anywhere;text-wrap:pretty}
+.adb-tl{font-size:12.5px;line-height:1.4;color:var(--muted);cursor:pointer;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.adb-t .adb-ta{margin-top:2px}
+.adb-mv{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--bg);border-radius:11px;padding:8px}
+.adb-mv>span{font-size:12px;font-weight:800;color:var(--muted);margin-right:2px}
+.adb-pick{position:relative;overflow:hidden;cursor:pointer}
+.adb-pick input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.adb-none{border:1.5px dashed #F0A898;background:#FFF8F6;border-radius:18px;padding:8px;margin-bottom:12px;--cc:var(--late)}
+body.dark .adb-none{background:var(--surface)}
+.adb-none>header b{font-size:15px;color:var(--late)}
+.adb-nonel{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:8px;margin-top:6px}
+.adb-nr{background:var(--surface);border-radius:12px;padding:9px 11px;display:flex;flex-direction:column;gap:7px;box-shadow:0 0 0 1px rgba(16,20,31,.06);min-width:0}
+.adb-nrn{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;cursor:pointer;min-width:0}
+.adb-nrn b{font-size:14px}.adb-nrn small{flex-basis:100%;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adb-nrq{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.adb-nrq>span{font-size:12px;font-weight:800;color:var(--muted)}
+.adb-nrq .adb-chip{min-height:30px;padding:4px 9px;font-size:12.5px}
+@media(hover:hover){@container (max-width:410px){.adb-t .adb-ta .adb-ib[data-adb="qna"] span,.adb-t .adb-ta .adb-ib[data-adb="qns"] span,.adb-t .adb-ta .adb-ib[data-adb="qlater"] span{display:none}}}
+.adb-m{background:var(--surface);border-radius:11px;padding:8px 10px 8px 12px;display:flex;flex-direction:column;gap:3px;cursor:pointer;position:relative;box-shadow:0 0 0 1px rgba(16,20,31,.05);align-items:flex-start;min-width:0}
+.adb-m::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--sc)}
+@media(hover:hover){.adb-m:hover{box-shadow:0 0 0 1px var(--line),0 4px 12px rgba(16,20,31,.08)}}
+.adb-m.adb-kb{box-shadow:0 0 0 2px #10141F}
+.adb-mh{display:flex;gap:8px;align-items:baseline;width:100%}
+.adb-mh b{flex:1;min-width:0;font-size:13.5px;line-height:1.25;overflow-wrap:anywhere}
+.adb-mh em{font-style:normal;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums}
+.adb-mw{font-size:12.5px;line-height:1.35;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.adb-legend{gap:6px 18px;margin-top:-6px}.adb-legend b{color:var(--ink)}
+@media(hover:none){.adb-legend{display:none}}
+/* ---------- PIPELINE ---------- */
+.adb-board{display:grid;grid-template-columns:repeat(8,minmax(164px,1fr));gap:6px;overflow-x:auto;padding:2px 2px 12px;align-items:start;-webkit-overflow-scrolling:touch}
+.adb-board.adb-9{grid-template-columns:repeat(9,minmax(164px,1fr))}
+.adb-col{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;min-height:150px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:background-color .12s,box-shadow .12s}
+.adb-col.adb-over{background:color-mix(in srgb,var(--sc) 9%,var(--surface));box-shadow:0 0 0 2px var(--sc)}
+.adb-ch{display:flex;align-items:center;gap:5px;padding:4px 4px 7px;border-bottom:3px solid var(--sc)}
+.adb-ch b{font-size:12.5px;flex:1;min-width:0;letter-spacing:-.005em;line-height:1.2}
+.adb-ch i{font-style:normal;font-weight:800;font-size:11.5px;background:var(--bg);border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums}
+.adb-ch em{font-style:normal;font-weight:800;font-size:10.5px;color:#fff;background:var(--late);border-radius:999px;padding:1px 6px;white-space:nowrap}
+.adb-cl{display:flex;flex-direction:column;gap:6px}
+.adb-card{position:relative;text-align:left;color:var(--ink);background:var(--bg);border-left:4px solid #C9D2E3;border-radius:10px;padding:8px 8px 9px 9px;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-width:0;transition:box-shadow .15s,background-color .15s}
+.adb-c-late{border-left-color:var(--late)}.adb-c-today{border-left-color:#E89A1C}.adb-c-tom{border-left-color:#2F7FE0}.adb-c-later{border-left-color:#A9B3C6}.adb-c-none{border-left-style:dashed;border-left-color:var(--late)}.adb-c-done{border-left-color:var(--ok)}
+@media(hover:hover){.adb-card:hover{background:var(--surface);box-shadow:0 0 0 1px var(--line),0 6px 16px rgba(16,20,31,.10)}}
+.adb-card.adb-on{box-shadow:0 0 0 2px #10141F}
+.adb-card.adb-drag{opacity:.4}
+.adb-ct{display:flex;gap:6px;align-items:baseline;min-width:0}
+.adb-ct b{flex:1;min-width:0;font-size:13.5px;line-height:1.25;overflow-wrap:break-word}
+.adb-ct small{font-size:10.5px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.adb-sp{font-size:11.5px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.adb-sp i{font-style:normal;font-variant-numeric:tabular-nums}
+.adb-cn{font-size:12px;font-weight:600;line-height:1.35;border-radius:7px;padding:4px 6px;display:flex;flex-direction:column;gap:1px}
+.adb-cn b{font-weight:800;font-size:11px;letter-spacing:.02em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.adb-cn span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.adb-d-late{background:var(--late-bg);color:#A82C17}
+.adb-d-today{background:var(--today-bg);color:#7D4B00}
+.adb-d-tom{background:var(--tom-bg);color:#1B4E9C}
+.adb-d-later{background:var(--lat-bg);color:#465166}
+.adb-d-none{background:transparent;color:var(--late);border:1px dashed #F0A898}
+.adb-last{font-size:12px;line-height:1.38;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.adb-last.adb-lm{font-style:italic}
+.adb-cq{display:flex;gap:4px;justify-content:flex-end;margin-top:2px}
+.adb-cq .adb-ib{min-height:30px;padding:0 9px;font-size:13px}
+@media(hover:hover){.adb-cq{position:absolute;right:6px;bottom:6px;margin:0;opacity:0;pointer-events:none;transition:opacity .12s;background:var(--surface);border-radius:10px;padding:3px;box-shadow:0 4px 14px rgba(16,20,31,.16)}.adb-card:hover .adb-cq,.adb-card:focus-within .adb-cq{opacity:1;pointer-events:auto}}
 .adb-under{display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin:2px 0 16px}
-/* next steps */
-.adb-nl{display:grid;gap:16px;margin-bottom:16px}
-.adb-grp h4{margin:0 0 8px;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
-.adb-grp h4 i{font-style:normal;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 8px;color:var(--ink);letter-spacing:0}
-.adb-g-late h4{color:#C2361B}.adb-g-today h4{color:#9A5B00}.adb-g-none h4{color:#C2361B}
-.adb-grp{display:grid;gap:6px}
-.adb-row{display:grid;grid-template-columns:104px minmax(0,1.1fr) minmax(0,1.6fr) auto auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:5px solid #C9D2E3;border-radius:14px;padding:10px 12px;cursor:pointer}
-@media(hover:hover){.adb-row:hover{box-shadow:0 4px 14px rgba(16,20,31,.07)}}
-.adb-r-late{border-left-color:#E0452B;background:#FFF7F5}.adb-r-today{border-left-color:#F5A623;background:#FFFCF4}.adb-r-tom{border-left-color:#2F7FE0}.adb-r-none{border-left-color:#E0452B;border-left-style:dashed}
-body.dark .adb-r-late,body.dark .adb-r-today{background:var(--surface)}
-.adb-rt{font-size:12.5px;font-weight:800;color:var(--muted);display:flex;flex-direction:column;font-variant-numeric:tabular-nums}
-.adb-rt b{font-size:16px;color:var(--ink)}
-.adb-rn{display:flex;flex-direction:column;min-width:0}.adb-rn b{font-size:14.5px;overflow-wrap:anywhere}.adb-rn small{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.adb-rw{display:flex;flex-direction:column;min-width:0;gap:2px}.adb-rw b{font-size:14px}.adb-rw small{font-size:12.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.adb-stp{font-size:11.5px;font-weight:800;border-radius:999px;padding:3px 9px;color:var(--sc);background:color-mix(in srgb,var(--sc) 13%,transparent);white-space:nowrap}
-.adb-ra{display:flex;gap:6px;align-items:center}.adb-ra .adl-btn{min-height:38px}
-@media(max-width:860px){.adb-row{grid-template-columns:78px minmax(0,1fr) auto;row-gap:6px}.adb-rw{grid-column:2/4}.adb-stp{grid-column:3;grid-row:1;justify-self:end}.adb-ra{grid-column:1/4;justify-content:flex-end}.adb-rn{grid-column:2;grid-row:1}}
-/* side panel */
+.adb-lg{font-weight:700;border-radius:6px;padding:1px 7px}.adb-lg.late{background:var(--late-bg);color:#A82C17}.adb-lg.today{background:var(--today-bg);color:#7D4B00}.adb-lg.tom{background:var(--tom-bg);color:#1B4E9C}.adb-lg.later{background:var(--lat-bg);color:#465166}
+/* ---------- the form: what happened + next step ---------- */
+.adb-form{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.adb-t .adb-form{border-top:1px solid var(--line);padding-top:10px}
+.adb-f1,.adb-f2{display:flex;flex-direction:column;gap:7px}
+.adb-f2{background:var(--bg);border-radius:12px;padding:9px}
+.adb-form.adb-ask .adb-f2{box-shadow:0 0 0 2px #F5A623;background:#FFF8E8}
+body.dark .adb-form.adb-ask .adb-f2{background:var(--bg)}
+.adb-fl{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.adb-fl em{font-style:normal;text-transform:none;letter-spacing:0;font-weight:600}
+.adb-chips{display:flex;flex-wrap:wrap;gap:5px}
+.adb-chip{appearance:none;font:inherit;font-size:12.5px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:5px 9px;cursor:pointer;min-height:34px;display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;line-height:1.2;transition:background-color .12s,border-color .12s}
+.adb-chip:hover{border-color:#B9C3D6}
+.adb-chip small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.adb-chip.on{background:#10141F;color:#fff;border-color:#10141F}.adb-chip.on small{color:#C9D2E3}
+body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
+.adb-in{font:inherit;font-size:15px;border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:var(--surface);color:var(--ink);width:100%;box-sizing:border-box;resize:vertical}
+.adb-in:focus{outline:2px solid #2F7FE0;outline-offset:-1px}
+.adb-fr{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.adb-fr label{font-size:11.5px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.adb-fr input{font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:var(--surface);color:var(--ink);min-height:38px}
+.adb-fr .adl-sep{flex:1}
+.adb-fr .adl-btn{min-height:40px}
+.adb-save{padding-left:20px!important;padding-right:20px!important;font-size:14px!important}
+/* ---------- side panel ---------- */
 .adb-ov{position:fixed;inset:0;z-index:900;background:rgba(16,20,31,.36);display:flex;justify-content:flex-end;animation:adlmf .18s ease-out}
-.adb-dr{width:min(580px,100%);height:100%;background:var(--surface);overflow-y:auto;overscroll-behavior:contain;box-shadow:-12px 0 40px rgba(16,20,31,.18);padding:18px 20px 48px;display:flex;flex-direction:column;gap:12px;animation:adbIn .22s cubic-bezier(.2,.8,.2,1)}
+.adb-dr>*{flex:none}
+.adb-dr{width:min(560px,100%);height:100%;background:var(--surface);overflow-y:auto;overscroll-behavior:contain;box-shadow:-12px 0 40px rgba(16,20,31,.18);padding:16px 18px 48px;display:flex;flex-direction:column;gap:11px;animation:adbIn .22s cubic-bezier(.2,.8,.2,1)}
 @keyframes adbIn{from{transform:translateX(24px);opacity:.4}}
 @keyframes adbUp{from{transform:translateY(30px);opacity:.4}}
 .adb-dh{display:flex;gap:12px;align-items:flex-start}
 .adb-dh>div{flex:1;min-width:0}
-.adb-dh h3{margin:0;font-size:22px;letter-spacing:-.015em;overflow-wrap:anywhere}
+.adb-dh h3{margin:0;font-size:21px;letter-spacing:-.015em;overflow-wrap:anywhere}
 .adb-dh p{margin:3px 0 0;color:var(--muted);font-size:13.5px}.adb-dh p b{color:var(--ink)}
 .adb-x{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;width:44px;height:44px;font-size:18px;cursor:pointer;flex:none}
-.adb-sec{border:1px solid var(--line);border-radius:16px;padding:12px 12px 13px;display:flex;flex-direction:column;gap:9px}
+.adb-sec{border:1px solid var(--line);border-radius:15px;padding:11px 11px 12px;display:flex;flex-direction:column;gap:9px}
 .adb-sec h5{margin:0;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .adb-sec h5 small{text-transform:none;letter-spacing:0;font-weight:600;margin-left:6px}
-.adb-sec h5 em{font-style:normal;text-transform:none;letter-spacing:0;color:#C2361B;margin-left:6px}
-.adb-sec.adb-ask{border-color:#F5A623;box-shadow:0 0 0 3px rgba(245,166,35,.18)}
-.adb-stages{display:flex;flex-wrap:wrap;gap:6px}
-.adb-sb{appearance:none;font:inherit;font-size:12.5px;font-weight:700;border:1.5px solid color-mix(in srgb,var(--sc) 35%,transparent);background:transparent;color:var(--sc);border-radius:999px;padding:6px 11px;cursor:pointer;min-height:34px}
+.adb-stages{display:flex;flex-wrap:wrap;gap:5px;flex:none}
+.adb-stages::-webkit-scrollbar{display:none}
+.adb-sb{appearance:none;font:inherit;font-size:12px;font-weight:700;border:1.5px solid color-mix(in srgb,var(--sc) 32%,transparent);background:transparent;color:var(--sc);border-radius:999px;padding:5px 10px;cursor:pointer;min-height:32px;white-space:nowrap;flex:none}
 .adb-sb.on{background:var(--sc);color:#fff;border-color:var(--sc)}
-.adb-nxbig{border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:#EEF1F6;color:#4A5468}
+.adb-nxsec{border:0;padding:0}
+.adb-nxsec h5{display:none}
+.adb-nxbig{border-radius:13px;padding:11px 13px;display:flex;flex-direction:column;gap:2px;border:0!important}
 .adb-nxbig span{font-size:12px;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
-.adb-nxbig b{font-size:16.5px;line-height:1.3;color:inherit}
-.adb-nxbig small{font-size:11.5px;opacity:.8}
-.adb-nxed summary{cursor:pointer;font-size:13px;font-weight:700;color:#2F7FE0;padding:4px 0;list-style:none}
-.adb-nxed summary::-webkit-details-marker{display:none}
-.adb-nxed summary::before{content:"＋ "}
-.adb-nxed[open] summary::before{content:"− "}
-.adb-nxed[open]{display:flex;flex-direction:column;gap:9px}
-.adb-chips{display:flex;flex-wrap:wrap;gap:6px}
-.adb-chip{appearance:none;font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:6px 10px;cursor:pointer;min-height:36px;display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.2}
-.adb-chip small{font-size:10.5px;font-weight:700;color:var(--muted)}
-.adb-chip.on{background:#10141F;color:#fff;border-color:#10141F}.adb-chip.on small{color:#C9D2E3}
-body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
-.adb-in{font:inherit;font-size:15px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box;resize:vertical}
-.adb-in:focus{outline:2px solid #2F7FE0;outline-offset:-1px;background:var(--surface)}
-.adb-dt{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
-.adb-dt label{font-size:12px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;gap:3px}
-.adb-dt input{font:inherit;font-size:15px;border:1px solid var(--line);border-radius:10px;padding:7px 9px;background:var(--bg);color:var(--ink);min-height:40px}
-.adb-dt .adl-btn{min-height:42px;margin-left:auto}
+.adb-nxbig b{font-size:17px;line-height:1.3;color:inherit;text-wrap:pretty}
+.adb-nxbig.adb-d-none{border:1.5px dashed #F0A898!important}
 .adb-dr .adl-btn{min-height:40px}
 .adb-log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.adb-li{display:grid;grid-template-columns:118px 1fr 30px;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.42;align-items:start}
+.adb-li{display:grid;grid-template-columns:112px 1fr 28px;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.42;align-items:start}
 .adb-li:first-child{border-top:0}
 .adb-li time{font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:1px}
 .adb-li span{min-width:0;overflow-wrap:anywhere;white-space:pre-wrap}
-.adb-li-stage span,.adb-li-next span{color:var(--muted);font-size:13px}
+.adb-li-stage,.adb-li-next{padding:4px 0}
+.adb-li-stage span,.adb-li-next span{color:var(--muted);font-size:12.5px}
 .adb-li-in span{color:var(--muted)}
-.adb-del{appearance:none;border:0;background:transparent;color:#C0C7D4;font-size:18px;cursor:pointer;width:30px;height:30px;border-radius:8px}
-.adb-del:hover{color:#C2361B;background:var(--bg)}
+.adb-del{appearance:none;border:0;background:transparent;color:#C0C7D4;font-size:17px;cursor:pointer;width:28px;height:28px;border-radius:8px}
+.adb-del:hover{color:var(--late);background:var(--bg)}
 .adb-more .adl-form{margin-top:4px}
+/* list view extras */
+.adl-tbl .adb-nxc{white-space:normal;min-width:190px;max-width:300px;font-size:13px;line-height:1.35}
+.adl-tbl .adb-nxc b{display:inline-block;border-radius:6px;padding:1px 6px;margin-right:4px;font-size:12px;white-space:nowrap}
+@media(max-width:1180px){.adb-todo{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1300px){.adb-nm{display:none}}
 @media(max-width:760px){
-  .adb-board{grid-auto-columns:84vw;scroll-snap-type:x mandatory}
-  .adb-q{margin-left:0;width:100%}
+  .adb-top h2{font-size:20px;flex-basis:100%}
+  .adb-seg{width:100%;box-sizing:border-box;overflow-x:auto}.adb-seg button{flex:1 0 auto;justify-content:center;padding:8px 10px;font-size:13px;min-height:40px}
+  .adb-q{width:100%;flex-basis:100%;min-height:42px}
+  .adb-nm{max-width:100%;flex-basis:100%;text-align:left}
+  .adb-top .adl-sep{display:none}
+  .adb-todo{grid-template-columns:minmax(0,1fr)}
+  .adb-ib{min-height:40px;font-size:13px;padding:0 11px}
+  .adb-chip{min-height:38px}
+  .adb-nonel{grid-template-columns:minmax(0,1fr)}
+  .adb-board,.adb-board.adb-9{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80vw;scroll-snap-type:x mandatory;gap:8px}
+  .adb-col{scroll-snap-align:center}
   .adb-ov{align-items:flex-end}
   .adb-dr{height:94vh;height:94dvh;border-radius:20px 20px 0 0;padding:14px 14px 40px;animation-name:adbUp}
-  .adb-li{grid-template-columns:1fr 30px}.adb-li time{grid-column:1/3}.adb-li span{grid-column:1}
-  .adb-seg{width:100%;box-sizing:border-box}.adb-seg button{flex:1 1 auto;justify-content:center;padding:8px 8px;font-size:13px;white-space:nowrap}
+  .adb-li{grid-template-columns:1fr 28px}.adb-li time{grid-column:1/3}.adb-li span{grid-column:1}
 }
 </style>
 </head>
@@ -16102,7 +16182,7 @@ const ADL_COL={call:['#FF5A3C','rgba(255,90,60,.12)'], cb:['#2F7FE0','rgba(47,12
 const ADL_GROUP={call:'todo',cb:'todo',na:'todo',book:'book',think:'after',won:'after',no:'after'};
 const ADL_FCOL={all:'#10141F',todo:'#FF5A3C',book:'#0EC673',think:'#F5A623',won:'#7C5CFC',no:'#B4BCCB'};
 const ADL_F=[['all','Ad leads'],['todo','To call'],['book','Meeting booked'],['think','Thinking'],['won','Clients'],['no','Not interested']];
-let adlMode=(()=>{try{const v=localStorage.getItem('adl-mode2');return ['board','next','week','list'].includes(v)?v:'board'}catch(e){return 'board'}})(), adlQ='';
+let adlMode=(()=>{try{const v=localStorage.getItem('adl-mode3');return ['todo','board','week','list'].includes(v)?v:'todo'}catch(e){return 'todo'}})(), adlQ='';
 let adlF='all', adlOpenF=null, adlWk=null, adlX=null, adlDays=null, adlWkPrev=null;
 const adlFk=e=>ADL_GROUP[e.st.k]==='todo'?'todo':e.st.k;
 const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
@@ -16233,7 +16313,7 @@ function adlListHtml(list){
   const per={}; list.forEach(e=>per[e.day]=(per[e.day]||0)+1);
   list.forEach(e=>{
     if(e.day!==last){ last=e.day; const x=new Date(e.day+'T12:00');
-      rows.push(`<tr class="adl-dsep${e.day===t?' adl-today':''}" data-day="${e.day}"><td colspan="9">${e.day===t?'TODAY · ':''}${esc(x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}))}<span>${per[e.day]} ${per[e.day]===1?'lead':'leads'}</span></td></tr>`); }
+      rows.push(`<tr class="adl-dsep${e.day===t?' adl-today':''}" data-day="${e.day}"><td colspan="10">${e.day===t?'TODAY · ':''}${esc(x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}))}<span>${per[e.day]} ${per[e.day]===1?'lead':'leads'}</span></td></tr>`); }
     n++; const col=ADL_COL[e.st.k]||ADL_COL.no, h=adlPfHue(e.spec), ph=adlPhoneTxt(e.phone), q=adlNorm([e.name,e.spec,e.phone,ph,e.email,e.msg].join(' '));
     const st=(e.c && e.c.stage==='booked' && e.c.day)? '📅 '+adlWhen(e.c.day)+(e.c.time?' '+e.c.time:'') : e.st.t;
     rows.push(`<tr class="adl-r2" data-adl="pick" data-id="${e.id}" data-day="${e.day}" data-q="${esc(q)}">
@@ -16243,14 +16323,14 @@ function adlListHtml(list){
       <td>${h<0?'<span class="adl-pf adl-pf0">—</span>':`<span class="adl-pf" style="--h:${h}">${esc(e.spec)}</span>`}</td>
       <td>${ph?`<a class="adl-ph" href="tel:+${adlTel(e.phone)}" data-adl="tel">${esc(ph)}</a><button class="adl-cpi" data-adl="copy1" data-v="${String(e.phone).replace(/\D/g,'').slice(-10)}" title="Copy the number" aria-label="Copy the number">⧉</button>`:'<span class="adl-dash">—</span>'}</td>
       <td>${e.email?`<a class="adl-em" href="mailto:${esc(e.email)}" data-adl="tel">${esc(e.email)}</a>`:'<span class="adl-dash">—</span>'}</td>
-      <td><span class="adl-stc" style="--sc:${col[0]};--sb:${col[1]}">${esc(st)}</span></td>
+      <td><span class="adl-stc" style="--sc:${(ADB_SM[e.bs]||{}).c||col[0]};--sb:${(ADB_SM[e.bs]||{}).c||col[0]}22">${esc((ADB_SM[e.bs]||{}).s||st)}</span></td><td class="adb-nxc">${e.nx?`<b class="adb-d-${e.due}">${esc(adbWhenTxt(e.nx))}</b>${esc(e.nx.w)}`:(e.due==='none'?'<b class="adb-d-none">⚠ no next step</b>':'<span class="adl-dash">—</span>')}</td>
       <td class="adl-msgc">${e.msg?esc(e.msg):'<span class="adl-dash">—</span>'}</td>
       <td class="adl-tm">${esc(e.src==='Form on the ad page'?'Form':e.src.startsWith('Booked')?'Online booking':'Board')}</td></tr>`);
   });
   return `<div class="adl-lst"><div class="adl-lsth"><h3>All ad leads · newest first<small>${list.length} ${list.length===1?'lead':'leads'}</small></h3>
     <input type="search" id="adlQ" placeholder="Search name, profession, phone, e-mail…" value="${esc(adlQ)}" autocomplete="off">
     <button class="adl-btn" data-adl="copy">⧉ Copy for Excel</button></div>
-    ${list.length?`<div class="adl-tw"><table class="adl-tbl"><thead><tr><th>#</th><th>Date · time</th><th>Name</th><th>Profession</th><th>Phone</th><th>E-mail</th><th>Status</th><th>Message</th><th>From</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`:'<div class="adl-lempty">No leads here yet.</div>'}</div>`;
+    ${list.length?`<div class="adl-tw"><table class="adl-tbl"><thead><tr><th>#</th><th>Date · time</th><th>Name</th><th>Profession</th><th>Phone</th><th>E-mail</th><th>Stage</th><th>Next step</th><th>Message</th><th>From</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`:'<div class="adl-lempty">No leads here yet.</div>'}</div>`;
 }
 function adlApplyQ(){ const q=adlNorm(adlQ.trim()); const tb=document.querySelector('#view-adl .adl-tbl tbody'); if(!tb) return; const vis={};
   tb.querySelectorAll('tr.adl-r2').forEach(r=>{ const ok=!q||r.dataset.q.includes(q); r.hidden=!ok; if(ok) vis[r.dataset.day]=1; });
@@ -16258,6 +16338,7 @@ function adlApplyQ(){ const q=adlNorm(adlQ.trim()); const tb=document.querySelec
 function renderAdl(){
   if(!state) return;
   try{ adlMarkApply(); }catch(e){}
+  try{ adbSweep(); }catch(e){}
   const all=adlEntries(); try{ adbDecorate(all); }catch(e){ console.warn('adb',e); } adlBadge(all);
   if(curView!=='adl'){ if(document.body.classList.contains('adl-mopen')){ document.body.classList.remove('adl-mopen'); adlX=null; } return; }
   const box=$('#adlBody'); if(!box) return;
@@ -16272,7 +16353,7 @@ function renderAdl(){
   const money=`<div class="adl-money"><label>Ad spend so far €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label>${sp&&all.length?`<span><b>${eur(sp/all.length)}</b> per lead</span>${meet?`<span><b>${eur(sp/meet)}</b> per booked meeting</span>`:''}${won?`<span><b>${eur(sp/won)}</b> per client</span>`:''}${adlRoas(sp,won)}`:'<span>type what Ads Manager shows as «Amount spent» to see the cost per lead</span>'}<span class="adl-sep"></span><span><b>${meet}</b> of ${all.length} booked a meeting · <b>${pct}%</b></span></div>`;
   let body='';
   if(adlMode==='board') body=adbBoardHtml(all);
-  else if(adlMode==='next') body=adbNextHtml(all);
+  else if(adlMode==='todo') body=adbTodoHtml(all);
   else {
     const list=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF);
     if(adlMode==='list') body=`<div class="adl-tiles">${tiles}</div>`+adlListHtml(list);
@@ -16282,7 +16363,7 @@ function renderAdl(){
       const wl=f(ws).getMonth()===f(wd[6]).getMonth()? f(ws).getDate()+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'long'}) : f(ws).toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
       const wkN=wd.reduce((n,d)=>n+(days[d]||[]).length,0), isNow=ws===adlMonday(t);
       const card=e=>{ const s=ADB_SM[e.bs]||ADB_SM.new;
-        return `<button class="adl-wc${adlX===e.id?' adl-on':''}" style="--sc:${s.c};--sb:${s.c}22" data-adl="pick" data-id="${e.id}"><span class="adl-wct">${adlHM(e.ts)}</span><b>${esc(e.name)}</b>${e.spec?`<span class="adl-wcs">${esc(e.spec)}</span>`:''}<span class="adl-wcx">${esc(s.s)}${e.nx?' · '+esc(adbWhenTxt(e.nx)):''}</span></button>`; };
+        return `<button class="adl-wc${adlX===e.id?' adl-on':''}" style="--sc:${s.c};--sb:${s.c}22" data-adl="pick" data-id="${e.id}"><span class="adl-wct">${adlHM(e.ts)}</span><b>${esc(e.name)}</b>${e.spec?`<span class="adl-wcs">${esc(e.spec)}</span>`:''}<span class="adl-wcx">${esc(s.s)}${e.nx?' · next '+esc(adbWhenTxt(e.nx)):''}</span></button>`; };
       const cols=wd.map(d=>{ const arr=(days[d]||[]).slice().sort((a,b)=>a.ts-b.ts), x=f(d), fut=d>t;
         const m={}; arr.forEach(e=>m[e.bs]=(m[e.bs]||0)+1);
         const bar=ADB_ST.filter(s=>m[s.k]).map(s=>`<i style="flex:${m[s.k]};background:${s.c}"></i>`).join('');
@@ -16301,7 +16382,10 @@ function renderAdl(){
   const keepX=box.querySelector('.adl-wgrid'), sl=keepX?keepX.scrollLeft:null;
   const kb=box.querySelector('.adb-board'), bsl=kb?kb.scrollLeft:null;
   const kd=box.querySelector('.adb-dr'), dsl=kd?kd.scrollTop:null, dWas=kd?kd.dataset.id:'';
-  box.innerHTML=adbHeadHtml(all)+body+(adlMode==='board'||adlMode==='next'?'':money)+askHtml+(adlMode==='board'||adlMode==='next'?money:'')+modal;
+  const ae=document.activeElement, af=ae&&ae.closest&&ae.closest('#view-adl .adb-form'), keep=(af&&ae.dataset&&ae.dataset.f)?{id:af.dataset.id,f:ae.dataset.f,s:ae.selectionStart}:null;
+  const main=adlMode==='board'||adlMode==='todo';
+  box.innerHTML=adbHeadHtml(all)+(main?askHtml:'')+body+(main?'':money+askHtml)+(main?money:'')+modal;
+  if(keep && !adbFocus){ const el=box.querySelector('.adb-form[data-id="'+keep.id+'"] [data-f="'+keep.f+'"]'); if(el){ try{ el.focus({preventScroll:true}); if(keep.s!=null) el.setSelectionRange(keep.s,keep.s); }catch(e){} } }
   const g=box.querySelector('.adl-wgrid');
   if(g && g.scrollWidth>g.clientWidth+4){ const ws=adlWk||adlMonday(t); if(sl!=null && adlWkPrev===ws) g.scrollLeft=sl; else { const c=g.querySelector('.adl-wcol.adl-today')||g.querySelector('.adl-wcol:not(.adl-z)'); if(c) g.scrollLeft=Math.max(0,c.offsetLeft-g.offsetLeft-8); } adlWkPrev=ws; }
   const nb=box.querySelector('.adb-board'); if(nb && bsl!=null) nb.scrollLeft=bsl;
@@ -16310,7 +16394,7 @@ function renderAdl(){
   document.body.classList.toggle('adl-mopen',!!sel);
   try{ adbAfterRender(box); }catch(e){}
 }
-document.addEventListener('keydown',ev=>{ if(ev.key==='Escape' && adlX && curView==='adl'){ adlX=null; adlOpenF=null; try{ adbAsk=false; adbOut=''; }catch(e){} renderAdl(); } });
+document.addEventListener('keydown',ev=>{ if(ev.key==='Escape' && adlX && curView==='adl'){ adlX=null; adlOpenF=null; try{ adbAsk=false; adbLater=null; if(adbForm&&adbForm.where==='dr') adbForm=null; }catch(e){} renderAdl(); } });
 window.addEventListener('beforeunload',()=>document.body.classList.remove('adl-mopen'));
 document.addEventListener('input',ev=>{ const i=ev.target; if(!i || i.id!=='adlQ') return; adlQ=i.value; adlApplyQ(); });
 document.addEventListener('change',ev=>{ const i=ev.target; if(!i || i.id!=='adlSpend') return; ensureMeta(); const A=state.meta.adl||(state.meta.adl={}); A.spend=Math.max(0,parseFloat(String(i.value).replace(',','.'))||0); A.spendAt=new Date().toISOString(); save(); renderAdl(); });
@@ -16323,9 +16407,9 @@ document.addEventListener('click',ev=>{
     const fb=()=>{ try{ const t=document.createElement('textarea'); t.value=v; t.setAttribute('readonly',''); t.style.cssText='position:fixed;top:0;left:0;opacity:0'; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); done(); }catch(e){ toast('Could not copy'); } };
     try{ navigator.clipboard.writeText(v).then(done,fb); }catch(e){ fb(); } return; }
   if(a==='mode'){ adlMode=adlMode==='list'?'week':'list'; try{ localStorage.setItem('adl-mode',adlMode); }catch(e){} adlX=null; renderAdl(); return; }
-  if(a==='copy'){ const all=adlEntries(), lst=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF), q=adlNorm(adlQ.trim());
-    const rows=lst.filter(e=>!q||adlNorm([e.name,e.spec,e.phone,adlPhoneTxt(e.phone),e.email,e.msg].join(' ')).includes(q)).map(e=>[e.day.split('-').reverse().join('/'),adlHM(e.ts),e.name||'',e.spec||'',adlPhoneTxt(e.phone),e.email||'',e.st.t,(e.msg||'').replace(/[\t\n]+/g,' ')].join('\t'));
-    const txt=['Date','Time','Name','Profession','Phone','E-mail','Status','Message'].join('\t')+'\n'+rows.join('\n');
+  if(a==='copy'){ const all=adbDecorate(adlEntries()), lst=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF), q=adlNorm(adlQ.trim());
+    const rows=lst.filter(e=>!q||adlNorm([e.name,e.spec,e.phone,adlPhoneTxt(e.phone),e.email,e.msg].join(' ')).includes(q)).map(e=>[e.day.split('-').reverse().join('/'),adlHM(e.ts),e.name||'',e.spec||'',adlPhoneTxt(e.phone),e.email||'',(ADB_SM[e.bs]||{}).s||e.st.t,e.nx?adbWhenTxt(e.nx)+' — '+e.nx.w:'',(e.msg||'').replace(/[\t\n]+/g,' ')].join('\t'));
+    const txt=['Date','Time','Name','Profession','Phone','E-mail','Stage','Next step','Message'].join('\t')+'\n'+rows.join('\n');
     try{ navigator.clipboard.writeText(txt).then(()=>toast(rows.length+' leads copied — paste them into Excel'),()=>toast('Could not copy')); }catch(e){ toast('Could not copy'); } return; }
   if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; renderAdl(); return; }
   if(a==='wk'){ adlWk=b.dataset.d||null; if(adlWk===adlMonday(todayIso())) adlWk=null; adlX=null; renderAdl(); return; }
@@ -16360,21 +16444,24 @@ document.addEventListener('click',ev=>{
 });
 </script>
 <script id="adb-js">
-/* ===== AD LEADS v4 — the pipeline board (Angelo, 10 Nov 2026: «I have to log what happens with each person super easily and in detail,
-   and what the next action is super clearly and when exactly — they are too many and I will get lost»).
-   One card per ad lead (same people as before: Leads list 'ads' + Board cards from the ads). On top of the real data each person has
-   a record in state.meta.adp[key] (key = 'p'+last 9 phone digits, or 'm'+e-mail, or 'c'+entry id) — synced with the CRM:
+/* ===== AD LEADS v5 — «To do» + pipeline (Angelo, 10 Nov 2026: «log what happens with each person super easily and in detail, the next
+   action super clearly and when exactly»; same evening: «easier to view, easier to act on, many shortcuts, urgent things in a separate menu»).
+   One card per ad lead (Leads list 'ads' + Board cards from the ads). Each person has a record in state.meta.adp[key]
+   (key = 'p'+last 9 phone digits, or 'm'+e-mail, or 'c'+entry id), synced with the CRM:
      st  = stage (new · talk · meet · offer · think · pay · won · silent · lost); empty = worked out from Leads / the Board card
      sAt = when the stage was set by hand
-     log = [{at, o, t}] — what happened (o = outcome chip: talk, noans, noshow, offer, think, yes, paid, no, note, done, stage, next)
-     nx  = {w, d, tm} — THE next step and exactly when; empty = worked out (meeting day, callback, «call them» for new people)
-   Views: 📋 Board (columns by stage) · ⏰ Next steps (late / today / tomorrow / this week / later / no next step) · 📅 By day · ☰ All leads.
+     log = [{at, o, t}] — what happened (o: done, talk, noans, noshow, offer, think, yes, paid, no, note, stage, next, meet)
+     nx  = {w, d, tm} — THE next step and exactly when; empty = worked out (Board meeting, lead call-back, first call for new people)
+   Views: 🎯 To do (Late · Today · Tomorrow · Later + «no next step») · 📋 Pipeline (columns by stage, drag to move) · 📅 By day · ☰ All leads.
+   Shortcuts on every card: Call · Viber · E-mail · ✓ Done (one form = what happened + next step) · No answer (→ tomorrow) · Later (move the day).
+   Keyboard: ↑↓ move · Enter open · C call · V Viber · E e-mail · D done/log · N no answer · T tomorrow · W +1 week · 1–4 views · / search · ? help.
+   A step set here replaces that lead's call-back in Leads/Callbacks (one place to follow a person).
    Claude's inbox: leads/lists.json → lists._crm.adp = [{id, phone|email, st?, log:[{at,o,t}], nx:{w,d,tm}}], each id applied ONCE (meta.adpIn). */
 const ADB_ST=[
   {k:'new',   t:'New · call them',     s:'New',        c:'#F0522E'},
   {k:'talk',  t:'Talking',             s:'Talking',    c:'#2F7FE0'},
   {k:'meet',  t:'Meeting booked',      s:'Meeting',    c:'#0E9AA7'},
-  {k:'offer', t:'Offer / info sent',   s:'Offer sent', c:'#7C5CFC'},
+  {k:'offer', t:'Offer sent',          s:'Offer sent', c:'#7C5CFC'},
   {k:'think', t:'Thinking',            s:'Thinking',   c:'#D08A00'},
   {k:'pay',   t:'Said yes · to pay',   s:'To pay',     c:'#DB2777'},
   {k:'won',   t:'Won · building',      s:'Won',        c:'#12A150'},
@@ -16382,13 +16469,13 @@ const ADB_ST=[
   {k:'lost',  t:'Lost',                s:'Lost',       c:'#A0A8B8'}];
 const ADB_SM={}; ADB_ST.forEach(s=>ADB_SM[s.k]=s);
 const adbOpenSt=k=>k!=='won'&&k!=='lost';
-const ADB_OUT=[['talk','📞 Talked','talk'],['noans','📵 No answer','silent'],['noshow','🙈 No-show','silent'],['offer','📨 Sent offer / info','offer'],
-  ['think','🤔 Thinking it over','think'],['yes','✅ Said yes','pay'],['paid','💶 Paid','won'],['no','👎 Not interested','lost'],['note','📝 Note',null]];
-const ADB_OM={}; ADB_OUT.forEach(o=>ADB_OM[o[0]]=o);
+const ADB_OUT=[['done','✔ Step done',null],['talk','📞 Talked','talk'],['noans','📵 No answer','silent'],['noshow','🙈 No-show','silent'],['offer','📨 Sent offer / info','offer'],
+  ['think','🤔 Thinking it over','think'],['yes','✅ Said yes','pay'],['paid','💶 Paid','won'],['no','👎 Not interested','lost']];
+const ADB_OM={note:['note','📝 Note',null]}; ADB_OUT.forEach(o=>ADB_OM[o[0]]=o);
 const ADB_OICON={talk:'📞',noans:'📵',noshow:'🙈',offer:'📨',think:'🤔',yes:'✅',paid:'💶',no:'👎',note:'📝',done:'✔',stage:'➜',next:'⏰',meet:'📅'};
 const ADB_WHAT=['📞 Call','💬 Viber','✉ E-mail','📅 Meeting','📨 Send offer','💶 Check payment','📦 Ask for material','🛠 Send the draft'];
-const ADB_DUE=[['late','🔴 Late — do these first'],['today','🟠 Today'],['tom','Tomorrow'],['week','Next 7 days'],['later','Later'],['none','⚠ No next step — decide what happens']];
-let adbShowLost=false, adbQ='', adbOut='', adbAsk=false, adbFocusLog=false;
+const ADB_KEYS=[['↑ ↓','move between people'],['Enter','open the person'],['C','call'],['V','Viber'],['E','e-mail'],['D','done — log what happened'],['N','no answer → try again tomorrow'],['T','move the step to tomorrow'],['W','move the step one week'],['1 2 3 4','To do · Pipeline · By day · All leads'],['/','search'],['⌘ Enter','save the form'],['Esc','close']];
+let adbShowLost=false, adbQ='', adbAsk=false, adbFocus=false, adbForm=null, adbDraft=null, adbLater=null, adbSel=null, adbHelp=false;
 function adbAllRec(){ ensureMeta(); if(!state.meta.adp||typeof state.meta.adp!=='object'||Array.isArray(state.meta.adp)) state.meta.adp={}; return state.meta.adp; }
 function adbKey(e){ const p=adlP9(e.phone); if(p.length===9) return 'p'+p; const m=String(e.email||'').trim().toLowerCase(); if(m) return 'm'+m; return 'c'+e.id; }
 function adbRec(e, mk){
@@ -16404,172 +16491,287 @@ function adbStage(e){
   const r=e.rec, c=e.c, l=e.l;
   if(c && c.stage==='lost' && !(r && r.st && (r.sAt||0)>(c.updated||0))) return 'lost';
   if(ADB_WORK(c) && (!r || r.st!=='lost')) return 'won';
+  if(c && c.stage==='thinking' && (!r || !r.st || ['new','talk','meet','silent'].includes(r.st))) return 'think';
   if(r && r.st && ADB_SM[r.st]) return r.st;
-  if(c){ if(c.stage==='thinking') return 'think'; if(c.stage==='booked') return 'meet'; }
+  if(c && c.stage==='booked') return 'meet';
   if(l){ if(l.status==='r'||l.status==='x') return 'lost'; if(l.status==='g') return 'meet'; if(l.cb && l.cb.day) return 'talk'; if(l.status==='y') return 'talk'; if(l.status==='na') return 'silent'; }
   return 'new';
 }
+function adbMeetPast(c){ return !!(c && c.stage==='booked' && c.day && Date.parse(c.day+'T'+(c.time||'23:59'))+15*60000<Date.now()); }
 function adbNext(e, st){
   const r=e.rec, c=e.c, l=e.l;
+  if(st==='lost') return null;
   if(r && r.nx && r.nx.d) return Object.assign({man:true}, r.nx);
-  if(st==='won'||st==='lost') return null;
+  if(st==='won') return null;
   if(c && c.stage==='booked' && c.day){
-    const end=Date.parse(c.day+'T'+(c.time||'23:59'))+15*60000;
-    if(end<Date.now()) return {w:'📅 Log the meeting — how did it go?', d:c.day, tm:c.time||'', meet:true, ask:true};
+    if(adbMeetPast(c)) return {w:'📅 Log the meeting — how did it go?', d:c.day, tm:c.time||'', meet:true, ask:true};
     return {w:'📅 Meeting', d:c.day, tm:c.time||'', meet:true};
   }
-  if(c && c.fu && c.fu.day && c.fu.st===c.stage) return {w:'↩ Follow up'+(c.fu.what?' · '+c.fu.what:''), d:c.fu.day, tm:''};
-  if(l && l.cb && l.cb.day) return {w:(l.cb.how==='sms'?'💬 SMS':l.cb.how==='email'?'✉ E-mail':'📞 Call back')+'', d:l.cb.day, tm:l.cb.time||''};
+  if(c && c.fu && c.fu.day && c.fu.st===c.stage && !(r && r.fuX===c.fu.day)) return {w:'📞 Follow up'+(c.fu.what?' — '+c.fu.what:''), d:c.fu.day, tm:''};
+  if(l && l.cb && l.cb.day) return {w:(l.cb.how==='sms'?'💬 Send SMS':l.cb.how==='email'?'✉ Send e-mail':'📞 Call back'), d:l.cb.day, tm:l.cb.time||''};
   if(st==='new') return {w:'📞 First call', d:e.day, tm:''};
   return null;
 }
 function adbDue(n){
   if(!n||!n.d) return 'none'; const t=todayIso();
   if(n.d<t) return 'late';
-  if(n.d===t){ if(n.ask) return 'late'; if(n.tm && !n.meet && n.tm<ldNowHM()) return 'late'; return 'today'; }
+  if(n.d===t){ if(n.ask) return 'late'; return 'today'; }
   if(n.d===adlAdd(t,1)) return 'tom';
-  if(n.d<=adlAdd(t,7)) return 'week';
   return 'later';
 }
-const ADB_DR={late:0,today:1,tom:2,week:3,later:4,none:5};
+const ADB_DR={late:0,today:1,tom:2,later:3,none:4};
+function adbKind(w){ w=String(w||''); let best='task', bi=1e9; [['📅','meet'],['📞','call'],['💬','msg'],['✉','mail'],['💶','pay'],['📨','send'],['📦','send'],['🛠','send']].forEach(([ic,k])=>{ const i=w.indexOf(ic); if(i>=0&&i<bi){ bi=i; best=k; } }); return best; }
 function adbWhenTxt(n){ if(!n||!n.d) return ''; return adlWhen(n.d)+(n.tm?' · '+n.tm:''); }
-function adbDecorate(all){ all.forEach(e=>{ e.rec=adbRec(e); e.bs=adbStage(e); e.nx=adbNext(e,e.bs); e.due=(e.nx||adbOpenSt(e.bs))?adbDue(e.nx):'done'; }); return all; }
-function adbCmp(a,b){ const x=ADB_DR[a.due]??6, y=ADB_DR[b.due]??6; if(x!==y) return x-y;
+function adbLateTxt(n){ const d=Math.round((Date.parse(todayIso()+'T12:00')-Date.parse(n.d+'T12:00'))/864e5); return d<=0?'now':d===1?'since yesterday':d+' days late'; }
+function adbDecorate(all){ all.forEach(e=>{ e.rec=adbRec(e); e.bs=adbStage(e); e.nx=adbNext(e,e.bs); e.kind=adbKind(e.nx&&e.nx.w); e.mq=adbMeetPast(e.c);
+  e.due=e.bs==='lost'?'done':(e.nx||adbOpenSt(e.bs))?adbDue(e.nx):'done'; }); return all; }
+function adbCmp(a,b){ const x=ADB_DR[a.due]??5, y=ADB_DR[b.due]??5; if(x!==y) return x-y;
   if(a.nx&&b.nx){ const s=(a.nx.d+(a.nx.tm||'99')).localeCompare(b.nx.d+(b.nx.tm||'99')); if(s) return s; } return b.ts-a.ts; }
 function adbIn(e){ return adlDay(e.day); }
 function adbLogTxt(x){ if(x.o==='stage') return '➜ '+((ADB_SM[x.t]||{}).t||x.t); const o=ADB_OM[x.o]; return (o&&x.o!=='note'?o[1]+(x.t?' — ':''):(ADB_OICON[x.o]?ADB_OICON[x.o]+' ':''))+(x.t||''); }
 function adbLastReal(r){ if(!r||!r.log) return null; for(let i=r.log.length-1;i>=0;i--){ const x=r.log[i]; if(x.o!=='stage' && x.o!=='next') return x; } return null; }
-function adbQkey(e){ return adlNorm([e.name,e.spec,e.phone,adlPhoneTxt(e.phone),e.email,e.msg,(e.rec&&e.rec.log||[]).map(x=>x.t).join(' ')].join(' ')); }
-function adbNxChip(e,big){
-  const n=e.nx;
-  if(!n) return adbOpenSt(e.bs)?`<span class="adb-nx adb-d-none">⚠ No next step</span>`:'';
-  return `<span class="adb-nx adb-d-${e.due}">${e.due==='late'?'⏰ ':''}${esc(n.w)} · <b>${esc(adbWhenTxt(n))}</b></span>`;
+function adbQkey(e){ return adlNorm([e.name,e.spec,e.phone,adlPhoneTxt(e.phone),e.email,e.msg,e.nx&&e.nx.w,(e.rec&&e.rec.log||[]).map(x=>x.t).join(' ')].join(' ')); }
+function adbFind(id){ const all=adlEntries(); adbDecorate(all); return all.find(x=>x.id===id); }
+function adbPush(r, o, t, at){ r.log.push({at:at||Date.now(), o, t:String(t||'')}); }
+function adbDayChips(){ const t=todayIso(), x=new Date(t+'T12:00'), dow=x.getDay(), mon=adlAdd(t,((8-dow)%7)||7);
+  return [['Today',t],['Tomorrow',adlAdd(t,1)],['In 2 days',adlAdd(t,2)],['Next Mon',mon],['In 1 week',adlAdd(t,7)],['In 2 weeks',adlAdd(t,14)]]; }
+function adbDraftFor(id){ if(!adbDraft||adbDraft.id!==id) adbDraft={id,o:'',t:'',w:'',d:'',tm:''}; return adbDraft; }
+/* the call-backs of people who now have their step on this board leave Leads/Callbacks — once (they were doubled there, all «late») */
+function adbSweep(){ ensureMeta(); if(state.meta.adbSweep1) return; const A=adbAllRec(); if(!Object.keys(A).length) return; let n=0;
+  (state.leads||[]).forEach(l=>{ if(!l||!l.cb||!(l.list==='ads'||l.src==='ads')) return; const r=A['p'+adlP9(l.phone)];
+    if(r && r.sAt && (r.st||(r.nx&&r.nx.d)) && (l.updated||0)<r.sAt){ delete l.cb; l.updated=Date.now(); n++; } });
+  state.meta.adbSweep1=Date.now();
+  setTimeout(()=>{ save(); if(n){ try{ cbRefresh(); }catch(e){} toast(n+' old call-back'+(n>1?'s':'')+' moved out of Callbacks — follow them here in Ad leads'); } },60);
 }
+/* ---------- pieces ---------- */
+function adbContactBtns(e, big){
+  const tel=adlTel(e.phone); let h='';
+  if(e.phone) h+=`<a class="adb-ib adb-call" data-adb="tel" data-id="${e.id}" href="tel:+${tel}" title="Call ${esc(adlPhoneTxt(e.phone))} (C)">📞 ${big?esc(adlPhoneTxt(e.phone)):'Call'}</a><a class="adb-ib" data-adl="tel" href="viber://chat?number=%2B${tel}" title="Open Viber (V)">Viber</a>`;
+  if(e.email) h+=`<a class="adb-ib" data-adl="tel" href="mailto:${esc(e.email)}" title="${esc(e.email)} (E)">✉${big?' E-mail':''}</a>`;
+  return h;
+}
+function adbMoveStrip(e){ return `<div class="adb-mv"><span>Move to</span>${adbDayChips().slice(1).map(([lab,d])=>`<button type="button" class="adb-chip" data-adb="mv" data-d="${d}" data-id="${e.id}">${lab}<small>${esc(adlDay(d))}</small></button>`).join('')}<label class="adb-chip adb-pick">Pick a day<input type="date" data-adb-mv="${e.id}"></label></div>`; }
+function adbFormHtml(e, where){
+  const D=adbDraftFor(e.id), n=e.nx;
+  const oq=ADB_OUT.map(([k,lab])=>`<button type="button" class="adb-chip adb-o${D.o===k?' on':''}" data-adb="fo" data-v="${k}">${lab}</button>`).join('');
+  const wq=ADB_WHAT.map(w=>`<button type="button" class="adb-chip adb-w${D.w.indexOf(w)===0?' on':''}" data-adb="fw" data-v="${esc(w)}">${esc(w)}</button>`).join('');
+  const dq=adbDayChips().map(([lab,d])=>`<button type="button" class="adb-chip adb-dd${D.d===d?' on':''}" data-adb="fd" data-v="${d}">${lab}<small>${esc(adlDay(d))}</small></button>`).join('');
+  return `<div class="adb-form${adbAsk&&adbForm&&adbForm.id===e.id?' adb-ask':''}" data-id="${e.id}" data-where="${where}">
+    <div class="adb-f1"><div class="adb-fl">1 · What happened?</div><div class="adb-chips">${oq}</div>
+      <textarea class="adb-in" data-f="t" rows="2" placeholder="Details — what they said, what they want, what they will send…">${esc(D.t)}</textarea></div>
+    <div class="adb-f2"><div class="adb-fl">2 · Next step <em>— what and when</em></div><div class="adb-chips">${wq}</div>
+      <input type="text" class="adb-in" data-f="w" placeholder="${n&&n.man?'Same as now: '+esc(n.w):'e.g. Call — ask if he read the offer'}" value="${esc(D.w)}">
+      <div class="adb-chips">${dq}</div>
+      <div class="adb-fr"><label>Day<input type="date" data-f="d" value="${esc(D.d)}"></label><label>Time<input type="time" data-f="tm" step="900" value="${esc(D.tm)}"></label><span class="adl-sep"></span>${where==='card'?`<button type="button" class="adl-btn adl-ghost adl-mute" data-adb="fx">Cancel</button>`:''}<button type="button" class="adl-btn adl-pri adb-save" data-adb="fsave" data-id="${e.id}">Save</button></div></div>
+  </div>`;
+}
+/* a task card of the «To do» view */
+function adbTask(e, mode){
+  const s=ADB_SM[e.bs], n=e.nx, last=adbLastReal(e.rec);
+  const open=adbForm && adbForm.id===e.id && adbForm.where==='card' && !adlX, mv=adbLater===e.id && !adlX;
+  let when='';
+  if(n){ if(e.due==='late') when=`<b>${esc(n.d===todayIso()?(n.tm||'now'):adbLateTxt(n))}</b>`; else if(mode==='later') when=`<b>${esc(n.tm||'')}</b>`; else when=n.tm?`<b>${esc(n.tm)}</b>`:''; }
+  const res=n? `${e.mq&&e.c?`<button type="button" class="adb-ib adb-ok" data-adl="mq" data-id="${e.c.id}">How did it go?</button>`:`<button type="button" class="adb-ib adb-ok" data-adb="qdone" data-id="${e.id}" title="Done — write what happened and the next step (D)">✓ Done</button>`}${e.kind==='meet'?`<button type="button" class="adb-ib" data-adb="qns" data-id="${e.id}" title="No-show — call tomorrow to rebook">🙈<span> No-show</span></button>`:`<button type="button" class="adb-ib" data-adb="qna" data-id="${e.id}" title="No answer — try again tomorrow (N)">📵<span> No answer</span></button>`}${n.meet?'':`<button type="button" class="adb-ib${mv?' on':''}" data-adb="qlater" data-id="${e.id}" title="Later — move to another day (T = tomorrow, W = one week)">⏭<span> Later</span></button>`}`
+    : `<button type="button" class="adb-ib adb-ok" data-adb="qdone" data-id="${e.id}">＋ Set the next step</button>`;
+  return `<article class="adb-t adb-t-${e.due} adb-k-${e.kind}${open?' adb-open':''}${adbSel===e.id?' adb-kb':''}" data-id="${e.id}" data-q="${esc(adbQkey(e))}">
+    <div class="adb-th" data-adl="pick" data-id="${e.id}" title="Open ${esc(e.name)}"><span class="adb-tn"><b>${esc(e.name||'—')}</b><small>${esc(e.spec||'')}</small></span>${when?`<span class="adb-tw">${when}</span>`:''}<span class="adb-stp" style="--sc:${s.c}">${esc(s.s)}</span></div>
+    <div class="adb-tk" data-adl="pick" data-id="${e.id}">${n?esc(n.w):'⚠ No next step yet'}</div>
+    ${last?`<div class="adb-tl" data-adl="pick" data-id="${e.id}">${esc(adbLogTxt(last))}</div>`:(e.msg?`<div class="adb-tl" data-adl="pick" data-id="${e.id}">«${esc(e.msg)}»</div>`:'')}
+    <div class="adb-ta">${adbContactBtns(e)}<span class="adl-sep"></span>${res}</div>
+    ${mv?adbMoveStrip(e):''}${open?adbFormHtml(e,'card'):''}
+  </article>`;
+}
+function adbTodoHtml(all){
+  const g={late:[],today:[],tom:[],later:[],none:[]}; all.forEach(e=>{ if(g[e.due]) g[e.due].push(e); });
+  Object.values(g).forEach(a=>a.sort(adbCmp));
+  const t=todayIso(), dl=d=>new Date(d+'T12:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});
+  const col=(k,title,sub,arr,empty)=>`<section class="adb-tc adb-tc-${k}"><header><b>${title}</b><i>${arr.length}</i><small>${sub}</small></header><div class="adb-tcl">${arr.length?arr.map(e=>adbTask(e,k)).join(''):`<div class="adb-empty">${empty}</div>`}</div></section>`;
+  let later=''; if(g.later.length){ let last=''; later=g.later.map(e=>{ let h=''; if(e.nx.d!==last){ last=e.nx.d; h=`<div class="adb-dsep">${esc(dl(e.nx.d))}</div>`; } const s=ADB_SM[e.bs];
+      return h+`<div class="adb-m${adbSel===e.id?' adb-kb':''}" role="button" tabindex="0" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}" style="--sc:${s.c}"><span class="adb-mh"><b>${esc(e.name||'—')}</b>${e.nx.tm?`<em>${esc(e.nx.tm)}</em>`:''}</span><span class="adb-mw">${esc(e.nx.w)}</span><span class="adb-stp">${esc(s.s)}</span></div>`; }).join(''); }
+  const none=g.none.length?`<section class="adb-none"><header><b>⚠ No next step</b><i>${g.none.length}</i><small>Pick when you call them, so nobody gets lost</small></header><div class="adb-nonel">${g.none.map(e=>{ const s=ADB_SM[e.bs], last=adbLastReal(e.rec);
+      return `<div class="adb-nr" data-id="${e.id}" data-q="${esc(adbQkey(e))}"><div class="adb-nrn" data-adl="pick" data-id="${e.id}"><b>${esc(e.name||'—')}</b><span class="adb-stp" style="--sc:${s.c}">${esc(s.s)}</span><small>${last?esc(adbLogTxt(last)):esc(e.spec||'')}</small></div><div class="adb-nrq"><span>📞 Call</span>${adbDayChips().slice(0,5).map(([lab,d])=>`<button type="button" class="adb-chip" data-adb="mv" data-d="${d}" data-id="${e.id}">${lab}</button>`).join('')}<button type="button" class="adb-chip" data-adl="pick" data-id="${e.id}">Other…</button></div></div>`; }).join('')}</div></section>`:'';
+  return `${none}<div class="adb-todo">
+    ${col('late','Late','do these first',g.late,'Nothing late 👌')}
+    ${col('today','Today',esc(dl(t)),g.today,'Nothing else for today')}
+    ${col('tom','Tomorrow',esc(dl(adlAdd(t,1))),g.tom,'Nothing yet')}
+    <section class="adb-tc adb-tc-later"><header><b>Later</b><i>${g.later.length}</i><small>after tomorrow</small></header><div class="adb-tcl">${later||'<div class="adb-empty">Nothing planned</div>'}</div></section>
+  </div><div class="adb-under adb-legend"><span><b>📞 Call</b> opens the «what happened» form by itself</span><span><b>✓ Done</b> = write what happened + the next step</span><span><b>📵</b> = no answer → again tomorrow</span><span><b>⏭</b> = move to another day</span><span>Tap a name for the full history</span></div>`;
+}
+/* a card of the pipeline */
 function adbCard(e){
-  const s=ADB_SM[e.bs], last=adbLastReal(e.rec);
-  return `<button class="adb-card${adlX===e.id?' adb-on':''}" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}" style="--sc:${s.c}">
-    <span class="adb-ct"><b>${esc(e.name||'—')}</b><small title="Came in">in ${esc(adbIn(e))}</small></span>
-    ${e.spec?`<span class="adb-sp">${esc(e.spec)}</span>`:''}
+  const n=e.nx, last=adbLastReal(e.rec), tel=adlTel(e.phone);
+  const nx=n?`<span class="adb-cn adb-d-${e.due}"><b>${esc(e.due==='late'?'Late':adlWhen(n.d))}${n.tm&&e.due!=='late'?' · '+esc(n.tm):''}</b><span>${esc(n.w)}</span></span>`:(adbOpenSt(e.bs)?`<span class="adb-cn adb-d-none">⚠ No next step</span>`:'');
+  return `<div class="adb-card adb-c-${e.due}${adlX===e.id?' adb-on':''}${adbSel===e.id?' adb-kb':''}" role="button" tabindex="0" draggable="true" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}">
+    <span class="adb-ct"><b>${esc(e.name||'—')}</b></span>
+    <span class="adb-sp" title="Came in ${esc(adbIn(e))}"><i>in ${esc(fmtDay(e.day))}</i>${e.spec?' · '+esc(e.spec):''}</span>${nx}
     ${last?`<span class="adb-last">${esc(adbLogTxt(last))}</span>`:(e.msg?`<span class="adb-last adb-lm">«${esc(e.msg)}»</span>`:'')}
-    ${adbNxChip(e)}</button>`;
-}
-function adbCounts(all){ const n={late:0,today:0,none:0}; all.forEach(e=>{ if(e.due==='late') n.late++; else if(e.due==='today') n.today++; else if(e.due==='none') n.none++; }); return n; }
-function adbHeadHtml(all){
-  const n=adbCounts(all), V=[['board','📋 Board'],['next','⏰ Next steps'],['week','📅 By day'],['list','☰ All leads']];
-  const due=n.late+n.today;
-  const views=V.map(([k,l])=>`<button class="${adlMode===k?'on':''}" data-adb="v" data-v="${k}">${l}${k==='next'&&due?`<i>${due}</i>`:''}</button>`).join('');
-  const focus=`<div class="adb-focus">${n.late?`<button class="adb-fc late" data-adb="v" data-v="next"><b>${n.late}</b> late</button>`:''}${n.today?`<button class="adb-fc today" data-adb="v" data-v="next"><b>${n.today}</b> for today</button>`:''}${n.none?`<button class="adb-fc none" data-adb="v" data-v="next"><b>${n.none}</b> with no next step</button>`:''}${!n.late&&!n.today&&!n.none?`<span class="adb-fc ok">✓ Nothing late — everyone has a next step</span>`:''}</div>`;
-  const search=(adlMode==='board'||adlMode==='next')?`<input type="search" id="adbQ" class="adb-q" placeholder="Search name, phone, notes…" value="${esc(adbQ)}" autocomplete="off">`:'';
-  return `<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Every person from the ads, by stage. Each card says what happened last and <b>what you do next, and when</b>. Tap a person to log a call or a note.</p></div>
-    <div class="adl-acts"><button class="adl-btn" data-adl="go" data-v="callbacks">☎ Callbacks</button><button class="adl-btn" data-adl="go" data-v="calendar">📅 Calendar</button><button class="adl-btn" data-adl="pull">↻ Check for new</button></div></div>
-    <div class="adb-bar"><div class="adb-seg" role="tablist">${views}</div>${search}</div>${focus}`;
+    <span class="adb-cq">${e.phone?`<a class="adb-ib adb-call" data-adb="tel" data-id="${e.id}" href="tel:+${tel}" title="Call">📞</a>`:''}<button type="button" class="adb-ib adb-ok" data-adb="qdone" data-id="${e.id}" title="Done / log">✓</button>${n&&!n.meet?`<button type="button" class="adb-ib" data-adb="mv" data-d="${adlAdd(todayIso(),1)}" data-id="${e.id}" title="Move the step to tomorrow">⏭</button>`:''}</span></div>`;
 }
 function adbBoardHtml(all){
   const by={}; all.forEach(e=>(by[e.bs]=by[e.bs]||[]).push(e));
   const nLost=(by.lost||[]).length;
   const cols=ADB_ST.filter(s=>s.k!=='lost'||adbShowLost).map(s=>{
-    const arr=(by[s.k]||[]).slice().sort(adbCmp);
-    const late=arr.filter(e=>e.due==='late').length;
-    return `<section class="adb-col" style="--sc:${s.c}"><div class="adb-ch"><span class="adb-dot"></span><b>${esc(s.t)}</b>${late?`<em title="late">${late} late</em>`:''}<i>${arr.length}</i></div>
+    const arr=(by[s.k]||[]).slice().sort(adbCmp), late=arr.filter(e=>e.due==='late').length;
+    return `<section class="adb-col" data-st="${s.k}" style="--sc:${s.c}"><div class="adb-ch"><b>${esc(s.t)}</b>${late?`<em>${late} late</em>`:''}<i>${arr.length}</i></div>
       <div class="adb-cl">${arr.map(adbCard).join('')||'<div class="adb-empty">—</div>'}</div></section>`; }).join('');
-  return `<div class="adb-board">${cols}</div><div class="adb-under"><button class="adl-btn adl-ghost adl-mute" data-adb="lost">${adbShowLost?'Hide lost':'Show lost ('+nLost+')'}</button><span>Tip: tap a card → log what happened → set the next step. Late steps are red, today's are orange.</span></div>`;
+  return `<div class="adb-board${adbShowLost?' adb-9':''}">${cols}</div><div class="adb-under"><button type="button" class="adl-btn adl-ghost adl-mute" data-adb="lost">${adbShowLost?'Hide lost':'Show lost ('+nLost+')'}</button><span>Drag a card to another column to change its stage · the coloured line shows the next step: <b class="adb-lg late">late</b> <b class="adb-lg today">today</b> <b class="adb-lg tom">tomorrow</b> <b class="adb-lg later">later</b></span></div>`;
 }
-function adbNextHtml(all){
-  const g={}; all.forEach(e=>{ if(e.due==='done') return; (g[e.due]=g[e.due]||[]).push(e); });
-  const blocks=ADB_DUE.filter(([k])=>(g[k]||[]).length).map(([k,lab])=>{
-    const arr=g[k].slice().sort(adbCmp);
-    return `<div class="adb-grp adb-g-${k}"><h4>${lab}<i>${arr.length}</i></h4>${arr.map(e=>{ const s=ADB_SM[e.bs], n=e.nx, tel=adlTel(e.phone), last=adbLastReal(e.rec);
-      return `<div class="adb-row adb-r-${k}" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}">
-        <span class="adb-rt">${n?`${esc(adlWhen(n.d))}${n.tm?`<b>${esc(n.tm)}</b>`:''}`:'—'}</span>
-        <span class="adb-rn"><b>${esc(e.name||'—')}</b><small>${esc(e.spec||'')}${e.spec?' · ':''}in ${esc(adbIn(e))}</small></span>
-        <span class="adb-rw"><b>${n?esc(n.w):'What happens next?'}</b>${last?`<small>Last: ${esc(adbLogTxt(last))}</small>`:''}</span>
-        <span class="adb-stp" style="--sc:${s.c}">${esc(s.s)}</span>
-        <span class="adb-ra">${e.phone?`<a class="adl-btn adl-hot" data-adl="tel" href="tel:+${tel}" title="Call">📞</a><a class="adl-btn" data-adl="tel" href="viber://chat?number=%2B${tel}">Viber</a>`:''}<button class="adl-btn adl-pri" data-adb="did" data-id="${e.id}">✓ Done / log</button></span></div>`; }).join('')}</div>`; }).join('');
-  return `<div class="adb-nl">${blocks||'<div class="adl-empty">Nothing to do — everyone is up to date.</div>'}</div>`;
+function adbHeadHtml(all){
+  const n={late:0,today:0,none:0}; all.forEach(e=>{ if(n[e.due]!==undefined) n[e.due]++; });
+  const V=[['todo','🎯 To do'],['board','📋 Pipeline'],['week','📅 By day'],['list','☰ All']], due=n.late+n.today;
+  const views=V.map(([k,l],i)=>`<button type="button" class="${adlMode===k?'on':''}" data-adb="v" data-v="${k}" title="Shortcut: ${i+1}">${l}${k==='todo'&&due?`<i${n.late?'':' class="soft"'}>${due}</i>`:''}</button>`).join('');
+  const now=todayIso()+'T'+ldNowHM(); let nm=null; all.forEach(e=>{ if(e.kind!=='meet'||!e.nx||e.due==='late') return; const k=e.nx.d+'T'+(e.nx.tm||'23:59'); if(k>=now && (!nm||k<nm.k)) nm={k,e}; });
+  const meet=nm?`<button type="button" class="adb-nm" data-adl="pick" data-id="${nm.e.id}">📅 Next meeting · <b>${esc(nm.e.name)}</b> · ${esc(adbWhenTxt(nm.e.nx))}</button>`:'';
+  const help=adbHelp?`<div class="adb-help"><b>Keyboard shortcuts</b>${ADB_KEYS.map(([k,d])=>`<span><kbd>${k}</kbd>${d}</span>`).join('')}</div>`:'';
+  return `<div class="adb-top"><h2>🔥 Ad leads</h2><div class="adb-seg" role="tablist">${views}</div>
+      <input type="search" id="adbQ" class="adb-q" placeholder="Search name, phone, notes…  ( / )" value="${esc(adlMode==='list'?'':adbQ)}" autocomplete="off"${adlMode==='list'||adlMode==='week'?' hidden':''}>
+      <span class="adl-sep"></span>${meet}
+      <button type="button" class="adl-btn adl-ghost" data-adl="go" data-v="callbacks">☎ Callbacks</button><button type="button" class="adl-btn adl-ghost" data-adl="go" data-v="calendar">📅 Calendar</button><button type="button" class="adl-btn" data-adl="pull" title="Check for new leads">↻ New leads</button><button type="button" class="adl-btn adl-ghost adb-kbtn${adbHelp?' on':''}" data-adb="help" title="Keyboard shortcuts (?)">⌨</button></div>${help}`;
 }
-function adbDayChips(){ const t=todayIso(), x=new Date(t+'T12:00'), dow=x.getDay(), mon=adlAdd(t,((8-dow)%7)||7);
-  return [['Today',t],['Tomorrow',adlAdd(t,1)],['In 2 days',adlAdd(t,2)],['Next Mon',mon],['In 1 week',adlAdd(t,7)],['In 2 weeks',adlAdd(t,14)]]; }
 function adbDrawer(e){
-  const s=ADB_SM[e.bs], n=e.nx, r=e.rec, tel=adlTel(e.phone), c=e.c, l=e.l, adn=e.ad?(ADL_AD_NAMES[e.ad]||e.ad):'';
-  const nxForm=(r&&r.nx)||{};
-  const stp=ADB_ST.map(x=>`<button class="adb-sb${x.k===e.bs?' on':''}" style="--sc:${x.c}" data-adb="st" data-k="${x.k}" data-id="${e.id}">${esc(x.s)}</button>`).join('');
-  const wq=ADB_WHAT.map(w=>`<button class="adb-chip" data-adb="wq" data-v="${esc(w)}">${esc(w)}</button>`).join('');
-  const dq=adbDayChips().map(([lab,d])=>`<button class="adb-chip${nxForm.d===d?' on':''}" data-adb="dq" data-v="${d}">${lab}<small>${esc(adlDay(d))}</small></button>`).join('');
-  const oq=ADB_OUT.map(([k,lab])=>`<button class="adb-chip adb-o${adbOut===k?' on':''}" data-adb="out" data-v="${k}">${lab}</button>`).join('');
-  const nxBox=n?`<div class="adb-nxbig adb-d-${e.due}"><span>${e.due==='late'?'⏰ LATE · ':e.due==='today'?'TODAY · ':''}${esc(adbWhenTxt(n))}</span><b>${esc(n.w)}</b>${n.man?'':'<small>from '+(n.meet?'the Board meeting':'the lead\'s callback / first call')+'</small>'}</div>
-      <div class="adl-row">${n.ask&&c?`<button class="adl-btn adl-pri" data-adl="mq" data-id="${c.id}">How did it go?</button>`:''}<button class="adl-btn adl-pri" data-adb="nxdone" data-id="${e.id}">✓ Done — log what happened</button>${n.man?`<button class="adl-btn adl-ghost adl-mute" data-adb="nxclr" data-id="${e.id}">Remove</button>`:''}</div>`
-    : `<div class="adb-nxbig adb-d-none"><b>${adbOpenSt(e.bs)?'⚠ No next step yet — set one so you don\'t forget them':'No next step needed'}</b></div>`;
-  const log=(r&&r.log||[]).map((x,i)=>({x,i})).reverse().map(({x,i})=>`<li class="adb-li adb-li-${esc(x.o||'note')}"><time>${esc(adlDay(isoDate(new Date(x.at))))} · ${adlHM(x.at)}</time><span>${esc(adbLogTxt(x))}</span><button class="adb-del" data-adb="del" data-i="${i}" data-id="${e.id}" title="Delete this line" aria-label="Delete">×</button></li>`).join('');
+  const n=e.nx, r=e.rec, c=e.c, l=e.l, adn=e.ad?(ADL_AD_NAMES[e.ad]||e.ad):'';
+  const stp=ADB_ST.map(x=>`<button type="button" class="adb-sb${x.k===e.bs?' on':''}" style="--sc:${x.c}" data-adb="st" data-k="${x.k}" data-id="${e.id}">${esc(x.s)}</button>`).join('');
+  const mv=adbLater===e.id;
+  const nxBox=n?`<div class="adb-nxbig adb-d-${e.due}"><span>${e.due==='late'?'⏰ LATE · ':''}${esc(adbWhenTxt(n))}</span><b>${esc(n.w)}</b></div>
+      <div class="adb-ta">${e.mq&&c?`<button type="button" class="adb-ib adb-ok" data-adl="mq" data-id="${c.id}">How did it go?</button>`:''}<button type="button" class="adb-ib adb-ok" data-adb="qdone" data-id="${e.id}">✓ Done</button>${e.kind==='meet'?`<button type="button" class="adb-ib" data-adb="qns" data-id="${e.id}">🙈 No-show</button>`:`<button type="button" class="adb-ib" data-adb="qna" data-id="${e.id}">📵 No answer → tomorrow</button>`}${n.meet?'<small class="adb-hint">The day comes from the Board card</small>':`<button type="button" class="adb-ib${mv?' on':''}" data-adb="qlater" data-id="${e.id}">⏭ Later</button>`}${n.man?`<span class="adl-sep"></span><button type="button" class="adb-ib adb-quiet" data-adb="nxclr" data-id="${e.id}">Remove</button>`:''}</div>${mv&&!n.meet?adbMoveStrip(e):''}`
+    : `<div class="adb-nxbig adb-d-none"><b>${adbOpenSt(e.bs)?'⚠ No next step — set one below (part 2)':'No next step needed'}</b></div>`;
+  const log=(r&&r.log||[]).map((x,i)=>({x,i})).reverse().map(({x,i})=>`<li class="adb-li adb-li-${esc(x.o||'note')}"><time>${esc(adlDay(isoDate(new Date(x.at))))} · ${adlHM(x.at)}</time><span>${esc(adbLogTxt(x))}</span><button type="button" class="adb-del" data-adb="del" data-i="${i}" data-id="${e.id}" title="Delete this line" aria-label="Delete">×</button></li>`).join('');
   const origin=`<li class="adb-li adb-li-in"><time>${esc(adbIn(e))} · ${adlHM(e.ts)}</time><span>🔥 Came in — ${esc(e.src)}${adn?' · ad «'+esc(adn)+'»':''}${e.msg?'<br>«'+esc(e.msg)+'»':''}</span></li>`;
   const open=adlOpenF && adlOpenF.id===e.id ? adlOpenF.kind : '', tom=adlAdd(todayIso(),1);
   const bookForm=open==='book'?`<div class="adl-form"><label>Meeting day<input type="date" data-fd value="${tom}"></label><label>Time<input type="time" data-ft step="900"></label><label>Value €<input type="number" data-fv value="130" style="width:90px"></label><span class="adl-sep"></span><button class="adl-btn adl-pri" data-adl="bookok" data-id="${e.id}">Save · on the Board</button><button class="adl-btn adl-ghost adl-mute" data-adl="close">Cancel</button></div>`:'';
-  const acts=[]; if(c) acts.push(`<button class="adl-btn" data-adl="open" data-id="${c.id}">Open Board card ›</button>`);
-  if(l && !c) acts.push(`<button class="adl-btn" data-adl="book" data-id="${e.id}">📅 Book a meeting (puts them on the Board)</button>`);
-  if(l && !c) acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="lead" data-id="${e.id}">In Leads ›</button>`);
-  acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="notad" data-id="${e.id}">Not from the ads</button>`);
+  const acts=[]; if(c) acts.push(`<button type="button" class="adl-btn" data-adl="open" data-id="${c.id}">Open Board card ›</button>`);
+  if(l && !c) acts.push(`<button type="button" class="adl-btn" data-adl="book" data-id="${e.id}">📅 Book a meeting (puts them on the Board)</button>`);
+  if(l && !c) acts.push(`<button type="button" class="adl-btn adl-ghost adl-mute" data-adl="lead" data-id="${e.id}">In Leads ›</button>`);
+  acts.push(`<button type="button" class="adl-btn adl-ghost adl-mute" data-adl="notad" data-id="${e.id}">Not from the ads</button>`);
   return `<div class="adb-ov" data-adb="close"><aside class="adb-dr" data-id="${e.id}" role="dialog" aria-label="${esc(e.name)}">
-    <div class="adb-dh"><div><h3>${esc(e.name||'—')}</h3><p>${esc(e.spec||'')}${e.spec?' · ':''}came in <b>${esc(adbIn(e))} · ${adlHM(e.ts)}</b></p></div><button class="adb-x" data-adb="close" aria-label="Close">✕</button></div>
-    <div class="adl-row">${e.phone?`<a class="adl-btn adl-hot" data-adl="tel" href="tel:+${tel}">📞 ${esc(adlPhoneTxt(e.phone))}</a><a class="adl-btn" data-adl="tel" href="viber://chat?number=%2B${tel}">Viber</a><button class="adl-btn adl-cpy" data-adl="copy1" data-v="${String(e.phone).replace(/\D/g,'').slice(-10)}">⧉ Copy</button>`:''}${e.email?`<a class="adl-btn" data-adl="tel" href="mailto:${esc(e.email)}">✉ E-mail</a><button class="adl-btn adl-cpy" data-adl="copy1" data-v="${esc(e.email)}" title="${esc(e.email)}">⧉ ${esc(e.email.length>24?e.email.slice(0,22)+'…':e.email)}</button>`:''}</div>
-    <div class="adb-sec"><h5>Stage</h5><div class="adb-stages">${stp}</div></div>
-    <div class="adb-sec adb-nxsec${adbAsk?' adb-ask':''}" id="adbNx"><h5>Next step${adbAsk?' <em>← set what happens next</em>':''}</h5>${nxBox}
-      <details class="adb-nxed"${adbAsk||!n?' open':''}><summary>${n?'Change the next step':'Set the next step'}</summary>
-        <div class="adb-chips">${wq}</div>
-        <input type="text" id="adbW" class="adb-in" placeholder="What exactly? e.g. Call — ask if he read the offer" value="${esc(nxForm.w||'')}">
-        <div class="adb-chips adb-dq">${dq}</div>
-        <div class="adb-dt"><label>Day<input type="date" id="adbD" value="${esc(nxForm.d||'')}"></label><label>Time (optional)<input type="time" id="adbT" step="900" value="${esc(nxForm.tm||'')}"></label><button class="adl-btn adl-pri" data-adb="nxsave" data-id="${e.id}">Save next step</button></div>
-      </details></div>
-    <div class="adb-sec"><h5>What happened?</h5><div class="adb-chips">${oq}</div>
-      <textarea id="adbTxt" class="adb-in" rows="3" placeholder="Details: what they said, what they want, prices, what they will send…"></textarea>
-      <div class="adl-row"><span class="adl-sep"></span><button class="adl-btn adl-pri" data-adb="log" data-id="${e.id}">Save to the history</button></div></div>
+    <div class="adb-dh"><div><h3>${esc(e.name||'—')}</h3><p>${esc(e.spec||'')}${e.spec?' · ':''}came in <b>${esc(adbIn(e))} · ${adlHM(e.ts)}</b></p></div><button type="button" class="adb-x" data-adb="close" aria-label="Close">✕</button></div>
+    <div class="adb-ta adb-big">${adbContactBtns(e,true)}${e.phone?`<button type="button" class="adb-ib adb-quiet" data-adl="copy1" data-v="${String(e.phone).replace(/\D/g,'').slice(-10)}" title="Copy the number">⧉ number</button>`:''}${e.email?`<button type="button" class="adb-ib adb-quiet" data-adl="copy1" data-v="${esc(e.email)}" title="Copy ${esc(e.email)}">⧉ e-mail</button>`:''}</div>
+    <div class="adb-stages">${stp}</div>
+    <div class="adb-sec adb-nxsec"><h5>Next step</h5>${nxBox}</div>
+    <div class="adb-sec"><h5>Log it <small>one save: what happened + what happens next</small></h5>${adbFormHtml(e,'dr')}</div>
     <div class="adb-sec"><h5>History <small>newest first</small></h5><ul class="adb-log">${log}${origin}</ul></div>
     <div class="adb-sec adb-more"><h5>Board & Leads</h5><div class="adl-row">${acts.join('')}</div>${bookForm}</div>
   </aside></div>`;
 }
-function adbApplyQ(){ const q=adlNorm(adbQ.trim()); document.querySelectorAll('#view-adl .adb-card, #view-adl .adb-row').forEach(x=>{ x.hidden=!!q && !String(x.dataset.q||'').includes(q); }); }
+function adbApplyQ(){ const q=adlNorm(adbQ.trim()); document.querySelectorAll('#view-adl .adb-card, #view-adl .adb-t, #view-adl .adb-m, #view-adl .adb-nr').forEach(x=>{ x.hidden=!!q && !String(x.dataset.q||'').includes(q); }); }
 function adbAfterRender(box){
-  if(adbFocusLog){ adbFocusLog=false; const t=box.querySelector('#adbTxt'); if(t){ try{ t.focus({preventScroll:true}); t.scrollIntoView({block:'center'}); }catch(e){} } }
-  else if(adbAsk){ const nx=box.querySelector('#adbNx'); if(nx){ try{ nx.scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} } }
+  if(adbFocus){ adbFocus=false; const f=box.querySelector(adlX?'.adb-dr .adb-form':'.adb-t.adb-open .adb-form'); const t=f&&f.querySelector(adbAsk?'[data-f="w"]':'[data-f="t"]');
+    if(t){ try{ t.focus({preventScroll:true}); t.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){} } }
 }
-function adbFind(id){ const all=adlEntries(); adbDecorate(all); return all.find(x=>x.id===id); }
-function adbPush(r, o, t, at){ r.log.push({at:at||Date.now(), o, t:String(t||'')}); }
-function adbSetStage(e, k, quiet){ const r=adbRec(e,true); if(r.st===k && e.bs===k) return; r.st=k; r.sAt=Date.now(); adbPush(r,'stage',k); }
+/* ---------- actions ---------- */
+function adbSnap(e){ const r=adbRec(e); return {k:adbKey(e), rec:r?JSON.stringify(r):null, l:e.l||null, cb:e.l&&e.l.cb?JSON.stringify(e.l.cb):null}; }
+function adbRestore(s){ const A=adbAllRec(); if(s.rec) A[s.k]=JSON.parse(s.rec); else delete A[s.k]; if(s.l && s.cb){ s.l.cb=JSON.parse(s.cb); s.l.updated=Date.now(); } save(); renderAdl(); try{ cbRefresh(); }catch(e){} }
+/* this board now carries the person's next step: their call-back in Leads / Callbacks goes (a future one is kept here as the step) */
+function adbTouch(e, r, drop){ const l=e.l; if(!l||!l.cb) return; if(!drop && !(r.nx&&r.nx.d) && l.cb.day>todayIso() && e.nx && !e.nx.man) r.nx={w:e.nx.w,d:e.nx.d,tm:e.nx.tm||''};
+  delete l.cb; l.updated=Date.now(); setTimeout(()=>{ try{ cbRefresh(); }catch(x){} },0); }
+function adbStageTo(r, cur, to){ if(to && to!==cur){ r.st=to; r.sAt=Date.now(); adbPush(r,'stage',to); return true; } return false; }
+function adbMove(e, d, quiet){
+  if(e.nx && e.nx.meet){ toast('That is the meeting on the Board — change its day on the Board card'); return; }
+  const s=adbSnap(e), r=adbRec(e,true), w=(e.nx&&e.nx.w)||'📞 Call'; r.nx={w,d,tm:''}; adbPush(r,'next',(e.nx?'Moved to ':'Next: '+w+' · ')+adlDay(d)); adbTouch(e,r);
+  if(e.l && e.bs==='new' && !r.st){ /* stays «new» */ }
+  adbLater=null; save(); renderAdl(); toastUndo(e.name+' → '+w.split(' — ')[0]+' · '+adlWhen(d), ()=>adbRestore(s));
+}
+function adbNoAns(e, show){
+  const s=adbSnap(e), r=adbRec(e,true); adbPush(r, show?'noshow':'noans', show?'Did not show up at the meeting':'');
+  if(show || e.bs==='new' || e.bs==='talk' || e.bs==='meet') adbStageTo(r, e.bs, 'silent');
+  const d=adlAdd(todayIso(),1); r.nx={w:show?'📞 Call — book a new meeting time':'📞 Call again', d, tm:''}; adbTouch(e,r);
+  adbLater=null; if(adbForm&&adbForm.id===e.id) adbForm=null; save(); renderAdl(); toastUndo(e.name+' — '+(show?'no-show':'no answer')+' · call again tomorrow', ()=>adbRestore(s));
+}
+function adbOpenForm(e, o){
+  const D=adbDraftFor(e.id); if(o && !D.o) D.o=o; adbAsk=false; adbLater=null; adbFocus=true; adbSel=e.id;
+  adbForm={id:e.id, where:(adlX||adlMode!=='todo')?'dr':'card'}; if(adbForm.where==='dr') adlX=e.id; renderAdl();
+}
+function adbSaveForm(id){
+  const e=adbFind(id); if(!e) return; const D=adbDraftFor(id);
+  let o=D.o, t=D.t.trim(), w=D.w.replace(/\s*—\s*$/,'').trim(), d=D.d, tm=D.tm;
+  if(!o && !t && !d){ toast('Tap what happened, write a note, or pick the day of the next step'); return; }
+  if(w && !d){ toast('Pick the day for «'+w+'»'); adbAsk=true; adbFocus=false; const f=document.querySelector('#view-adl .adb-form[data-id="'+id+'"]'); if(f) f.classList.add('adb-ask'); return; }
+  const s=adbSnap(e), r=adbRec(e,true), cur=e.bs; let moved=false;
+  if(o==='done' && !t && e.nx) t=e.nx.w;
+  if(o||t) adbPush(r, o||'note', t);
+  if(o){ const to=ADB_OM[o]&&ADB_OM[o][2]; if(to && to!==cur){ let mv=false; if(['offer','think','yes','paid','no','noshow'].includes(o)) mv=true; else if(o==='talk' && (cur==='new'||cur==='silent')) mv=true; else if(o==='noans' && (cur==='new'||cur==='talk')) mv=true; if(mv) moved=adbStageTo(r,cur,to); } }
+  if(!d && (o==='noans'||o==='noshow')){ d=adlAdd(todayIso(),1); w=w||(o==='noshow'?'📞 Call — book a new meeting time':'📞 Call again'); }
+  if(d){ if(!w) w=(e.nx&&e.nx.man&&!o)?e.nx.w:'📞 Call'; r.nx={w,d,tm}; adbPush(r,'next','Next: '+w+' · '+adlDay(d)+(tm?' '+tm:'')); }
+  else if(o || (r.nx && r.nx.d<=todayIso())) r.nx=null;   /* an outcome closes the step that was open; a plain note keeps a future one */
+  if(o && e.c && e.c.fu && e.c.fu.day) r.fuX=e.c.fu.day;
+  adbTouch(e,r,!!o); adbDraft=null; adbLater=null; save();
+  const e2=adbFind(id), need=e2 && e2.due==='none';
+  if(need){ adbAsk=true; adbFocus=true; adlX=id; adbForm={id, where:'dr'}; renderAdl(); toast('Saved'+(moved?' · '+e.name+' → '+ADB_SM[r.st].t:'')+' — now pick the next step (part 2)'); return; }
+  adbAsk=false; if(!adlX) adbForm=null; renderAdl();
+  toastUndo('Saved · '+e.name+(moved?' → '+ADB_SM[r.st].t:'')+(e2&&e2.nx?' · next '+adbWhenTxt(e2.nx):''), ()=>adbRestore(s));
+}
 /* after the old «Book a meeting» form put them on the Board */
 function adbAfterBook(l, pick){ try{ const e=adlEntries().find(x=>x.l && x.l.id===l.id); if(!e) return; const r=adbRec(e,true); r.st='meet'; r.sAt=Date.now(); r.nx=null;
   adbPush(r,'meet','Meeting booked'+(pick&&pick.day?' for '+adlDay(pick.day)+(pick.time?' · '+pick.time:''):'')); save(); }catch(err){} }
-const ADB_RANK={new:0,talk:1,silent:1,meet:2,offer:3,think:3,pay:4,won:5,lost:5};
-document.addEventListener('input',ev=>{ const i=ev.target; if(!i||i.id!=='adbQ') return; adbQ=i.value; adbApplyQ(); });
-document.addEventListener('keydown',ev=>{ if(ev.key==='Enter' && ev.target && ev.target.id==='adbW'){ const b=document.querySelector('#view-adl [data-adb="nxsave"]'); if(b){ ev.preventDefault(); b.click(); } } });
+/* the form keeps what was typed while the screen re-draws */
+function adbFormInput(ev){ const i=ev.target; if(!i||!i.closest) return; const f=i.closest('#view-adl .adb-form'); if(!f||!i.dataset.f) return; const D=adbDraftFor(f.dataset.id); D[i.dataset.f]=i.value;
+  if(i.dataset.f==='d') f.querySelectorAll('.adb-dd').forEach(x=>x.classList.toggle('on',x.dataset.v===i.value)); }
+document.addEventListener('input',ev=>{ const i=ev.target; if(i && i.id==='adbQ'){ adbQ=i.value; adbApplyQ(); return; } adbFormInput(ev); });
+document.addEventListener('change',ev=>{ const i=ev.target; if(i && i.dataset && i.dataset.adbMv){ if(!i.value) return; const e=adbFind(i.dataset.adbMv); if(e) adbMove(e,i.value); return; } adbFormInput(ev); });
 document.addEventListener('click',ev=>{
   const b=ev.target.closest && ev.target.closest('#view-adl [data-adb]'); if(!b) return;
-  const a=b.dataset.adb, id=b.dataset.id;
-  if(a==='close'){ if(b.classList.contains('adb-ov') && ev.target!==b) return; adlX=null; adlOpenF=null; adbAsk=false; adbOut=''; renderAdl(); return; }
-  if(a==='v'){ adlMode=b.dataset.v; try{ localStorage.setItem('adl-mode2',adlMode); }catch(e){} adlX=null; renderAdl(); window.scrollTo(0,0); return; }
+  const a=b.dataset.adb, id=b.dataset.id, f=b.closest('.adb-form');
+  if(a==='close'){ if(b.classList.contains('adb-ov') && ev.target!==b) return; adlX=null; adlOpenF=null; adbAsk=false; adbLater=null; if(adbForm&&adbForm.where==='dr') adbForm=null; renderAdl(); return; }
+  if(a==='v'){ adlMode=b.dataset.v; try{ localStorage.setItem('adl-mode3',adlMode); }catch(e){} adlX=null; adbForm=null; adbLater=null; renderAdl(); window.scrollTo(0,0); return; }
   if(a==='lost'){ adbShowLost=!adbShowLost; renderAdl(); return; }
-  if(a==='wq'){ const i=document.getElementById('adbW'); if(i){ i.value=b.dataset.v+(/—/.test(i.value)?'':' — '); i.focus(); } return; }
-  if(a==='dq'){ const i=document.getElementById('adbD'); if(i) i.value=b.dataset.v; b.parentNode.querySelectorAll('.adb-chip').forEach(x=>x.classList.toggle('on',x===b)); return; }
-  if(a==='out'){ adbOut=adbOut===b.dataset.v?'':b.dataset.v; b.parentNode.querySelectorAll('.adb-o').forEach(x=>x.classList.toggle('on',x.dataset.v===adbOut)); const t=document.getElementById('adbTxt'); if(t) t.focus(); return; }
-  if(a==='did'){ ev.stopPropagation(); adlX=id; adbFocusLog=true; adbAsk=false; adbOut=''; renderAdl(); return; }
+  if(a==='help'){ adbHelp=!adbHelp; renderAdl(); return; }
+  if(a==='tel'){ ev.stopPropagation(); const e=adbFind(id); if(e) setTimeout(()=>{ if(curView==='adl') adbOpenForm(e,'talk'); },700); return; }
+  if(f){ const D=adbDraftFor(f.dataset.id);
+    if(a==='fo'){ D.o=D.o===b.dataset.v?'':b.dataset.v; f.querySelectorAll('.adb-o').forEach(x=>x.classList.toggle('on',x.dataset.v===D.o)); const t=f.querySelector('[data-f="t"]'); if(t) t.focus(); return; }
+    if(a==='fw'){ const i=f.querySelector('[data-f="w"]'); D.w=b.dataset.v+' — '; if(i){ i.value=D.w; i.focus(); } f.querySelectorAll('.adb-w').forEach(x=>x.classList.toggle('on',x===b)); return; }
+    if(a==='fd'){ D.d=D.d===b.dataset.v?'':b.dataset.v; const i=f.querySelector('[data-f="d"]'); if(i) i.value=D.d; f.querySelectorAll('.adb-dd').forEach(x=>x.classList.toggle('on',x.dataset.v===D.d)); f.classList.remove('adb-ask'); return; }
+    if(a==='fx'){ adbForm=null; adbDraft=null; adbAsk=false; renderAdl(); return; }
+    if(a==='fsave'){ adbSaveForm(f.dataset.id); return; }
+  }
   const e=id?adbFind(id):null; if(!e) return;
-  if(a==='st'){ const k=b.dataset.k; if(k===e.bs) return; adbSetStage(e,k); const r=adbRec(e,true);
-    if(adbOpenSt(k) && !(r.nx&&r.nx.d)) adbAsk=true; save(); renderAdl(); toast(e.name+' → '+ADB_SM[k].t); return; }
-  if(a==='nxsave'){ const w=(document.getElementById('adbW')||{}).value||'', d=(document.getElementById('adbD')||{}).value||'', tm=(document.getElementById('adbT')||{}).value||'';
-    const ww=w.replace(/\s*—\s*$/,'').trim();
-    if(!ww){ toast('Write what happens next (or tap Call / Viber / E-mail…)'); const i=document.getElementById('adbW'); if(i) i.focus(); return; }
-    if(!d){ toast('Pick the day'); return; }
-    const r=adbRec(e,true); r.nx={w:ww,d,tm}; adbPush(r,'next','Next: '+ww+' · '+adlDay(d)+(tm?' '+tm:'')); adbAsk=false; save(); renderAdl(); toast('Next step saved · '+adlWhen(d)+(tm?' '+tm:'')); return; }
-  if(a==='nxclr'){ const r=adbRec(e,true); r.nx=null; save(); renderAdl(); return; }
-  if(a==='nxdone'){ adbFocusLog=true; adbOut=''; renderAdl(); toast('Write what happened, then set the next step'); return; }
+  ev.stopPropagation();
+  if(a==='qdone'){ adbOpenForm(e, e.nx?(e.kind==='call'?'talk':'done'):''); if(!e.nx){ adbAsk=true; } return; }
+  if(a==='qna'){ adbNoAns(e,false); return; }
+  if(a==='qns'){ adbNoAns(e,true); return; }
+  if(a==='qlater'){ adbLater=adbLater===id?null:id; if(!adlX) adbForm=null; renderAdl(); return; }
+  if(a==='mv'){ adbMove(e,b.dataset.d); return; }
+  if(a==='st'){ const k=b.dataset.k; if(k===e.bs) return; const r=adbRec(e,true); r.st=k; r.sAt=Date.now(); adbPush(r,'stage',k); adbTouch(e,r);
+    adbAsk=adbOpenSt(k) && !(r.nx&&r.nx.d) && !(e.nx&&e.nx.meet); if(adbAsk){ adbForm={id,where:'dr'}; adbFocus=true; } save(); renderAdl(); toast(e.name+' → '+ADB_SM[k].t+(adbAsk?' — now pick the next step':'')); return; }
+  if(a==='nxclr'){ const s=adbSnap(e), r=adbRec(e,true); r.nx=null; save(); renderAdl(); toastUndo('Next step removed', ()=>adbRestore(s)); return; }
   if(a==='del'){ const r=adbRec(e,true), i=+b.dataset.i, x=r.log[i]; if(!x) return; if(!confirm('Delete this line?\n\n'+adbLogTxt(x))) return; r.log.splice(i,1); save(); renderAdl(); return; }
-  if(a==='log'){ const txt=((document.getElementById('adbTxt')||{}).value||'').trim(); const o=adbOut||'note';
-    if(!txt && !adbOut){ toast('Tap what happened or write a note'); const t=document.getElementById('adbTxt'); if(t) t.focus(); return; }
-    const r=adbRec(e,true); adbPush(r,o,txt);
-    /* the step that was due is now done */
-    if(r.nx && r.nx.d && r.nx.d<=todayIso()) r.nx=null;
-    const to=ADB_OM[o]&&ADB_OM[o][2], cur=e.bs;
-    let move=false; if(to && to!==cur){ if(['offer','think','yes','paid','no','noshow'].includes(o)) move=true; else if(o==='talk' && (cur==='new'||cur==='silent')) move=true; else if(o==='noans' && (cur==='new'||cur==='talk')) move=true; }
-    if(move){ r.st=to; r.sAt=Date.now(); adbPush(r,'stage',to); }
-    const st=move?to:cur; adbOut=''; adbAsk=adbOpenSt(st) && !(r.nx&&r.nx.d);
-    save(); renderAdl(); toast('Saved'+(move?' · '+e.name+' → '+ADB_SM[to].t:'')+(adbAsk?' — now set the next step':'')); return; }
+});
+/* drag a pipeline card to another column = change the stage */
+let adbDrag=null;
+document.addEventListener('dragstart',ev=>{ const c=ev.target.closest && ev.target.closest('#view-adl .adb-card'); if(!c) return; adbDrag=c.dataset.id; try{ ev.dataTransfer.setData('text/plain',adbDrag); ev.dataTransfer.effectAllowed='move'; }catch(e){} c.classList.add('adb-drag'); });
+document.addEventListener('dragend',()=>{ adbDrag=null; document.querySelectorAll('#view-adl .adb-drag, #view-adl .adb-over').forEach(x=>x.classList.remove('adb-drag','adb-over')); });
+document.addEventListener('dragover',ev=>{ if(!adbDrag) return; const c=ev.target.closest && ev.target.closest('#view-adl .adb-col'); if(!c) return; ev.preventDefault(); document.querySelectorAll('#view-adl .adb-over').forEach(x=>{ if(x!==c) x.classList.remove('adb-over'); }); c.classList.add('adb-over'); });
+document.addEventListener('drop',ev=>{ if(!adbDrag) return; const c=ev.target.closest && ev.target.closest('#view-adl .adb-col'); if(!c) return; ev.preventDefault(); const id=adbDrag, k=c.dataset.st; adbDrag=null; const e=adbFind(id); if(!e||!ADB_SM[k]||e.bs===k){ renderAdl(); return; }
+  const s=adbSnap(e), r=adbRec(e,true); r.st=k; r.sAt=Date.now(); adbPush(r,'stage',k); adbTouch(e,r); save();
+  const e2=adbFind(id); if(e2 && e2.bs!==k){ renderAdl(); toast('The Board card decides this one — it stays in «'+ADB_SM[e2.bs].t+'»'); return; }
+  if(e2 && e2.due==='none'){ adlX=id; adbAsk=true; adbFocus=true; adbForm={id,where:'dr'}; renderAdl(); toast(e.name+' → '+ADB_SM[k].t+' — now pick the next step'); return; }
+  renderAdl(); toastUndo(e.name+' → '+ADB_SM[k].t, ()=>adbRestore(s)); });
+/* keyboard */
+function adbKbItems(){ return [...document.querySelectorAll('#view-adl .adb-t[data-id], #view-adl .adb-m[data-id], #view-adl .adb-card[data-id]')].filter(x=>!x.hidden); }
+function adbKbMove(dir){ const it=adbKbItems(); if(!it.length) return; let i=it.findIndex(x=>x.dataset.id===adbSel); i=i<0?(dir>0?0:it.length-1):Math.max(0,Math.min(it.length-1,i+dir));
+  it.forEach(x=>x.classList.remove('adb-kb')); const el=it[i]; adbSel=el.dataset.id; el.classList.add('adb-kb'); try{ el.scrollIntoView({block:'nearest',inline:'nearest'}); }catch(e){} }
+document.addEventListener('keydown',ev=>{
+  if(curView!=='adl' || !state) return;
+  const tg=ev.target, typing=tg && (/^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName)||tg.isContentEditable), f=tg && tg.closest && tg.closest('#view-adl .adb-form');
+  if((ev.metaKey||ev.ctrlKey) && ev.key==='Enter' && f){ ev.preventDefault(); adbSaveForm(f.dataset.id); return; }
+  if(f && ev.key==='Enter' && tg.tagName==='INPUT' && tg.type==='text'){ ev.preventDefault(); adbSaveForm(f.dataset.id); return; }
+  if(ev.key==='Escape'){ if(adbHelp){ adbHelp=false; renderAdl(); return; } if(!adlX && (adbForm||adbLater)){ adbForm=null; adbLater=null; adbAsk=false; renderAdl(); } return; }
+  if(typing || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+  if(document.body.classList.contains('locked') || document.querySelector('.overlay.open, .overlay.show')) return;
+  const k=ev.key.length===1?ev.key.toLowerCase():ev.key;
+  if(k==='?'){ adbHelp=!adbHelp; renderAdl(); return; }
+  if(k==='/'){ const q=document.getElementById('adbQ'); if(q && !q.hidden){ ev.preventDefault(); q.focus(); q.select(); } return; }
+  if(!adlX && ['1','2','3','4'].includes(k)){ adlMode=['todo','board','week','list'][+k-1]; try{ localStorage.setItem('adl-mode3',adlMode); }catch(e){} adbForm=null; adbLater=null; renderAdl(); return; }
+  if(!adlX && (k==='ArrowDown'||k==='j')){ ev.preventDefault(); adbKbMove(1); return; }
+  if(!adlX && (k==='ArrowUp'||k==='k')){ ev.preventDefault(); adbKbMove(-1); return; }
+  const id=adlX||adbSel; if(!id) return; const e=adbFind(id); if(!e) return;
+  if(k==='Enter'||k==='o'){ if(!adlX){ ev.preventDefault(); adlX=id; adlOpenF=null; renderAdl(); } return; }
+  if(k==='c' && e.phone){ location.href='tel:+'+adlTel(e.phone); setTimeout(()=>adbOpenForm(e,'talk'),700); return; }
+  if(k==='v' && e.phone){ location.href='viber://chat?number=%2B'+adlTel(e.phone); return; }
+  if(k==='e' && e.email){ location.href='mailto:'+e.email; return; }
+  if(k==='d'||k==='l'){ ev.preventDefault(); adbOpenForm(e, e.nx?(e.kind==='call'?'talk':'done'):''); return; }
+  if(k==='n'){ adbNoAns(e, e.kind==='meet'); return; }
+  if(k==='t'){ adbMove(e, adlAdd(todayIso(),1)); return; }
+  if(k==='w'){ adbMove(e, adlAdd(todayIso(),7)); return; }
 });
 </script>
 </body>
