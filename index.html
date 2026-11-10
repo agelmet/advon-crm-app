@@ -4183,6 +4183,40 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 .adl-roas small{font-size:12px;font-weight:600;color:var(--muted)}
 .adl-roas.adl-neg{background:rgba(255,90,60,.12);color:#C2361B}.adl-roas.adl-neg em{background:#E0452B}
 @media(prefers-reduced-motion:reduce){.adl-whc.adl-fire b,.adl-whc.adl-fire b::before{animation:none}}
+/* ALL LEADS list — spreadsheet view (10 Nov 2026) */
+.adl-btn.adl-listbtn{background:#10141F;color:#fff;border-color:#10141F}
+.adl-btn.adl-listbtn.adl-on{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.adl-lst{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:16px}
+.adl-lsth{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 2px 12px}
+.adl-lsth h3{margin:0;font-size:16px;letter-spacing:-.01em;flex:1;min-width:160px}
+.adl-lsth h3 small{font-weight:600;color:var(--muted);margin-left:8px;font-size:13px}
+.adl-lsth input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:10px;padding:7px 11px;min-height:36px;width:min(280px,100%);background:var(--bg);color:var(--ink)}
+.adl-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px}
+.adl-tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;min-width:900px}
+.adl-tbl th{position:sticky;top:0;z-index:2;background:#F3F5F9;text-align:left;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.adl-tbl td{padding:11px 14px;border-bottom:1px solid #EEF1F6;vertical-align:middle;white-space:nowrap}
+.adl-tbl tr.adl-r2{cursor:pointer;transition:background .12s}
+.adl-tbl tr.adl-r2:nth-child(even) td{background:#FAFBFD}
+@media(hover:hover){.adl-tbl tr.adl-r2:hover td{background:#FFF4EC}}
+.adl-tbl tr.adl-dsep td{background:#10141F;color:#fff;font-size:12px;font-weight:800;letter-spacing:.04em;padding:7px 14px;border-bottom:0}
+.adl-tbl tr.adl-dsep td span{color:#FFB37A;margin-left:8px;font-weight:700}
+.adl-tbl tr.adl-dsep.adl-today td{background:linear-gradient(90deg,#FF6B3D,#FF4D5E)}
+.adl-tbl tr.adl-dsep.adl-today td span{color:#fff}
+.adl-tbl .adl-n0{color:#B4BCCB;font-weight:700;font-variant-numeric:tabular-nums;width:1%}
+.adl-tbl .adl-tm{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700;font-size:13px}
+.adl-tbl .adl-nm{font-weight:800;color:var(--ink);font-size:14.5px;white-space:normal;min-width:160px}
+.adl-tbl td.adl-nmc{position:sticky;left:0;z-index:1;background:var(--surface)}
+.adl-pf{display:inline-block;border-radius:999px;padding:4px 11px;font-size:12.5px;font-weight:800;background:hsl(var(--h) 85% 93%);color:hsl(var(--h) 62% 30%);border:1px solid hsl(var(--h) 60% 84%)}
+.adl-pf.adl-pf0{background:#F1F3F7;color:#9AA3B5;border-color:#E3E7EE}
+.adl-ph{font-variant-numeric:tabular-nums;font-weight:800;color:#0B7A47;text-decoration:none;letter-spacing:.02em;font-size:14.5px}
+.adl-em{color:#1C6FD8;text-decoration:none;font-weight:600}
+.adl-ph:hover,.adl-em:hover{text-decoration:underline}
+#view-adl .adl-tbl a.adl-ph{color:#0B7A47!important;-webkit-text-fill-color:#0B7A47}#view-adl .adl-tbl a.adl-em{color:#1C6FD8!important}
+.adl-dash{color:#C5CCD8}
+.adl-stc{display:inline-block;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;background:var(--sb);color:var(--sc)}
+.adl-tbl .adl-msgc{white-space:normal;color:var(--muted);font-size:13px;max-width:320px;min-width:180px;line-height:1.35}
+.adl-lempty{padding:28px;text-align:center;color:var(--muted)}
+@media(max-width:760px){.adl-tbl .adl-n0,.adl-tbl th:first-child{display:none}.adl-lst{padding:8px}.adl-tbl{font-size:13.5px}.adl-tbl td,.adl-tbl th{padding:9px 10px}}
 #view-adl{max-width:none;margin:14px auto 60px;padding:0 20px}
 @media(min-width:981px){.adl-wkc{padding:14px}.adl-wgrid{gap:10px}.adl-wcol{padding:8px;min-height:340px}.adl-wl{gap:8px}.adl-wc{padding:10px 11px 10px 12px;gap:3px}.adl-wc b{font-size:14.5px}.adl-wct{font-size:12px}.adl-wcs{font-size:12.5px}.adl-wcx{font-size:12px;padding:3px 9px}}
 .adl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:6px 0 14px}
@@ -15924,6 +15958,7 @@ const ADL_COL={call:['#FF5A3C','rgba(255,90,60,.12)'], cb:['#2F7FE0','rgba(47,12
 const ADL_GROUP={call:'todo',cb:'todo',na:'todo',book:'book',think:'after',won:'after',no:'after'};
 const ADL_FCOL={all:'#10141F',todo:'#FF5A3C',book:'#0EC673',think:'#F5A623',won:'#7C5CFC',no:'#B4BCCB'};
 const ADL_F=[['all','Ad leads'],['todo','To call'],['book','Meeting booked'],['think','Thinking'],['won','Clients'],['no','Not interested']];
+let adlMode=(()=>{try{return localStorage.getItem('adl-mode')||'week'}catch(e){return 'week'}})(), adlQ='';
 let adlF='all', adlOpenF=null, adlWk=null, adlX=null, adlDays=null, adlWkPrev=null;
 const adlFk=e=>ADL_GROUP[e.st.k]==='todo'?'todo':e.st.k;
 const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
@@ -16045,6 +16080,36 @@ function adlPHtml(e){
 const ADL_PROFIT=120;
 function adlRoas(sp,won){ if(!sp) return ''; const back=won*ADL_PROFIT, r=back/sp, net=back-sp, e0=v=>'€'+Math.round(Math.abs(v)).toLocaleString('el-GR');
   return `<span class="adl-roas${r<1?' adl-neg':''}" title="ROAS = clients closed × €${ADL_PROFIT} profit ÷ ad spend"><em>ROAS</em><b>${r.toFixed(2).replace('.',',')}×</b><small>${won} ${won===1?'client':'clients'} × €${ADL_PROFIT} = ${e0(back)} · ${net>=0?'+':'−'}${e0(net)} ${net>=0?'profit':'so far'}</small></span>`; }
+function adlPfHue(s){ const k=adlNorm(s||''); if(!k) return -1;
+  const fix=[['ψυχ',265],['οδοντ',200],['παιδ',150],['φυσικ',28],['δικηγ',220],['διατρ',95],['λογοθ',320],['γιατρ',0],['ιατρ',0],['κομμ',300],['λογιστ',45]]; for(const [w,h] of fix) if(k.includes(w)) return h;
+  let x=0; for(const ch of k) x=(x*31+ch.charCodeAt(0))>>>0; return x%360; }
+function adlListHtml(list){
+  const t=todayIso(), rows=[]; let last='', n=0;
+  const per={}; list.forEach(e=>per[e.day]=(per[e.day]||0)+1);
+  list.forEach(e=>{
+    if(e.day!==last){ last=e.day; const x=new Date(e.day+'T12:00');
+      rows.push(`<tr class="adl-dsep${e.day===t?' adl-today':''}" data-day="${e.day}"><td colspan="9">${e.day===t?'TODAY · ':''}${esc(x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}))}<span>${per[e.day]} ${per[e.day]===1?'lead':'leads'}</span></td></tr>`); }
+    n++; const col=ADL_COL[e.st.k]||ADL_COL.no, h=adlPfHue(e.spec), ph=adlPhoneTxt(e.phone), q=adlNorm([e.name,e.spec,e.phone,ph,e.email,e.msg].join(' '));
+    const st=(e.c && e.c.stage==='booked' && e.c.day)? '📅 '+adlWhen(e.c.day)+(e.c.time?' '+e.c.time:'') : e.st.t;
+    rows.push(`<tr class="adl-r2" data-adl="pick" data-id="${e.id}" data-day="${e.day}" data-q="${esc(q)}">
+      <td class="adl-n0">${n}</td>
+      <td class="adl-tm">${esc(new Date(e.day+'T12:00').toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'}))} · ${adlHM(e.ts)}</td>
+      <td class="adl-nmc"><span class="adl-nm">${esc(e.name||'—')}</span></td>
+      <td>${h<0?'<span class="adl-pf adl-pf0">—</span>':`<span class="adl-pf" style="--h:${h}">${esc(e.spec)}</span>`}</td>
+      <td>${ph?`<a class="adl-ph" href="tel:+${adlTel(e.phone)}" data-adl="tel">${esc(ph)}</a>`:'<span class="adl-dash">—</span>'}</td>
+      <td>${e.email?`<a class="adl-em" href="mailto:${esc(e.email)}" data-adl="tel">${esc(e.email)}</a>`:'<span class="adl-dash">—</span>'}</td>
+      <td><span class="adl-stc" style="--sc:${col[0]};--sb:${col[1]}">${esc(st)}</span></td>
+      <td class="adl-msgc">${e.msg?esc(e.msg):'<span class="adl-dash">—</span>'}</td>
+      <td class="adl-tm">${esc(e.src==='Form on the ad page'?'Form':e.src.startsWith('Booked')?'Online booking':'Board')}</td></tr>`);
+  });
+  return `<div class="adl-lst"><div class="adl-lsth"><h3>All ad leads · newest first<small>${list.length} ${list.length===1?'lead':'leads'}</small></h3>
+    <input type="search" id="adlQ" placeholder="Search name, profession, phone, e-mail…" value="${esc(adlQ)}" autocomplete="off">
+    <button class="adl-btn" data-adl="copy">⧉ Copy for Excel</button></div>
+    ${list.length?`<div class="adl-tw"><table class="adl-tbl"><thead><tr><th>#</th><th>Date · time</th><th>Name</th><th>Profession</th><th>Phone</th><th>E-mail</th><th>Status</th><th>Message</th><th>From</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`:'<div class="adl-lempty">No leads here yet.</div>'}</div>`;
+}
+function adlApplyQ(){ const q=adlNorm(adlQ.trim()); const tb=document.querySelector('#view-adl .adl-tbl tbody'); if(!tb) return; const vis={};
+  tb.querySelectorAll('tr.adl-r2').forEach(r=>{ const ok=!q||r.dataset.q.includes(q); r.hidden=!ok; if(ok) vis[r.dataset.day]=1; });
+  tb.querySelectorAll('tr.adl-dsep').forEach(r=>r.hidden=!vis[r.dataset.day]); }
 function renderAdl(){
   if(!state) return;
   try{ adlMarkApply(); }catch(e){}
@@ -16083,21 +16148,27 @@ function renderAdl(){
   const askHtml=ask.length?`<div class="adl-ask"><h4>Booked online since the ads started — did they come from the ads?</h4>${ask.map(c=>`<div class="adl-r"><span class="adl-n">${esc(c.name)} <small>· ${c.day?'meeting '+esc(adlDay(c.day))+(c.time?' '+esc(c.time):''):'no day'}${c.phone?' · '+esc(adlPhoneTxt(c.phone)):''}</small></span><button class="adl-btn adl-hot" data-adl="mark" data-v="1" data-id="${c.id}">🔥 From the ads</button><button class="adl-btn adl-ghost adl-mute" data-adl="mark" data-v="0" data-id="${c.id}">Not from the ads</button></div>`).join('')}</div>`:'';
   const keepX=box.querySelector('.adl-wgrid'); const sl=keepX?keepX.scrollLeft:null;
   box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads, by the day they came — like the Calendar. Tap a person to open their card.</p></div>
-    <div class="adl-acts"><button class="adl-btn" data-adl="go" data-v="callbacks">☎ Callbacks</button><button class="adl-btn" data-adl="go" data-v="calendar">📅 Calendar</button><button class="adl-btn" data-adl="pull">↻ Check for new</button></div></div>
-    <div class="adl-tiles">${tiles}</div>${money}${cal}${askHtml}${modal}`;
+    <div class="adl-acts"><button class="adl-btn adl-listbtn${adlMode==='list'?' adl-on':''}" data-adl="mode">${adlMode==='list'?'📅 Week view':'☰ All leads'}</button><button class="adl-btn" data-adl="go" data-v="callbacks">☎ Callbacks</button><button class="adl-btn" data-adl="go" data-v="calendar">📅 Calendar</button><button class="adl-btn" data-adl="pull">↻ Check for new</button></div></div>
+    <div class="adl-tiles">${tiles}</div>${money}${adlMode==='list'?adlListHtml(list):cal}${askHtml}${modal}`;
   const g=box.querySelector('.adl-wgrid');
   if(g && g.scrollWidth>g.clientWidth+4){ if(sl!=null && adlWkPrev===ws) g.scrollLeft=sl; else { const c=g.querySelector('.adl-wcol.adl-today')||g.querySelector('.adl-wcol:not(.adl-z)'); if(c) g.scrollLeft=Math.max(0,c.offsetLeft-g.offsetLeft-8); } }
-  adlWkPrev=ws;
+  adlWkPrev=ws; if(adlMode==='list') adlApplyQ();
   document.body.classList.toggle('adl-mopen',!!sel);
 }
 document.addEventListener('keydown',ev=>{ if(ev.key==='Escape' && adlX && curView==='adl'){ adlX=null; adlOpenF=null; renderAdl(); } });
 window.addEventListener('beforeunload',()=>document.body.classList.remove('adl-mopen'));
+document.addEventListener('input',ev=>{ const i=ev.target; if(!i || i.id!=='adlQ') return; adlQ=i.value; adlApplyQ(); });
 document.addEventListener('change',ev=>{ const i=ev.target; if(!i || i.id!=='adlSpend') return; ensureMeta(); const A=state.meta.adl||(state.meta.adl={}); A.spend=Math.max(0,parseFloat(String(i.value).replace(',','.'))||0); A.spendAt=new Date().toISOString(); save(); renderAdl(); });
 document.addEventListener('click',ev=>{
   const b=ev.target.closest && ev.target.closest('#view-adl [data-adl]'); if(!b) return;
   const a=b.dataset.adl, id=b.dataset.id;
   const L=()=>(state.leads||[]).find(x=>x.id===id);
   if(a==='tel'){ return; }
+  if(a==='mode'){ adlMode=adlMode==='list'?'week':'list'; try{ localStorage.setItem('adl-mode',adlMode); }catch(e){} adlX=null; renderAdl(); return; }
+  if(a==='copy'){ const all=adlEntries(), lst=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF), q=adlNorm(adlQ.trim());
+    const rows=lst.filter(e=>!q||adlNorm([e.name,e.spec,e.phone,adlPhoneTxt(e.phone),e.email,e.msg].join(' ')).includes(q)).map(e=>[e.day.split('-').reverse().join('/'),adlHM(e.ts),e.name||'',e.spec||'',adlPhoneTxt(e.phone),e.email||'',e.st.t,(e.msg||'').replace(/[\t\n]+/g,' ')].join('\t'));
+    const txt=['Date','Time','Name','Profession','Phone','E-mail','Status','Message'].join('\t')+'\n'+rows.join('\n');
+    try{ navigator.clipboard.writeText(txt).then(()=>toast(rows.length+' leads copied — paste them into Excel'),()=>toast('Could not copy')); }catch(e){ toast('Could not copy'); } return; }
   if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; renderAdl(); return; }
   if(a==='wk'){ adlWk=b.dataset.d||null; if(adlWk===adlMonday(todayIso())) adlWk=null; adlX=null; renderAdl(); return; }
   if(a==='day'){ const d=b.dataset.d; if(!adlDays) adlDays=new Set(); if(adlDays.has(d)) adlDays.delete(d); else adlDays.add(d); adlOpenF=null; renderAdl();
