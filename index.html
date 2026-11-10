@@ -3294,7 +3294,7 @@ body.dark .card .c-review.sent{background:rgba(0,0,0,.2);color:#FCD34D}
    the slim bar on every tab (#gmBar, hidden on Home), the big card on Home (#gmCard),
    a strip inside Leads → Call mode, and a line in the once-a-day «Today» window. */
 .gm-bar{max-width:1600px; margin:14px auto 0; padding:0 24px;}
-body[data-view=home] .gm-bar{display:none;}
+body[data-view=home] .gm-bar,body[data-view=adl] .gm-bar{display:none;}
 .gm-bar:empty{display:none;}
 .gm-hud{position:relative; display:flex; align-items:center; gap:10px 18px; flex-wrap:wrap; padding:9px 12px 9px 16px; border-radius:14px; color:#fff;
   background:linear-gradient(120deg,#10141F 10%,#172C52 60%,#1F4F93 115%); box-shadow:0 6px 22px rgba(16,20,31,.18); overflow:hidden;}
@@ -4170,6 +4170,19 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 /* ===== AD LEADS tab v3 (10 Nov 2026) — week strip + one block per day, people grouped by what happens next ===== */
 .tab.tab-adl{display:inline-flex;align-items:center;gap:6px;color:#E0452B;background:linear-gradient(135deg,rgba(255,107,61,.16),rgba(255,77,94,.10));border:1px solid rgba(255,107,61,.35);font-weight:800}
 .tab.tab-adl.active{background:linear-gradient(135deg,#FF6B3D,#FF4D5E);color:#fff;border-color:transparent}
+/* fire daily count + ROAS (10 Nov 2026) */
+.adl-whc.adl-fire{color:#E8590C}
+.adl-whc.adl-fire b{position:relative;display:inline-block;font-size:26px;font-weight:900;color:#FF5A1F;background:linear-gradient(0deg,#C81E1E 0%,#FF3B1F 28%,#FF7A00 55%,#FFC21A 82%,#FFF1A8 100%);background-size:100% 220%;background-position:50% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 5px rgba(255,110,0,.55)) drop-shadow(0 2px 6px rgba(255,60,0,.35));animation:adlFlame 1.6s ease-in-out infinite alternate}
+.adl-whc.adl-fire b::before{content:"🔥";position:absolute;right:100%;bottom:.12em;margin-right:2px;font-size:.62em;-webkit-text-fill-color:initial;animation:adlFlick 1.1s ease-in-out infinite alternate;transform-origin:50% 100%}
+.adl-whc.adl-fire.adl-hot b{font-size:30px;filter:drop-shadow(0 0 8px rgba(255,120,0,.75)) drop-shadow(0 0 16px rgba(255,60,0,.4))}
+@keyframes adlFlame{0%{background-position:50% 100%;transform:translateY(0) scale(1)}100%{background-position:50% 55%;transform:translateY(-1px) scale(1.06)}}
+@keyframes adlFlick{0%{transform:rotate(-6deg) scaleY(.92)}100%{transform:rotate(5deg) scaleY(1.08)}}
+.adl-roas{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:4px 12px 4px 5px;font-weight:700;background:rgba(14,198,115,.12);color:#0B7A47}
+.adl-roas em{font-style:normal;font-size:11px;font-weight:900;letter-spacing:.08em;background:#0B9E5C;color:#fff;border-radius:999px;padding:3px 8px}
+.adl-roas>b{font-size:17px;color:inherit!important}
+.adl-roas small{font-size:12px;font-weight:600;color:var(--muted)}
+.adl-roas.adl-neg{background:rgba(255,90,60,.12);color:#C2361B}.adl-roas.adl-neg em{background:#E0452B}
+@media(prefers-reduced-motion:reduce){.adl-whc.adl-fire b,.adl-whc.adl-fire b::before{animation:none}}
 #view-adl{max-width:none;margin:14px auto 60px;padding:0 20px}
 @media(min-width:981px){.adl-wkc{padding:14px}.adl-wgrid{gap:10px}.adl-wcol{padding:8px;min-height:340px}.adl-wl{gap:8px}.adl-wc{padding:10px 11px 10px 12px;gap:3px}.adl-wc b{font-size:14.5px}.adl-wct{font-size:12px}.adl-wcs{font-size:12.5px}.adl-wcx{font-size:12px;padding:3px 9px}}
 .adl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:6px 0 14px}
@@ -16029,6 +16042,9 @@ function adlPHtml(e){
     ${more}
   </div>`;
 }
+const ADL_PROFIT=120;
+function adlRoas(sp,won){ if(!sp) return ''; const back=won*ADL_PROFIT, r=back/sp, net=back-sp, e0=v=>'€'+Math.round(Math.abs(v)).toLocaleString('el-GR');
+  return `<span class="adl-roas${r<1?' adl-neg':''}" title="ROAS = clients closed × €${ADL_PROFIT} profit ÷ ad spend"><em>ROAS</em><b>${r.toFixed(2).replace('.',',')}×</b><small>${won} ${won===1?'client':'clients'} × €${ADL_PROFIT} = ${e0(back)} · ${net>=0?'+':'−'}${e0(net)} ${net>=0?'profit':'so far'}</small></span>`; }
 function renderAdl(){
   if(!state) return;
   try{ adlMarkApply(); }catch(e){}
@@ -16042,7 +16058,7 @@ function renderAdl(){
   ensureMeta(); const A=state.meta.adl||{}; const sp=+A.spend||0;
   const meet=all.filter(e=>e.c || e.st.k==='book').length, eur=v=>'€'+v.toFixed(2).replace('.',',');
   const pct=all.length?Math.round(meet*100/all.length):0;
-  const money=`<div class="adl-money"><label>Ad spend so far €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label>${sp&&all.length?`<span><b>${eur(sp/all.length)}</b> per lead</span>${meet?`<span><b>${eur(sp/meet)}</b> per booked meeting</span>`:''}${cnt.won?`<span><b>${eur(sp/cnt.won)}</b> per client</span>`:''}`:'<span>type what Ads Manager shows as «Amount spent» to see the cost per lead</span>'}<span class="adl-sep"></span><span><b>${meet}</b> of ${all.length} booked a meeting · <b>${pct}%</b></span></div>`;
+  const money=`<div class="adl-money"><label>Ad spend so far €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label>${sp&&all.length?`<span><b>${eur(sp/all.length)}</b> per lead</span>${meet?`<span><b>${eur(sp/meet)}</b> per booked meeting</span>`:''}${cnt.won?`<span><b>${eur(sp/cnt.won)}</b> per client</span>`:''}${adlRoas(sp,cnt.won)}`:'<span>type what Ads Manager shows as «Amount spent» to see the cost per lead</span>'}<span class="adl-sep"></span><span><b>${meet}</b> of ${all.length} booked a meeting · <b>${pct}%</b></span></div>`;
   /* the week like the Calendar: 7 day columns side by side, a small card per person, tap a card to open it */
   const list=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF);
   const days={}; list.forEach(e=>(days[e.day]=days[e.day]||[]).push(e));
@@ -16056,7 +16072,7 @@ function renderAdl(){
     const m={}; arr.forEach(e=>m[adlFk(e)]=(m[adlFk(e)]||0)+1);
     const bar=['todo','book','think','won','no'].filter(k=>m[k]).map(k=>`<i style="flex:${m[k]};background:${ADL_FCOL[k]}"></i>`).join('');
     return `<div class="adl-wcol${d===t?' adl-today':''}${fut?' adl-fut':''}${arr.length?'':' adl-z'}" data-d="${d}">
-      <div class="adl-wh"><span class="adl-whd">${d===t?'Today':x.toLocaleDateString('en-GB',{weekday:'short'})}</span><span class="adl-whn">${x.getDate()}</span><span class="adl-whc">${arr.length?`<b>${arr.length}</b> ${arr.length===1?'lead':'leads'}`:(fut?'':'no leads')}</span>${arr.length?`<span class="adl-bar">${bar}</span>`:''}</div>
+      <div class="adl-wh"><span class="adl-whd">${d===t?'Today':x.toLocaleDateString('en-GB',{weekday:'short'})}</span><span class="adl-whn">${x.getDate()}</span><span class="adl-whc${arr.length?' adl-fire'+(arr.length>=5?' adl-hot':''):''}">${arr.length?`<b>${arr.length}</b> ${arr.length===1?'lead':'leads'}`:(fut?'':'no leads')}</span>${arr.length?`<span class="adl-bar">${bar}</span>`:''}</div>
       <div class="adl-wl">${arr.map(card).join('')}</div></div>`; }).join('');
   const legend=[['todo','to call'],['book','meeting booked'],['think','thinking'],['won','client'],['no','not interested']].map(([k,w])=>`<span><i style="background:${ADL_FCOL[k]}"></i>${w}</span>`).join('');
   const cal=`<div class="adl-wkc"><div class="adl-wknav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${isNow?'This week':'Week'} · ${esc(wl)}<small>${wkN} ${wkN===1?'lead':'leads'}</small></h3>${isNow?'':`<button class="adl-btn adl-ghost" data-adl="wk" data-d="">This week</button>`}<button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week"${isNow?' disabled':''}>›</button></div><div class="adl-wgrid">${cols}</div><div class="adl-legend">${legend}</div></div>`;
