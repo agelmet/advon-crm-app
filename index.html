@@ -4217,6 +4217,10 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 .adl-tbl .adl-msgc{white-space:normal;color:var(--muted);font-size:13px;max-width:320px;min-width:180px;line-height:1.35}
 .adl-lempty{padding:28px;text-align:center;color:var(--muted)}
 @media(max-width:760px){.adl-tbl .adl-n0,.adl-tbl th:first-child{display:none}.adl-lst{padding:8px}.adl-tbl{font-size:13.5px}.adl-tbl td,.adl-tbl th{padding:9px 10px}}
+.adl-btn.adl-cpy.adl-done{background:#0EC673;border-color:#0EC673;color:#fff}
+.adl-btn.adl-cpys{min-height:28px;padding:3px 9px;font-size:12px;border-radius:9px}
+.adl-cpi{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;width:30px;height:30px;margin-left:8px;cursor:pointer;font-size:14px;vertical-align:middle;line-height:1}
+.adl-cpi:hover{color:var(--ink);border-color:#c9d2e3}.adl-cpi.adl-done{background:#0EC673;border-color:#0EC673;color:#fff}
 #view-adl{max-width:none;margin:14px auto 60px;padding:0 20px}
 @media(min-width:981px){.adl-wkc{padding:14px}.adl-wgrid{gap:10px}.adl-wcol{padding:8px;min-height:340px}.adl-wl{gap:8px}.adl-wc{padding:10px 11px 10px 12px;gap:3px}.adl-wc b{font-size:14.5px}.adl-wct{font-size:12px}.adl-wcs{font-size:12.5px}.adl-wcx{font-size:12px;padding:3px 9px}}
 .adl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:6px 0 14px}
@@ -16070,7 +16074,7 @@ function adlPHtml(e){
     if(s.k==='cb') acts.push(`<button class="adl-btn adl-ghost" data-adl="go" data-v="callbacks">Callbacks ›</button>`);
     if(l && !c) acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="lead" data-id="${e.id}">In Leads ›</button>`);
     acts.push(`<button class="adl-btn adl-ghost adl-mute" data-adl="notad" data-id="${e.id}" title="Take this person out of Ad leads">Not from the ads</button>`);
-    more=`<div class="adl-meta">${e.email?`<a href="mailto:${esc(e.email)}">✉ ${esc(e.email)}</a>`:''}<span>${esc(e.src)} · ${adlAgo(e.ts)}</span>${adn?`<span>Ad: <b>${esc(adn)}</b></span>`:''}</div>
+    more=`<div class="adl-meta">${e.email?`<a href="mailto:${esc(e.email)}">✉ ${esc(e.email)}</a><button class="adl-btn adl-cpy adl-cpys" data-adl="copy1" data-v="${esc(e.email)}" title="Copy the e-mail">⧉ Copy</button>`:''}<span>${esc(e.src)} · ${adlAgo(e.ts)}</span>${adn?`<span>Ad: <b>${esc(adn)}</b></span>`:''}</div>
       ${e.msg?`<div class="adl-msg">«${esc(e.msg)}»</div>`:''}${e.memo&&e.memo!==e.msg?`<div class="adl-msg">📝 ${esc(e.memo)}</div>`:''}
       <div class="adl-row">${acts.join('')}</div>${form}`;
   }
@@ -16078,7 +16082,7 @@ function adlPHtml(e){
   return `<div class="adl-p${x?' adl-px':''}" id="adl-${e.id}" style="--sc:${col[0]};--sb:${col[1]}">
     <button class="adl-ph" data-adl="x" data-id="${e.id}" aria-expanded="${x?'true':'false'}"><span class="adl-pt">${adlHM(e.ts)}</span><span class="adl-pn"><b>${esc(e.name)}</b>${e.spec?`<small>${esc(e.spec)}</small>`:''}</span><span class="adl-st${s.k==='call'?' adl-pulse':''}">${esc(s.t)}</span></button>
     ${s.d?`<div class="adl-when">${esc(s.d)}</div>`:''}
-    <div class="adl-row">${e.phone?`<a class="adl-btn adl-hot" data-adl="tel" data-id="${e.id}" href="tel:+${tel}">📞 ${esc(adlPhoneTxt(e.phone))}</a><a class="adl-btn" href="viber://chat?number=%2B${tel}">Viber</a>`:''}${quick}<span class="adl-sep"></span><button class="adl-btn adl-ghost adl-mute" data-adl="x" data-id="${e.id}">${x?'Less ▴':'More ▾'}</button></div>
+    <div class="adl-row">${e.phone?`<a class="adl-btn adl-hot" data-adl="tel" data-id="${e.id}" href="tel:+${tel}">📞 ${esc(adlPhoneTxt(e.phone))}</a><a class="adl-btn" href="viber://chat?number=%2B${tel}">Viber</a><button class="adl-btn adl-cpy" data-adl="copy1" data-v="${String(e.phone).replace(/\D/g,'').slice(-10)}" title="Copy the number">⧉ Copy</button>`:''}${quick}<span class="adl-sep"></span><button class="adl-btn adl-ghost adl-mute" data-adl="x" data-id="${e.id}">${x?'Less ▴':'More ▾'}</button></div>
     ${more}
   </div>`;
 }
@@ -16101,7 +16105,7 @@ function adlListHtml(list){
       <td class="adl-tm">${esc(new Date(e.day+'T12:00').toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'}))} · ${adlHM(e.ts)}</td>
       <td class="adl-nmc"><span class="adl-nm">${esc(e.name||'—')}</span></td>
       <td>${h<0?'<span class="adl-pf adl-pf0">—</span>':`<span class="adl-pf" style="--h:${h}">${esc(e.spec)}</span>`}</td>
-      <td>${ph?`<a class="adl-ph" href="tel:+${adlTel(e.phone)}" data-adl="tel">${esc(ph)}</a>`:'<span class="adl-dash">—</span>'}</td>
+      <td>${ph?`<a class="adl-ph" href="tel:+${adlTel(e.phone)}" data-adl="tel">${esc(ph)}</a><button class="adl-cpi" data-adl="copy1" data-v="${String(e.phone).replace(/\D/g,'').slice(-10)}" title="Copy the number" aria-label="Copy the number">⧉</button>`:'<span class="adl-dash">—</span>'}</td>
       <td>${e.email?`<a class="adl-em" href="mailto:${esc(e.email)}" data-adl="tel">${esc(e.email)}</a>`:'<span class="adl-dash">—</span>'}</td>
       <td><span class="adl-stc" style="--sc:${col[0]};--sb:${col[1]}">${esc(st)}</span></td>
       <td class="adl-msgc">${e.msg?esc(e.msg):'<span class="adl-dash">—</span>'}</td>
@@ -16169,6 +16173,9 @@ document.addEventListener('click',ev=>{
   const a=b.dataset.adl, id=b.dataset.id;
   const L=()=>(state.leads||[]).find(x=>x.id===id);
   if(a==='tel'){ return; }
+  if(a==='copy1'){ const v=b.dataset.v||''; if(!v) return; const done=()=>{ const t0=b.textContent; b.classList.add('adl-done'); b.textContent=b.classList.contains('adl-cpi')?'✓':'✓ Copied'; toast('Copied '+(/^\d{10}$/.test(v)?adlPhoneTxt(v):v)); setTimeout(()=>{ b.classList.remove('adl-done'); b.textContent=t0; },1400); };
+    const fb=()=>{ try{ const t=document.createElement('textarea'); t.value=v; t.setAttribute('readonly',''); t.style.cssText='position:fixed;top:0;left:0;opacity:0'; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); done(); }catch(e){ toast('Could not copy'); } };
+    try{ navigator.clipboard.writeText(v).then(done,fb); }catch(e){ fb(); } return; }
   if(a==='mode'){ adlMode=adlMode==='list'?'week':'list'; try{ localStorage.setItem('adl-mode',adlMode); }catch(e){} adlX=null; renderAdl(); return; }
   if(a==='copy'){ const all=adlEntries(), lst=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF), q=adlNorm(adlQ.trim());
     const rows=lst.filter(e=>!q||adlNorm([e.name,e.spec,e.phone,adlPhoneTxt(e.phone),e.email,e.msg].join(' ')).includes(q)).map(e=>[e.day.split('-').reverse().join('/'),adlHM(e.ts),e.name||'',e.spec||'',adlPhoneTxt(e.phone),e.email||'',e.st.t,(e.msg||'').replace(/[\t\n]+/g,' ')].join('\t'));
