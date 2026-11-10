@@ -4263,6 +4263,43 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 .adl-empty{padding:40px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
 .adl-flash{animation:adlfl 1.8s ease-out}
 @keyframes adlfl{0%,40%{box-shadow:0 0 0 5px rgba(255,90,60,.35)}100%{box-shadow:none}}
+/* vertical week calendar (10 Nov 2026) */
+.adl-vcal{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:16px}
+.adl-vday{border-top:1px solid var(--line);scroll-margin-top:12px}
+.adl-vday:first-of-type{border-top:0}
+.adl-vrow{appearance:none;border:0;background:transparent;font:inherit;color:var(--ink);width:100%;display:grid;grid-template-columns:62px 1fr auto 22px;align-items:center;gap:14px;text-align:left;padding:12px 8px;border-radius:14px;cursor:pointer}
+.adl-vrow:hover{background:var(--bg)}
+.adl-vrow:disabled{cursor:default;background:transparent}
+.adl-vdate{display:grid;place-items:center;width:56px;height:56px;border-radius:14px;background:var(--bg);line-height:1}
+.adl-vdate small{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.adl-vdate b{font-size:23px;letter-spacing:-.02em;margin-top:3px;font-variant-numeric:tabular-nums}
+.adl-today .adl-vdate{background:#FF8A00;color:#fff}
+.adl-today .adl-vdate small{color:rgba(255,255,255,.85)}
+.adl-vmid{display:grid;gap:6px;min-width:0}
+.adl-vtop{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.adl-vlab{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.adl-vlab small{font-weight:600;color:var(--muted);font-size:13px}
+.adl-today .adl-vlab{color:#D97400}
+.adl-vchips{display:flex;gap:5px;flex-wrap:wrap}
+.adl-vchips i{font-style:normal;font-size:12px;font-weight:800;border-radius:999px;padding:2px 8px;background:var(--bg)}
+.adl-vbar{display:flex;height:8px;border-radius:999px;overflow:hidden;gap:1px;background:rgba(16,20,31,.07);min-width:40px}
+.adl-vbar i{display:block;height:100%}
+.adl-vnames{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adl-vnone{font-size:13px;color:var(--muted)}
+.adl-vn{display:grid;justify-items:end;line-height:1}
+.adl-vn b{font-size:28px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.adl-vn small{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px}
+.adl-vchev{font-size:15px;color:var(--muted);text-align:center}
+.adl-vday.adl-z .adl-vrow{padding-top:7px;padding-bottom:7px}
+.adl-vday.adl-z .adl-vdate{height:40px;width:56px;opacity:.6}
+.adl-vday.adl-z .adl-vdate b{font-size:17px}
+.adl-vday.adl-z .adl-vn b{font-size:18px;color:#c3cad8}
+.adl-vday.adl-z .adl-vlab{font-size:14px;color:var(--muted)}
+.adl-vday.adl-fut{opacity:.55}
+.adl-vday.adl-open{background:linear-gradient(180deg,rgba(255,138,0,.035),transparent 120px);border-radius:14px}
+.adl-vbody{padding:0 8px 14px 84px}
+.adl-vbody .adl-g:first-child{margin-top:2px}
+@media(max-width:760px){.adl-vrow{grid-template-columns:48px 1fr auto 16px;gap:10px;padding:10px 4px}.adl-vdate{width:46px;height:48px;border-radius:12px}.adl-vdate b{font-size:19px}.adl-vday.adl-z .adl-vdate{width:46px;height:36px}.adl-vbody{padding:0 2px 12px}.adl-vn b{font-size:24px}.adl-vlab{font-size:15px}.adl-vcal{padding:8px}}
 @media(max-width:1100px){.adl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.adl-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.adl-grid{grid-template-columns:1fr}.adl-head h2{font-size:22px}.adl-strip{gap:4px}.adl-dt{padding:6px 5px 7px;border-radius:11px;text-align:center}.adl-dt span{font-size:9.5px;letter-spacing:.02em}.adl-dt span em{display:block;margin:0;font-size:12px}.adl-dt b{font-size:19px}.adl-dt b small{display:none}.adl-wk{padding:10px 8px}.adl-daybox{padding:12px 10px 12px}.adl-tile b{font-size:22px}}
 @media(prefers-reduced-motion:reduce){.adl-st.adl-pulse,.adl-flash{animation:none}}
@@ -15876,7 +15913,7 @@ const ADL_COL={call:['#FF5A3C','rgba(255,90,60,.12)'], cb:['#2F7FE0','rgba(47,12
 const ADL_GROUP={call:'todo',cb:'todo',na:'todo',book:'book',think:'after',won:'after',no:'after'};
 const ADL_FCOL={all:'#10141F',todo:'#FF5A3C',book:'#0EC673',think:'#F5A623',won:'#7C5CFC',no:'#B4BCCB'};
 const ADL_F=[['all','Ad leads'],['todo','To call'],['book','Meeting booked'],['think','Thinking'],['won','Clients'],['no','Not interested']];
-let adlF='all', adlOpenF=null, adlWk=null, adlX=null;
+let adlF='all', adlOpenF=null, adlWk=null, adlX=null, adlDays=null;
 const adlFk=e=>ADL_GROUP[e.st.k]==='todo'?'todo':e.st.k;
 const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
 const adlNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
@@ -16008,38 +16045,44 @@ function renderAdl(){
   const meet=all.filter(e=>e.c || e.st.k==='book').length, eur=v=>'€'+v.toFixed(2).replace('.',',');
   const pct=all.length?Math.round(meet*100/all.length):0;
   const money=`<div class="adl-money"><label>Ad spend so far €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label>${sp&&all.length?`<span><b>${eur(sp/all.length)}</b> per lead</span>${meet?`<span><b>${eur(sp/meet)}</b> per booked meeting</span>`:''}${cnt.won?`<span><b>${eur(sp/cnt.won)}</b> per client</span>`:''}`:'<span>type what Ads Manager shows as «Amount spent» to see the cost per lead</span>'}<span class="adl-sep"></span><span><b>${meet}</b> of ${all.length} booked a meeting · <b>${pct}%</b></span></div>`;
-  /* the week */
+  /* the week as a vertical calendar: one row per day, Mon → Sun, tap a row to open it */
   const list=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF);
   const days={}; list.forEach(e=>(days[e.day]=days[e.day]||[]).push(e));
   const ws=adlWk||adlMonday(t), wd=[0,1,2,3,4,5,6].map(i=>adlAdd(ws,i)), f=d=>new Date(d+'T12:00');
+  if(!adlDays){ adlDays=new Set(); const open=days[t]?t:wd.slice().reverse().find(d=>d<=t && days[d]); if(open) adlDays.add(open); }
   const wl=f(ws).getMonth()===f(wd[6]).getMonth()? f(ws).getDate()+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'long'}) : f(ws).toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-  const wkN=wd.reduce((n,d)=>n+(days[d]||[]).length,0);
-  const older=Object.keys(days).some(d=>d<ws), isNow=ws===adlMonday(t);
-  const strip=wd.map(d=>{ const arr=days[d]||[], x=f(d); const m={}; arr.forEach(e=>m[adlFk(e)]=(m[adlFk(e)]||0)+1);
-    const bar=['todo','book','think','won','no'].filter(k=>m[k]).map(k=>`<i style="flex:${m[k]};background:${ADL_FCOL[k]}"></i>`).join('');
-    return `<button class="adl-dt${d===t?' adl-today':''}${arr.length?'':' adl-z'}${d>t?' adl-fut':''}" data-adl="day" data-d="${d}" title="${arr.length} ad leads"><span>${d===t?'Today':x.toLocaleDateString('en-GB',{weekday:'short'})}<em>${x.getDate()}</em></span><b>${arr.length||'–'}${arr.length?`<small>${arr.length===1?'lead':'leads'}</small>`:''}</b><div class="adl-bar">${bar}</div></button>`; }).join('');
-  const legend=[['todo','to call'],['book','meeting booked'],['think','thinking'],['won','client'],['no','not interested']].map(([k,w])=>`<span><i style="background:${ADL_FCOL[k]}"></i>${w}</span>`).join('');
-  const week=`<div class="adl-wk"><div class="adl-wknav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${isNow?'This week':'Week'} · ${esc(wl)}<small>${wkN} ${wkN===1?'lead':'leads'}</small></h3>${isNow?'':`<button class="adl-btn adl-ghost" data-adl="wk" data-d="">This week</button>`}<button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week"${isNow?' disabled':''}>›</button></div><div class="adl-strip">${strip}</div><div class="adl-legend">${legend}</div></div>`;
-  /* one block per day, newest first */
-  const dayLab=d=>{ const w=f(d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}); return d===t?'Today · '+w:d===adlAdd(t,-1)?'Yesterday · '+w:w; };
+  const wkN=wd.reduce((n,d)=>n+(days[d]||[]).length,0), isNow=ws===adlMonday(t);
+  const maxN=Math.max(1,...wd.map(d=>(days[d]||[]).length));
   const rank=e=>e.st.k==='call'?0:(e.st.k==='cb'&&e.st.today)?1:e.st.k==='na'?2:3;
   const mt=e=>(e.c&&e.c.day)?e.c.day+'T'+(e.c.time||''):'9999';
-  const blocks=wd.slice().reverse().map(d=>{ const arr=days[d]||[];
-    if(!arr.length){ if(d>t || adlF!=='all') return ''; return `<div class="adl-dayz" id="adl-d-${d}"><b>${esc(dayLab(d))}</b><span>no ad leads</span></div>`; }
-    const g={todo:[],book:[],after:[]}; arr.forEach(e=>g[ADL_GROUP[e.st.k]].push(e));
-    g.todo.sort((a,b)=>rank(a)-rank(b)||b.ts-a.ts); g.book.sort((a,b)=>mt(a).localeCompare(mt(b)));
-    const grp=(k,lab)=>g[k].length?`<div class="adl-g"><h4>${lab}<i>${g[k].length}</i></h4><div class="adl-grid">${g[k].map(adlPHtml).join('')}</div></div>`:'';
+  const mc={todo:'#FF5A3C',book:'#0B9E5C',think:'#C98A00',won:'#7C5CFC',no:'#687182'};
+  const anyOpen=wd.some(d=>adlDays.has(d)&&(days[d]||[]).length);
+  const rows=wd.map(d=>{ const arr=days[d]||[], x=f(d), open=adlDays.has(d)&&arr.length, fut=d>t;
     const m={}; arr.forEach(e=>m[adlFk(e)]=(m[adlFk(e)]||0)+1);
-    const mc={todo:'#FF5A3C',book:'#0B9E5C',think:'#C98A00',won:'#7C5CFC',no:'#687182'};
-    const mini=[['todo','to call'],['book','booked'],['think','thinking'],['won','client'],['no','not interested']].filter(([k])=>m[k]).map(([k,w])=>`<i style="color:${mc[k]}">${m[k]} ${w}</i>`).join('');
-    return `<section class="adl-daybox${d===t?' adl-today':''}" id="adl-d-${d}"><div class="adl-day"><h3>${esc(dayLab(d))}</h3><span class="adl-cnt">${arr.length} ${arr.length===1?'lead':'leads'}</span><span class="adl-mini">${mini}</span></div>${grp('todo','📞 To call')}${grp('book','📅 Meeting booked')}${grp('after','🏁 After the meeting')}</section>`; }).join('');
+    const bar=['todo','book','think','won','no'].filter(k=>m[k]).map(k=>`<i style="flex:${m[k]};background:${ADL_FCOL[k]}"></i>`).join('');
+    const chips=[['todo','to call'],['book','booked'],['think','thinking'],['won','client'],['no','not interested']].filter(([k])=>m[k]).map(([k,w])=>`<i style="color:${mc[k]}">${m[k]} ${w}</i>`).join('');
+    const names=arr.slice().sort((a,b)=>a.ts-b.ts).map(e=>esc(String(e.name).split(/\s+/).slice(0,2).join(' '))).join(' · ');
+    let body='';
+    if(open){ const g={todo:[],book:[],after:[]}; arr.forEach(e=>g[ADL_GROUP[e.st.k]].push(e));
+      g.todo.sort((a,b)=>rank(a)-rank(b)||b.ts-a.ts); g.book.sort((a,b)=>mt(a).localeCompare(mt(b)));
+      const grp=(k,lab)=>g[k].length?`<div class="adl-g"><h4>${lab}<i>${g[k].length}</i></h4><div class="adl-grid">${g[k].map(adlPHtml).join('')}</div></div>`:'';
+      body=`<div class="adl-vbody">${grp('todo','📞 To call')}${grp('book','📅 Meeting booked')}${grp('after','🏁 After the meeting')}</div>`; }
+    const lab=d===t?'Today':d===adlAdd(t,-1)?'Yesterday':x.toLocaleDateString('en-GB',{weekday:'long'});
+    return `<section class="adl-vday${d===t?' adl-today':''}${open?' adl-open':''}${arr.length?'':' adl-z'}${fut?' adl-fut':''}" id="adl-d-${d}">
+      <button class="adl-vrow" data-adl="day" data-d="${d}"${arr.length?` aria-expanded="${open?'true':'false'}"`:' disabled'}>
+        <span class="adl-vdate"><small>${x.toLocaleDateString('en-GB',{weekday:'short'})}</small><b>${x.getDate()}</b></span>
+        <span class="adl-vmid"><span class="adl-vtop"><span class="adl-vlab">${lab}<small> · ${x.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</small></span>${arr.length?`<span class="adl-vchips">${chips}</span>`:''}</span>
+          ${arr.length?`<span class="adl-vbar" style="width:${Math.max(18,Math.round(arr.length*100/maxN))}%">${bar}</span>${open?'':`<span class="adl-vnames">${names}</span>`}`:`<span class="adl-vnone">${fut?'':'no ad leads'}</span>`}</span>
+        <span class="adl-vn">${arr.length?`<b>${arr.length}</b><small>${arr.length===1?'lead':'leads'}</small>`:'<b>–</b>'}</span>
+        <span class="adl-vchev" aria-hidden="true">${arr.length?(open?'▴':'▾'):''}</span>
+      </button>${body}</section>`; }).join('');
+  const legend=[['todo','to call'],['book','meeting booked'],['think','thinking'],['won','client'],['no','not interested']].map(([k,w])=>`<span><i style="background:${ADL_FCOL[k]}"></i>${w}</span>`).join('');
+  const cal=`<div class="adl-vcal"><div class="adl-wknav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${isNow?'This week':'Week'} · ${esc(wl)}<small>${wkN} ${wkN===1?'lead':'leads'}</small></h3>${isNow?'':`<button class="adl-btn adl-ghost" data-adl="wk" data-d="">This week</button>`}<button class="adl-btn adl-ghost adl-mute" data-adl="all">${anyOpen?'Close all':'Open all'}</button><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week"${isNow?' disabled':''}>›</button></div>${rows}<div class="adl-legend">${legend}</div></div>`;
   const ask=adlAskList();
   const askHtml=ask.length?`<div class="adl-ask"><h4>Booked online since the ads started — did they come from the ads?</h4>${ask.map(c=>`<div class="adl-r"><span class="adl-n">${esc(c.name)} <small>· ${c.day?'meeting '+esc(adlDay(c.day))+(c.time?' '+esc(c.time):''):'no day'}${c.phone?' · '+esc(adlPhoneTxt(c.phone)):''}</small></span><button class="adl-btn adl-hot" data-adl="mark" data-v="1" data-id="${c.id}">🔥 From the ads</button><button class="adl-btn adl-ghost adl-mute" data-adl="mark" data-v="0" data-id="${c.id}">Not from the ads</button></div>`).join('')}</div>`:'';
-  box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads. One block per day; inside each day: who to call, who has a meeting, and what happened after it.</p></div>
+  box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads, as a calendar: one row per day. Tap a day to see who came and what happens next.</p></div>
     <div class="adl-acts"><button class="adl-btn" data-adl="go" data-v="callbacks">☎ Callbacks</button><button class="adl-btn" data-adl="go" data-v="calendar">📅 Calendar</button><button class="adl-btn" data-adl="pull">↻ Check for new</button></div></div>
-    <div class="adl-tiles">${tiles}</div>${money}${week}
-    ${blocks||`<div class="adl-empty">${older?'No ad leads this week — use ‹ for earlier weeks.':adlF==='all'?'No ad leads this week yet.':'Nobody here this week with this filter.'}</div>`}
-    ${askHtml}`;
+    <div class="adl-tiles">${tiles}</div>${money}${cal}${askHtml}`;
 }
 document.addEventListener('change',ev=>{ const i=ev.target; if(!i || i.id!=='adlSpend') return; ensureMeta(); const A=state.meta.adl||(state.meta.adl={}); A.spend=Math.max(0,parseFloat(String(i.value).replace(',','.'))||0); A.spendAt=new Date().toISOString(); save(); renderAdl(); });
 document.addEventListener('click',ev=>{
@@ -16048,8 +16091,11 @@ document.addEventListener('click',ev=>{
   const L=()=>(state.leads||[]).find(x=>x.id===id);
   if(a==='tel'){ setTimeout(()=>{ if(adlX!==id){ adlX=id; adlOpenF=null; renderAdl(); } },400); return; }
   if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; renderAdl(); return; }
-  if(a==='wk'){ adlWk=b.dataset.d||null; if(adlWk===adlMonday(todayIso())) adlWk=null; renderAdl(); return; }
-  if(a==='day'){ const el=document.getElementById('adl-d-'+b.dataset.d); if(el) try{ el.scrollIntoView({behavior:'smooth',block:'start'}); el.classList.add('adl-flash'); setTimeout(()=>el.classList.remove('adl-flash'),1900); }catch(e){} return; }
+  if(a==='wk'){ adlWk=b.dataset.d||null; if(adlWk===adlMonday(todayIso())) adlWk=null; adlDays=null; renderAdl(); return; }
+  if(a==='day'){ const d=b.dataset.d; if(!adlDays) adlDays=new Set(); if(adlDays.has(d)) adlDays.delete(d); else adlDays.add(d); adlOpenF=null; renderAdl();
+    if(adlDays.has(d)){ const el=document.getElementById('adl-d-'+d); if(el){ const r=el.getBoundingClientRect(); if(r.top<0||r.top>innerHeight*0.6) try{ el.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} } } return; }
+  if(a==='all'){ const t=todayIso(), ws=adlWk||adlMonday(t), wd=[0,1,2,3,4,5,6].map(i=>adlAdd(ws,i)); const any=adlDays && wd.some(d=>adlDays.has(d) && document.querySelector('#adl-d-'+d+'.adl-open'));
+    adlDays=new Set(); if(!any) wd.forEach(d=>adlDays.add(d)); renderAdl(); return; }
   if(a==='x'){ adlX=adlX===id?null:id; adlOpenF=null; renderAdl(); return; }
   if(a==='go'){ switchView(b.dataset.v); window.scrollTo(0,0); return; }
   if(a==='pull'){ try{ Leads.pull(true); }catch(e){} try{ Bookings.pull(true); }catch(e){} return; }
