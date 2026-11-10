@@ -4263,43 +4263,40 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 .adl-empty{padding:40px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
 .adl-flash{animation:adlfl 1.8s ease-out}
 @keyframes adlfl{0%,40%{box-shadow:0 0 0 5px rgba(255,90,60,.35)}100%{box-shadow:none}}
-/* vertical week calendar (10 Nov 2026) */
-.adl-vcal{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:16px}
-.adl-vday{border-top:1px solid var(--line);scroll-margin-top:12px}
-.adl-vday:first-of-type{border-top:0}
-.adl-vrow{appearance:none;border:0;background:transparent;font:inherit;color:var(--ink);width:100%;display:grid;grid-template-columns:62px 1fr auto 22px;align-items:center;gap:14px;text-align:left;padding:12px 8px;border-radius:14px;cursor:pointer}
-.adl-vrow:hover{background:var(--bg)}
-.adl-vrow:disabled{cursor:default;background:transparent}
-.adl-vdate{display:grid;place-items:center;width:56px;height:56px;border-radius:14px;background:var(--bg);line-height:1}
-.adl-vdate small{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.adl-vdate b{font-size:23px;letter-spacing:-.02em;margin-top:3px;font-variant-numeric:tabular-nums}
-.adl-today .adl-vdate{background:#FF8A00;color:#fff}
-.adl-today .adl-vdate small{color:rgba(255,255,255,.85)}
-.adl-vmid{display:grid;gap:6px;min-width:0}
-.adl-vtop{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
-.adl-vlab{font-size:16px;font-weight:800;letter-spacing:-.01em}
-.adl-vlab small{font-weight:600;color:var(--muted);font-size:13px}
-.adl-today .adl-vlab{color:#D97400}
-.adl-vchips{display:flex;gap:5px;flex-wrap:wrap}
-.adl-vchips i{font-style:normal;font-size:12px;font-weight:800;border-radius:999px;padding:2px 8px;background:var(--bg)}
-.adl-vbar{display:flex;height:8px;border-radius:999px;overflow:hidden;gap:1px;background:rgba(16,20,31,.07);min-width:40px}
-.adl-vbar i{display:block;height:100%}
-.adl-vnames{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.adl-vnone{font-size:13px;color:var(--muted)}
-.adl-vn{display:grid;justify-items:end;line-height:1}
-.adl-vn b{font-size:28px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.adl-vn small{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px}
-.adl-vchev{font-size:15px;color:var(--muted);text-align:center}
-.adl-vday.adl-z .adl-vrow{padding-top:7px;padding-bottom:7px}
-.adl-vday.adl-z .adl-vdate{height:40px;width:56px;opacity:.6}
-.adl-vday.adl-z .adl-vdate b{font-size:17px}
-.adl-vday.adl-z .adl-vn b{font-size:18px;color:#c3cad8}
-.adl-vday.adl-z .adl-vlab{font-size:14px;color:var(--muted)}
-.adl-vday.adl-fut{opacity:.55}
-.adl-vday.adl-open{background:linear-gradient(180deg,rgba(255,138,0,.035),transparent 120px);border-radius:14px}
-.adl-vbody{padding:0 8px 14px 84px}
-.adl-vbody .adl-g:first-child{margin-top:2px}
-@media(max-width:760px){.adl-vrow{grid-template-columns:48px 1fr auto 16px;gap:10px;padding:10px 4px}.adl-vdate{width:46px;height:48px;border-radius:12px}.adl-vdate b{font-size:19px}.adl-vday.adl-z .adl-vdate{width:46px;height:36px}.adl-vbody{padding:0 2px 12px}.adl-vn b{font-size:24px}.adl-vlab{font-size:15px}.adl-vcal{padding:8px}}
+/* week calendar, day columns side by side (10 Nov 2026) */
+.adl-wkc{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:16px}
+.adl-wgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:stretch}
+.adl-wcol{background:var(--bg);border-radius:14px;padding:6px;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:260px;border:2px solid transparent}
+.adl-wcol.adl-today{border-color:#FF8A00;background:rgba(255,138,0,.06)}
+.adl-wcol.adl-fut{opacity:.55}
+.adl-wh{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"d c" "n c" "b b";align-items:end;gap:0 8px;padding:4px 6px 6px}
+.adl-whd{grid-area:d;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.adl-today .adl-whd{color:#D97400}
+.adl-whn{grid-area:n;font-size:26px;font-weight:800;line-height:1.05;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.adl-whc{grid-area:c;justify-self:end;align-self:end;font-size:12px;font-weight:700;color:var(--muted);text-align:right;line-height:1.1}
+.adl-whc b{display:block;font-size:22px;color:var(--ink);letter-spacing:-.02em}
+.adl-wh .adl-bar{grid-area:b;margin-top:7px}
+.adl-wcol.adl-z .adl-whn{color:#b9c1cf}
+.adl-wl{display:flex;flex-direction:column;gap:6px}
+.adl-wc{appearance:none;font:inherit;color:var(--ink);text-align:left;cursor:pointer;border:0;border-left:4px solid var(--sc,#c9d2e3);background:var(--surface);border-radius:10px;padding:7px 8px 7px 9px;display:grid;gap:2px;box-shadow:0 1px 2px rgba(16,20,31,.07);min-width:0;transition:transform .15s ease,box-shadow .15s ease}
+@media(hover:hover){.adl-wc:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(16,20,31,.12)}}
+.adl-wc:active{transform:scale(.98)}
+.adl-wc.adl-on{outline:2px solid var(--sc)}
+.adl-wct{font-size:11px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums}
+.adl-wc b{font-size:13px;line-height:1.25;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.adl-wcs{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adl-wcx{justify-self:start;margin-top:3px;font-size:11px;font-weight:800;border-radius:999px;padding:2px 7px;background:var(--sb);color:var(--sc);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adl-modal{position:fixed;inset:0;z-index:900;background:rgba(16,20,31,.42);display:grid;place-items:center;padding:16px;animation:adlmf .18s ease-out}
+.adl-mbox{position:relative;width:min(640px,100%);max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border-radius:20px;padding:16px 16px 14px;box-shadow:0 24px 60px rgba(16,20,31,.3);animation:adlmb .22s cubic-bezier(.2,.8,.2,1)}
+.adl-mbox .adl-p.adl-px{outline:0;box-shadow:none;padding:4px 2px 0;background:transparent;border-left:0}
+.adl-mday{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 40px 8px 2px}
+.adl-mx{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:15px;cursor:pointer;color:var(--ink)}
+body.adl-mopen{overflow:hidden}
+@keyframes adlmf{from{opacity:0}}
+@keyframes adlmb{from{opacity:0;transform:translateY(10px) scale(.98)}}
+@media(max-width:980px){.adl-wgrid{grid-template-columns:repeat(7,minmax(150px,1fr));overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:6px;-webkit-overflow-scrolling:touch}.adl-wcol{scroll-snap-align:start}}
+@media(max-width:760px){.adl-modal{place-items:end center;padding:0}.adl-mbox{width:100%;border-radius:20px 20px 0 0;max-height:88vh;padding-bottom:calc(14px + env(safe-area-inset-bottom))}.adl-wkc{padding:8px}}
+@media(prefers-reduced-motion:reduce){.adl-modal,.adl-mbox{animation:none}.adl-wc{transition:none}}
 @media(max-width:1100px){.adl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.adl-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.adl-grid{grid-template-columns:1fr}.adl-head h2{font-size:22px}.adl-strip{gap:4px}.adl-dt{padding:6px 5px 7px;border-radius:11px;text-align:center}.adl-dt span{font-size:9.5px;letter-spacing:.02em}.adl-dt span em{display:block;margin:0;font-size:12px}.adl-dt b{font-size:19px}.adl-dt b small{display:none}.adl-wk{padding:10px 8px}.adl-daybox{padding:12px 10px 12px}.adl-tile b{font-size:22px}}
 @media(prefers-reduced-motion:reduce){.adl-st.adl-pulse,.adl-flash{animation:none}}
@@ -15913,7 +15910,7 @@ const ADL_COL={call:['#FF5A3C','rgba(255,90,60,.12)'], cb:['#2F7FE0','rgba(47,12
 const ADL_GROUP={call:'todo',cb:'todo',na:'todo',book:'book',think:'after',won:'after',no:'after'};
 const ADL_FCOL={all:'#10141F',todo:'#FF5A3C',book:'#0EC673',think:'#F5A623',won:'#7C5CFC',no:'#B4BCCB'};
 const ADL_F=[['all','Ad leads'],['todo','To call'],['book','Meeting booked'],['think','Thinking'],['won','Clients'],['no','Not interested']];
-let adlF='all', adlOpenF=null, adlWk=null, adlX=null, adlDays=null;
+let adlF='all', adlOpenF=null, adlWk=null, adlX=null, adlDays=null, adlWkPrev=null;
 const adlFk=e=>ADL_GROUP[e.st.k]==='todo'?'todo':e.st.k;
 const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
 const adlNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
@@ -16035,7 +16032,7 @@ function renderAdl(){
   if(!state) return;
   try{ adlMarkApply(); }catch(e){}
   const all=adlEntries(); adlBadge(all);
-  if(curView!=='adl') return;
+  if(curView!=='adl'){ if(document.body.classList.contains('adl-mopen')){ document.body.classList.remove('adl-mopen'); adlX=null; } return; }
   const box=$('#adlBody'); if(!box) return;
   const t=todayIso();
   const cnt={all:all.length,todo:0,book:0,think:0,won:0,no:0}; all.forEach(e=>cnt[adlFk(e)]++);
@@ -16045,58 +16042,54 @@ function renderAdl(){
   const meet=all.filter(e=>e.c || e.st.k==='book').length, eur=v=>'€'+v.toFixed(2).replace('.',',');
   const pct=all.length?Math.round(meet*100/all.length):0;
   const money=`<div class="adl-money"><label>Ad spend so far €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label>${sp&&all.length?`<span><b>${eur(sp/all.length)}</b> per lead</span>${meet?`<span><b>${eur(sp/meet)}</b> per booked meeting</span>`:''}${cnt.won?`<span><b>${eur(sp/cnt.won)}</b> per client</span>`:''}`:'<span>type what Ads Manager shows as «Amount spent» to see the cost per lead</span>'}<span class="adl-sep"></span><span><b>${meet}</b> of ${all.length} booked a meeting · <b>${pct}%</b></span></div>`;
-  /* the week as a vertical calendar: one row per day, Mon → Sun, tap a row to open it */
+  /* the week like the Calendar: 7 day columns side by side, a small card per person, tap a card to open it */
   const list=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF);
   const days={}; list.forEach(e=>(days[e.day]=days[e.day]||[]).push(e));
   const ws=adlWk||adlMonday(t), wd=[0,1,2,3,4,5,6].map(i=>adlAdd(ws,i)), f=d=>new Date(d+'T12:00');
-  if(!adlDays){ adlDays=new Set(); const open=days[t]?t:wd.slice().reverse().find(d=>d<=t && days[d]); if(open) adlDays.add(open); }
   const wl=f(ws).getMonth()===f(wd[6]).getMonth()? f(ws).getDate()+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'long'}) : f(ws).toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
   const wkN=wd.reduce((n,d)=>n+(days[d]||[]).length,0), isNow=ws===adlMonday(t);
-  const maxN=Math.max(1,...wd.map(d=>(days[d]||[]).length));
-  const rank=e=>e.st.k==='call'?0:(e.st.k==='cb'&&e.st.today)?1:e.st.k==='na'?2:3;
-  const mt=e=>(e.c&&e.c.day)?e.c.day+'T'+(e.c.time||''):'9999';
-  const mc={todo:'#FF5A3C',book:'#0B9E5C',think:'#C98A00',won:'#7C5CFC',no:'#687182'};
-  const anyOpen=wd.some(d=>adlDays.has(d)&&(days[d]||[]).length);
-  const rows=wd.map(d=>{ const arr=days[d]||[], x=f(d), open=adlDays.has(d)&&arr.length, fut=d>t;
+  const card=e=>{ const col=ADL_COL[e.st.k]||ADL_COL.no;
+    const sub=(e.c && e.c.stage==='booked' && e.c.day)? '📅 '+adlWhen(e.c.day)+(e.c.time?' '+e.c.time:'') : e.st.t;
+    return `<button class="adl-wc${adlX===e.id?' adl-on':''}" style="--sc:${col[0]};--sb:${col[1]}" data-adl="pick" data-id="${e.id}"><span class="adl-wct">${adlHM(e.ts)}</span><b>${esc(e.name)}</b>${e.spec?`<span class="adl-wcs">${esc(e.spec)}</span>`:''}<span class="adl-wcx">${esc(sub)}</span></button>`; };
+  const cols=wd.map(d=>{ const arr=(days[d]||[]).slice().sort((a,b)=>a.ts-b.ts), x=f(d), fut=d>t;
     const m={}; arr.forEach(e=>m[adlFk(e)]=(m[adlFk(e)]||0)+1);
     const bar=['todo','book','think','won','no'].filter(k=>m[k]).map(k=>`<i style="flex:${m[k]};background:${ADL_FCOL[k]}"></i>`).join('');
-    const chips=[['todo','to call'],['book','booked'],['think','thinking'],['won','client'],['no','not interested']].filter(([k])=>m[k]).map(([k,w])=>`<i style="color:${mc[k]}">${m[k]} ${w}</i>`).join('');
-    const names=arr.slice().sort((a,b)=>a.ts-b.ts).map(e=>esc(String(e.name).split(/\s+/).slice(0,2).join(' '))).join(' · ');
-    let body='';
-    if(open){ const g={todo:[],book:[],after:[]}; arr.forEach(e=>g[ADL_GROUP[e.st.k]].push(e));
-      g.todo.sort((a,b)=>rank(a)-rank(b)||b.ts-a.ts); g.book.sort((a,b)=>mt(a).localeCompare(mt(b)));
-      const grp=(k,lab)=>g[k].length?`<div class="adl-g"><h4>${lab}<i>${g[k].length}</i></h4><div class="adl-grid">${g[k].map(adlPHtml).join('')}</div></div>`:'';
-      body=`<div class="adl-vbody">${grp('todo','📞 To call')}${grp('book','📅 Meeting booked')}${grp('after','🏁 After the meeting')}</div>`; }
-    const lab=d===t?'Today':d===adlAdd(t,-1)?'Yesterday':x.toLocaleDateString('en-GB',{weekday:'long'});
-    return `<section class="adl-vday${d===t?' adl-today':''}${open?' adl-open':''}${arr.length?'':' adl-z'}${fut?' adl-fut':''}" id="adl-d-${d}">
-      <button class="adl-vrow" data-adl="day" data-d="${d}"${arr.length?` aria-expanded="${open?'true':'false'}"`:' disabled'}>
-        <span class="adl-vdate"><small>${x.toLocaleDateString('en-GB',{weekday:'short'})}</small><b>${x.getDate()}</b></span>
-        <span class="adl-vmid"><span class="adl-vtop"><span class="adl-vlab">${lab}<small> · ${x.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</small></span>${arr.length?`<span class="adl-vchips">${chips}</span>`:''}</span>
-          ${arr.length?`<span class="adl-vbar" style="width:${Math.max(18,Math.round(arr.length*100/maxN))}%">${bar}</span>${open?'':`<span class="adl-vnames">${names}</span>`}`:`<span class="adl-vnone">${fut?'':'no ad leads'}</span>`}</span>
-        <span class="adl-vn">${arr.length?`<b>${arr.length}</b><small>${arr.length===1?'lead':'leads'}</small>`:'<b>–</b>'}</span>
-        <span class="adl-vchev" aria-hidden="true">${arr.length?(open?'▴':'▾'):''}</span>
-      </button>${body}</section>`; }).join('');
+    return `<div class="adl-wcol${d===t?' adl-today':''}${fut?' adl-fut':''}${arr.length?'':' adl-z'}" data-d="${d}">
+      <div class="adl-wh"><span class="adl-whd">${d===t?'Today':x.toLocaleDateString('en-GB',{weekday:'short'})}</span><span class="adl-whn">${x.getDate()}</span><span class="adl-whc">${arr.length?`<b>${arr.length}</b> ${arr.length===1?'lead':'leads'}`:(fut?'':'no leads')}</span>${arr.length?`<span class="adl-bar">${bar}</span>`:''}</div>
+      <div class="adl-wl">${arr.map(card).join('')}</div></div>`; }).join('');
   const legend=[['todo','to call'],['book','meeting booked'],['think','thinking'],['won','client'],['no','not interested']].map(([k,w])=>`<span><i style="background:${ADL_FCOL[k]}"></i>${w}</span>`).join('');
-  const cal=`<div class="adl-vcal"><div class="adl-wknav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${isNow?'This week':'Week'} · ${esc(wl)}<small>${wkN} ${wkN===1?'lead':'leads'}</small></h3>${isNow?'':`<button class="adl-btn adl-ghost" data-adl="wk" data-d="">This week</button>`}<button class="adl-btn adl-ghost adl-mute" data-adl="all">${anyOpen?'Close all':'Open all'}</button><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week"${isNow?' disabled':''}>›</button></div>${rows}<div class="adl-legend">${legend}</div></div>`;
+  const cal=`<div class="adl-wkc"><div class="adl-wknav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${isNow?'This week':'Week'} · ${esc(wl)}<small>${wkN} ${wkN===1?'lead':'leads'}</small></h3>${isNow?'':`<button class="adl-btn adl-ghost" data-adl="wk" data-d="">This week</button>`}<button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week"${isNow?' disabled':''}>›</button></div><div class="adl-wgrid">${cols}</div><div class="adl-legend">${legend}</div></div>`;
+  /* the opened person */
+  const sel=adlX && all.find(e=>e.id===adlX);
+  const modal=sel?`<div class="adl-modal" data-adl="mclose"><div class="adl-mbox" role="dialog" aria-label="${esc(sel.name)}"><button class="adl-mx" data-adl="mclose" aria-label="Close">✕</button><div class="adl-mday">${esc(f(sel.day).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}))} · ${adlHM(sel.ts)}</div>${adlPHtml(sel)}</div></div>`:'';
   const ask=adlAskList();
   const askHtml=ask.length?`<div class="adl-ask"><h4>Booked online since the ads started — did they come from the ads?</h4>${ask.map(c=>`<div class="adl-r"><span class="adl-n">${esc(c.name)} <small>· ${c.day?'meeting '+esc(adlDay(c.day))+(c.time?' '+esc(c.time):''):'no day'}${c.phone?' · '+esc(adlPhoneTxt(c.phone)):''}</small></span><button class="adl-btn adl-hot" data-adl="mark" data-v="1" data-id="${c.id}">🔥 From the ads</button><button class="adl-btn adl-ghost adl-mute" data-adl="mark" data-v="0" data-id="${c.id}">Not from the ads</button></div>`).join('')}</div>`:'';
-  box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads, as a calendar: one row per day. Tap a day to see who came and what happens next.</p></div>
+  const keepX=box.querySelector('.adl-wgrid'); const sl=keepX?keepX.scrollLeft:null;
+  box.innerHTML=`<div class="adl-head"><div><h2>🔥 Ad leads</h2><p>Everyone who came from the Facebook / Instagram ads, by the day they came — like the Calendar. Tap a person to open their card.</p></div>
     <div class="adl-acts"><button class="adl-btn" data-adl="go" data-v="callbacks">☎ Callbacks</button><button class="adl-btn" data-adl="go" data-v="calendar">📅 Calendar</button><button class="adl-btn" data-adl="pull">↻ Check for new</button></div></div>
-    <div class="adl-tiles">${tiles}</div>${money}${cal}${askHtml}`;
+    <div class="adl-tiles">${tiles}</div>${money}${cal}${askHtml}${modal}`;
+  const g=box.querySelector('.adl-wgrid');
+  if(g && g.scrollWidth>g.clientWidth+4){ if(sl!=null && adlWkPrev===ws) g.scrollLeft=sl; else { const c=g.querySelector('.adl-wcol.adl-today')||g.querySelector('.adl-wcol:not(.adl-z)'); if(c) g.scrollLeft=Math.max(0,c.offsetLeft-g.offsetLeft-8); } }
+  adlWkPrev=ws;
+  document.body.classList.toggle('adl-mopen',!!sel);
 }
+document.addEventListener('keydown',ev=>{ if(ev.key==='Escape' && adlX && curView==='adl'){ adlX=null; adlOpenF=null; renderAdl(); } });
+window.addEventListener('beforeunload',()=>document.body.classList.remove('adl-mopen'));
 document.addEventListener('change',ev=>{ const i=ev.target; if(!i || i.id!=='adlSpend') return; ensureMeta(); const A=state.meta.adl||(state.meta.adl={}); A.spend=Math.max(0,parseFloat(String(i.value).replace(',','.'))||0); A.spendAt=new Date().toISOString(); save(); renderAdl(); });
 document.addEventListener('click',ev=>{
   const b=ev.target.closest && ev.target.closest('#view-adl [data-adl]'); if(!b) return;
   const a=b.dataset.adl, id=b.dataset.id;
   const L=()=>(state.leads||[]).find(x=>x.id===id);
-  if(a==='tel'){ setTimeout(()=>{ if(adlX!==id){ adlX=id; adlOpenF=null; renderAdl(); } },400); return; }
+  if(a==='tel'){ return; }
   if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; renderAdl(); return; }
-  if(a==='wk'){ adlWk=b.dataset.d||null; if(adlWk===adlMonday(todayIso())) adlWk=null; adlDays=null; renderAdl(); return; }
+  if(a==='wk'){ adlWk=b.dataset.d||null; if(adlWk===adlMonday(todayIso())) adlWk=null; adlX=null; renderAdl(); return; }
   if(a==='day'){ const d=b.dataset.d; if(!adlDays) adlDays=new Set(); if(adlDays.has(d)) adlDays.delete(d); else adlDays.add(d); adlOpenF=null; renderAdl();
     if(adlDays.has(d)){ const el=document.getElementById('adl-d-'+d); if(el){ const r=el.getBoundingClientRect(); if(r.top<0||r.top>innerHeight*0.6) try{ el.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} } } return; }
   if(a==='all'){ const t=todayIso(), ws=adlWk||adlMonday(t), wd=[0,1,2,3,4,5,6].map(i=>adlAdd(ws,i)); const any=adlDays && wd.some(d=>adlDays.has(d) && document.querySelector('#adl-d-'+d+'.adl-open'));
     adlDays=new Set(); if(!any) wd.forEach(d=>adlDays.add(d)); renderAdl(); return; }
   if(a==='x'){ adlX=adlX===id?null:id; adlOpenF=null; renderAdl(); return; }
+  if(a==='pick'){ adlX=id; adlOpenF=null; renderAdl(); return; }
+  if(a==='mclose'){ if(b.classList.contains('adl-modal') && ev.target!==b) return; adlX=null; adlOpenF=null; renderAdl(); return; }
   if(a==='go'){ switchView(b.dataset.v); window.scrollTo(0,0); return; }
   if(a==='pull'){ try{ Leads.pull(true); }catch(e){} try{ Bookings.pull(true); }catch(e){} return; }
   if(a==='open'){ openModal(id); return; }
