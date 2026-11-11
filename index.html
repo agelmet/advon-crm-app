@@ -12273,12 +12273,16 @@ const Leads={
       const n=ldMerge(data.leads||[], 'harvest');
       this.lastAt=Date.now();
       state.meta.ld.poolAt=data.updated||''; state.meta.ld.pulledAt=Date.now();
-      if(n||changed){ save(); renderLeads(); renderHome(); if(n){ const L=ldLists(); const fresh=Object.keys(L).find(k=>L[k].fresh); const ads=state.leads.filter(l=>l.list==='ads'&&ldOpen(l)&&Date.now()-(l.created||0)<60000).length; toast(n+' new lead'+(n>1?'s':'')+' added'+(ads?' — '+ads+' from the ads, call now':(fresh?' — in their own category «'+L[fresh].t+'»':''))); } }
+      if(n||changed){ save(); renderLeads(); renderHome(); try{ if(typeof renderAdl==='function') renderAdl(); }catch(e){} if(n){ const L=ldLists(); const fresh=Object.keys(L).find(k=>L[k].fresh); const ads=state.leads.filter(l=>l.list==='ads'&&ldOpen(l)&&Date.now()-(l.created||0)<60000).length; toast(n+' new lead'+(n>1?'s':'')+' added'+(ads?' — '+ads+' from the ads, call now':(fresh?' — in their own category «'+L[fresh].t+'»':''))); } }
       else { if(manual) toast('No new leads since the last harvest'); renderLdBanner(); }
     }catch(e){ if(manual) toast('Could not fetch leads: '+(e.message||'network')); }
     finally{ this.busy=false; }
   }
 };
+/* 11 Nov 2026 (Angelo: ad leads he got on Telegram were not in the CRM): new leads were fetched only on open or after
+   10 idle minutes. Now: every 2 min on Ad leads / Leads, every 5 min elsewhere — only while the CRM is on screen. */
+setInterval(()=>{ try{ if(document.hidden || !SYNC_TOKEN || !state) return; const hot=(curView==='adl'||curView==='leads');
+  if(Date.now()-Leads.lastAt>(hot?110:290)*1000) Leads.pull(false); }catch(e){} }, 30*1000);
 /* ---- CSV import (Greek or English headers, comma or semicolon) ---- */
 function ldParseCSV(text){
   const rows=[]; let row=[], cell='', q=false;
@@ -12979,7 +12983,7 @@ function switchView(v){
   $('#strip').style.display = (v==='year'||v==='renewals'||v==='ideas'||v==='monthly'||v==='remaining'||v==='leads'||v==='chats'||v==='meta'||v==='xs'||v==='adl') ? 'none' : 'flex';
   if(v==='meta' && Date.now()-Meta.lastAt>20*1000) Meta.pull(false);
   if(v==='chats'){ if(Date.now()-Chats.lastAt>15*1000) Chats.pull(false); if(Chats.cur) Chats.pullThread(false); setTimeout(()=>Chats.seen(),400); }
-  if(v==='leads' && Date.now()-Leads.lastAt>10*60*1000) Leads.pull(false);
+  if((v==='leads'||v==='adl') && Date.now()-Leads.lastAt>45*1000) Leads.pull(false);
   if(v==='home' && Date.now()-Reminders.lastAt>5*60*1000) Reminders.pull(false);
   renderAll();
 }
@@ -14405,11 +14409,14 @@ function wireSyncEvents(){
     touchActivity();
     if(idleExpired()){ clearKey(); state=null; lockUI(); return; }
     if(Date.now()-Sync.lastCheck>4000) Sync.pull(true);
+    /* 11 Nov 2026: phones send only visibilitychange when you return to the app — fetch new ad leads + bookings here too */
+    try{ if(Date.now()-Leads.lastAt>60*1000) Leads.pull(false); }catch(e){}
+    try{ if(Date.now()-Bookings.lastAt>120000) Bookings.pull(false); }catch(e){}
   });
   window.addEventListener('focus',()=>{
     if(Date.now()-Sync.lastCheck>4000) Sync.pull(true);
     if(Date.now()-Bookings.lastAt>120000) Bookings.pull(false);
-    if(Date.now()-Leads.lastAt>10*60*1000) Leads.pull(false);
+    if(Date.now()-Leads.lastAt>60*1000) Leads.pull(false);
     if(Date.now()-Reminders.lastAt>5*60*1000) Reminders.pull(false);
   });
   /* back online → flush anything that failed while offline */
