@@ -5343,7 +5343,6 @@ body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
          downloaded first, so nothing is lost either way.</p>
     </div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" id="cfKeepMine">Keep what's on this device</button>
       <button class="btn btn-brand" id="cfKeepRemote">Use the server copy</button>
     </div>
   </div>
@@ -6008,6 +6007,14 @@ const Sync={
     if(this.conflictOpen) return;
     this.conflictOpen=true;
     this._remote=remote;
+    /* 11 Nov 2026 (Angelo): no more «Keep what's on this device» — the server copy ALWAYS wins, without asking.
+       This device's copy is kept as a quiet backup in this browser (localStorage 'advon-crm-conflict-backup'),
+       never pushed and never downloaded as a file. The old two-button box below is no longer shown. */
+    if(!window.CF_ASK){
+      try{ localStorage.setItem('advon-crm-conflict-backup', JSON.stringify({at:new Date().toISOString(), deviceUpdated:LOCAL_UPDATED_AT||'', state})); }catch(e){}
+      this.resolve('remote', true);
+      return;
+    }
     const det=$('#conflictDetail');
     if(det){
       det.textContent='Server copy: '+relTime(remote.updatedAt)+
@@ -6049,10 +6056,11 @@ const Sync={
     this.conflictOpen=false;
     $('#conflictOverlay').classList.remove('open');
   },
-  async resolve(keep){
+  async resolve(keep, quiet){
     const remote=this._remote;
-    /* Always take both versions to disk before changing anything. */
-    try{
+    if(quiet) keep='remote';
+    /* Always take both versions to disk before changing anything (not for the automatic «server wins» — see openConflict). */
+    if(!quiet) try{
       download('advon-crm-conflict-thisdevice-'+todayIso()+'.json',
         new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));
       if(remote && remote.data){
@@ -6077,7 +6085,7 @@ const Sync={
         this.setPending(false);
         this.setState('ok');
         renderAll();
-        toast('Now showing the server copy');
+        toast(quiet?'Updated with the latest data from the server':'Now showing the server copy');
       }catch(e){ this.setState('error','could not read the server copy'); }
     }else{
       setSyncMeta({sha:remote?remote.sha:null});
@@ -14450,7 +14458,7 @@ function wireSyncEvents(){
     if(Sync.pendingFlag()) Sync.push(false); else Sync.pull(false);
   });
   /* two-step: the first tap only arms the button (red, stronger wording), the second within 8 s keeps this device */
-  $('#cfKeepMine').addEventListener('click',e=>{
+  $('#cfKeepMine')?.addEventListener('click',e=>{
     const b=e.currentTarget;
     if(b.dataset.arm!=='1'){
       b.dataset.arm='1'; b.classList.add('cf-arm');
