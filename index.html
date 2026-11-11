@@ -4439,8 +4439,8 @@ body.dark .adb-none{background:var(--surface)}
 .adb-legend{gap:6px 18px;margin-top:-6px}.adb-legend b{color:var(--ink)}
 @media(hover:none){.adb-legend{display:none}}
 /* ---------- PIPELINE ---------- */
-.adb-board{display:grid;grid-template-columns:repeat(8,minmax(164px,1fr));gap:6px;overflow-x:auto;padding:2px 2px 12px;align-items:start;-webkit-overflow-scrolling:touch}
-.adb-board.adb-9{grid-template-columns:repeat(9,minmax(164px,1fr))}
+.adb-board{display:grid;grid-template-columns:repeat(9,minmax(164px,1fr));gap:6px;overflow-x:auto;padding:2px 2px 12px;align-items:start;-webkit-overflow-scrolling:touch}
+.adb-board.adb-9{grid-template-columns:repeat(10,minmax(164px,1fr))}
 .adb-col{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;min-height:150px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:background-color .12s,box-shadow .12s}
 .adb-col.adb-over{background:color-mix(in srgb,var(--sc) 9%,var(--surface));box-shadow:0 0 0 2px var(--sc)}
 .adb-ch{display:flex;align-items:center;gap:5px;padding:4px 4px 7px;border-bottom:3px solid var(--sc)}
@@ -4552,6 +4552,87 @@ body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
   .adb-dr{height:94vh;height:94dvh;border-radius:20px 20px 0 0;padding:14px 14px 40px;animation-name:adbUp}
   .adb-li{grid-template-columns:1fr 28px}.adb-li time{grid-column:1/3}.adb-li span{grid-column:1}
 }
+/* ===== Ad leads HERO + stage colours (Angelo, 11 Nov 2026: «big like In the bank, ROAS, different colours; cards yellow if thinking, red if lost, green if positive») ===== */
+.adl-hero{margin:0 0 16px}
+.adl-htop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-bottom:12px}
+.adl-hl,.adl-hr{position:relative;overflow:hidden;border-radius:20px;padding:18px 20px 15px;border:1px solid var(--line);text-align:left;font:inherit;color:var(--ink);min-width:0;display:flex;flex-direction:column;gap:7px;box-shadow:0 1px 2px rgba(24,49,92,.05)}
+.adl-hl{appearance:none;cursor:pointer;background:linear-gradient(160deg,#FFF2E8 0,#FFE9E4 42%,var(--surface) 100%);border-color:#FFD6C4}
+.adl-hl::before,.adl-hr::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#FFB21A,#FF6B3D,#FF3D5E)}
+.adl-hk{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#E2531F;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.adl-hk span{letter-spacing:.01em;text-transform:none;color:var(--muted);font-weight:700}
+.adl-hbig{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:58px}
+.adl-hbig .adl-cu{font-family:'Sora',system-ui,sans-serif;font-weight:800;font-size:56px;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.adl-hl .adl-hbig .adl-cu{color:#F04E1E;background:linear-gradient(0deg,#D9261C 0%,#FF5A1F 48%,#FF9F1A 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding-right:2px}
+.adl-hbig em{font-style:normal;font-size:13px;font-weight:800;border-radius:999px;padding:5px 11px;background:#FF6B3D;color:#fff;white-space:nowrap}
+.adl-hbig em.soft{background:color-mix(in srgb,#FF6B3D 14%,var(--surface));color:#C2410C}
+.adl-hsub{font-size:13.5px;color:var(--muted);font-weight:600}.adl-hsub b{color:var(--ink);font-variant-numeric:tabular-nums}
+.adl-hbar{display:flex;height:12px;border-radius:999px;overflow:hidden;gap:2px;background:rgba(16,20,31,.06);margin-top:3px}
+.adl-hbar i{display:block;height:100%;min-width:6px}
+.adl-hlg{display:flex;flex-wrap:wrap;gap:3px 12px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.adl-hlg span{white-space:nowrap}.adl-hlg b{color:var(--ink);font-variant-numeric:tabular-nums}
+.adl-hlg i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:5px}
+/* ROAS card — green when the ads pay back, orange/red while they don't yet */
+.adl-hr{--rc:#0B9E5C;background:linear-gradient(160deg,#EAFBF2 0,#F4FDF8 40%,var(--surface) 100%);border-color:#CDEFDD}
+.adl-hr::before{background:linear-gradient(90deg,#0EB86A,#35C98A,#9BE6C3)}
+.adl-hr .adl-hk,.adl-hr .adl-hbig .adl-cu{color:var(--rc)}
+.adl-hr .adl-hbig em{background:var(--rc)}
+.adl-hr-neg{--rc:#D9481F;background:linear-gradient(160deg,#FFF1EA 0,var(--surface) 75%);border-color:#FFD3C4}
+.adl-hr-neg::before{background:linear-gradient(90deg,#FFB21A,#FF5A1F,#D9261C)}
+.adl-hr-none{--rc:#64748B;background:var(--surface)}
+.adl-hr-none::before{background:#C9D2E3}
+.adl-hr-great::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.6) 50%,transparent 58%);transform:translateX(-100%);animation:adlSheen 5s ease-in-out infinite;pointer-events:none}
+@keyframes adlSheen{55%,100%{transform:translateX(100%)}}
+.adl-hmeter{position:relative;height:10px;border-radius:999px;background:rgba(16,20,31,.07);margin-top:3px}
+.adl-hmeter i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#FFB21A,var(--rc));transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.adl-hmeter b{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink);opacity:.45;border-radius:2px}
+.adl-hmk{position:relative;height:14px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.adl-hmk span{position:absolute;top:0;white-space:nowrap}.adl-hmk span:nth-child(1){left:0}.adl-hmk span:nth-child(2){left:33.33%;transform:translateX(-50%)}.adl-hmk span:nth-child(3){right:0}
+.adl-hline{font-size:14px;color:var(--muted);font-weight:600}.adl-hline b{color:var(--ink);font-variant-numeric:tabular-nums}
+.adl-hline .p{color:#0B7A47;font-weight:800}.adl-hline .m{color:#C2361B;font-weight:800}
+.adl-hchips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.adl-hchips span{font-size:12.5px;font-weight:600;color:var(--muted);background:color-mix(in srgb,var(--rc) 10%,var(--surface));border-radius:999px;padding:4px 10px;white-space:nowrap}
+.adl-hchips span b{color:var(--ink);font-variant-numeric:tabular-nums}
+.adl-hchips label{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap}
+.adl-hchips input{width:100px;font:inherit;font-size:14px;font-weight:800;border:1px solid var(--line);border-radius:10px;padding:5px 8px;background:var(--surface);color:var(--ink);min-height:36px}
+.adl-hnote{font-size:11px;color:var(--muted)}
+/* the stage tiles — tap = show only those people */
+.adl-htiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.adl-ht{appearance:none;font:inherit;cursor:pointer;text-align:left;position:relative;overflow:hidden;border-radius:16px;padding:13px 12px 11px;border:1px solid color-mix(in srgb,var(--hc) 28%,var(--line));background:linear-gradient(165deg,color-mix(in srgb,var(--hc) 15%,var(--surface)) 0,var(--surface) 78%);color:var(--ink);display:flex;flex-direction:column;gap:1px;min-width:0;transition:transform .15s ease,box-shadow .15s ease}
+.adl-ht::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--hc)}
+@media(hover:hover){.adl-ht:hover{transform:translateY(-2px);box-shadow:0 8px 20px color-mix(in srgb,var(--hc) 22%,transparent)}}
+.adl-ht:active{transform:scale(.97)}
+.adl-ht.on{box-shadow:0 0 0 2.5px var(--hc),0 8px 22px color-mix(in srgb,var(--hc) 26%,transparent)}
+.adl-hti{position:absolute;top:11px;right:10px;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:15px;background:color-mix(in srgb,var(--hc) 17%,var(--surface))}
+.adl-htl{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--hc);padding-right:36px;line-height:1.25;min-height:28px}
+.adl-ht>b{display:block}
+.adl-ht>b .adl-cu{font-family:'Sora',system-ui,sans-serif;font-weight:800;font-size:36px;line-height:1.1;letter-spacing:-.02em;color:var(--hc);font-variant-numeric:tabular-nums}
+.adl-ht small{font-size:12px;font-weight:600;color:var(--muted);line-height:1.3}.adl-ht small b{color:var(--hc)}
+.adl-ht.z{opacity:.62}.adl-ht.z>b .adl-cu{color:#B4BCCB}
+.adl-hf{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding:8px 8px 8px 14px;border-radius:14px;font-size:13.5px;font-weight:600;color:var(--ink);background:color-mix(in srgb,var(--hc) 11%,var(--surface));border:1px solid color-mix(in srgb,var(--hc) 30%,var(--line))}
+.adl-hf b{color:var(--hc)}.adl-hf .adl-btn{margin-left:auto}
+.adl-pop{animation:adlPop .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes adlPop{35%{transform:scale(1.035);box-shadow:0 0 0 5px color-mix(in srgb,var(--hc,#0EB86A) 28%,transparent)}}
+body.dark .adl-hl{background:linear-gradient(160deg,color-mix(in srgb,#FF6B3D 16%,var(--surface)) 0,var(--surface) 80%);border-color:var(--line)}
+body.dark .adl-hr{background:linear-gradient(160deg,color-mix(in srgb,var(--rc) 15%,var(--surface)) 0,var(--surface) 78%);border-color:var(--line)}
+body.dark .adl-hr-great::after{display:none}
+.adl-hl .adl-hbar{margin-top:auto}
+@media(max-width:980px){.adl-htop{grid-template-columns:1fr}.adl-htiles{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(150px,40%);overflow-x:auto;scroll-snap-type:x proximity;padding:3px 3px 6px;-webkit-overflow-scrolling:touch}.adl-ht{scroll-snap-align:start}}
+@media(max-width:760px){.adl-hbig .adl-cu{font-size:46px}.adl-hl,.adl-hr{padding:15px 15px 13px}.adl-htiles{grid-auto-columns:minmax(140px,44%)}.adl-ht>b .adl-cu{font-size:32px}.adl-hchips label{margin-left:0}.adl-hlg,.adl-hnote,.adl-hmk{display:none}.adl-hl .adl-hbar{margin-top:3px}}
+@media(prefers-reduced-motion:reduce){.adl-pop,.adl-hr-great::after{animation:none}.adl-ht,.adl-hmeter i{transition:none}}
+/* every person's card takes the colour of their stage: yellow = thinking, green = positive, red = lost … */
+.adbs-new{--stc:#F97316;--stp:9%}.adbs-talk{--stc:#2F7FE0;--stp:8%}.adbs-meet{--stc:#0E9AA7;--stp:10%}.adbs-offer{--stc:#5B5BD6;--stp:10%}
+.adbs-think{--stc:#F5C518;--stp:32%}.adbs-pos{--stc:#22C55E;--stp:19%}.adbs-pay{--stc:#DB2777;--stp:11%}.adbs-won{--stc:#8B5CF6;--stp:14%}
+.adbs-silent{--stc:#64748B;--stp:10%}.adbs-lost{--stc:#EF4444;--stp:15%}
+#view-adl :is(.adb-t,.adb-card,.adb-m,.adb-nr,.adl-wc)[class*="adbs-"]{background:color-mix(in srgb,var(--stc) var(--stp),var(--surface));outline:1px solid color-mix(in srgb,var(--stc) 38%,transparent);outline-offset:-1px}
+#view-adl .adl-wc.adl-on[class*="adbs-"]{outline:2px solid var(--sc)}
+#view-adl .adb-card.adbs-think,#view-adl .adb-t.adbs-think,#view-adl .adl-wc.adbs-think,#view-adl .adb-m.adbs-think,#view-adl .adb-nr.adbs-think{outline-color:#E3B008}
+#view-adl .adl-tbl tr.adl-r2[class*="adbs-"] td{background:color-mix(in srgb,var(--stc) calc(var(--stp) * .7),var(--surface))}
+#view-adl .adl-tbl tr.adl-r2[class*="adbs-"] td:first-child{box-shadow:inset 4px 0 0 var(--stc)}
+@media(hover:hover){#view-adl .adl-tbl tr.adl-r2[class*="adbs-"]:hover td{background:color-mix(in srgb,var(--stc) calc(var(--stp) + 10%),var(--surface))}}
+#view-adl .adb-dr[class*="adbs-"]{border-top:6px solid var(--stc)}
+#view-adl .adb-dr[class*="adbs-"] .adb-dh{background:color-mix(in srgb,var(--stc) var(--stp),transparent);margin:-2px -4px 0;padding:8px 10px;border-radius:14px}
+#view-adl .adb-col{background:color-mix(in srgb,var(--sc) 6%,var(--surface))}
+#view-adl .adb-col.adb-over{background:color-mix(in srgb,var(--sc) 16%,var(--surface))}
 </style>
 </head>
 <body class="locked">
@@ -16211,7 +16292,8 @@ const ADL_FCOL={all:'#10141F',todo:'#FF5A3C',book:'#0EC673',think:'#F5A623',won:
 const ADL_F=[['all','Ad leads'],['todo','To call'],['book','Meeting booked'],['think','Thinking'],['won','Clients'],['no','Not interested']];
 let adlMode=(()=>{try{const v=localStorage.getItem('adl-mode3');return ['todo','board','week','list'].includes(v)?v:'todo'}catch(e){return 'todo'}})(), adlQ='';
 let adlF='all', adlOpenF=null, adlWk=null, adlX=null, adlDays=null, adlWkPrev=null;
-const adlFk=e=>ADL_GROUP[e.st.k]==='todo'?'todo':e.st.k;
+const ADL_HG={new:'call',talk:'call',silent:'call',meet:'meet',offer:'offer',think:'think',pos:'pos',pay:'pos',won:'won',lost:'lost'};
+const adlFk=e=>ADL_HG[e.bs]||'call';
 const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
 const adlNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 function adlIsTest(n){ return /δοκιμ|dokimi/i.test(adlNorm(n)); }
@@ -16343,7 +16425,7 @@ function adlListHtml(list){
       rows.push(`<tr class="adl-dsep${e.day===t?' adl-today':''}" data-day="${e.day}"><td colspan="10">${e.day===t?'TODAY · ':''}${esc(x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}))}<span>${per[e.day]} ${per[e.day]===1?'lead':'leads'}</span></td></tr>`); }
     n++; const col=ADL_COL[e.st.k]||ADL_COL.no, h=adlPfHue(e.spec), ph=adlPhoneTxt(e.phone), q=adlNorm([e.name,e.spec,e.phone,ph,e.email,e.msg].join(' '));
     const st=(e.c && e.c.stage==='booked' && e.c.day)? '📅 '+adlWhen(e.c.day)+(e.c.time?' '+e.c.time:'') : e.st.t;
-    rows.push(`<tr class="adl-r2" data-adl="pick" data-id="${e.id}" data-day="${e.day}" data-q="${esc(q)}">
+    rows.push(`<tr class="adl-r2 adbs-${e.bs||'new'}" data-adl="pick" data-id="${e.id}" data-day="${e.day}" data-q="${esc(q)}">
       <td class="adl-n0">${n}</td>
       <td class="adl-tm">${esc(new Date(e.day+'T12:00').toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit'}))} · ${adlHM(e.ts)}</td>
       <td class="adl-nmc"><span class="adl-nm">${esc(e.name||'—')}</span></td>
@@ -16370,27 +16452,20 @@ function renderAdl(){
   if(curView!=='adl'){ if(document.body.classList.contains('adl-mopen')){ document.body.classList.remove('adl-mopen'); adlX=null; } return; }
   const box=$('#adlBody'); if(!box) return;
   const t=todayIso();
-  const cnt={all:all.length,todo:0,book:0,think:0,won:0,no:0}; all.forEach(e=>cnt[adlFk(e)]++);
-  const tiles=ADL_F.map(([k,lab])=>`<button class="adl-tile${adlF===k?' adl-on':''}${cnt[k]?'':' adl-z'}" style="--tc:${ADL_FCOL[k]}" data-adl="f" data-k="${k}"><b>${cnt[k]}</b><span>${lab}</span></button>`).join('');
-  /* money line */
-  ensureMeta(); const A=state.meta.adl||{}; const sp=+A.spend||0;
-  const won=all.filter(e=>e.bs==='won').length||cnt.won;
-  const meet=all.filter(e=>e.c || e.st.k==='book').length, eur=v=>'€'+v.toFixed(2).replace('.',',');
-  const pct=all.length?Math.round(meet*100/all.length):0;
-  const money=`<div class="adl-money"><label>Ad spend so far €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label>${sp&&all.length?`<span><b>${eur(sp/all.length)}</b> per lead</span>${meet?`<span><b>${eur(sp/meet)}</b> per booked meeting</span>`:''}${won?`<span><b>${eur(sp/won)}</b> per client</span>`:''}${adlRoas(sp,won)}`:'<span>type what Ads Manager shows as «Amount spent» to see the cost per lead</span>'}<span class="adl-sep"></span><span><b>${meet}</b> of ${all.length} booked a meeting · <b>${pct}%</b></span></div>`;
+  const shown=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF);
   let body='';
-  if(adlMode==='board') body=adbBoardHtml(all);
-  else if(adlMode==='todo') body=adbTodoHtml(all);
+  if(adlMode==='board') body=adbBoardHtml(shown);
+  else if(adlMode==='todo') body=adbTodoHtml(shown);
   else {
-    const list=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF);
-    if(adlMode==='list') body=`<div class="adl-tiles">${tiles}</div>`+adlListHtml(list);
+    const list=shown;
+    if(adlMode==='list') body=adlListHtml(list);
     else {
       const days={}; list.forEach(e=>(days[e.day]=days[e.day]||[]).push(e));
       const ws=adlWk||adlMonday(t), wd=[0,1,2,3,4,5,6].map(i=>adlAdd(ws,i)), f=d=>new Date(d+'T12:00');
       const wl=f(ws).getMonth()===f(wd[6]).getMonth()? f(ws).getDate()+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'long'}) : f(ws).toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' – '+f(wd[6]).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
       const wkN=wd.reduce((n,d)=>n+(days[d]||[]).length,0), isNow=ws===adlMonday(t);
       const card=e=>{ const s=ADB_SM[e.bs]||ADB_SM.new;
-        return `<button class="adl-wc${adlX===e.id?' adl-on':''}" style="--sc:${s.c};--sb:${s.c}22" data-adl="pick" data-id="${e.id}"><span class="adl-wct">${adlHM(e.ts)}</span><b>${esc(e.name)}</b>${e.spec?`<span class="adl-wcs">${esc(e.spec)}</span>`:''}<span class="adl-wcx">${esc(s.s)}${e.nx?' · next '+esc(adbWhenTxt(e.nx)):''}</span></button>`; };
+        return `<button class="adl-wc adbs-${e.bs}${adlX===e.id?' adl-on':''}" style="--sc:${s.c};--sb:${s.c}22" data-adl="pick" data-id="${e.id}"><span class="adl-wct">${adlHM(e.ts)}</span><b>${esc(e.name)}</b>${e.spec?`<span class="adl-wcs">${esc(e.spec)}</span>`:''}<span class="adl-wcx">${esc(s.s)}${e.nx?' · next '+esc(adbWhenTxt(e.nx)):''}</span></button>`; };
       const cols=wd.map(d=>{ const arr=(days[d]||[]).slice().sort((a,b)=>a.ts-b.ts), x=f(d), fut=d>t;
         const m={}; arr.forEach(e=>m[e.bs]=(m[e.bs]||0)+1);
         const bar=ADB_ST.filter(s=>m[s.k]).map(s=>`<i style="flex:${m[s.k]};background:${s.c}"></i>`).join('');
@@ -16398,7 +16473,7 @@ function renderAdl(){
           <div class="adl-wh"><span class="adl-whd">${d===t?'Today':x.toLocaleDateString('en-GB',{weekday:'short'})}</span><span class="adl-whn">${x.getDate()}</span><span class="adl-whc${arr.length?' adl-fire'+(arr.length>=5?' adl-hot':''):''}">${arr.length?`<b>${arr.length}</b> ${arr.length===1?'lead':'leads'}`:(fut?'':'no leads')}</span>${arr.length?`<span class="adl-bar">${bar}</span>`:''}</div>
           <div class="adl-wl">${arr.map(card).join('')}</div></div>`; }).join('');
       const legend=ADB_ST.map(s=>`<span><i style="background:${s.c}"></i>${esc(s.s)}</span>`).join('');
-      body=`<div class="adl-tiles">${tiles}</div><div class="adl-wkc"><div class="adl-wknav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${isNow?'This week':'Week'} · ${esc(wl)}<small>${wkN} ${wkN===1?'lead':'leads'} came in</small></h3>${isNow?'':`<button class="adl-btn adl-ghost" data-adl="wk" data-d="">This week</button>`}<button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week"${isNow?' disabled':''}>›</button></div><div class="adl-wgrid">${cols}</div><div class="adl-legend">${legend}</div></div>`;
+      body=`<div class="adl-wkc"><div class="adl-wknav"><button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,-7)}" aria-label="Previous week">‹</button><h3>${isNow?'This week':'Week'} · ${esc(wl)}<small>${wkN} ${wkN===1?'lead':'leads'} came in</small></h3>${isNow?'':`<button class="adl-btn adl-ghost" data-adl="wk" data-d="">This week</button>`}<button class="adl-btn" data-adl="wk" data-d="${adlAdd(ws,7)}" aria-label="Next week"${isNow?' disabled':''}>›</button></div><div class="adl-wgrid">${cols}</div><div class="adl-legend">${legend}</div></div>`;
     }
   }
   const sel=adlX && all.find(e=>e.id===adlX);
@@ -16411,7 +16486,8 @@ function renderAdl(){
   const kd=box.querySelector('.adb-dr'), dsl=kd?kd.scrollTop:null, dWas=kd?kd.dataset.id:'';
   const ae=document.activeElement, af=ae&&ae.closest&&ae.closest('#view-adl .adb-form'), keep=(af&&ae.dataset&&ae.dataset.f)?{id:af.dataset.id,f:ae.dataset.f,s:ae.selectionStart}:null;
   const main=adlMode==='board'||adlMode==='todo';
-  box.innerHTML=adbHeadHtml(all)+(main?askHtml:'')+body+(main?'':money+askHtml)+(main?money:'')+modal;
+  box.innerHTML=adbHeadHtml(all)+adlHeroHtml(all)+(main?askHtml:'')+body+(main?'':askHtml)+modal;
+  try{ adlCountUp(box); }catch(e){}
   if(keep && !adbFocus){ const el=box.querySelector('.adb-form[data-id="'+keep.id+'"] [data-f="'+keep.f+'"]'); if(el){ try{ el.focus({preventScroll:true}); if(keep.s!=null) el.setSelectionRange(keep.s,keep.s); }catch(e){} } }
   const g=box.querySelector('.adl-wgrid');
   if(g && g.scrollWidth>g.clientWidth+4){ const ws=adlWk||adlMonday(t); if(sl!=null && adlWkPrev===ws) g.scrollLeft=sl; else { const c=g.querySelector('.adl-wcol.adl-today')||g.querySelector('.adl-wcol:not(.adl-z)'); if(c) g.scrollLeft=Math.max(0,c.offsetLeft-g.offsetLeft-8); } adlWkPrev=ws; }
@@ -16438,7 +16514,7 @@ document.addEventListener('click',ev=>{
     const rows=lst.filter(e=>!q||adlNorm([e.name,e.spec,e.phone,adlPhoneTxt(e.phone),e.email,e.msg].join(' ')).includes(q)).map(e=>[e.day.split('-').reverse().join('/'),adlHM(e.ts),e.name||'',e.spec||'',adlPhoneTxt(e.phone),e.email||'',(ADB_SM[e.bs]||{}).s||e.st.t,e.nx?adbWhenTxt(e.nx)+' — '+e.nx.w:'',(e.msg||'').replace(/[\t\n]+/g,' ')].join('\t'));
     const txt=['Date','Time','Name','Profession','Phone','E-mail','Stage','Next step','Message'].join('\t')+'\n'+rows.join('\n');
     try{ navigator.clipboard.writeText(txt).then(()=>toast(rows.length+' leads copied — paste them into Excel'),()=>toast('Could not copy')); }catch(e){ toast('Could not copy'); } return; }
-  if(a==='f'){ adlF=b.dataset.k; adlOpenF=null; renderAdl(); return; }
+  if(a==='f'){ const k=b.dataset.k||'all'; adlF=(adlF===k&&k!=='all')?'all':k; adlOpenF=null; adlX=null; renderAdl(); return; }
   if(a==='wk'){ adlWk=b.dataset.d||null; if(adlWk===adlMonday(todayIso())) adlWk=null; adlX=null; renderAdl(); return; }
   if(a==='day'){ const d=b.dataset.d; if(!adlDays) adlDays=new Set(); if(adlDays.has(d)) adlDays.delete(d); else adlDays.add(d); adlOpenF=null; renderAdl();
     if(adlDays.has(d)){ const el=document.getElementById('adl-d-'+d); if(el){ const r=el.getBoundingClientRect(); if(r.top<0||r.top>innerHeight*0.6) try{ el.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} } } return; }
@@ -16485,21 +16561,22 @@ document.addEventListener('click',ev=>{
    A step set here replaces that lead's call-back in Leads/Callbacks (one place to follow a person).
    Claude's inbox: leads/lists.json → lists._crm.adp = [{id, phone|email, st?, log:[{at,o,t}], nx:{w,d,tm}}], each id applied ONCE (meta.adpIn). */
 const ADB_ST=[
-  {k:'new',   t:'New · call them',     s:'New',        c:'#F0522E'},
+  {k:'new',   t:'New · call them',     s:'New',        c:'#EA6A12'},
   {k:'talk',  t:'Talking',             s:'Talking',    c:'#2F7FE0'},
   {k:'meet',  t:'Meeting booked',      s:'Meeting',    c:'#0E9AA7'},
-  {k:'offer', t:'Offer sent',          s:'Offer sent', c:'#7C5CFC'},
-  {k:'think', t:'Thinking',            s:'Thinking',   c:'#D08A00'},
+  {k:'offer', t:'Offer sent',          s:'Offer sent', c:'#5B5BD6'},
+  {k:'think', t:'Thinking',            s:'Thinking',   c:'#C99400'},
+  {k:'pos',   t:'Positive · push to yes', s:'Positive', c:'#16A34A'},
   {k:'pay',   t:'Said yes · to pay',   s:'To pay',     c:'#DB2777'},
-  {k:'won',   t:'Won · building',      s:'Won',        c:'#12A150'},
+  {k:'won',   t:'Won · building',      s:'Won',        c:'#7C3AED'},
   {k:'silent',t:'No reply · no-show',  s:'No reply',   c:'#64748B'},
-  {k:'lost',  t:'Lost',                s:'Lost',       c:'#A0A8B8'}];
+  {k:'lost',  t:'Lost',                s:'Lost',       c:'#DC2626'}];
 const ADB_SM={}; ADB_ST.forEach(s=>ADB_SM[s.k]=s);
 const adbOpenSt=k=>k!=='won'&&k!=='lost';
 const ADB_OUT=[['done','✔ Step done',null],['talk','📞 Talked','talk'],['noans','📵 No answer','silent'],['noshow','🙈 No-show','silent'],['offer','📨 Sent offer / info','offer'],
-  ['think','🤔 Thinking it over','think'],['yes','✅ Said yes','pay'],['paid','💶 Paid','won'],['no','👎 Not interested','lost']];
+  ['think','🤔 Thinking it over','think'],['pos','💚 Positive — push to yes','pos'],['yes','✅ Said yes','pay'],['paid','💶 Paid','won'],['no','👎 Not interested','lost']];
 const ADB_OM={note:['note','📝 Note',null]}; ADB_OUT.forEach(o=>ADB_OM[o[0]]=o);
-const ADB_OICON={talk:'📞',noans:'📵',noshow:'🙈',offer:'📨',think:'🤔',yes:'✅',paid:'💶',no:'👎',note:'📝',done:'✔',stage:'➜',next:'⏰',meet:'📅'};
+const ADB_OICON={talk:'📞',noans:'📵',noshow:'🙈',offer:'📨',think:'🤔',pos:'💚',yes:'✅',paid:'💶',no:'👎',note:'📝',done:'✔',stage:'➜',next:'⏰',meet:'📅'};
 const ADB_WHAT=['📞 Call','💬 Viber','✉ E-mail','📅 Meeting','📨 Send offer','💶 Check payment','📦 Ask for material','🛠 Send the draft'];
 const ADB_KEYS=[['↑ ↓','move between people'],['Enter','open the person'],['C','call'],['V','Viber'],['E','e-mail'],['D','done — log what happened'],['N','no answer → try again tomorrow'],['T','move the step to tomorrow'],['W','move the step one week'],['1 2 3 4','To do · Pipeline · By day · All leads'],['/','search'],['⌘ Enter','save the form'],['Esc','close']];
 let adbShowLost=false, adbQ='', adbAsk=false, adbFocus=false, adbForm=null, adbDraft=null, adbLater=null, adbSel=null, adbHelp=false;
@@ -16600,7 +16677,7 @@ function adbTask(e, mode){
   if(n){ if(e.due==='late') when=`<b>${esc(n.d===todayIso()?(n.tm||'now'):adbLateTxt(n))}</b>`; else if(mode==='later') when=`<b>${esc(n.tm||'')}</b>`; else when=n.tm?`<b>${esc(n.tm)}</b>`:''; }
   const res=n? `${e.mq&&e.c?`<button type="button" class="adb-ib adb-ok" data-adl="mq" data-id="${e.c.id}">How did it go?</button>`:`<button type="button" class="adb-ib adb-ok" data-adb="qdone" data-id="${e.id}" title="Done — write what happened and the next step (D)">✓ Done</button>`}${e.kind==='meet'?`<button type="button" class="adb-ib" data-adb="qns" data-id="${e.id}" title="No-show — call tomorrow to rebook">🙈<span> No-show</span></button>`:`<button type="button" class="adb-ib" data-adb="qna" data-id="${e.id}" title="No answer — try again tomorrow (N)">📵<span> No answer</span></button>`}${n.meet?'':`<button type="button" class="adb-ib${mv?' on':''}" data-adb="qlater" data-id="${e.id}" title="Later — move to another day (T = tomorrow, W = one week)">⏭<span> Later</span></button>`}`
     : `<button type="button" class="adb-ib adb-ok" data-adb="qdone" data-id="${e.id}">＋ Set the next step</button>`;
-  return `<article class="adb-t adb-t-${e.due} adb-k-${e.kind}${open?' adb-open':''}${adbSel===e.id?' adb-kb':''}" data-id="${e.id}" data-q="${esc(adbQkey(e))}">
+  return `<article class="adb-t adbs-${e.bs} adb-t-${e.due} adb-k-${e.kind}${open?' adb-open':''}${adbSel===e.id?' adb-kb':''}" data-id="${e.id}" data-q="${esc(adbQkey(e))}">
     <div class="adb-th" data-adl="pick" data-id="${e.id}" title="Open ${esc(e.name)}"><span class="adb-tn"><b>${esc(e.name||'—')}</b><small>${esc(e.spec||'')}</small></span>${when?`<span class="adb-tw">${when}</span>`:''}<span class="adb-stp" style="--sc:${s.c}">${esc(s.s)}</span></div>
     <div class="adb-tk" data-adl="pick" data-id="${e.id}">${n?esc(n.w):'⚠ No next step yet'}</div>
     ${last?`<div class="adb-tl" data-adl="pick" data-id="${e.id}">${esc(adbLogTxt(last))}</div>`:(e.msg?`<div class="adb-tl" data-adl="pick" data-id="${e.id}">«${esc(e.msg)}»</div>`:'')}
@@ -16614,9 +16691,9 @@ function adbTodoHtml(all){
   const t=todayIso(), dl=d=>new Date(d+'T12:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});
   const col=(k,title,sub,arr,empty)=>`<section class="adb-tc adb-tc-${k}"><header><b>${title}</b><i>${arr.length}</i><small>${sub}</small></header><div class="adb-tcl">${arr.length?arr.map(e=>adbTask(e,k)).join(''):`<div class="adb-empty">${empty}</div>`}</div></section>`;
   let later=''; if(g.later.length){ let last=''; later=g.later.map(e=>{ let h=''; if(e.nx.d!==last){ last=e.nx.d; h=`<div class="adb-dsep">${esc(dl(e.nx.d))}</div>`; } const s=ADB_SM[e.bs];
-      return h+`<div class="adb-m${adbSel===e.id?' adb-kb':''}" role="button" tabindex="0" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}" style="--sc:${s.c}"><span class="adb-mh"><b>${esc(e.name||'—')}</b>${e.nx.tm?`<em>${esc(e.nx.tm)}</em>`:''}</span><span class="adb-mw">${esc(e.nx.w)}</span><span class="adb-stp">${esc(s.s)}</span></div>`; }).join(''); }
+      return h+`<div class="adb-m adbs-${e.bs}${adbSel===e.id?' adb-kb':''}" role="button" tabindex="0" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}" style="--sc:${s.c}"><span class="adb-mh"><b>${esc(e.name||'—')}</b>${e.nx.tm?`<em>${esc(e.nx.tm)}</em>`:''}</span><span class="adb-mw">${esc(e.nx.w)}</span><span class="adb-stp">${esc(s.s)}</span></div>`; }).join(''); }
   const none=g.none.length?`<section class="adb-none"><header><b>⚠ No next step</b><i>${g.none.length}</i><small>Pick when you call them, so nobody gets lost</small></header><div class="adb-nonel">${g.none.map(e=>{ const s=ADB_SM[e.bs], last=adbLastReal(e.rec);
-      return `<div class="adb-nr" data-id="${e.id}" data-q="${esc(adbQkey(e))}"><div class="adb-nrn" data-adl="pick" data-id="${e.id}"><b>${esc(e.name||'—')}</b><span class="adb-stp" style="--sc:${s.c}">${esc(s.s)}</span><small>${last?esc(adbLogTxt(last)):esc(e.spec||'')}</small></div><div class="adb-nrq"><span>📞 Call</span>${adbDayChips().slice(0,5).map(([lab,d])=>`<button type="button" class="adb-chip" data-adb="mv" data-d="${d}" data-id="${e.id}">${lab}</button>`).join('')}<button type="button" class="adb-chip" data-adl="pick" data-id="${e.id}">Other…</button></div></div>`; }).join('')}</div></section>`:'';
+      return `<div class="adb-nr adbs-${e.bs}" data-id="${e.id}" data-q="${esc(adbQkey(e))}"><div class="adb-nrn" data-adl="pick" data-id="${e.id}"><b>${esc(e.name||'—')}</b><span class="adb-stp" style="--sc:${s.c}">${esc(s.s)}</span><small>${last?esc(adbLogTxt(last)):esc(e.spec||'')}</small></div><div class="adb-nrq"><span>📞 Call</span>${adbDayChips().slice(0,5).map(([lab,d])=>`<button type="button" class="adb-chip" data-adb="mv" data-d="${d}" data-id="${e.id}">${lab}</button>`).join('')}<button type="button" class="adb-chip" data-adl="pick" data-id="${e.id}">Other…</button></div></div>`; }).join('')}</div></section>`:'';
   return `${none}<div class="adb-todo">
     ${col('late','Late','do these first',g.late,'Nothing late 👌')}
     ${col('today','Today',esc(dl(t)),g.today,'Nothing else for today')}
@@ -16628,7 +16705,7 @@ function adbTodoHtml(all){
 function adbCard(e){
   const n=e.nx, last=adbLastReal(e.rec), tel=adlTel(e.phone);
   const nx=n?`<span class="adb-cn adb-d-${e.due}"><b>${esc(e.due==='late'?'Late':adlWhen(n.d))}${n.tm&&e.due!=='late'?' · '+esc(n.tm):''}</b><span>${esc(n.w)}</span></span>`:(adbOpenSt(e.bs)?`<span class="adb-cn adb-d-none">⚠ No next step</span>`:'');
-  return `<div class="adb-card adb-c-${e.due}${adlX===e.id?' adb-on':''}${adbSel===e.id?' adb-kb':''}" role="button" tabindex="0" draggable="true" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}">
+  return `<div class="adb-card adbs-${e.bs} adb-c-${e.due}${adlX===e.id?' adb-on':''}${adbSel===e.id?' adb-kb':''}" role="button" tabindex="0" draggable="true" data-adl="pick" data-id="${e.id}" data-q="${esc(adbQkey(e))}">
     <span class="adb-ct"><b>${esc(e.name||'—')}</b></span>
     <span class="adb-sp" title="Came in ${esc(adbIn(e))}"><i>in ${esc(fmtDay(e.day))}</i>${e.spec?' · '+esc(e.spec):''}</span>${nx}
     ${last?`<span class="adb-last">${esc(adbLogTxt(last))}</span>`:(e.msg?`<span class="adb-last adb-lm">«${esc(e.msg)}»</span>`:'')}
@@ -16670,7 +16747,7 @@ function adbDrawer(e){
   if(l && !c) acts.push(`<button type="button" class="adl-btn" data-adl="book" data-id="${e.id}">📅 Book a meeting (puts them on the Board)</button>`);
   if(l && !c) acts.push(`<button type="button" class="adl-btn adl-ghost adl-mute" data-adl="lead" data-id="${e.id}">In Leads ›</button>`);
   acts.push(`<button type="button" class="adl-btn adl-ghost adl-mute" data-adl="notad" data-id="${e.id}">Not from the ads</button>`);
-  return `<div class="adb-ov" data-adb="close"><aside class="adb-dr" data-id="${e.id}" role="dialog" aria-label="${esc(e.name)}">
+  return `<div class="adb-ov" data-adb="close"><aside class="adb-dr adbs-${e.bs}" data-id="${e.id}" role="dialog" aria-label="${esc(e.name)}">
     <div class="adb-dh"><div><h3>${esc(e.name||'—')}</h3><p>${esc(e.spec||'')}${e.spec?' · ':''}came in <b>${esc(adbIn(e))} · ${adlHM(e.ts)}</b></p></div><button type="button" class="adb-x" data-adb="close" aria-label="Close">✕</button></div>
     <div class="adb-ta adb-big">${adbContactBtns(e,true)}${e.phone?`<button type="button" class="adb-ib adb-quiet" data-adl="copy1" data-v="${String(e.phone).replace(/\D/g,'').slice(-10)}" title="Copy the number">⧉ number</button>`:''}${e.email?`<button type="button" class="adb-ib adb-quiet" data-adl="copy1" data-v="${esc(e.email)}" title="Copy ${esc(e.email)}">⧉ e-mail</button>`:''}</div>
     <div class="adb-stages">${stp}</div>
@@ -16800,6 +16877,59 @@ document.addEventListener('keydown',ev=>{
   if(k==='t'){ adbMove(e, adlAdd(todayIso(),1)); return; }
   if(k==='w'){ adbMove(e, adlAdd(todayIso(),7)); return; }
 });
+/* ===== Ad leads HERO (Angelo, 11 Nov 2026): big coloured numbers like «In the bank» + ROAS; tap a tile = show only those people ===== */
+const ADL_HT=[['call','To call','📞'],['meet','Meeting booked','📅'],['offer','Offer sent','📨'],['think','Thinking','🤔'],['pos','Positive','💚'],['won','Clients','🏆'],['lost','Not interested','👎']];
+const ADL_HC={call:'#EA6A12',meet:'#0E9AA7',offer:'#5B5BD6',think:'#C99400',pos:'#16A34A',won:'#7C3AED',lost:'#DC2626'};
+const ADL_HN={all:'Everyone'}; ADL_HT.forEach(x=>ADL_HN[x[0]]=x[1]);
+let adlPrevN={};
+function adlNum(v,dec){ return dec?(+v).toFixed(dec).replace('.',','):Math.round(+v).toLocaleString('el-GR'); }
+function adlCU(k,v,dec,pre,suf){ return `<span class="adl-cu" data-k="${k}" data-v="${v}" data-dec="${dec||0}" data-pre="${pre||''}" data-suf="${suf||''}">${pre||''}${adlNum(v,dec)}${suf||''}</span>`; }
+function adlHeroHtml(all){
+  const t=todayIso(), mon=adlMonday(t), n={call:0,meet:0,offer:0,think:0,pos:0,won:0,lost:0}, by={};
+  all.forEach(e=>{ const g=adlFk(e); if(n[g]!==undefined) n[g]++; by[e.bs]=(by[e.bs]||0)+1; });
+  const tot=all.length, td=all.filter(e=>e.day===t).length, wk=all.filter(e=>e.day>=mon).length;
+  const due=all.filter(e=>adlFk(e)==='call'&&(e.due==='late'||e.due==='today')).length;
+  const reached=all.filter(e=>['meet','offer','think','pos','pay','won'].includes(e.bs)).length;
+  const pc=v=>tot?Math.round(v*100/tot):0;
+  ensureMeta(); const sp=+((state.meta.adl||{}).spend)||0, won=n.won, back=won*ADL_PROFIT, r=sp?back/sp:0, net=back-sp;
+  const e0=v=>'€'+Math.round(Math.abs(v)).toLocaleString('el-GR'), e2=v=>'€'+v.toFixed(2).replace('.',',');
+  const sub={call:due?`<b>${due}</b> due today or late`:'nobody waiting',meet:`${pc(reached)}% of leads got this far`,offer:'waiting for their answer',think:'still deciding',
+    pos:n.pos?`<b>${e0(n.pos*ADL_PROFIT)}</b> to win — push!`:'about to say yes',won:tot?`<b>${pc(won)}%</b> of all leads`:'—',lost:'said no'};
+  const bar=ADB_ST.filter(s=>by[s.k]).map(s=>`<i style="flex:${by[s.k]};background:${s.c}" title="${esc(s.s)}: ${by[s.k]}"></i>`).join('');
+  const lg=ADB_ST.filter(s=>by[s.k]).map(s=>`<span><i style="background:${s.c}"></i>${esc(s.s)} <b>${by[s.k]}</b></span>`).join('');
+  const lead=`<button type="button" class="adl-hl" data-adl="f" data-k="all" style="--hc:#FF6B3D" title="Show everyone">
+    <div class="adl-hk">🔥 Ad leads <span>everyone who came from the ads</span></div>
+    <div class="adl-hbig">${adlCU('tall',tot)}<em${td?'':' class="soft"'}>${td?'+'+td+' today':'none today yet'}</em></div>
+    <div class="adl-hsub"><b>+${wk}</b> this week · <b>${pc(reached)}%</b> booked a meeting · <b>${pc(won)}%</b> became clients</div>
+    <div class="adl-hbar">${bar}</div><div class="adl-hlg">${lg}</div></button>`;
+  const lvl=!sp?'none':r>=2?'great':r>=1?'good':'neg', fill=sp?Math.min(r/3,1)*100:0;
+  const tag=lvl==='great'?'🚀 great return':lvl==='good'?'✓ in profit':lvl==='neg'?'not paid back yet':'';
+  const roas=`<div class="adl-hr adl-hr-${lvl}" style="--hc:var(--rc)">
+    <div class="adl-hk">ROAS <span>what the ads bring back for every €1</span></div>
+    <div class="adl-hbig">${sp?adlCU('roas',r,2,'','×'):'<span class="adl-cu">—</span>'}${tag?`<em>${tag}</em>`:''}</div>
+    <div class="adl-hmeter"><i style="width:${fill.toFixed(1)}%"></i><b style="left:33.33%" title="break-even = 1×"></b></div>
+    <div class="adl-hmk"><span>0×</span><span>1× = break-even</span><span>3×</span></div>
+    <div class="adl-hline">${sp?`<b>${e0(back)}</b> back from <b>${e0(sp)}</b> spent · <span class="${net>=0?'p':'m'}">${net>=0?'+':'−'}${e0(net)} ${net>=0?'profit':'to go'}</span>`:'Type the ad spend from Ads Manager to see the ROAS'}</div>
+    <div class="adl-hchips">${sp&&tot?`<span><b>${e2(sp/tot)}</b> per lead</span>`:''}${sp&&reached?`<span><b>${e2(sp/reached)}</b> per meeting</span>`:''}${sp&&won?`<span><b>${e2(sp/won)}</b> per client</span>`:''}<label>Ad spend €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label></div>
+    <small class="adl-hnote">ROAS = ${won} ${won===1?'client':'clients'} × €${ADL_PROFIT} profit ÷ ad spend</small></div>`;
+  const tiles=ADL_HT.map(([k,lab,ic])=>`<button type="button" class="adl-ht${adlF===k?' on':''}${n[k]?'':' z'}" style="--hc:${ADL_HC[k]}" data-adl="f" data-k="${k}" aria-pressed="${adlF===k}"><span class="adl-hti" aria-hidden="true">${ic}</span><span class="adl-htl">${lab}</span><b>${adlCU('t'+k,n[k])}</b><small>${sub[k]}</small></button>`).join('');
+  const fb=adlF!=='all'&&ADL_HC[adlF]?`<div class="adl-hf" style="--hc:${ADL_HC[adlF]}">Showing only <b>${esc(ADL_HN[adlF])}</b> · ${n[adlF]} ${n[adlF]===1?'person':'people'}<button type="button" class="adl-btn" data-adl="f" data-k="all">Show everyone ✕</button></div>`:'';
+  return `<section class="adl-hero"><div class="adl-htop">${lead}${roas}</div><div class="adl-htiles">${tiles}</div>${fb}</section>`;
+}
+/* numbers count up when they change (first time from 0) and the tile pops when a number goes up */
+function adlCountUp(box){
+  const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  box.querySelectorAll('.adl-cu[data-k]').forEach(el=>{ const k=el.dataset.k, to=+el.dataset.v, dec=+el.dataset.dec||0, pre=el.dataset.pre||'', suf=el.dataset.suf||'', from=adlPrevN[k]; adlPrevN[k]=to;
+    const f=v=>pre+adlNum(v,dec)+suf;
+    if(from===to || !isFinite(to)) return;
+    if(from!==undefined && to>from && !rm){ const h=el.closest('.adl-ht,.adl-hl,.adl-hr'); if(h){ h.classList.remove('adl-pop'); void h.offsetWidth; h.classList.add('adl-pop'); } }
+    if(rm||document.hidden) return;
+    const a=from===undefined?0:from, D=from===undefined?900:600, t0=performance.now();
+    el.textContent=f(a);
+    const step=now=>{ if(!el.isConnected) return; const p=Math.min(1,(now-t0)/D), q=1-Math.pow(1-p,3); el.textContent=f(dec?a+(to-a)*q:Math.round(a+(to-a)*q)); if(p<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step); setTimeout(()=>{ if(el.isConnected) el.textContent=f(to); },D+300);
+  });
+}
 </script>
 </body>
 </html>
