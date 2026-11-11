@@ -9084,6 +9084,16 @@ function cbInbox(box){
       if(o.nx && o.nx.d) r.nx={w:String(o.nx.w||''), d:String(o.nx.d).slice(0,10), tm:String(o.nx.tm||'')};
       dn[o.id]=Date.now(); nn++; adQ=true; });
     if(nn) setTimeout(()=>{ try{ renderAdl(); }catch(e){} toast('Ad leads: '+nn+(nn===1?' person':' people')+' updated'); },80); } }catch(e){ console.warn('adp inbox',e); }
+  /* 11 Nov 2026: lists._crm.xs = [{id, name, phone, email, ads, social, unsure, day, note}] — Claude adds a client to the «Ads & Social» tab; each id ONCE (meta.xsIn); same phone = updates that row */
+  try{ if(box && Array.isArray(box.xs) && box.xs.length && xsEnsure()){ ensureMeta(); const dn=state.meta.xsIn||(state.meta.xsIn={}); const q9=v=>String(v||'').replace(/\D/g,'').slice(-9); let nn=0;
+    box.xs.forEach(o=>{ if(!o || !o.id || dn[o.id] || !o.name) return; const ph=q9(o.phone);
+      let e=ph.length===9 ? state.xsvc.find(x=>x && q9(x.phone)===ph) : null;
+      if(!e){ e={id:uid(), src:'manual', at:Date.now(), log:[], st:'todo'}; state.xsvc.push(e); }
+      e.name=String(o.name); e.phone=String(o.phone||e.phone||''); e.email=String(o.email||e.email||'');
+      e.ads=!!o.ads; e.social=!!o.social; e.unsure=!!o.unsure; e.day=String(o.day||e.day||xsStart()).slice(0,10); e.note=String(o.note||e.note||'');
+      if(!e.st) e.st='todo'; if(!Array.isArray(e.log)) e.log=[];
+      dn[o.id]=Date.now(); nn++; adQ=true; });
+    if(nn) setTimeout(()=>{ try{ renderXs(); }catch(e){} toast('Ads & Social: '+nn+(nn===1?' client':' clients')+' added'); },90); } }catch(e){ console.warn('xs inbox',e); }
   if(!box || !Array.isArray(box.cb) || !box.cb.length) return adQ;
   ensureMeta(); const seen=state.meta.cbIn||(state.meta.cbIn={}); const names=[];
   const p9=v=>String(v||'').replace(/\D/g,'').slice(-9);
