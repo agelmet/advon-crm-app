@@ -9077,6 +9077,8 @@ function cbInbox(box){
     box.upd.forEach(u=>{ if(!u || !u.id || dn[u.id]) return; const ph=q9(u.phone);
       const l=(state.leads||[]).find(x=>x && ((u.key && x.key===u.key) || (ph.length===9 && q9(x.phone)===ph))); if(!l) return;
       ['spec','memo','email','name'].forEach(k=>{ if(u[k]!=null && String(u[k]).trim()) l[k]=String(u[k]).trim(); });
+      /* 11 Nov 2026: setPhone = give a lead that came in without a number (a DM) its phone */
+      if(u.setPhone){ const d=String(u.setPhone).replace(/\D/g,''); if(d.length>=10) l.phone=d; }
       /* 10 Nov 2026: memoAdd = ADD a line to the lead's note without wiping what Angelo typed himself */
       if(u.memoAdd && String(u.memoAdd).trim()){ const a=String(u.memoAdd).trim(); if(!String(l.memo||'').includes(a)) l.memo=l.memo? (a+' · '+l.memo) : a; }
       l.updated=Date.now(); dn[u.id]=Date.now(); adQ=true; }); } }catch(e){}
