@@ -4661,7 +4661,7 @@ body.dark .adl-hr-great::after{display:none}
 @media(max-width:760px){.adl-hbig .adl-cu{font-size:46px}.adl-hl,.adl-hr{padding:15px 15px 13px}.adl-htiles{grid-auto-columns:minmax(140px,44%)}.adl-ht>b .adl-cu{font-size:32px}.adl-hchips label{margin-left:0}.adl-hlg,.adl-hnote,.adl-hmk{display:none}.adl-hl .adl-hbar{margin-top:3px}}
 @media(prefers-reduced-motion:reduce){.adl-pop,.adl-hr-great::after{animation:none}.adl-ht,.adl-hmeter i{transition:none}}
 /* every person's card takes the colour of their stage: yellow = thinking, green = positive, red = lost … */
-.adbs-new{--stc:#F97316;--stp:9%}.adbs-talk{--stc:#2F7FE0;--stp:8%}.adbs-meet{--stc:#0E9AA7;--stp:10%}.adbs-offer{--stc:#5B5BD6;--stp:10%}
+.adbs-new{--stc:#F97316;--stp:9%}.adbs-talk{--stc:#0891B2;--stp:10%}.adbs-meet{--stc:#1D4ED8;--stp:16%}#view-adl :is(.adb-card,.adb-t,.adb-m,.adb-nr,.adl-wc).adbs-meet{outline:2px solid #2563EB;outline-offset:-2px}#view-adl .adbs-meet b{color:#1E3A8A}.adbs-offer{--stc:#5B5BD6;--stp:10%}
 .adbs-think{--stc:#F5C518;--stp:32%}.adbs-pos{--stc:#22C55E;--stp:19%}.adbs-pay{--stc:#DB2777;--stp:11%}.adbs-won{--stc:#047857;--stp:30%}#view-adl :is(.adb-card,.adb-t,.adb-m,.adb-nr,.adl-wc).adbs-won{outline:2px solid #047857;outline-offset:-2px}#view-adl .adbs-won b{color:#064E3B}
 .adbs-silent{--stc:#475569;--stp:24%}.adbs-lost{--stc:#991B1B;--stp:24%}#view-adl :is(.adb-card,.adb-t,.adb-m,.adb-nr,.adl-wc).adbs-lost{outline:2px solid #991B1B;outline-offset:-2px}#view-adl .adbs-lost b{color:#7F1D1D}#view-adl :is(.adb-card,.adb-t,.adb-m,.adb-nr,.adl-wc).adbs-silent{outline:2px solid #64748B;outline-offset:-2px}.adbs-lost.adb-c-done,.adb-card.adbs-lost{border-left-color:#991B1B}.adbs-noshow{--stc:#FF6A00;--stp:17%}
 #view-adl :is(.adb-t,.adb-card,.adb-m,.adb-nr,.adl-wc)[class*="adbs-"]{background:color-mix(in srgb,var(--stc) var(--stp),var(--surface));outline:1px solid color-mix(in srgb,var(--stc) 38%,transparent);outline-offset:-1px}
@@ -16632,8 +16632,8 @@ document.addEventListener('click',ev=>{
    Claude's inbox: leads/lists.json → lists._crm.adp = [{id, phone|email, st?, log:[{at,o,t}], nx:{w,d,tm}}], each id applied ONCE (meta.adpIn). */
 const ADB_ST=[
   {k:'new',   t:'New · call them',     s:'New',        c:'#EA6A12'},
-  {k:'talk',  t:'Talking',             s:'Talking',    c:'#2F7FE0'},
-  {k:'meet',  t:'Meeting booked',      s:'Meeting',    c:'#0E9AA7'},
+  {k:'talk',  t:'Talking',             s:'Talking',    c:'#0891B2'},
+  {k:'meet',  t:'Meeting booked',      s:'Meeting',    c:'#1D4ED8'},
   {k:'noshow',t:'No-show · call to rebook', s:'No-show', c:'#FF6A00'},
   {k:'offer', t:'Offer sent',          s:'Offer sent', c:'#5B5BD6'},
   {k:'think', t:'Thinking',            s:'Thinking',   c:'#C99400'},
@@ -16991,7 +16991,7 @@ document.addEventListener('keydown',ev=>{
 });
 /* ===== Ad leads HERO (Angelo, 11 Nov 2026): big coloured numbers like «In the bank» + ROAS; tap a tile = show only those people ===== */
 const ADL_HT=[['call','To call','📞'],['meet','Meeting booked','📅'],['noshow','No-show','🙈'],['offer','Offer sent','📨'],['think','Thinking','🤔'],['pos','Positive','💚'],['won','Clients','🏆'],['lost','Not interested','👎']];
-const ADL_HC={call:'#EA6A12',meet:'#0E9AA7',noshow:'#FF6A00',offer:'#5B5BD6',think:'#C99400',pos:'#16A34A',won:'#047857',lost:'#991B1B'};
+const ADL_HC={call:'#EA6A12',meet:'#1D4ED8',noshow:'#FF6A00',offer:'#5B5BD6',think:'#C99400',pos:'#16A34A',won:'#047857',lost:'#991B1B'};
 const ADL_HN={all:'Everyone'}; ADL_HT.forEach(x=>ADL_HN[x[0]]=x[1]);
 let adlPrevN={};
 function adlNum(v,dec){ return dec?(+v).toFixed(dec).replace('.',','):Math.round(+v).toLocaleString('el-GR'); }
@@ -17037,7 +17037,7 @@ function adlHeroHtml(all){
      open  = the meeting time passed and nothing is logged yet
      up    = still to come (incl. a no-show that was rebooked to a new time)
    Show-up rate = happened ÷ (happened + no-shows). */
-const ADM_K={held:['Happened','#0B9E5C','✓'],ns:['No-show','#FF6A00','🙈'],rs:['Moved by them','#D97706','📆'],open:['Not logged yet','#64748B','⏳'],up:['Coming up','#0E9AA7','📅']};
+const ADM_K={held:['Happened','#0B9E5C','✓'],ns:['No-show','#FF6A00','🙈'],rs:['Moved by them','#D97706','📆'],open:['Not logged yet','#64748B','⏳'],up:['Coming up','#1D4ED8','📅']};
 let admOpen=(()=>{ try{ return localStorage.getItem('adm-open')!=='0'; }catch(e){ return true; } })();
 function adlMeetOf(e){
   const c=e.c, r=e.rec, now=Date.now(), ev=[];
