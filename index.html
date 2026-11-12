@@ -16581,7 +16581,10 @@ function renderAdl(){
   if(!state) return;
   try{ adlMarkApply(); }catch(e){}
   try{ adbSweep(); }catch(e){}
-  const all=adlEntries(); try{ adbDecorate(all); }catch(e){ console.warn('adb',e); } adlBadge(all);
+  let all=adlEntries(); try{ adbDecorate(all); }catch(e){ console.warn('adb',e); }
+  try{ ensureMeta(); if(!state.meta.adbWonB1){ state.meta.adbWonB1=Date.now(); const W=all.filter(e=>e.bs==='won' && !(e.c && !e.c.trashed && ADB_WORK(e.c)));
+    if(W.length){ W.forEach(e=>adbToBoard(e,null)); save(); all=adlEntries(); adbDecorate(all); setTimeout(()=>{ try{ renderAll(); }catch(x){} toast('Board · Need info: '+W.map(e=>e.name).join(', ')); },150); } else save(); } }catch(e){ console.warn('won→board',e); }
+  adlBadge(all);
   if(curView!=='adl'){ const H=adbHostEl();
     if(adlHost && adlX){ const sel=all.find(e=>e.id===adlX); if(sel){ const kd=H.querySelector('.adb-dr'), dsl=kd&&kd.dataset.id===sel.id?kd.scrollTop:null;
         H.innerHTML=adbDrawer(sel); document.body.classList.add('adl-mopen'); const nd=H.querySelector('.adb-dr'); if(nd && dsl!=null) nd.scrollTop=dsl; try{ adbAfterRender(H); }catch(e){} return; } }
@@ -16913,7 +16916,11 @@ function adbSnap(e){ const r=adbRec(e), c=e.c; const cj={}; if(c) ADB_CK.forEach
   return {k:adbKey(e), rec:r?JSON.stringify(r):null, l:e.l||null, cb:e.l&&e.l.cb?JSON.stringify(e.l.cb):null, c:c||null, cj}; }
 function adbRestore(s){ const A=adbAllRec(); if(s.rec) A[s.k]=JSON.parse(s.rec); else delete A[s.k]; if(s.l && s.cb){ s.l.cb=JSON.parse(s.cb); s.l.updated=Date.now(); }
   if(s.c) ADB_CK.forEach(k=>{ if(s.cj[k]===undefined) delete s.c[k]; else s.c[k]=JSON.parse(s.cj[k]); });
-  save(); renderAdl(); try{ cbRefresh(); }catch(e){} }
+  if(s.newCid) state.clients=state.clients.filter(x=>x.id!==s.newCid);
+  if(s.newLog) state.logs=state.logs.filter(x=>x.id!==s.newLog);
+  if(s.cFull){ const o=(state.clients||[]).find(x=>x.id===s.cFull.id); if(o){ const j=JSON.parse(s.cFull.j); Object.keys(o).forEach(k=>delete o[k]); Object.assign(o,j); o.updated=Date.now(); } }
+  if(s.lead){ const l=(state.leads||[]).find(x=>x.id===s.lead.id); if(l){ ['status','logId','clientId','doneAt'].forEach(k=>{ if(s.lead[k]===undefined) delete l[k]; else l[k]=s.lead[k]; }); if(s.lead.cb) l.cb=JSON.parse(s.lead.cb); l.updated=Date.now(); } }
+  save(); try{ renderAll(); }catch(x){} renderAdl(); try{ cbRefresh(); }catch(e){} }
 /* 12 Nov 2026: a no-show goes on the Board card too (red in the Calendar + its «No show» list, no «How did it go?» pop-up) */
 function adbCardNoShow(c, note){
   if(!c || c.stage!=='booked') return false; const slot=mqSlot(c); if(!slot) return false;
@@ -16946,6 +16953,31 @@ function adbCardResched(c, day, what){
 /* this board now carries the person's next step: their call-back in Leads / Callbacks goes (a future one is kept here as the step) */
 function adbTouch(e, r, drop){ const l=e.l; if(!l||!l.cb) return; if(!drop && !(r.nx&&r.nx.d) && l.cb.day>todayIso() && e.nx && !e.nx.man) r.nx={w:e.nx.w,d:e.nx.d,tm:e.nx.tm||''};
   delete l.cb; l.updated=Date.now(); setTimeout(()=>{ try{ cbRefresh(); }catch(x){} },0); }
+/* 12 Nov 2026 (Angelo): «Won» in Ad leads puts the client on the Board in «Need info» at once (card made if there is none) */
+function adbToBoard(e, s){
+  let c=e.c; if(c && (c.trashed || c.stage==='trash')) c=null;
+  if(c && ADB_WORK(c)) return c;
+  const l=e.l, now=Date.now();
+  if(s && l) s.lead={id:l.id, status:l.status, logId:l.logId, clientId:l.clientId, doneAt:l.doneAt, cb:l.cb?JSON.stringify(l.cb):null};
+  if(!c){ const before=new Set((state.clients||[]).map(x=>x.id));
+    const log={id:uid(), type:'g', name:String(e.name||'—'), value:130, source:'cold', note:'From the ads · Won', date:todayIso(), created:now, updated:now};
+    if(l) log.leadId=l.id; state.logs.push(log); if(s) s.newLog=log.id;
+    linkClientForLog(log,'',''); c=(state.clients||[]).find(x=>x.id===log.clientId);
+    if(!c) return null;
+    if(s && !before.has(c.id)) s.newCid=c.id; }
+  if(s && !s.newCid && !s.cFull) s.cFull={id:c.id, j:JSON.stringify(c)};
+  const p=String(e.phone||'').replace(/\D/g,''); if(p && !c.phone) c.phone=p.slice(-10);
+  if(e.email && !c.email) c.email=String(e.email).trim().toLowerCase();
+  if(c.ad!=='no' && c.ad!==false){ c.ad=true; if(!c.adAt) c.adAt=e.ts||now; }
+  if(!(+c.value>0)){ c.value=130; c.v130=1; } if(!c.month) c.month=todayIso().slice(0,7);
+  if(c.stage!=='needinfo'){ c.stage='needinfo'; c.stageAt=now; }
+  delete c.lostReason; c.lostAt=null; c.meetOutcome='won';
+  try{ const sl=mqSlot(c); if(sl) c.mqDone=sl; }catch(x){}
+  c.notes=(fmtDay(todayIso())+' · WON (Ad leads) → Need info'+(c.notes?'\n'+c.notes:'')).slice(0,4000);
+  if(l){ l.status='g'; l.clientId=c.id; if(!l.logId && s && s.newLog) l.logId=s.newLog; l.doneAt=now; delete l.cb; l.updated=now; }
+  c.updated=now; return c;
+}
+function adbWonGo(e, s){ const c=adbToBoard(e, s); try{ renderAll(); }catch(x){} return c; }
 function adbStageTo(r, cur, to){ if(to && to!==cur){ r.st=to; r.sAt=Date.now(); adbPush(r,'stage',to); return true; } return false; }
 function adbMove(e, d, quiet){
   if(e.nx && e.nx.meet){ toast('That is the meeting on the Board — change its day on the Board card'); return; }
@@ -16979,6 +17011,7 @@ function adbSaveForm(id){
   if(o && e.c && e.c.fu && e.c.fu.day) r.fuX=e.c.fu.day;
   if(o==='noshow' && e.c) adbCardNoShow(e.c, t);
   if(o==='resched' && e.c) adbCardResched(e.c, d, w);
+  if(r.st==='won' && moved){ r.nx=null; adbWonGo(e,s); }
   adbTouch(e,r,!!o); adbDraft=null; adbLater=null; save();
   const e2=adbFind(id), need=e2 && e2.due==='none';
   if(need){ adbAsk=true; adbFocus=true; adlX=id; adbForm={id, where:'dr'}; renderAdl(); toast('Saved'+(moved?' · '+e.name+' → '+ADB_SM[r.st].t:'')+' — now pick the next step (part 2)'); return; }
@@ -17015,7 +17048,10 @@ document.addEventListener('click',ev=>{
   if(a==='qns'){ adbNoAns(e,true); return; }
   if(a==='qlater'){ adbLater=adbLater===id?null:id; if(!adlX) adbForm=null; renderAdl(); return; }
   if(a==='mv'){ adbMove(e,b.dataset.d); return; }
-  if(a==='st'){ const k=b.dataset.k; if(k===e.bs) return; const r=adbRec(e,true); r.st=k; r.sAt=Date.now(); adbPush(r,'stage',k); adbTouch(e,r);
+  if(a==='st'){ const k=b.dataset.k; if(k===e.bs) return;
+    if(k==='won'){ const s=adbSnap(e), r=adbRec(e,true); r.st='won'; r.sAt=Date.now(); adbPush(r,'stage','won'); r.nx=null; adbTouch(e,r,true); const c=adbWonGo(e,s); save(); renderAdl();
+      toastUndo(c?e.name+' → Board · Need info':e.name+' → Won (could not make the Board card)', ()=>adbRestore(s)); return; }
+    const r=adbRec(e,true); r.st=k; r.sAt=Date.now(); adbPush(r,'stage',k); adbTouch(e,r);
     adbAsk=adbOpenSt(k) && !(r.nx&&r.nx.d) && !(e.nx&&e.nx.meet); if(adbAsk){ adbForm={id,where:'dr'}; adbFocus=true; } save(); renderAdl(); toast(e.name+' → '+ADB_SM[k].t+(adbAsk?' — now pick the next step':'')); return; }
   if(a==='nxclr'){ const s=adbSnap(e), r=adbRec(e,true); r.nx=null; save(); renderAdl(); toastUndo('Next step removed', ()=>adbRestore(s)); return; }
   if(a==='del'){ const r=adbRec(e,true), i=+b.dataset.i, x=r.log[i]; if(!x) return; if(!confirm('Delete this line?\n\n'+adbLogTxt(x))) return; r.log.splice(i,1); save(); renderAdl(); return; }
@@ -17026,7 +17062,8 @@ document.addEventListener('dragstart',ev=>{ const c=ev.target.closest && ev.targ
 document.addEventListener('dragend',()=>{ adbDrag=null; document.querySelectorAll('#view-adl .adb-drag, #view-adl .adb-over').forEach(x=>x.classList.remove('adb-drag','adb-over')); });
 document.addEventListener('dragover',ev=>{ if(!adbDrag) return; const c=ev.target.closest && ev.target.closest('#view-adl .adb-col'); if(!c) return; ev.preventDefault(); document.querySelectorAll('#view-adl .adb-over').forEach(x=>{ if(x!==c) x.classList.remove('adb-over'); }); c.classList.add('adb-over'); });
 document.addEventListener('drop',ev=>{ if(!adbDrag) return; const c=ev.target.closest && ev.target.closest('#view-adl .adb-col'); if(!c) return; ev.preventDefault(); const id=adbDrag, k=c.dataset.st; adbDrag=null; const e=adbFind(id); if(!e||!ADB_SM[k]||e.bs===k){ renderAdl(); return; }
-  const s=adbSnap(e), r=adbRec(e,true); r.st=k; r.sAt=Date.now(); adbPush(r,'stage',k); adbTouch(e,r); save();
+  const s=adbSnap(e), r=adbRec(e,true); r.st=k; r.sAt=Date.now(); adbPush(r,'stage',k); adbTouch(e,r,k==='won'); if(k==='won'){ r.nx=null; adbWonGo(e,s); } save();
+  if(k==='won'){ renderAdl(); toastUndo(e.name+' → Board · Need info', ()=>adbRestore(s)); return; }
   const e2=adbFind(id); if(e2 && e2.bs!==k){ renderAdl(); toast('The Board card decides this one — it stays in «'+ADB_SM[e2.bs].t+'»'); return; }
   if(e2 && e2.due==='none'){ adlX=id; adbAsk=true; adbFocus=true; adbForm={id,where:'dr'}; renderAdl(); toast(e.name+' → '+ADB_SM[k].t+' — now pick the next step'); return; }
   renderAdl(); toastUndo(e.name+' → '+ADB_SM[k].t, ()=>adbRestore(s)); });
@@ -17072,16 +17109,17 @@ function adlHeroHtml(all){
   const due=all.filter(e=>adlFk(e)==='call'&&(e.due==='late'||e.due==='today')).length;
   const reached=all.filter(e=>['meet','noshow','offer','think','pos','pay','won'].includes(e.bs)).length;
   const pc=v=>tot?Math.round(v*100/tot):0;
-  ensureMeta(); const sp=+((state.meta.adl||{}).spend)||0, won=n.won, back=won*ADL_PROFIT, r=sp?back/sp:0, net=back-sp;
+  ensureMeta(); const wonAll=all.filter(e=>adlFk(e)==='won'), won=wonAll.filter(e=>e.c && !e.c.trashed && !notSure(e.c)).length, wonNs=wonAll.length-won;
+  const sp=+((state.meta.adl||{}).spend)||0, back=won*ADL_PROFIT, r=sp?back/sp:0, net=back-sp;
   const e0=v=>'€'+Math.round(Math.abs(v)).toLocaleString('el-GR'), e2=v=>'€'+v.toFixed(2).replace('.',',');
   const sub={call:due?`<b>${due}</b> due today or late`:'nobody waiting',meet:`${pc(reached)}% of leads got this far`,noshow:n.noshow?'<b>call them</b> to rebook':'nobody missed one',offer:'waiting for their answer',think:'still deciding',
-    pos:n.pos?`<b>${e0(n.pos*ADL_PROFIT)}</b> to win — push!`:'about to say yes',won:tot?`<b>${pc(won)}%</b> of all leads`:'—',lost:'said no'};
+    pos:n.pos?`<b>${e0(n.pos*ADL_PROFIT)}</b> to win — push!`:'about to say yes',won:tot?`<b>${pc(n.won)}%</b> of all leads${wonNs?` · <b>${wonNs}</b> not sure`:''}`:'—',lost:'said no'};
   const bar=ADB_ST.filter(s=>by[s.k]).map(s=>`<i style="flex:${by[s.k]};background:${s.c}" title="${esc(s.s)}: ${by[s.k]}"></i>`).join('');
   const lg=ADB_ST.filter(s=>by[s.k]).map(s=>`<span><i style="background:${s.c}"></i>${esc(s.s)} <b>${by[s.k]}</b></span>`).join('');
   const lead=`<button type="button" class="adl-hl" data-adl="f" data-k="all" style="--hc:#FF6B3D" title="Show everyone">
     <div class="adl-hk">🔥 Ad leads <span>everyone who came from the ads</span></div>
     <div class="adl-hbig">${adlCU('tall',tot)}<em${td?'':' class="soft"'}>${td?'+'+td+' today':'none today yet'}</em></div>
-    <div class="adl-hsub"><b>+${wk}</b> this week · <b>${pc(reached)}%</b> booked a meeting · <b>${pc(won)}%</b> became clients</div>
+    <div class="adl-hsub"><b>+${wk}</b> this week · <b>${pc(reached)}%</b> booked a meeting · <b>${pc(n.won)}%</b> became clients</div>
     <div class="adl-hbar">${bar}</div><div class="adl-hlg">${lg}</div></button>`;
   const lvl=!sp?'none':r>=2?'great':r>=1?'good':'neg', fill=sp?Math.min(r/3,1)*100:0;
   const tag=lvl==='great'?'🚀 great return':lvl==='good'?'✓ in profit':lvl==='neg'?'not paid back yet':'';
@@ -17092,7 +17130,7 @@ function adlHeroHtml(all){
     <div class="adl-hmk"><span>0×</span><span>1× = break-even</span><span>3×</span></div>
     <div class="adl-hline">${sp?`<b>${e0(back)}</b> back from <b>${e0(sp)}</b> spent · <span class="${net>=0?'p':'m'}">${net>=0?'+':'−'}${e0(net)} ${net>=0?'profit':'to go'}</span>`:'Type the ad spend from Ads Manager to see the ROAS'}</div>
     <div class="adl-hchips">${sp&&tot?`<span><b>${e2(sp/tot)}</b> per lead</span>`:''}${sp&&reached?`<span><b>${e2(sp/reached)}</b> per meeting</span>`:''}${sp&&won?`<span><b>${e2(sp/won)}</b> per client</span>`:''}<label>Ad spend €<input type="number" id="adlSpend" inputmode="decimal" min="0" step="0.01" value="${sp||''}" placeholder="0"></label></div>
-    <small class="adl-hnote">ROAS = ${won} ${won===1?'client':'clients'} × €${ADL_PROFIT} profit ÷ ad spend</small></div>`;
+    <small class="adl-hnote">ROAS = ${won} ${won===1?'client':'clients'} on the Board × €${ADL_PROFIT} profit ÷ ad spend${wonNs?` · <b>${wonNs}</b> «not sure they'll pay» left out until they pay`:''}</small></div>`;
   const tiles=ADL_HT.map(([k,lab,ic])=>`<button type="button" class="adl-ht${adlF===k?' on':''}${n[k]?'':' z'}" style="--hc:${ADL_HC[k]}" data-adl="f" data-k="${k}" aria-pressed="${adlF===k}"><span class="adl-hti" aria-hidden="true">${ic}</span><span class="adl-htl">${lab}</span><b>${adlCU('t'+k,n[k])}</b><small>${sub[k]}</small></button>`).join('');
   const fb=adlF!=='all'&&ADL_HC[adlF]?`<div class="adl-hf" style="--hc:${ADL_HC[adlF]}">Showing only <b>${esc(ADL_HN[adlF])}</b> · ${n[adlF]} ${n[adlF]===1?'person':'people'}<button type="button" class="adl-btn" data-adl="f" data-k="all">Show everyone ✕</button></div>`:'';
   return `<section class="adl-hero"><div class="adl-htop">${lead}${roas}</div><div class="adl-htiles">${tiles}</div>${fb}</section>`;
