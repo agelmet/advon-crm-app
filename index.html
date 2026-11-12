@@ -4590,7 +4590,7 @@ body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
 .adm-cs{display:flex;flex-wrap:wrap;gap:6px}
 .adm-c{appearance:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;min-height:32px;border:1px solid color-mix(in srgb,var(--mc) 35%,var(--line));background:color-mix(in srgb,var(--mc) 10%,var(--surface))}
 .adm-c i{font-style:normal;font-variant-numeric:tabular-nums;color:var(--muted)}.adm-c em{font-style:normal}
-.adm-c.adm-ns{background:#FF6A00;border-color:#FF6A00;color:#fff}.adm-c.adm-lost{background:#DC2626;border-color:#DC2626;color:#fff}.adm-c.adm-lost i{color:rgba(255,255,255,.85)}.adm-c.adm-ns i{color:rgba(255,255,255,.85)}
+.adm-c.adm-ns{background:#FF6A00;border-color:#FF6A00;color:#fff}.adm-c.adm-lost{background:#991B1B;border-color:#991B1B;color:#fff}.adm-c.adm-lost i{color:rgba(255,255,255,.85)}.adm-c.adm-ns i{color:rgba(255,255,255,.85)}
 .adm-box .adm-note{margin:6px 0 0}.adm-note{margin:4px 18px 12px;font-size:11.5px;color:var(--muted)}
 body.dark .adm-h{background:var(--surface)}body.dark .adm-nsb{background:color-mix(in srgb,#FF6A00 12%,var(--surface))}body.dark .adm-rsb{background:color-mix(in srgb,#D97706 12%,var(--surface))}
 @media(max-width:760px){.adm-ts{grid-template-columns:repeat(3,minmax(0,1fr))}.adm-h{padding:12px 14px}.adm-box{margin:0 12px 12px}.adm-days,.adm-ts{padding-left:12px;padding-right:12px}.adm-tl{padding:10px 14px 0}.adm-rate b{font-size:26px}}
@@ -4663,7 +4663,7 @@ body.dark .adl-hr-great::after{display:none}
 /* every person's card takes the colour of their stage: yellow = thinking, green = positive, red = lost … */
 .adbs-new{--stc:#F97316;--stp:9%}.adbs-talk{--stc:#2F7FE0;--stp:8%}.adbs-meet{--stc:#0E9AA7;--stp:10%}.adbs-offer{--stc:#5B5BD6;--stp:10%}
 .adbs-think{--stc:#F5C518;--stp:32%}.adbs-pos{--stc:#22C55E;--stp:19%}.adbs-pay{--stc:#DB2777;--stp:11%}.adbs-won{--stc:#047857;--stp:30%}#view-adl :is(.adb-card,.adb-t,.adb-m,.adb-nr,.adl-wc).adbs-won{outline:2px solid #047857;outline-offset:-2px}#view-adl .adbs-won b{color:#064E3B}
-.adbs-silent{--stc:#64748B;--stp:10%}.adbs-lost{--stc:#DC2626;--stp:20%}.adbs-lost.adb-c-done,.adb-card.adbs-lost{border-left-color:#DC2626}.adbs-noshow{--stc:#FF6A00;--stp:17%}
+.adbs-silent{--stc:#475569;--stp:24%}.adbs-lost{--stc:#991B1B;--stp:24%}#view-adl :is(.adb-card,.adb-t,.adb-m,.adb-nr,.adl-wc).adbs-lost{outline:2px solid #991B1B;outline-offset:-2px}#view-adl .adbs-lost b{color:#7F1D1D}#view-adl :is(.adb-card,.adb-t,.adb-m,.adb-nr,.adl-wc).adbs-silent{outline:2px solid #64748B;outline-offset:-2px}.adbs-lost.adb-c-done,.adb-card.adbs-lost{border-left-color:#991B1B}.adbs-noshow{--stc:#FF6A00;--stp:17%}
 #view-adl :is(.adb-t,.adb-card,.adb-m,.adb-nr,.adl-wc)[class*="adbs-"]{background:color-mix(in srgb,var(--stc) var(--stp),var(--surface));outline:1px solid color-mix(in srgb,var(--stc) 38%,transparent);outline-offset:-1px}
 #view-adl .adl-wc.adl-on[class*="adbs-"]{outline:2px solid var(--sc)}
 #view-adl .adb-card.adbs-think,#view-adl .adb-t.adbs-think,#view-adl .adl-wc.adbs-think,#view-adl .adb-m.adbs-think,#view-adl .adb-nr.adbs-think{outline-color:#E3B008}
@@ -16640,8 +16640,8 @@ const ADB_ST=[
   {k:'pos',   t:'Positive · push to yes', s:'Positive', c:'#16A34A'},
   {k:'pay',   t:'Said yes · to pay',   s:'To pay',     c:'#DB2777'},
   {k:'won',   t:'Won · building',      s:'Won',        c:'#047857'},
-  {k:'silent',t:'No reply · no-show',  s:'No reply',   c:'#64748B'},
-  {k:'lost',  t:'Lost',                s:'Lost',       c:'#DC2626'}];
+  {k:'silent',t:'No reply',            s:'No reply',   c:'#475569'},
+  {k:'lost',  t:'Lost',                s:'Lost',       c:'#991B1B'}];
 const ADB_SM={}; ADB_ST.forEach(s=>ADB_SM[s.k]=s);
 const adbOpenSt=k=>k!=='won'&&k!=='lost';
 const ADB_OUT=[['done','✔ Step done',null],['talk','📞 Talked','talk'],['noans','📵 No answer','silent'],['noshow','🙈 No-show','noshow'],['resched','📆 Moved the meeting',null],['offer','📨 Sent offer / info','offer'],
@@ -16991,7 +16991,7 @@ document.addEventListener('keydown',ev=>{
 });
 /* ===== Ad leads HERO (Angelo, 11 Nov 2026): big coloured numbers like «In the bank» + ROAS; tap a tile = show only those people ===== */
 const ADL_HT=[['call','To call','📞'],['meet','Meeting booked','📅'],['noshow','No-show','🙈'],['offer','Offer sent','📨'],['think','Thinking','🤔'],['pos','Positive','💚'],['won','Clients','🏆'],['lost','Not interested','👎']];
-const ADL_HC={call:'#EA6A12',meet:'#0E9AA7',noshow:'#FF6A00',offer:'#5B5BD6',think:'#C99400',pos:'#16A34A',won:'#047857',lost:'#DC2626'};
+const ADL_HC={call:'#EA6A12',meet:'#0E9AA7',noshow:'#FF6A00',offer:'#5B5BD6',think:'#C99400',pos:'#16A34A',won:'#047857',lost:'#991B1B'};
 const ADL_HN={all:'Everyone'}; ADL_HT.forEach(x=>ADL_HN[x[0]]=x[1]);
 let adlPrevN={};
 function adlNum(v,dec){ return dec?(+v).toFixed(dec).replace('.',','):Math.round(+v).toLocaleString('el-GR'); }
