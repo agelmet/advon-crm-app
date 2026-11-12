@@ -4439,8 +4439,8 @@ body.dark .adb-none{background:var(--surface)}
 .adb-legend{gap:6px 18px;margin-top:-6px}.adb-legend b{color:var(--ink)}
 @media(hover:none){.adb-legend{display:none}}
 /* ---------- PIPELINE ---------- */
-.adb-board{display:grid;grid-template-columns:repeat(9,minmax(164px,1fr));gap:6px;overflow-x:auto;padding:2px 2px 12px;align-items:start;-webkit-overflow-scrolling:touch}
-.adb-board.adb-9{grid-template-columns:repeat(10,minmax(164px,1fr))}
+.adb-board{display:grid;grid-template-columns:repeat(var(--adbn,10),minmax(0,1fr));gap:6px;overflow-x:auto;padding:2px 2px 12px;align-items:start;-webkit-overflow-scrolling:touch}
+.adb-board.adb-9{grid-template-columns:repeat(var(--adbn,11),minmax(0,1fr))}
 .adb-col{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;min-height:150px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:background-color .12s,box-shadow .12s}
 .adb-col.adb-over{background:color-mix(in srgb,var(--sc) 9%,var(--surface));box-shadow:0 0 0 2px var(--sc)}
 .adb-ch{display:flex;align-items:center;gap:5px;padding:4px 4px 7px;border-bottom:3px solid var(--sc)}
@@ -4472,6 +4472,22 @@ body.dark .adb-none{background:var(--surface)}
 @media(hover:hover){.adb-cq{position:absolute;right:6px;bottom:6px;margin:0;opacity:0;pointer-events:none;transition:opacity .12s;background:var(--surface);border-radius:10px;padding:3px;box-shadow:0 4px 14px rgba(16,20,31,.16)}.adb-card:hover .adb-cq,.adb-card:focus-within .adb-cq{opacity:1;pointer-events:auto}}
 .adb-under{display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin:2px 0 16px}
 .adb-lg{font-weight:700;border-radius:6px;padding:1px 7px}.adb-lg.late{background:var(--late-bg);color:#A82C17}.adb-lg.today{background:var(--today-bg);color:#7D4B00}.adb-lg.tom{background:var(--tom-bg);color:#1B4E9C}.adb-lg.later{background:var(--lat-bg);color:#465166}
+/* 12 Nov 2026 — every column fits on one screen: tighter cards in the narrow columns */
+@media(min-width:761px){
+  .adb-board{gap:5px}
+  .adb-col{padding:4px;border-radius:12px}
+  .adb-ch{padding:3px 3px 6px;gap:3px 4px;flex-wrap:wrap;align-items:flex-start}
+  .adb-ch b{font-size:11.5px;flex:1 0 100%;min-height:2.4em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .adb-ch i{font-size:11px;padding:1px 6px;order:3;margin-left:auto}.adb-ch em{font-size:10px;padding:1px 5px;order:2}
+  .adb-card{padding:7px 6px 8px 7px;border-left-width:3px}
+  .adb-ct b{font-size:12.5px}
+  .adb-sp{white-space:normal;font-size:11px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .adb-cn{font-size:11.5px;padding:3px 5px}.adb-cn b{font-size:10.5px}
+  .adb-last{font-size:11.5px}
+}
+@media(min-width:761px) and (max-width:1180px){
+  .adb-board,.adb-board.adb-9{grid-template-columns:repeat(var(--adbn,10),minmax(118px,1fr))}
+}
 /* ---------- the form: what happened + next step ---------- */
 .adb-form{display:flex;flex-direction:column;gap:10px;margin-top:4px}
 .adb-t .adb-form{border-top:1px solid var(--line);padding-top:10px}
@@ -16632,6 +16648,7 @@ document.addEventListener('click',ev=>{
    Claude's inbox: leads/lists.json → lists._crm.adp = [{id, phone|email, st?, log:[{at,o,t}], nx:{w,d,tm}}], each id applied ONCE (meta.adpIn). */
 const ADB_ST=[
   {k:'new',   t:'New · call them',     s:'New',        c:'#EA6A12'},
+  {k:'silent',t:'No reply',            s:'No reply',   c:'#475569'},
   {k:'talk',  t:'Talking',             s:'Talking',    c:'#0891B2'},
   {k:'meet',  t:'Meeting booked',      s:'Meeting',    c:'#1D4ED8'},
   {k:'noshow',t:'No-show · call to rebook', s:'No-show', c:'#FF6A00'},
@@ -16640,7 +16657,6 @@ const ADB_ST=[
   {k:'pos',   t:'Positive · push to yes', s:'Positive', c:'#16A34A'},
   {k:'pay',   t:'Said yes · to pay',   s:'To pay',     c:'#DB2777'},
   {k:'won',   t:'Won · building',      s:'Won',        c:'#047857'},
-  {k:'silent',t:'No reply',            s:'No reply',   c:'#475569'},
   {k:'lost',  t:'Lost',                s:'Lost',       c:'#991B1B'}];
 const ADB_SM={}; ADB_ST.forEach(s=>ADB_SM[s.k]=s);
 const adbOpenSt=k=>k!=='won'&&k!=='lost';
@@ -16789,11 +16805,12 @@ function adbCard(e){
 function adbBoardHtml(all){
   const by={}; all.forEach(e=>(by[e.bs]=by[e.bs]||[]).push(e));
   const nLost=(by.lost||[]).length;
-  const cols=ADB_ST.filter(s=>s.k!=='lost'||adbShowLost).map(s=>{
+  const stl=ADB_ST.filter(s=>s.k!=='lost'||adbShowLost);
+  const cols=stl.map(s=>{
     const arr=(by[s.k]||[]).slice().sort(adbCmp), late=arr.filter(e=>e.due==='late').length;
-    return `<section class="adb-col" data-st="${s.k}" style="--sc:${s.c}"><div class="adb-ch"><b>${esc(s.t)}</b>${late?`<em>${late} late</em>`:''}<i>${arr.length}</i></div>
+    return `<section class="adb-col" data-st="${s.k}" style="--sc:${s.c}"><div class="adb-ch"><b title="${esc(s.t)}">${esc(s.t)}</b>${late?`<em>${late} late</em>`:''}<i>${arr.length}</i></div>
       <div class="adb-cl">${arr.map(adbCard).join('')||'<div class="adb-empty">—</div>'}</div></section>`; }).join('');
-  return `<div class="adb-board${adbShowLost?' adb-9':''}">${cols}</div><div class="adb-under"><button type="button" class="adl-btn adl-ghost adl-mute" data-adb="lost">${adbShowLost?'Hide lost':'Show lost ('+nLost+')'}</button><span>Drag a card to another column to change its stage · the coloured line shows the next step: <b class="adb-lg late">late</b> <b class="adb-lg today">today</b> <b class="adb-lg tom">tomorrow</b> <b class="adb-lg later">later</b></span></div>`;
+  return `<div class="adb-board${adbShowLost?' adb-9':''}" style="--adbn:${stl.length}">${cols}</div><div class="adb-under"><button type="button" class="adl-btn adl-ghost adl-mute" data-adb="lost">${adbShowLost?'Hide lost':'Show lost ('+nLost+')'}</button><span>Drag a card to another column to change its stage · the coloured line shows the next step: <b class="adb-lg late">late</b> <b class="adb-lg today">today</b> <b class="adb-lg tom">tomorrow</b> <b class="adb-lg later">later</b></span></div>`;
 }
 function adbHeadHtml(all){
   const n={late:0,today:0,none:0}; all.forEach(e=>{ if(n[e.due]!==undefined) n[e.due]++; });
