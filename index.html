@@ -9204,6 +9204,24 @@ function cbInbox(box){
       /* 10 Nov 2026: memoAdd = ADD a line to the lead's note without wiping what Angelo typed himself */
       if(u.memoAdd && String(u.memoAdd).trim()){ const a=String(u.memoAdd).trim(); if(!String(l.memo||'').includes(a)) l.memo=l.memo? (a+' · '+l.memo) : a; }
       l.updated=Date.now(); dn[u.id]=Date.now(); adQ=true; }); } }catch(e){}
+  /* 12 Nov 2026: lists._crm.board = [{id, phone, email, name, stage, value, notes, draft, ad}] — Claude puts a client on the Board or moves their card
+     (same phone / e-mail = that card; otherwise a new card, linked to their lead in Leads when the phone matches); each id ONCE (meta.boardIn) */
+  try{ if(box && Array.isArray(box.board) && box.board.length){ ensureMeta(); const dn=state.meta.boardIn||(state.meta.boardIn={}); const q9=v=>String(v||'').replace(/\D/g,'').slice(-9); const done=[];
+    box.board.forEach(o=>{ if(!o || !o.id || dn[o.id]) return; const p=q9(o.phone), em=String(o.email||'').trim().toLowerCase();
+      let c=(state.clients||[]).find(x=>x && x.stage!=='lost' && !isJob(x) && ((p.length===9 && q9(x.phone)===p) || (em && String(x.email||'').trim().toLowerCase()===em)));
+      if(!c){ const l=(state.leads||[]).find(x=>x && p.length===9 && q9(x.phone)===p);
+        const log={id:uid(), type:'g', name:String(o.name||(l&&l.name)||'—'), value:+o.value||0, source:'cold', note:'', date:todayIso(), created:Date.now(), updated:Date.now()};
+        if(l) log.leadId=l.id; state.logs.push(log); linkClientForLog(log,'',''); c=state.clients.find(x=>x.id===log.clientId);
+        if(c && l){ l.status='g'; l.logId=log.id; l.clientId=c.id; l.doneAt=Date.now(); delete l.cb; l.updated=Date.now(); } }
+      if(!c) return;
+      if(o.name) c.name=String(o.name); if(o.phone && !c.phone) c.phone=String(o.phone).replace(/\D/g,'').slice(-10); if(em && !c.email) c.email=em;
+      if(o.stage && STAGES.some(x=>x.id===o.stage) && c.stage!==o.stage){ c.stage=o.stage; c.stageAt=Date.now(); }
+      if(+o.value>0 && !(+c.value>0)) c.value=+o.value; if(!c.month) c.month=todayIso().slice(0,7);
+      if(o.draft) c.draft=String(o.draft);
+      if(o.notes){ const a=String(o.notes); if(!String(c.notes||'').includes(a)) c.notes=(a+(c.notes?'\n'+c.notes:'')).slice(0,4000); }
+      if(o.ad && c.ad!=='no' && c.ad!==false){ c.ad=true; if(!c.adAt) c.adAt=Date.now(); }
+      c.updated=Date.now(); dn[o.id]=Date.now(); done.push(c.name+' → '+((STAGES.find(x=>x.id===c.stage)||{}).name||c.stage)); adQ=true; });
+    if(done.length) setTimeout(()=>{ try{ renderAll(); }catch(e){} toast('Board: '+done.join(' · ')); },120); } }catch(e){ console.warn('board inbox',e); }
   /* 10 Nov 2026: lists._crm.adp = [{id, phone|email, st?, log:[{at,o,t}], nx:{w,d,tm}}] — Ad leads board: stage, history and next step per person, each id ONCE (meta.adpIn) */
   try{ if(box && Array.isArray(box.adp)){ ensureMeta(); const dn=state.meta.adpIn||(state.meta.adpIn={});
     if(!state.meta.adp||typeof state.meta.adp!=='object'||Array.isArray(state.meta.adp)) state.meta.adp={}; const A=state.meta.adp; let nn=0;
@@ -9218,7 +9236,8 @@ function cbInbox(box){
       try{ const em=String(o.email||'').trim().toLowerCase(), cs=(state.clients||[]).filter(c=>c && ((p.length===9 && String(c.phone||'').replace(/\D/g,'').slice(-9)===p) || (em && String(c.email||'').trim().toLowerCase()===em)));
         const cc=cs.find(c=>c.stage==='booked')||cs[0];
         if(cc && typeof adbCardNoShow==='function' && (o.log||[]).some(x=>x && x.o==='noshow')) adbCardNoShow(cc, (o.log.find(x=>x.o==='noshow')||{}).t||'');
-        if(cc && typeof adbCardResched==='function' && o.card && o.card.fu) adbCardResched(cc, String(o.card.fu.day||'').slice(0,10), o.card.fu.what); }catch(e){ console.warn('adp card',e); }
+        if(cc && o.card && typeof adbCardClearNs==='function'){ if(o.card.clearNoShow) adbCardClearNs(cc);
+          if(o.card.fu){ const d=String(o.card.fu.day||'').slice(0,10); if((o.log||[]).some(x=>x && x.o==='resched')) adbCardResched(cc, d, o.card.fu.what); else adbCardFollow(cc, d, o.card.fu.what, o.card.note); } } }catch(e){ console.warn('adp card',e); }
       dn[o.id]=Date.now(); nn++; adQ=true; });
     if(nn) setTimeout(()=>{ try{ renderAdl(); }catch(e){} toast('Ad leads: '+nn+(nn===1?' person':' people')+' updated'); },80); } }catch(e){ console.warn('adp inbox',e); }
   /* 11 Nov 2026: lists._crm.xs = [{id, name, phone, email, ads, social, unsure, day, note}] — Claude adds a client to the «Ads & Social» tab; each id ONCE (meta.xsIn); same phone = updates that row */
@@ -16837,6 +16856,17 @@ function adbCardNoShow(c, note){
   c.notes=(fmtDay(todayIso())+' · NO SHOW'+(note?' — «'+note+'»':'')+(c.notes?'\n'+c.notes:'')).slice(0,4000);
   c.updated=Date.now(); return true;
 }
+/* the no-show was a mistake (they called back / turned up): the card and the Calendar «No show» list forget it */
+function adbCardClearNs(c){ if(!c) return false; const sl=mqSlot(c);
+  if(c.meetOutcome==='noshow') delete c.meetOutcome;
+  c.mlog=(c.mlog||[]).filter(m=>!(m && m.out==='noshow' && (!sl || nsSlotKey(m.slot)===nsSlotKey(sl))));
+  if(c.fu && c.fu.out==='noshow') delete c.fu;
+  if(sl) c.mqDone=sl; c.notes=String(c.notes||'').replace(/^[^\n]*· NO SHOW[^\n]*\n?/,''); c.updated=Date.now(); return true; }
+/* the meeting / call happened: no pop-up for this slot, a follow-up on the card, one dated line in its notes */
+function adbCardFollow(c, day, what, note){ if(!c) return false; const sl=mqSlot(c); if(sl) c.mqDone=sl;
+  if(day) c.fu={day, what:String(what||'Follow up'), st:c.stage, out:'think', at:Date.now()};
+  if(note) c.notes=(fmtDay(todayIso())+' · '+note+(c.notes?'\n'+c.notes:'')).slice(0,4000);
+  c.updated=Date.now(); return true; }
 /* they asked to move the meeting: the slot counts as logged (no pop-up) and a follow-up goes on the card */
 function adbCardResched(c, day, what){
   if(!c) return false; const slot=mqSlot(c); if(slot) c.mqDone=slot;
