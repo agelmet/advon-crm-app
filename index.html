@@ -4355,7 +4355,7 @@ body.adl-mopen{overflow:hidden}
 </style>
 <style id="adb-css">
 /* ===== AD LEADS v5 — «To do» + pipeline (10 Nov 2026) ===== */
-#view-adl{--late:#D93A20;--late-bg:#FFF0EC;--today:#B86E00;--today-bg:#FFF4DC;--tom:#1F5FBF;--tom-bg:#E9F1FF;--lat:#5B6578;--lat-bg:#EEF1F6;--ok:#0E9F5B}
+#view-adl,#adbHost{--late:#D93A20;--late-bg:#FFF0EC;--today:#B86E00;--today-bg:#FFF4DC;--tom:#1F5FBF;--tom-bg:#E9F1FF;--lat:#5B6578;--lat-bg:#EEF1F6;--ok:#0E9F5B}
 .adb-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 12px}
 .adb-top h2{margin:0 6px 0 0;font-size:22px;letter-spacing:-.02em;white-space:nowrap}
 .adb-top .adl-btn{min-height:38px;padding:7px 11px;font-size:12.5px}
@@ -4555,7 +4555,11 @@ body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
 /* ===== Ad leads HERO + stage colours (Angelo, 11 Nov 2026: «big like In the bank, ROAS, different colours; cards yellow if thinking, red if lost, green if positive») ===== */
 .adl-hero{margin:0 0 16px}
 /* Meetings from the ads (12 Nov 2026) */
-.adm{border:1px solid var(--line);border-radius:20px;background:var(--surface);margin:0 0 16px;overflow:hidden;box-shadow:0 1px 2px rgba(24,49,92,.05)}
+.adb-mt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;margin-bottom:8px}.adb-mt span{font-size:12.5px;font-weight:700;color:var(--muted);background:var(--bg);border-radius:999px;padding:3px 9px}
+.adb-mt em{font-style:normal;font-size:12px;font-weight:800;color:#fff;background:var(--oc,#64748B);border-radius:999px;padding:3px 9px}
+.adb-notes{white-space:pre-wrap;font-size:13.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;max-height:260px;overflow:auto}
+.adb-nonote{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.admp{border:1px solid var(--line);border-radius:20px;background:var(--surface);margin:0 0 16px;overflow:hidden;box-shadow:0 1px 2px rgba(24,49,92,.05)}
 .adm-h{appearance:none;width:100%;font:inherit;color:var(--ink);background:linear-gradient(160deg,#EEF6FF 0,var(--surface) 70%);border:0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;cursor:pointer;text-align:left;min-height:44px}
 .adm-closed .adm-h{border-bottom:0}
 .adm-hk{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1D5FB8}
@@ -4666,8 +4670,8 @@ body.dark .adl-hr-great::after{display:none}
 #view-adl .adl-tbl tr.adl-r2[class*="adbs-"] td{background:color-mix(in srgb,var(--stc) calc(var(--stp) * .7),var(--surface))}
 #view-adl .adl-tbl tr.adl-r2[class*="adbs-"] td:first-child{box-shadow:inset 4px 0 0 var(--stc)}
 @media(hover:hover){#view-adl .adl-tbl tr.adl-r2[class*="adbs-"]:hover td{background:color-mix(in srgb,var(--stc) calc(var(--stp) + 10%),var(--surface))}}
-#view-adl .adb-dr[class*="adbs-"]{border-top:6px solid var(--stc)}
-#view-adl .adb-dr[class*="adbs-"] .adb-dh{background:color-mix(in srgb,var(--stc) var(--stp),transparent);margin:-2px -4px 0;padding:8px 10px;border-radius:14px}
+:is(#view-adl,#adbHost) .adb-dr[class*="adbs-"]{border-top:6px solid var(--stc)}
+:is(#view-adl,#adbHost) .adb-dr[class*="adbs-"] .adb-dh{background:color-mix(in srgb,var(--stc) var(--stp),transparent);margin:-2px -4px 0;padding:8px 10px;border-radius:14px}
 #view-adl .adb-col{background:color-mix(in srgb,var(--sc) 6%,var(--surface))}
 #view-adl .adb-col.adb-over{background:color-mix(in srgb,var(--sc) 16%,var(--surface))}
 </style>
@@ -8881,7 +8885,7 @@ function renderCalendar(){
   }
   body.querySelectorAll('.m2cb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); m2Open(b.dataset.m2, b); }));
   body.querySelectorAll('.rmcb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); rmOpen(b.dataset.rm, b); }));
-  body.querySelectorAll('.meet').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(c) mqOpen(c.id); }));
+  body.querySelectorAll('.meet').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(!c) return; try{ if(typeof adlOpenFromCal==='function' && adlOpenFromCal(c)) return; }catch(err){} mqOpen(c.id); }));
   body.querySelectorAll('.day-add').forEach(el=>el.addEventListener('click',()=>openModal(null, el.dataset.day)));
   body.querySelectorAll('.mcell').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.meet')) return; openModal(null, el.dataset.day); }));
 }
@@ -16491,7 +16495,11 @@ function renderAdl(){
   try{ adlMarkApply(); }catch(e){}
   try{ adbSweep(); }catch(e){}
   const all=adlEntries(); try{ adbDecorate(all); }catch(e){ console.warn('adb',e); } adlBadge(all);
-  if(curView!=='adl'){ if(document.body.classList.contains('adl-mopen')){ document.body.classList.remove('adl-mopen'); adlX=null; } return; }
+  if(curView!=='adl'){ const H=adbHostEl();
+    if(adlHost && adlX){ const sel=all.find(e=>e.id===adlX); if(sel){ const kd=H.querySelector('.adb-dr'), dsl=kd&&kd.dataset.id===sel.id?kd.scrollTop:null;
+        H.innerHTML=adbDrawer(sel); document.body.classList.add('adl-mopen'); const nd=H.querySelector('.adb-dr'); if(nd && dsl!=null) nd.scrollTop=dsl; try{ adbAfterRender(H); }catch(e){} return; } }
+    H.innerHTML=''; adlHost=false; if(document.body.classList.contains('adl-mopen')){ document.body.classList.remove('adl-mopen'); adlX=null; } return; }
+  { const H=document.getElementById('adbHost'); if(H) H.innerHTML=''; adlHost=false; }
   const box=$('#adlBody'); if(!box) return;
   const t=todayIso();
   const shown=adlF==='all'?all:all.filter(e=>adlFk(e)===adlF);
@@ -16526,7 +16534,7 @@ function renderAdl(){
   const keepX=box.querySelector('.adl-wgrid'), sl=keepX?keepX.scrollLeft:null;
   const kb=box.querySelector('.adb-board'), bsl=kb?kb.scrollLeft:null;
   const kd=box.querySelector('.adb-dr'), dsl=kd?kd.scrollTop:null, dWas=kd?kd.dataset.id:'';
-  const ae=document.activeElement, af=ae&&ae.closest&&ae.closest('#view-adl .adb-form'), keep=(af&&ae.dataset&&ae.dataset.f)?{id:af.dataset.id,f:ae.dataset.f,s:ae.selectionStart}:null;
+  const ae=document.activeElement, af=ae&&ae.closest&&ae.closest(':is(#view-adl,#adbHost) .adb-form'), keep=(af&&ae.dataset&&ae.dataset.f)?{id:af.dataset.id,f:ae.dataset.f,s:ae.selectionStart}:null;
   const main=adlMode==='board'||adlMode==='todo';
   box.innerHTML=adbHeadHtml(all)+adlHeroHtml(all)+adlMeetHtml(all)+(main?askHtml:'')+body+(main?'':askHtml)+modal;
   try{ adlCountUp(box); }catch(e){}
@@ -16539,12 +16547,12 @@ function renderAdl(){
   document.body.classList.toggle('adl-mopen',!!sel);
   try{ adbAfterRender(box); }catch(e){}
 }
-document.addEventListener('keydown',ev=>{ if(ev.key==='Escape' && adlX && curView==='adl'){ adlX=null; adlOpenF=null; try{ adbAsk=false; adbLater=null; if(adbForm&&adbForm.where==='dr') adbForm=null; }catch(e){} renderAdl(); } });
+document.addEventListener('keydown',ev=>{ if(ev.key==='Escape' && adlX && (curView==='adl'||adlHost)){ adlX=null; adlOpenF=null; try{ adbAsk=false; adbLater=null; if(adbForm&&adbForm.where==='dr') adbForm=null; }catch(e){} renderAdl(); } });
 window.addEventListener('beforeunload',()=>document.body.classList.remove('adl-mopen'));
 document.addEventListener('input',ev=>{ const i=ev.target; if(!i || i.id!=='adlQ') return; adlQ=i.value; adlApplyQ(); });
 document.addEventListener('change',ev=>{ const i=ev.target; if(!i || i.id!=='adlSpend') return; ensureMeta(); const A=state.meta.adl||(state.meta.adl={}); A.spend=Math.max(0,parseFloat(String(i.value).replace(',','.'))||0); A.spendAt=new Date().toISOString(); save(); renderAdl(); });
 document.addEventListener('click',ev=>{
-  const b=ev.target.closest && ev.target.closest('#view-adl [data-adl]'); if(!b) return; { const db=ev.target.closest('[data-adb]'); if(db && b.contains(db) && db!==b) return; }
+  const b=ev.target.closest && ev.target.closest(':is(#view-adl,#adbHost) [data-adl]'); if(!b) return; { const db=ev.target.closest('[data-adb]'); if(db && b.contains(db) && db!==b) return; }
   const a=b.dataset.adl, id=b.dataset.id;
   const L=()=>(state.leads||[]).find(x=>x.id===id);
   if(a==='tel'){ return; }
@@ -16567,6 +16575,7 @@ document.addEventListener('click',ev=>{
   if(a==='mclose'){ if(b.classList.contains('adl-modal') && ev.target!==b) return; adlX=null; adlOpenF=null; renderAdl(); return; }
   if(a==='go'){ switchView(b.dataset.v); window.scrollTo(0,0); return; }
   if(a==='pull'){ try{ Leads.pull(true); }catch(e){} try{ Bookings.pull(true); }catch(e){} return; }
+  if(adlHost && ['open','mq','lead'].includes(a)){ adlX=null; adlOpenF=null; adlHost=false; renderAdl(); }
   if(a==='open'){ openModal(id); return; }
   if(a==='mq'){ try{ mqOpen(id); }catch(e){ openModal(id); } return; }
   if(a==='lead'){ const l=L(); if(!l) return; ldFilter.list='ads'; ldFilter.q=''; switchView('leads'); return; }
@@ -16799,6 +16808,7 @@ function adbDrawer(e){
     <div class="adb-ta adb-big">${adbContactBtns(e,true)}${e.phone?`<button type="button" class="adb-ib adb-quiet" data-adl="copy1" data-v="${String(e.phone).replace(/\D/g,'').slice(-10)}" title="Copy the number">⧉ number</button>`:''}${e.email?`<button type="button" class="adb-ib adb-quiet" data-adl="copy1" data-v="${esc(e.email)}" title="Copy ${esc(e.email)}">⧉ e-mail</button>`:''}</div>
     <div class="adb-stages">${stp}</div>
     <div class="adb-sec adb-nxsec"><h5>Next step</h5>${nxBox}</div>
+    ${adbMeetNotes(e)}
     <div class="adb-sec"><h5>Log it <small>one save: what happened + what happens next</small></h5>${adbFormHtml(e,'dr')}</div>
     <div class="adb-sec"><h5>History <small>newest first</small></h5><ul class="adb-log">${log}${origin}</ul></div>
     <div class="adb-sec adb-more"><h5>Board & Leads</h5><div class="adl-row">${acts.join('')}</div>${bookForm}</div>
@@ -16859,7 +16869,7 @@ function adbSaveForm(id){
   const e=adbFind(id); if(!e) return; const D=adbDraftFor(id);
   let o=D.o, t=D.t.trim(), w=D.w.replace(/\s*—\s*$/,'').trim(), d=D.d, tm=D.tm;
   if(!o && !t && !d){ toast('Tap what happened, write a note, or pick the day of the next step'); return; }
-  if(w && !d){ toast('Pick the day for «'+w+'»'); adbAsk=true; adbFocus=false; const f=document.querySelector('#view-adl .adb-form[data-id="'+id+'"]'); if(f) f.classList.add('adb-ask'); return; }
+  if(w && !d){ toast('Pick the day for «'+w+'»'); adbAsk=true; adbFocus=false; const f=document.querySelector(':is(#view-adl,#adbHost) .adb-form[data-id="'+id+'"]'); if(f) f.classList.add('adb-ask'); return; }
   const s=adbSnap(e), r=adbRec(e,true), cur=e.bs; let moved=false;
   if(o==='done' && !t && e.nx) t=e.nx.w;
   if(o||t) adbPush(r, o||'note', t);
@@ -16880,18 +16890,18 @@ function adbSaveForm(id){
 function adbAfterBook(l, pick){ try{ const e=adlEntries().find(x=>x.l && x.l.id===l.id); if(!e) return; const r=adbRec(e,true); r.st='meet'; r.sAt=Date.now(); r.nx=null;
   adbPush(r,'meet','Meeting booked'+(pick&&pick.day?' for '+adlDay(pick.day)+(pick.time?' · '+pick.time:''):'')); save(); }catch(err){} }
 /* the form keeps what was typed while the screen re-draws */
-function adbFormInput(ev){ const i=ev.target; if(!i||!i.closest) return; const f=i.closest('#view-adl .adb-form'); if(!f||!i.dataset.f) return; const D=adbDraftFor(f.dataset.id); D[i.dataset.f]=i.value;
+function adbFormInput(ev){ const i=ev.target; if(!i||!i.closest) return; const f=i.closest(':is(#view-adl,#adbHost) .adb-form'); if(!f||!i.dataset.f) return; const D=adbDraftFor(f.dataset.id); D[i.dataset.f]=i.value;
   if(i.dataset.f==='d') f.querySelectorAll('.adb-dd').forEach(x=>x.classList.toggle('on',x.dataset.v===i.value)); }
 document.addEventListener('input',ev=>{ const i=ev.target; if(i && i.id==='adbQ'){ adbQ=i.value; adbApplyQ(); return; } adbFormInput(ev); });
 document.addEventListener('change',ev=>{ const i=ev.target; if(i && i.dataset && i.dataset.adbMv){ if(!i.value) return; const e=adbFind(i.dataset.adbMv); if(e) adbMove(e,i.value); return; } adbFormInput(ev); });
 document.addEventListener('click',ev=>{
-  const b=ev.target.closest && ev.target.closest('#view-adl [data-adb]'); if(!b) return;
+  const b=ev.target.closest && ev.target.closest(':is(#view-adl,#adbHost) [data-adb]'); if(!b) return;
   const a=b.dataset.adb, id=b.dataset.id, f=b.closest('.adb-form');
   if(a==='close'){ if(b.classList.contains('adb-ov') && ev.target!==b) return; adlX=null; adlOpenF=null; adbAsk=false; adbLater=null; if(adbForm&&adbForm.where==='dr') adbForm=null; renderAdl(); return; }
   if(a==='v'){ adlMode=b.dataset.v; try{ localStorage.setItem('adl-mode3',adlMode); }catch(e){} adlX=null; adbForm=null; adbLater=null; renderAdl(); window.scrollTo(0,0); return; }
   if(a==='lost'){ adbShowLost=!adbShowLost; renderAdl(); return; }
   if(a==='help'){ adbHelp=!adbHelp; renderAdl(); return; }
-  if(a==='tel'){ ev.stopPropagation(); const e=adbFind(id); if(e) setTimeout(()=>{ if(curView==='adl') adbOpenForm(e,'talk'); },700); return; }
+  if(a==='tel'){ ev.stopPropagation(); const e=adbFind(id); if(e) setTimeout(()=>{ if(curView==='adl'||adlHost) adbOpenForm(e,'talk'); },700); return; }
   if(f){ const D=adbDraftFor(f.dataset.id);
     if(a==='fo'){ D.o=D.o===b.dataset.v?'':b.dataset.v; f.querySelectorAll('.adb-o').forEach(x=>x.classList.toggle('on',x.dataset.v===D.o)); const t=f.querySelector('[data-f="t"]'); if(t) t.focus(); return; }
     if(a==='fw'){ const i=f.querySelector('[data-f="w"]'); D.w=b.dataset.v+' — '; if(i){ i.value=D.w; i.focus(); } f.querySelectorAll('.adb-w').forEach(x=>x.classList.toggle('on',x===b)); return; }
@@ -16926,8 +16936,8 @@ function adbKbItems(){ return [...document.querySelectorAll('#view-adl .adb-t[da
 function adbKbMove(dir){ const it=adbKbItems(); if(!it.length) return; let i=it.findIndex(x=>x.dataset.id===adbSel); i=i<0?(dir>0?0:it.length-1):Math.max(0,Math.min(it.length-1,i+dir));
   it.forEach(x=>x.classList.remove('adb-kb')); const el=it[i]; adbSel=el.dataset.id; el.classList.add('adb-kb'); try{ el.scrollIntoView({block:'nearest',inline:'nearest'}); }catch(e){} }
 document.addEventListener('keydown',ev=>{
-  if(curView!=='adl' || !state) return;
-  const tg=ev.target, typing=tg && (/^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName)||tg.isContentEditable), f=tg && tg.closest && tg.closest('#view-adl .adb-form');
+  if((curView!=='adl' && !adlHost) || !state) return;
+  const tg=ev.target, typing=tg && (/^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName)||tg.isContentEditable), f=tg && tg.closest && tg.closest(':is(#view-adl,#adbHost) .adb-form');
   if((ev.metaKey||ev.ctrlKey) && ev.key==='Enter' && f){ ev.preventDefault(); adbSaveForm(f.dataset.id); return; }
   if(f && ev.key==='Enter' && tg.tagName==='INPUT' && tg.type==='text'){ ev.preventDefault(); adbSaveForm(f.dataset.id); return; }
   if(ev.key==='Escape'){ if(adbHelp){ adbHelp=false; renderAdl(); return; } if(!adlX && (adbForm||adbLater)){ adbForm=null; adbLater=null; adbAsk=false; renderAdl(); } return; }
@@ -17052,7 +17062,7 @@ function adlMeetHtml(all){
   const td=by[t]||[], tn={held:0,ns:0,rs:0,open:0,up:0}; td.forEach(m=>tn[m.k]++);
   const real=tn.held+tn.open+tn.up;
   const todayLine=td.length?`<div class="adm-tl">Today: <b>${td.length}</b> booked${tn.ns?` · <span class="r">${tn.ns} no-show${tn.ns>1?'s':''}</span>`:''}${tn.rs?` · <span class="a">${tn.rs} moved</span>`:''} → <b>${real}</b> real meeting${real===1?'':'s'} left${tn.held?` (${tn.held} done)`:''}</div>`:'';
-  return `<section class="adm adm-${lvl}${admOpen?'':' adm-closed'}">
+  return `<section class="admp adm-${lvl}${admOpen?'':' adm-closed'}">
     <button type="button" class="adm-h" data-adm="tog" aria-expanded="${admOpen}"><span class="adm-hk">📅 Meetings from the ads</span><span class="adm-rate"><b>${rate===null?'—':rate+'%'}</b><small>showed up · ${N.held} of ${done} meetings that were due</small></span><span class="adm-hns">${N.ns?`🙈 <b>${N.ns}</b> no-show${N.ns>1?'s':''} to call`:''}</span><span class="adm-tw">${admOpen?'Hide ▴':'Show ▾'}</span></button>
     ${admOpen?`${todayLine}<div class="adm-ts"><div class="adm-t adm-tb" style="--mc:#10141F"><span>Booked</span><b>${rows.length}</b></div>${['held','ns','rs','open','up'].map(tile).join('')}</div>
     ${nsHtml}${rsHtml}<div class="adm-days">${days.map(dayRow).join('')}</div>
@@ -17061,6 +17071,20 @@ function adlMeetHtml(all){
 }
 document.addEventListener('click',ev=>{ const b=ev.target.closest && ev.target.closest('#view-adl [data-adm]'); if(!b) return; if(b.dataset.adm==='tog'){ admOpen=!admOpen; try{ localStorage.setItem('adm-open',admOpen?'1':'0'); }catch(e){} renderAdl(); } });
 
+/* 12 Nov 2026 (Angelo): clicking an ad lead in the Calendar opens this whole card — details, meeting, notes, history — over the Calendar */
+let adlHost=false;
+function adbHostEl(){ let h=document.getElementById('adbHost'); if(!h){ h=document.createElement('div'); h.id='adbHost'; document.body.appendChild(h); } return h; }
+function adlOpenFromCal(c){ try{ if(!c || !cFromAd(c)) return false; const e=adlEntries().find(x=>x.c && x.c.id===c.id); if(!e) return false;
+  adlX=e.id; adlOpenF=null; adbForm=null; adbLater=null; adbAsk=false; adlHost=curView!=='adl'; renderAdl(); return true; }catch(err){ console.warn('adl cal',err); return false; } }
+function adbMeetNotes(e){
+  const c=e.c, l=e.l; const notes=[l&&l.memo?'📝 '+l.memo:'', c&&c.notes?String(c.notes):''].filter(Boolean).join('\n');
+  if(!c && !notes) return '';
+  let mt='';
+  if(c){ const st=c.stage==='booked'?'Meeting on the Board':((STAGES.find(x=>x.id===c.stage)||{}).name||''), o=c.meetOutcome&&MEET_OUT[c.meetOutcome];
+    mt=`<div class="adb-mt">${c.day?`📅 <b>${esc(adlDay(c.day))}${c.time?' · '+esc(c.time):''}</b>`:'<b>No meeting day</b>'}<span>${esc(st)}</span>${o?`<em style="--oc:${o.c}">${esc(o.name)}</em>`:''}${+c.value>0?`<span>${esc(fmtMoney(+c.value))}</span>`:''}</div>
+      <div class="adl-row"><button type="button" class="adl-btn adl-pri" data-adl="mq" data-id="${c.id}">How did it go?</button><button type="button" class="adl-btn" data-adl="open" data-id="${c.id}">Open Board card ›</button></div>`; }
+  return `<div class="adb-sec adb-mn"><h5>Meeting & notes</h5>${mt}${notes?`<div class="adb-notes">${esc(notes)}</div>`:'<p class="adb-nonote">No notes on the card yet.</p>'}</div>`;
+}
 /* numbers count up when they change (first time from 0) and the tile pops when a number goes up */
 function adlCountUp(box){
   const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
