@@ -308,6 +308,13 @@ body[data-view="calendar"] .stat-pill.meet-pill{display:flex; flex-basis:150px; 
 .col-head .count{margin-left:auto; background:var(--cs,#eee); color:var(--c,#666); font-weight:700; font-size:11px; border-radius:99px; padding:3px 8px; font-variant-numeric:tabular-nums;}
 .col-sum{font-size:11px; font-weight:600; color:var(--muted); padding:0 13px 8px; font-variant-numeric:tabular-nums;}
 .col-body{padding:4px 9px 12px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; min-height:60px; flex:1;}
+.col.col-unsure{background:linear-gradient(#FFF5F7,#fff 140px)}
+.col.col-unsure .col-sum .un{margin-left:0}
+.ns-stage{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:var(--sc);background:color-mix(in srgb,var(--sc) 12%,#fff);border-radius:6px;padding:2px 7px;margin:0 0 5px;align-self:flex-start;width:max-content;max-width:100%}
+.ns-stage i{width:6px;height:6px;border-radius:50%;background:var(--sc);flex:none}
+body.dark .col.col-unsure{background:var(--surface)}
+@media(min-width:901px){.col{min-width:170px}}
+@media(max-width:900px){.col.col-unsure{flex:0 0 250px;width:250px;min-width:0}.col.col-unsure .card{min-width:0}}
 .col-body.dragover{background:var(--cs,#f5f5f5); border-radius:0 0 var(--radius) var(--radius);}
 .card{background:#fff; border:1px solid var(--line); border-radius:13px; padding:8px 10px; cursor:grab; transition:box-shadow .15s, transform .15s; position:relative; border-left:4px solid var(--c,#ccc);}
 .card:hover{box-shadow:0 6px 20px -6px var(--c), var(--shadow); transform:translateY(-1px);}
@@ -7166,6 +7173,13 @@ function dropHandlers(el, stageId){
     e.preventDefault(); el.classList.remove('dragover');
     const id=e.dataTransfer.getData('text/plain');
     const cl=state.clients.find(x=>x.id===id);
+    if(cl && nsOnBoard(cl) && NS_WORK.includes(stageId)){
+      const was=cl.stage, undo=nsMakeSure(cl);
+      if(was!==stageId){ cl.stage=stageId; cl.stageAt=Date.now(); }
+      cl.updated=Date.now(); save(); renderAll(); try{ chSyncBoard(); }catch(err){}
+      toastUndo(cl.name+' · sure now → '+stageById(stageId).name+' · counted again', ()=>{ undo(); cl.stage=was; cl.updated=Date.now(); save(); renderAll(); try{ chSyncBoard(); }catch(err){} });
+      return;
+    }
     if(cl && cl.stage!==stageId){
       cl.stage=stageId; cl.updated=Date.now(); cl.stageAt=Date.now();
       if(stageId==='lost'){ cl.lostAt=Date.now(); lostOpen=true; }
@@ -7251,12 +7265,33 @@ function renderBookedTray(mc){
     ab.appendChild(card);
   });
 }
+/* «Not sure» column (Angelo, 12 Nov 2026): every working card he is not sure will pay (c.doubt, or orange/red in
+   Remaining) sits in ONE column left of Need info, with its real stage shown on the card. Drop a card there →
+   «Will they pay?» opens. Drag it out into a stage → it is sure again (Undo in the toast). */
+const NS_WORK=['needinfo','building','review','changes','pay'];
+const nsOnBoard=c=>NS_WORK.includes(c.stage) && notSure(c);
+function nsMakeSure(cl){
+  const prev=cl.doubt?JSON.parse(JSON.stringify(cl.doubt)):null, rf=cl.remFlag, rfs=cl.remFlagStage;
+  delete cl.doubt; if(cl.remFlag==='orange'||cl.remFlag==='red'){ delete cl.remFlag; delete cl.remFlagStage; }
+  return ()=>{ if(prev) cl.doubt=prev; if(rf!==undefined){ cl.remFlag=rf; cl.remFlagStage=rfs; } };
+}
+function nsDropHandlers(el){
+  el.addEventListener('dragover',e=>{e.preventDefault(); el.classList.add('dragover');});
+  el.addEventListener('dragleave',()=>el.classList.remove('dragover'));
+  el.addEventListener('drop',e=>{
+    e.preventDefault(); el.classList.remove('dragover');
+    const cl=state.clients.find(x=>x.id===e.dataTransfer.getData('text/plain')); if(!cl || nsOnBoard(cl)) return;
+    if(!NS_WORK.includes(cl.stage)){ cl.stage='needinfo'; cl.stageAt=Date.now(); cl.thinkAt=null; delete cl.thinkAck; delete cl.lostReason; cl.lostAt=null; cl.updated=Date.now(); save(); renderAll(); try{ chSyncBoard(); }catch(err){} }
+    dbOpen(cl.id,'c');
+  });
+}
 function renderBoard(){
   const mc=state.clients.filter(c=>c.month===curMonth && notLost(c));
+  const unsure=mc.filter(nsOnBoard);
   /* Two horizontal trays: Booked (new) and Making changes (quick fixes) */
   const tray=(sel,stageId,label,hint)=>{
     const st=stageById(stageId);
-    const items=mc.filter(c=>c.stage===stageId).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
+    const items=mc.filter(c=>c.stage===stageId && !nsOnBoard(c)).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
     const sum=items.filter(c=>!notSure(c)).reduce((a,c)=>a+cval(c),0), unS=items.filter(notSure).reduce((a,c)=>a+cowed(c),0);
     const el=$(sel);
     el.innerHTML=`
@@ -7274,8 +7309,25 @@ function renderBoard(){
   tray('#changesTray','changes','Making changes — quick fixes','Empty — drop cards here while you fix them.');
   /* The working pipeline columns (booked/changes are trays, lost is its own drawer) */
   const board=$('#board'); board.innerHTML='';
+  { const ns=document.createElement('div'), tot=unsure.reduce((a,c)=>a+cowed(c),0);
+    ns.className='col col-unsure'; ns.style.setProperty('--c','#E11D48'); ns.style.setProperty('--cs','#FFE4E9');
+    ns.innerHTML=`
+      <div class="col-head" style="border-top-color:#E11D48">
+        <span class="name" title="Not counted in New money / To collect / the goal until they pay">⚠ Not sure</span>
+        <span class="count" style="background:#FFE4E9;color:#BE123C">${unsure.length}</span>
+      </div>
+      <div class="col-sum">${tot?`<small class="un" title="Not sure they will pay — not counted">${fmtMoney(tot)} ? not counted</small>`:'—'}</div>
+      <div class="col-body" data-stage="unsure">${unsure.length?'':'<div class="empty-col">Drop a card here if you\'re not sure they\'ll pay</div>'}</div>`;
+    const body=ns.querySelector('.col-body');
+    unsure.sort((a,b)=>(dbDue(b)-dbDue(a))||(NS_WORK.indexOf(a.stage)-NS_WORK.indexOf(b.stage))||(cowed(b)-cowed(a))).forEach(c=>{
+      const st=stageById(c.stage), card=cardEl(c,st);
+      const tag=document.createElement('div'); tag.className='ns-stage'; tag.style.setProperty('--sc',st.hex);
+      tag.innerHTML=`<i></i>${esc(st.name)}`; tag.title='Its stage on the Board — drag it into a column when you are sure they will pay';
+      card.insertBefore(tag, card.firstChild); body.appendChild(card); });
+    nsDropHandlers(body);
+    board.appendChild(ns); }
   FLOW.filter(s=>s.id!=='booked'&&s.id!=='changes').forEach(st=>{
-    const items=mc.filter(c=>c.stage===st.id).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
+    const items=mc.filter(c=>c.stage===st.id && !nsOnBoard(c)).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
     const sum=items.filter(c=>!notSure(c)).reduce((a,c)=>a+cval(c),0), unS=items.filter(notSure).reduce((a,c)=>a+cowed(c),0);
     const col=document.createElement('div');
     col.className='col'; col.style.setProperty('--c',st.c); col.style.setProperty('--cs',st.cs);
