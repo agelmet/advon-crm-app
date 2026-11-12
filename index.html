@@ -4554,6 +4554,43 @@ body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
 }
 /* ===== Ad leads HERO + stage colours (Angelo, 11 Nov 2026: «big like In the bank, ROAS, different colours; cards yellow if thinking, red if lost, green if positive») ===== */
 .adl-hero{margin:0 0 16px}
+/* Meetings from the ads (12 Nov 2026) */
+.adm{border:1px solid var(--line);border-radius:20px;background:var(--surface);margin:0 0 16px;overflow:hidden;box-shadow:0 1px 2px rgba(24,49,92,.05)}
+.adm-h{appearance:none;width:100%;font:inherit;color:var(--ink);background:linear-gradient(160deg,#EEF6FF 0,var(--surface) 70%);border:0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;cursor:pointer;text-align:left;min-height:44px}
+.adm-closed .adm-h{border-bottom:0}
+.adm-hk{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1D5FB8}
+.adm-rate{display:flex;align-items:baseline;gap:8px}.adm-rate b{font-family:'Sora',system-ui,sans-serif;font-size:30px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.adm-rate small{font-size:12.5px;font-weight:600;color:var(--muted)}
+.adm-good .adm-rate b{color:#0B9E5C}.adm-mid .adm-rate b{color:#D97706}.adm-bad .adm-rate b{color:#E11D48}.adm-none .adm-rate b{color:#94A3B8}
+.adm-hns{font-size:13px;font-weight:800;color:#E11D48}.adm-hns b{font-variant-numeric:tabular-nums}
+.adm-tw{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+.adm-tl{padding:12px 18px 0;font-size:14px;font-weight:600;color:var(--muted)}.adm-tl b{color:var(--ink)}.adm-tl .r{color:#E11D48;font-weight:800}.adm-tl .a{color:#D97706;font-weight:800}
+.adm-ts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:12px 18px}
+.adm-t{border-radius:14px;padding:9px 11px;border:1px solid color-mix(in srgb,var(--mc) 25%,var(--line));background:color-mix(in srgb,var(--mc) 8%,var(--surface));display:flex;flex-direction:column;gap:2px;min-width:0}
+.adm-t span{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--mc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-t b{font-family:'Sora',system-ui,sans-serif;font-size:26px;font-weight:800;line-height:1.1;color:var(--mc);font-variant-numeric:tabular-nums}
+.adm-t.z{opacity:.55}
+.adm-box{margin:0 18px 12px;border-radius:16px;padding:12px 14px;border:1px solid}
+.adm-box h4{margin:0 0 8px;font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}.adm-box h4 i{font-style:normal;font-size:12px;padding:2px 8px;border-radius:999px;color:#fff}
+.adm-nsb{background:#FFF1F3;border-color:#FBC4CE}.adm-nsb h4{color:#BE123C}.adm-nsb h4 i{background:#E11D48}
+.adm-rsb{background:#FFF8EB;border-color:#F6DDAE}.adm-rsb h4{color:#B45309}.adm-rsb h4 i{background:#D97706}
+.adm-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px solid rgba(16,20,31,.07)}.adm-r:first-of-type{border-top:0}
+.adm-rn{flex:1 1 220px;min-width:0;cursor:pointer;display:flex;flex-direction:column}.adm-rn b{font-size:14.5px}.adm-rn small{font-size:12.5px;color:var(--muted);font-weight:600}.adm-rn small b{font-size:12.5px;color:var(--ink)}
+.adm-ra{display:flex;gap:6px;flex-wrap:wrap}
+.adm-days{display:flex;flex-direction:column;gap:8px;padding:0 18px 4px}
+.adm-d{border:1px solid var(--line);border-radius:14px;padding:10px 12px}.adm-d.adm-today{border-color:#9CC3F5;background:color-mix(in srgb,#2F7FE0 5%,var(--surface))}
+.adm-dh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}.adm-dh>b{font-size:14px}.adm-dn{color:var(--muted);font-weight:700}
+.adm-dsum{display:flex;gap:4px 10px;flex-wrap:wrap}.adm-dsum span{font-weight:700;color:var(--mc)}
+.adm-dr{margin-left:auto;font-family:'Sora',system-ui,sans-serif;font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}.adm-dr small{font-family:inherit;font-size:11px;font-weight:700;color:var(--muted);margin-left:4px;font-family:system-ui,sans-serif}
+.adm-bar{display:flex;height:8px;border-radius:999px;overflow:hidden;gap:2px;background:rgba(16,20,31,.06);margin:7px 0 8px}.adm-bar i{display:block;min-width:6px}
+.adm-cs{display:flex;flex-wrap:wrap;gap:6px}
+.adm-c{appearance:none;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;min-height:32px;border:1px solid color-mix(in srgb,var(--mc) 35%,var(--line));background:color-mix(in srgb,var(--mc) 10%,var(--surface))}
+.adm-c i{font-style:normal;font-variant-numeric:tabular-nums;color:var(--muted)}.adm-c em{font-style:normal}
+.adm-c.adm-ns{background:#E11D48;border-color:#E11D48;color:#fff}.adm-c.adm-ns i{color:rgba(255,255,255,.85)}
+.adm-box .adm-note{margin:6px 0 0}.adm-note{margin:4px 18px 12px;font-size:11.5px;color:var(--muted)}
+body.dark .adm-h{background:var(--surface)}body.dark .adm-nsb{background:color-mix(in srgb,#E11D48 12%,var(--surface))}body.dark .adm-rsb{background:color-mix(in srgb,#D97706 12%,var(--surface))}
+@media(max-width:760px){.adm-ts{grid-template-columns:repeat(3,minmax(0,1fr))}.adm-h{padding:12px 14px}.adm-box{margin:0 12px 12px}.adm-days,.adm-ts{padding-left:12px;padding-right:12px}.adm-tl{padding:10px 14px 0}.adm-rate b{font-size:26px}}
+
 .adl-htop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-bottom:12px}
 .adl-hl,.adl-hr{position:relative;overflow:hidden;border-radius:20px;padding:18px 20px 15px;border:1px solid var(--line);text-align:left;font:inherit;color:var(--ink);min-width:0;display:flex;flex-direction:column;gap:7px;box-shadow:0 1px 2px rgba(24,49,92,.05)}
 .adl-hl{appearance:none;cursor:pointer;background:linear-gradient(160deg,#FFF2E8 0,#FFE9E4 42%,var(--surface) 100%);border-color:#FFD6C4}
@@ -4596,7 +4633,7 @@ body.dark .adb-chip.on{background:#E9EDF5;color:#10141F}
 .adl-hchips input{width:100px;font:inherit;font-size:14px;font-weight:800;border:1px solid var(--line);border-radius:10px;padding:5px 8px;background:var(--surface);color:var(--ink);min-height:36px}
 .adl-hnote{font-size:11px;color:var(--muted)}
 /* the stage tiles — tap = show only those people */
-.adl-htiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.adl-htiles{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
 .adl-ht{appearance:none;font:inherit;cursor:pointer;text-align:left;position:relative;overflow:hidden;border-radius:16px;padding:13px 12px 11px;border:1px solid color-mix(in srgb,var(--hc) 28%,var(--line));background:linear-gradient(165deg,color-mix(in srgb,var(--hc) 15%,var(--surface)) 0,var(--surface) 78%);color:var(--ink);display:flex;flex-direction:column;gap:1px;min-width:0;transition:transform .15s ease,box-shadow .15s ease}
 .adl-ht::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--hc)}
 @media(hover:hover){.adl-ht:hover{transform:translateY(-2px);box-shadow:0 8px 20px color-mix(in srgb,var(--hc) 22%,transparent)}}
@@ -4622,7 +4659,7 @@ body.dark .adl-hr-great::after{display:none}
 /* every person's card takes the colour of their stage: yellow = thinking, green = positive, red = lost … */
 .adbs-new{--stc:#F97316;--stp:9%}.adbs-talk{--stc:#2F7FE0;--stp:8%}.adbs-meet{--stc:#0E9AA7;--stp:10%}.adbs-offer{--stc:#5B5BD6;--stp:10%}
 .adbs-think{--stc:#F5C518;--stp:32%}.adbs-pos{--stc:#22C55E;--stp:19%}.adbs-pay{--stc:#DB2777;--stp:11%}.adbs-won{--stc:#8B5CF6;--stp:14%}
-.adbs-silent{--stc:#64748B;--stp:10%}.adbs-lost{--stc:#EF4444;--stp:15%}
+.adbs-silent{--stc:#64748B;--stp:10%}.adbs-lost{--stc:#8A94A8;--stp:12%}.adbs-noshow{--stc:#E11D48;--stp:16%}
 #view-adl :is(.adb-t,.adb-card,.adb-m,.adb-nr,.adl-wc)[class*="adbs-"]{background:color-mix(in srgb,var(--stc) var(--stp),var(--surface));outline:1px solid color-mix(in srgb,var(--stc) 38%,transparent);outline-offset:-1px}
 #view-adl .adl-wc.adl-on[class*="adbs-"]{outline:2px solid var(--sc)}
 #view-adl .adb-card.adbs-think,#view-adl .adb-t.adbs-think,#view-adl .adl-wc.adbs-think,#view-adl .adb-m.adbs-think,#view-adl .adb-nr.adbs-think{outline-color:#E3B008}
@@ -9173,6 +9210,11 @@ function cbInbox(box){
       r.log.sort((a,b)=>a.at-b.at);
       if(o.st){ r.st=String(o.st); r.sAt=Date.now(); }
       if(o.nx && o.nx.d) r.nx={w:String(o.nx.w||''), d:String(o.nx.d).slice(0,10), tm:String(o.nx.tm||'')};
+      /* 12 Nov 2026: a logged no-show / moved meeting also goes on the Board card (Calendar «No show» list, no pop-up) */
+      try{ const em=String(o.email||'').trim().toLowerCase(), cs=(state.clients||[]).filter(c=>c && ((p.length===9 && String(c.phone||'').replace(/\D/g,'').slice(-9)===p) || (em && String(c.email||'').trim().toLowerCase()===em)));
+        const cc=cs.find(c=>c.stage==='booked')||cs[0];
+        if(cc && typeof adbCardNoShow==='function' && (o.log||[]).some(x=>x && x.o==='noshow')) adbCardNoShow(cc, (o.log.find(x=>x.o==='noshow')||{}).t||'');
+        if(cc && typeof adbCardResched==='function' && o.card && o.card.fu) adbCardResched(cc, String(o.card.fu.day||'').slice(0,10), o.card.fu.what); }catch(e){ console.warn('adp card',e); }
       dn[o.id]=Date.now(); nn++; adQ=true; });
     if(nn) setTimeout(()=>{ try{ renderAdl(); }catch(e){} toast('Ad leads: '+nn+(nn===1?' person':' people')+' updated'); },80); } }catch(e){ console.warn('adp inbox',e); }
   /* 11 Nov 2026: lists._crm.xs = [{id, name, phone, email, ads, social, unsure, day, note}] — Claude adds a client to the «Ads & Social» tab; each id ONCE (meta.xsIn); same phone = updates that row */
@@ -16292,7 +16334,7 @@ const ADL_FCOL={all:'#10141F',todo:'#FF5A3C',book:'#0EC673',think:'#F5A623',won:
 const ADL_F=[['all','Ad leads'],['todo','To call'],['book','Meeting booked'],['think','Thinking'],['won','Clients'],['no','Not interested']];
 let adlMode=(()=>{try{const v=localStorage.getItem('adl-mode3');return ['todo','board','week','list'].includes(v)?v:'todo'}catch(e){return 'todo'}})(), adlQ='';
 let adlF='all', adlOpenF=null, adlWk=null, adlX=null, adlDays=null, adlWkPrev=null;
-const ADL_HG={new:'call',talk:'call',silent:'call',meet:'meet',offer:'offer',think:'think',pos:'pos',pay:'pos',won:'won',lost:'lost'};
+const ADL_HG={new:'call',talk:'call',silent:'call',meet:'meet',noshow:'noshow',offer:'offer',think:'think',pos:'pos',pay:'pos',won:'won',lost:'lost'};
 const adlFk=e=>ADL_HG[e.bs]||'call';
 const adlP9=v=>String(v||'').replace(/\D/g,'').slice(-9);
 const adlNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
@@ -16486,7 +16528,7 @@ function renderAdl(){
   const kd=box.querySelector('.adb-dr'), dsl=kd?kd.scrollTop:null, dWas=kd?kd.dataset.id:'';
   const ae=document.activeElement, af=ae&&ae.closest&&ae.closest('#view-adl .adb-form'), keep=(af&&ae.dataset&&ae.dataset.f)?{id:af.dataset.id,f:ae.dataset.f,s:ae.selectionStart}:null;
   const main=adlMode==='board'||adlMode==='todo';
-  box.innerHTML=adbHeadHtml(all)+adlHeroHtml(all)+(main?askHtml:'')+body+(main?'':askHtml)+modal;
+  box.innerHTML=adbHeadHtml(all)+adlHeroHtml(all)+adlMeetHtml(all)+(main?askHtml:'')+body+(main?'':askHtml)+modal;
   try{ adlCountUp(box); }catch(e){}
   if(keep && !adbFocus){ const el=box.querySelector('.adb-form[data-id="'+keep.id+'"] [data-f="'+keep.f+'"]'); if(el){ try{ el.focus({preventScroll:true}); if(keep.s!=null) el.setSelectionRange(keep.s,keep.s); }catch(e){} } }
   const g=box.querySelector('.adl-wgrid');
@@ -16564,19 +16606,20 @@ const ADB_ST=[
   {k:'new',   t:'New · call them',     s:'New',        c:'#EA6A12'},
   {k:'talk',  t:'Talking',             s:'Talking',    c:'#2F7FE0'},
   {k:'meet',  t:'Meeting booked',      s:'Meeting',    c:'#0E9AA7'},
+  {k:'noshow',t:'No-show · call to rebook', s:'No-show', c:'#E11D48'},
   {k:'offer', t:'Offer sent',          s:'Offer sent', c:'#5B5BD6'},
   {k:'think', t:'Thinking',            s:'Thinking',   c:'#C99400'},
   {k:'pos',   t:'Positive · push to yes', s:'Positive', c:'#16A34A'},
   {k:'pay',   t:'Said yes · to pay',   s:'To pay',     c:'#DB2777'},
   {k:'won',   t:'Won · building',      s:'Won',        c:'#7C3AED'},
   {k:'silent',t:'No reply · no-show',  s:'No reply',   c:'#64748B'},
-  {k:'lost',  t:'Lost',                s:'Lost',       c:'#DC2626'}];
+  {k:'lost',  t:'Lost',                s:'Lost',       c:'#8A94A8'}];
 const ADB_SM={}; ADB_ST.forEach(s=>ADB_SM[s.k]=s);
 const adbOpenSt=k=>k!=='won'&&k!=='lost';
-const ADB_OUT=[['done','✔ Step done',null],['talk','📞 Talked','talk'],['noans','📵 No answer','silent'],['noshow','🙈 No-show','silent'],['offer','📨 Sent offer / info','offer'],
+const ADB_OUT=[['done','✔ Step done',null],['talk','📞 Talked','talk'],['noans','📵 No answer','silent'],['noshow','🙈 No-show','noshow'],['resched','📆 Moved the meeting',null],['offer','📨 Sent offer / info','offer'],
   ['think','🤔 Thinking it over','think'],['pos','💚 Positive — push to yes','pos'],['yes','✅ Said yes','pay'],['paid','💶 Paid','won'],['no','👎 Not interested','lost']];
 const ADB_OM={note:['note','📝 Note',null]}; ADB_OUT.forEach(o=>ADB_OM[o[0]]=o);
-const ADB_OICON={talk:'📞',noans:'📵',noshow:'🙈',offer:'📨',think:'🤔',pos:'💚',yes:'✅',paid:'💶',no:'👎',note:'📝',done:'✔',stage:'➜',next:'⏰',meet:'📅'};
+const ADB_OICON={talk:'📞',noans:'📵',noshow:'🙈',resched:'📆',offer:'📨',think:'🤔',pos:'💚',yes:'✅',paid:'💶',no:'👎',note:'📝',done:'✔',stage:'➜',next:'⏰',meet:'📅'};
 const ADB_WHAT=['📞 Call','💬 Viber','✉ E-mail','📅 Meeting','📨 Send offer','💶 Check payment','📦 Ask for material','🛠 Send the draft'];
 const ADB_KEYS=[['↑ ↓','move between people'],['Enter','open the person'],['C','call'],['V','Viber'],['E','e-mail'],['D','done — log what happened'],['N','no answer → try again tomorrow'],['T','move the step to tomorrow'],['W','move the step one week'],['1 2 3 4','To do · Pipeline · By day · All leads'],['/','search'],['⌘ Enter','save the form'],['Esc','close']];
 let adbShowLost=false, adbQ='', adbAsk=false, adbFocus=false, adbForm=null, adbDraft=null, adbLater=null, adbSel=null, adbHelp=false;
@@ -16596,6 +16639,9 @@ function adbStage(e){
   if(c && c.stage==='lost' && !(r && r.st && (r.sAt||0)>(c.updated||0))) return 'lost';
   if(ADB_WORK(c) && (!r || r.st!=='lost')) return 'won';
   if(c && c.stage==='thinking' && (!r || !r.st || ['new','talk','meet','silent'].includes(r.st))) return 'think';
+  if(c && c.stage==='booked'){ const sl=mqSlot(c), fut=!!sl && Date.parse(c.day+'T'+c.time)>Date.now();
+    if(r && r.st==='noshow' && fut && c.mqDone && c.mqDone!==sl) return 'meet';                        /* rebooked after the no-show */
+    if(c.meetOutcome==='noshow' && sl && c.mqDone===sl && (!r || !r.st || ['new','talk','meet','silent','noshow'].includes(r.st))) return 'noshow'; }
   if(r && r.st && ADB_SM[r.st]) return r.st;
   if(c && c.stage==='booked') return 'meet';
   if(l){ if(l.status==='r'||l.status==='x') return 'lost'; if(l.status==='g') return 'meet'; if(l.cb && l.cb.day) return 'talk'; if(l.status==='y') return 'talk'; if(l.status==='na') return 'silent'; }
@@ -16607,6 +16653,7 @@ function adbNext(e, st){
   if(st==='lost') return null;
   if(r && r.nx && r.nx.d) return Object.assign({man:true}, r.nx);
   if(st==='won') return null;
+  if(st==='noshow') return {w:'📞 Call — book a new meeting time', d:(c&&c.fu&&c.fu.day&&c.fu.out==='noshow')?c.fu.day:todayIso(), tm:''};
   if(c && c.stage==='booked' && c.day){
     if(adbMeetPast(c)) return {w:'📅 Log the meeting — how did it go?', d:c.day, tm:c.time||'', meet:true, ask:true};
     return {w:'📅 Meeting', d:c.day, tm:c.time||'', meet:true};
@@ -16627,7 +16674,7 @@ const ADB_DR={late:0,today:1,tom:2,later:3,none:4};
 function adbKind(w){ w=String(w||''); let best='task', bi=1e9; [['📅','meet'],['📞','call'],['💬','msg'],['✉','mail'],['💶','pay'],['📨','send'],['📦','send'],['🛠','send']].forEach(([ic,k])=>{ const i=w.indexOf(ic); if(i>=0&&i<bi){ bi=i; best=k; } }); return best; }
 function adbWhenTxt(n){ if(!n||!n.d) return ''; return adlWhen(n.d)+(n.tm?' · '+n.tm:''); }
 function adbLateTxt(n){ const d=Math.round((Date.parse(todayIso()+'T12:00')-Date.parse(n.d+'T12:00'))/864e5); return d<=0?'now':d===1?'since yesterday':d+' days late'; }
-function adbDecorate(all){ all.forEach(e=>{ e.rec=adbRec(e); e.bs=adbStage(e); e.nx=adbNext(e,e.bs); e.kind=adbKind(e.nx&&e.nx.w); e.mq=adbMeetPast(e.c);
+function adbDecorate(all){ all.forEach(e=>{ e.rec=adbRec(e); e.bs=adbStage(e); e.nx=adbNext(e,e.bs); e.kind=adbKind(e.nx&&e.nx.w); e.mq=adbMeetPast(e.c) && ['new','talk','meet'].includes(e.bs);
   e.due=e.bs==='lost'?'done':(e.nx||adbOpenSt(e.bs))?adbDue(e.nx):'done'; }); return all; }
 function adbCmp(a,b){ const x=ADB_DR[a.due]??5, y=ADB_DR[b.due]??5; if(x!==y) return x-y;
   if(a.nx&&b.nx){ const s=(a.nx.d+(a.nx.tm||'99')).localeCompare(b.nx.d+(b.nx.tm||'99')); if(s) return s; } return b.ts-a.ts; }
@@ -16763,8 +16810,30 @@ function adbAfterRender(box){
     if(t){ try{ t.focus({preventScroll:true}); t.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){} } }
 }
 /* ---------- actions ---------- */
-function adbSnap(e){ const r=adbRec(e); return {k:adbKey(e), rec:r?JSON.stringify(r):null, l:e.l||null, cb:e.l&&e.l.cb?JSON.stringify(e.l.cb):null}; }
-function adbRestore(s){ const A=adbAllRec(); if(s.rec) A[s.k]=JSON.parse(s.rec); else delete A[s.k]; if(s.l && s.cb){ s.l.cb=JSON.parse(s.cb); s.l.updated=Date.now(); } save(); renderAdl(); try{ cbRefresh(); }catch(e){} }
+const ADB_CK=['meetOutcome','mqDone','mlog','fu','notes','updated'];
+function adbSnap(e){ const r=adbRec(e), c=e.c; const cj={}; if(c) ADB_CK.forEach(k=>{ cj[k]=c[k]===undefined?undefined:JSON.stringify(c[k]); });
+  return {k:adbKey(e), rec:r?JSON.stringify(r):null, l:e.l||null, cb:e.l&&e.l.cb?JSON.stringify(e.l.cb):null, c:c||null, cj}; }
+function adbRestore(s){ const A=adbAllRec(); if(s.rec) A[s.k]=JSON.parse(s.rec); else delete A[s.k]; if(s.l && s.cb){ s.l.cb=JSON.parse(s.cb); s.l.updated=Date.now(); }
+  if(s.c) ADB_CK.forEach(k=>{ if(s.cj[k]===undefined) delete s.c[k]; else s.c[k]=JSON.parse(s.cj[k]); });
+  save(); renderAdl(); try{ cbRefresh(); }catch(e){} }
+/* 12 Nov 2026: a no-show goes on the Board card too (red in the Calendar + its «No show» list, no «How did it go?» pop-up) */
+function adbCardNoShow(c, note){
+  if(!c || c.stage!=='booked') return false; const slot=mqSlot(c); if(!slot) return false;
+  if(Date.parse(c.day+'T'+c.time)>Date.now()) return false;
+  if(c.meetOutcome==='noshow' && c.mqDone===slot) return false;
+  c.meetOutcome='noshow'; c.mqDone=slot;
+  c.mlog=(c.mlog||[]).concat({at:Date.now(), slot, out:'noshow', tags:['Call to rebook'], note:String(note||''), day:todayIso()}).slice(-20);
+  c.fu={day:todayIso(), what:'No show — call to rebook', st:c.stage, out:'noshow', at:Date.now()};
+  c.notes=(fmtDay(todayIso())+' · NO SHOW'+(note?' — «'+note+'»':'')+(c.notes?'\n'+c.notes:'')).slice(0,4000);
+  c.updated=Date.now(); return true;
+}
+/* they asked to move the meeting: the slot counts as logged (no pop-up) and a follow-up goes on the card */
+function adbCardResched(c, day, what){
+  if(!c) return false; const slot=mqSlot(c); if(slot) c.mqDone=slot;
+  if(day) c.fu={day, what:String(what||'Moved the meeting — call to book the new time'), st:c.stage, out:'think', at:Date.now()};
+  c.notes=(fmtDay(todayIso())+' · MOVED THE MEETING'+(day?' → '+fmtDay(day):'')+(what?' — '+what:'')+(c.notes?'\n'+c.notes:'')).slice(0,4000);
+  c.updated=Date.now(); return true;
+}
 /* this board now carries the person's next step: their call-back in Leads / Callbacks goes (a future one is kept here as the step) */
 function adbTouch(e, r, drop){ const l=e.l; if(!l||!l.cb) return; if(!drop && !(r.nx&&r.nx.d) && l.cb.day>todayIso() && e.nx && !e.nx.man) r.nx={w:e.nx.w,d:e.nx.d,tm:e.nx.tm||''};
   delete l.cb; l.updated=Date.now(); setTimeout(()=>{ try{ cbRefresh(); }catch(x){} },0); }
@@ -16777,9 +16846,10 @@ function adbMove(e, d, quiet){
 }
 function adbNoAns(e, show){
   const s=adbSnap(e), r=adbRec(e,true); adbPush(r, show?'noshow':'noans', show?'Did not show up at the meeting':'');
-  if(show || e.bs==='new' || e.bs==='talk' || e.bs==='meet') adbStageTo(r, e.bs, 'silent');
-  const d=adlAdd(todayIso(),1); r.nx={w:show?'📞 Call — book a new meeting time':'📞 Call again', d, tm:''}; adbTouch(e,r);
-  adbLater=null; if(adbForm&&adbForm.id===e.id) adbForm=null; save(); renderAdl(); toastUndo(e.name+' — '+(show?'no-show':'no answer')+' · call again tomorrow', ()=>adbRestore(s));
+  if(show) adbStageTo(r, e.bs, 'noshow'); else if(e.bs==='new' || e.bs==='talk' || e.bs==='meet') adbStageTo(r, e.bs, 'silent');
+  if(show && e.c) adbCardNoShow(e.c, 'Did not show up');
+  const d=show?todayIso():adlAdd(todayIso(),1); r.nx={w:show?'📞 Call — book a new meeting time':'📞 Call again', d, tm:''}; adbTouch(e,r);
+  adbLater=null; if(adbForm&&adbForm.id===e.id) adbForm=null; save(); renderAdl(); toastUndo(e.name+' — '+(show?'no-show · call today to rebook':'no answer · call again tomorrow'), ()=>adbRestore(s));
 }
 function adbOpenForm(e, o){
   const D=adbDraftFor(e.id); if(o && !D.o) D.o=o; adbAsk=false; adbLater=null; adbFocus=true; adbSel=e.id;
@@ -16798,6 +16868,8 @@ function adbSaveForm(id){
   if(d){ if(!w) w=(e.nx&&e.nx.man&&!o)?e.nx.w:'📞 Call'; r.nx={w,d,tm}; adbPush(r,'next','Next: '+w+' · '+adlDay(d)+(tm?' '+tm:'')); }
   else if(o || (r.nx && r.nx.d<=todayIso())) r.nx=null;   /* an outcome closes the step that was open; a plain note keeps a future one */
   if(o && e.c && e.c.fu && e.c.fu.day) r.fuX=e.c.fu.day;
+  if(o==='noshow' && e.c) adbCardNoShow(e.c, t);
+  if(o==='resched' && e.c) adbCardResched(e.c, d, w);
   adbTouch(e,r,!!o); adbDraft=null; adbLater=null; save();
   const e2=adbFind(id), need=e2 && e2.due==='none';
   if(need){ adbAsk=true; adbFocus=true; adlX=id; adbForm={id, where:'dr'}; renderAdl(); toast('Saved'+(moved?' · '+e.name+' → '+ADB_SM[r.st].t:'')+' — now pick the next step (part 2)'); return; }
@@ -16878,22 +16950,22 @@ document.addEventListener('keydown',ev=>{
   if(k==='w'){ adbMove(e, adlAdd(todayIso(),7)); return; }
 });
 /* ===== Ad leads HERO (Angelo, 11 Nov 2026): big coloured numbers like «In the bank» + ROAS; tap a tile = show only those people ===== */
-const ADL_HT=[['call','To call','📞'],['meet','Meeting booked','📅'],['offer','Offer sent','📨'],['think','Thinking','🤔'],['pos','Positive','💚'],['won','Clients','🏆'],['lost','Not interested','👎']];
-const ADL_HC={call:'#EA6A12',meet:'#0E9AA7',offer:'#5B5BD6',think:'#C99400',pos:'#16A34A',won:'#7C3AED',lost:'#DC2626'};
+const ADL_HT=[['call','To call','📞'],['meet','Meeting booked','📅'],['noshow','No-show','🙈'],['offer','Offer sent','📨'],['think','Thinking','🤔'],['pos','Positive','💚'],['won','Clients','🏆'],['lost','Not interested','👎']];
+const ADL_HC={call:'#EA6A12',meet:'#0E9AA7',noshow:'#E11D48',offer:'#5B5BD6',think:'#C99400',pos:'#16A34A',won:'#7C3AED',lost:'#8A94A8'};
 const ADL_HN={all:'Everyone'}; ADL_HT.forEach(x=>ADL_HN[x[0]]=x[1]);
 let adlPrevN={};
 function adlNum(v,dec){ return dec?(+v).toFixed(dec).replace('.',','):Math.round(+v).toLocaleString('el-GR'); }
 function adlCU(k,v,dec,pre,suf){ return `<span class="adl-cu" data-k="${k}" data-v="${v}" data-dec="${dec||0}" data-pre="${pre||''}" data-suf="${suf||''}">${pre||''}${adlNum(v,dec)}${suf||''}</span>`; }
 function adlHeroHtml(all){
-  const t=todayIso(), mon=adlMonday(t), n={call:0,meet:0,offer:0,think:0,pos:0,won:0,lost:0}, by={};
+  const t=todayIso(), mon=adlMonday(t), n={call:0,meet:0,noshow:0,offer:0,think:0,pos:0,won:0,lost:0}, by={};
   all.forEach(e=>{ const g=adlFk(e); if(n[g]!==undefined) n[g]++; by[e.bs]=(by[e.bs]||0)+1; });
   const tot=all.length, td=all.filter(e=>e.day===t).length, wk=all.filter(e=>e.day>=mon).length;
   const due=all.filter(e=>adlFk(e)==='call'&&(e.due==='late'||e.due==='today')).length;
-  const reached=all.filter(e=>['meet','offer','think','pos','pay','won'].includes(e.bs)).length;
+  const reached=all.filter(e=>['meet','noshow','offer','think','pos','pay','won'].includes(e.bs)).length;
   const pc=v=>tot?Math.round(v*100/tot):0;
   ensureMeta(); const sp=+((state.meta.adl||{}).spend)||0, won=n.won, back=won*ADL_PROFIT, r=sp?back/sp:0, net=back-sp;
   const e0=v=>'€'+Math.round(Math.abs(v)).toLocaleString('el-GR'), e2=v=>'€'+v.toFixed(2).replace('.',',');
-  const sub={call:due?`<b>${due}</b> due today or late`:'nobody waiting',meet:`${pc(reached)}% of leads got this far`,offer:'waiting for their answer',think:'still deciding',
+  const sub={call:due?`<b>${due}</b> due today or late`:'nobody waiting',meet:`${pc(reached)}% of leads got this far`,noshow:n.noshow?'<b>call them</b> to rebook':'nobody missed one',offer:'waiting for their answer',think:'still deciding',
     pos:n.pos?`<b>${e0(n.pos*ADL_PROFIT)}</b> to win — push!`:'about to say yes',won:tot?`<b>${pc(won)}%</b> of all leads`:'—',lost:'said no'};
   const bar=ADB_ST.filter(s=>by[s.k]).map(s=>`<i style="flex:${by[s.k]};background:${s.c}" title="${esc(s.s)}: ${by[s.k]}"></i>`).join('');
   const lg=ADB_ST.filter(s=>by[s.k]).map(s=>`<span><i style="background:${s.c}"></i>${esc(s.s)} <b>${by[s.k]}</b></span>`).join('');
@@ -16916,6 +16988,79 @@ function adlHeroHtml(all){
   const fb=adlF!=='all'&&ADL_HC[adlF]?`<div class="adl-hf" style="--hc:${ADL_HC[adlF]}">Showing only <b>${esc(ADL_HN[adlF])}</b> · ${n[adlF]} ${n[adlF]===1?'person':'people'}<button type="button" class="adl-btn" data-adl="f" data-k="all">Show everyone ✕</button></div>`:'';
   return `<section class="adl-hero"><div class="adl-htop">${lead}${roas}</div><div class="adl-htiles">${tiles}</div>${fb}</section>`;
 }
+/* ===== Meetings from the ads — show-up stats + no-shows in red (Angelo, 12 Nov 2026: «clearly note stats from meetings from ad leads …
+   2 no-shows out of 2 … should be marked red as no-shows so I can call back and reschedule»; MPGIALA moved hers to Tuesday).
+   One line per ad lead who had a meeting. What happened to their (latest) meeting, from the real data:
+     held  = logged Yes / Thinking / No («How did it go?»), or Talked / Offer / … logged here on or after the meeting day
+     ns    = No-show (here, or «No show» in «How did it go?») — red, with a call + a ready rebook message
+     rs    = they moved it themselves (outcome «📆 Moved the meeting»)
+     open  = the meeting time passed and nothing is logged yet
+     up    = still to come (incl. a no-show that was rebooked to a new time)
+   Show-up rate = happened ÷ (happened + no-shows). */
+const ADM_K={held:['Happened','#0B9E5C','✓'],ns:['No-show','#E11D48','🙈'],rs:['Moved by them','#D97706','📆'],open:['Not logged yet','#64748B','⏳'],up:['Coming up','#0E9AA7','📅']};
+let admOpen=(()=>{ try{ return localStorage.getItem('adm-open')!=='0'; }catch(e){ return true; } })();
+function adlMeetOf(e){
+  const c=e.c, r=e.rec, now=Date.now(), ev=[];
+  const day0=c&&c.day?Date.parse(c.day+'T00:00'):0;
+  (r&&r.log||[]).forEach(x=>{ if(!x) return; if(x.o==='noshow') ev.push({at:x.at,k:'ns'}); else if(x.o==='resched') ev.push({at:x.at,k:'rs'});
+    else if(['talk','offer','think','pos','yes','paid','no'].includes(x.o) && day0 && x.at>=day0) ev.push({at:x.at,k:'held'}); });
+  (c&&c.mlog||[]).forEach(m=>{ if(!m) return; if(m.out==='noshow') ev.push({at:m.at,k:'ns'}); else if(['yes','think','no'].includes(m.out)) ev.push({at:m.at,k:'held'}); });
+  const has=(c && (c.day || (c.mlog&&c.mlog.length))) || ev.length || (r&&r.log||[]).some(x=>x&&x.o==='meet') || e.bs==='meet' || e.bs==='noshow';
+  if(!has) return null;
+  ev.sort((a,b)=>a.at-b.at); const last=ev[ev.length-1];
+  const sl=c?mqSlot(c):'', slT=sl?Date.parse(c.day+'T'+c.time):0, rebooked=!!(c && c.stage==='booked' && sl && slT>now && c.mqDone && c.mqDone!==sl);
+  let k;
+  if(e.bs==='noshow') k='ns';
+  else if(last && (last.k==='ns'||last.k==='rs') && rebooked) k='up';
+  else if(last) k=last.k;
+  else if(c && c.day && Date.parse(c.day+'T'+(c.time||'23:59'))+15*60000>now) k='up';
+  else if(['think','pos','offer','pay','won','lost'].includes(e.bs)) k='held';
+  else k='open';
+  let day='', tm='';
+  if(k==='up' || k==='open' || !last){ day=(c&&c.day)||(last?isoDate(new Date(last.at)):e.day); tm=(c&&c.time)||''; }
+  else if(c && c.mqDone && /^\d{4}-\d{2}-\d{2}/.test(c.mqDone)){ day=c.mqDone.slice(0,10); tm=c.mqDone.slice(11,16); }
+  else { day=isoDate(new Date(last.at)); tm=(c&&c.day===day&&c.time)||''; }
+  return {k, day, tm, nsEver:ev.some(x=>x.k==='ns'), e};
+}
+function admRebookTxt(m){
+  const t=todayIso(), d=m.day===t?'σήμερα':m.day===adlAdd(t,-1)?'χθες':'στις '+fmtDay(m.day);
+  return `Καλημέρα σας, ${d}${m.tm?' στις '+m.tm:''} είχαμε κλείσει τη δωρεάν κλήση για την ιστοσελίδα σας, αλλά δεν καταφέραμε να συνδεθούμε. Θέλετε να βρούμε μια νέα ώρα που σας βολεύει;\n\nΆγγελος Μετρίδης - 6934088046\nAdvon Media`;
+}
+function adlMeetHtml(all){
+  const rows=all.map(adlMeetOf).filter(Boolean); if(!rows.length) return '';
+  const t=todayIso(), N={held:0,ns:0,rs:0,open:0,up:0}; rows.forEach(m=>N[m.k]++);
+  const done=N.held+N.ns, rate=done?Math.round(N.held*100/done):null, lvl=rate===null?'none':rate>=70?'good':rate>=50?'mid':'bad';
+  const tile=k=>`<div class="adm-t${N[k]?'':' z'}" style="--mc:${ADM_K[k][1]}"><span>${ADM_K[k][2]} ${ADM_K[k][0]}</span><b>${N[k]}</b></div>`;
+  /* per day, newest first (last 10 days that had meetings) */
+  const by={}; rows.forEach(m=>(by[m.day]=by[m.day]||[]).push(m));
+  const days=Object.keys(by).filter(d=>d<=adlAdd(t,7)).sort().reverse().slice(0,10);
+  const chip=m=>{ const s=ADM_K[m.k]; return `<button type="button" class="adm-c adm-${m.k}" style="--mc:${s[1]}" data-adl="pick" data-id="${m.e.id}" title="${esc(s[0])}">${m.tm?`<i>${esc(m.tm)}</i>`:''}${esc(m.e.name||'—')}<em>${s[2]}</em></button>`; };
+  const dayRow=d=>{ const a=by[d].slice().sort((x,y)=>(x.tm||'99').localeCompare(y.tm||'99')), n={held:0,ns:0,rs:0,open:0,up:0}; a.forEach(m=>n[m.k]++);
+    const dn=n.held+n.ns, r=dn?Math.round(n.held*100/dn)+'%':'—';
+    const bar=['held','ns','rs','open','up'].filter(k=>n[k]).map(k=>`<i style="flex:${n[k]};background:${ADM_K[k][1]}"></i>`).join('');
+    const sum=['held','ns','rs','open','up'].filter(k=>n[k]).map(k=>`<span style="--mc:${ADM_K[k][1]}"><b>${n[k]}</b> ${ADM_K[k][0].toLowerCase()}</span>`).join('');
+    return `<div class="adm-d${d===t?' adm-today':''}"><div class="adm-dh"><b>${d===t?'Today':esc(adlDay(d))}</b><span class="adm-dn">${a.length} booked</span><span class="adm-dsum">${sum}</span><span class="adm-dr" title="Show-up rate that day">${r}<small>showed up</small></span></div><div class="adm-bar">${bar}</div><div class="adm-cs">${a.map(chip).join('')}</div></div>`; };
+  /* no-shows: red, call + ready message */
+  const ns=rows.filter(m=>m.k==='ns').sort((a,b)=>(b.day+(b.tm||'')).localeCompare(a.day+(a.tm||'')));
+  const nsHtml=ns.length?`<div class="adm-box adm-nsb"><h4>🙈 No-shows — call them to book a new time <i>${ns.length}</i></h4>${ns.map(m=>{ const e=m.e, tel=adlTel(e.phone), nx=e.nx;
+      return `<div class="adm-r"><div class="adm-rn" data-adl="pick" data-id="${e.id}"><b>${esc(e.name||'—')}</b><small>${esc(e.spec||'')}${e.spec?' · ':''}missed ${esc(adlWhen(m.day))}${m.tm?' · '+esc(m.tm):''}${nx?' · next: '+esc(adbWhenTxt(nx)):''}</small></div>
+        <div class="adm-ra">${e.phone?`<a class="adb-ib adb-call" data-adb="tel" data-id="${e.id}" href="tel:+${tel}">📞 ${esc(adlPhoneTxt(e.phone))}</a><a class="adb-ib" data-adl="tel" href="viber://chat?number=%2B${tel}">Viber</a>`:(e.email?`<a class="adb-ib" data-adl="tel" href="mailto:${esc(e.email)}">✉ ${esc(e.email)}</a>`:'')}<button type="button" class="adb-ib" data-adl="copy1" data-v="${esc(admRebookTxt(m))}" title="Copy a ready message to rebook">⧉ Rebook message</button><button type="button" class="adb-ib adb-ok" data-adl="pick" data-id="${e.id}">Rebooked / log ›</button></div></div>`; }).join('')}<p class="adm-note">The card stays red until you log what happened or book a new time on the Board card.</p></div>`:'';
+  const rs=rows.filter(m=>m.k==='rs');
+  const rsHtml=rs.length?`<div class="adm-box adm-rsb"><h4>📆 Moved by them <i>${rs.length}</i></h4>${rs.map(m=>{ const e=m.e, nx=e.nx, tel=adlTel(e.phone);
+      return `<div class="adm-r"><div class="adm-rn" data-adl="pick" data-id="${e.id}"><b>${esc(e.name||'—')}</b><small>${esc(e.spec||'')}${e.spec?' · ':''}was ${esc(adlWhen(m.day))}${m.tm?' · '+esc(m.tm):''}${nx?' → <b>'+esc(adbWhenTxt(nx))+'</b> '+esc(nx.w):''}</small></div>
+        <div class="adm-ra">${e.phone?`<a class="adb-ib adb-call" data-adb="tel" data-id="${e.id}" href="tel:+${tel}">📞 ${esc(adlPhoneTxt(e.phone))}</a>`:''}<button type="button" class="adb-ib" data-adl="pick" data-id="${e.id}">Open ›</button></div></div>`; }).join('')}</div>`:'';
+  const td=by[t]||[], tn={held:0,ns:0,rs:0,open:0,up:0}; td.forEach(m=>tn[m.k]++);
+  const real=tn.held+tn.open+tn.up;
+  const todayLine=td.length?`<div class="adm-tl">Today: <b>${td.length}</b> booked${tn.ns?` · <span class="r">${tn.ns} no-show${tn.ns>1?'s':''}</span>`:''}${tn.rs?` · <span class="a">${tn.rs} moved</span>`:''} → <b>${real}</b> real meeting${real===1?'':'s'} left${tn.held?` (${tn.held} done)`:''}</div>`:'';
+  return `<section class="adm adm-${lvl}${admOpen?'':' adm-closed'}">
+    <button type="button" class="adm-h" data-adm="tog" aria-expanded="${admOpen}"><span class="adm-hk">📅 Meetings from the ads</span><span class="adm-rate"><b>${rate===null?'—':rate+'%'}</b><small>showed up · ${N.held} of ${done} meetings that were due</small></span><span class="adm-hns">${N.ns?`🙈 <b>${N.ns}</b> no-show${N.ns>1?'s':''} to call`:''}</span><span class="adm-tw">${admOpen?'Hide ▴':'Show ▾'}</span></button>
+    ${admOpen?`${todayLine}<div class="adm-ts"><div class="adm-t adm-tb" style="--mc:#10141F"><span>Booked</span><b>${rows.length}</b></div>${['held','ns','rs','open','up'].map(tile).join('')}</div>
+    ${nsHtml}${rsHtml}<div class="adm-days">${days.map(dayRow).join('')}</div>
+    <p class="adm-note">Every booked person gets the Zoho e-mail reminder 1 hour before and the SMS 30 minutes before. Tap a name to open them.</p>`:''}
+  </section>`;
+}
+document.addEventListener('click',ev=>{ const b=ev.target.closest && ev.target.closest('#view-adl [data-adm]'); if(!b) return; if(b.dataset.adm==='tog'){ admOpen=!admOpen; try{ localStorage.setItem('adm-open',admOpen?'1':'0'); }catch(e){} renderAdl(); } });
+
 /* numbers count up when they change (first time from 0) and the tile pops when a number goes up */
 function adlCountUp(box){
   const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
