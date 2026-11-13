@@ -109,7 +109,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid v
 .apps-menu .ai{width:32px; height:32px; border-radius:9px; display:grid; place-items:center; flex-shrink:0; font:800 13px/1 'Sora',sans-serif; color:#fff;}
 .apps-menu .at{min-width:0; flex:1;} .apps-menu .at b{display:block; font-size:13.5px; font-weight:700;} .apps-menu .at small{display:block; font-size:11.5px; color:var(--muted); font-weight:500; line-height:1.35;}
 .apps-menu .ax{color:var(--muted); font-size:13px;}
-#appsBtn{gap:6px;} #ideasBtn{gap:6px; text-decoration:none;} #ideasBtn .ic{color:#E0A100;} @media(max-width:640px){ #ideasBtn .lbl-t{display:none;} #ideasBtn{padding-left:10px; padding-right:10px;} .topbar-right{gap:6px;} } @media(max-width:640px){ #appsBtn .lbl-t{display:none;} #appsBtn{padding-left:10px; padding-right:10px;} .apps-menu{min-width:0; width:calc(100vw - 24px); max-width:340px;} }
+#appsBtn{gap:6px;} #ideasBtn{gap:6px; text-decoration:none;} #ideasBtn .ic{color:#E0A100;} #dashBtn{gap:6px; text-decoration:none;} #dashBtn .ic{color:#7C3AED;} @media(max-width:640px){ #dashBtn .lbl-t{display:none;} #dashBtn{padding-left:10px; padding-right:10px;} } @media(max-width:640px){ #ideasBtn .lbl-t{display:none;} #ideasBtn{padding-left:10px; padding-right:10px;} .topbar-right{gap:6px;} } @media(max-width:640px){ #appsBtn .lbl-t{display:none;} #appsBtn{padding-left:10px; padding-right:10px;} .apps-menu{min-width:0; width:calc(100vw - 24px); max-width:340px;} }
 .export-menu .xm-hint{font-size:11.5px; line-height:1.45; color:var(--muted); padding:4px 12px 8px; font-weight:500;}
 .export-menu .xm-last{font-weight:700; padding-top:0;}
 .export-menu .xm-last.stale{color:#C4243A;}
@@ -4781,6 +4781,7 @@ body.dark .adl-hr-great::after{display:none}
         <div class="export-menu apps-menu" id="appsMenu" role="menu"></div>
       </div>
       <a class="btn btn-ghost" id="ideasBtn" href="/ideas/" target="_blank" rel="noopener" title="Ideas — every idea as its own page" aria-label="Ideas"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/></svg><span class="lbl-t">Ideas</span></a>
+      <a class="btn btn-ghost" id="dashBtn" href="https://claude.ai/artifact/S9vY5m26wg4iiwnrfFBP7b" target="_blank" rel="noopener" title="Business dashboard — money, unpaid clients, calls and ad leads in charts (Claude Data)" aria-label="Business dashboard"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span class="lbl-t">Dashboard</span></a>
     </div>
   </div>
 </header>
