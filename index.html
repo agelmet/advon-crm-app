@@ -12465,6 +12465,32 @@ function ldRehydrate(incoming, mine){
   }catch(e){}
   return incoming;
 }
+/* 13 Nov 2026 (Angelo: Φλουρου sent the ad form a 2nd time and the CRM never showed it): /api/lead now writes every later send of the
+   same phone into the pool record as again:[iso…]. Each new send brings the person back as «New · call them» in Ad leads, in TODAY's
+   column, with «🔁 Sent the form again» in the history and a call for today — once per send (meta.ldAgain[key] = last send seen). */
+function ldAgain(list){
+  ensureMeta(); const seen=state.meta.ldAgain||(state.meta.ldAgain={}); const names=[]; let ch=false;
+  (list||[]).forEach(p=>{
+    if(!p || !p.key || !Array.isArray(p.again) || !p.again.length) return;
+    const l=state.leads.find(x=>x && x.key===p.key); if(!l) return;
+    const ag=p.again.map(String).filter(x=>Date.parse(x)).sort().slice(-10); if(!ag.length) return;
+    if(JSON.stringify(l.again||[])!==JSON.stringify(ag)){ l.again=ag; ch=true; }
+    const last=ag[ag.length-1]; if(seen[p.key] && seen[p.key]>=last) return;
+    seen[p.key]=last; ch=true;
+    if(!(l.list==='ads'||l.src==='ads')) return;
+    if(['na','r','x'].includes(l.status)){ l.status='new'; l.updated=Date.now(); }
+    try{
+      const e=adlEntries().find(x=>x.l===l); if(!e) return; adbDecorate([e]);
+      const r=adbRec(e,true), t=new Date(Date.parse(last));
+      adbPush(r,'again',t.toLocaleString('el-GR',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'Europe/Athens'}), Date.parse(last));
+      if(e.bs!=='won' && e.bs!=='pay') adbStageTo(r, e.bs, 'new');
+      r.nx={w:'📞 Call — sent the form again', d:todayIso(), tm:''};
+      names.push(l.name);
+    }catch(x){ console.warn('ld again adp',x); }
+  });
+  if(names.length) setTimeout(()=>{ try{ renderAdl(); }catch(e){} toast('🔁 '+names.join(', ')+(names.length===1?' sent':' sent')+' the ad form again — call today'); },120);
+  return ch;
+}
 function ldMerge(list, src){
   ensureLeads();
   const have=new Set(state.leads.map(l=>l.key)); const trash=state.meta.ld.trash||{};
@@ -12495,6 +12521,7 @@ const Leads={
       if(data.lists && typeof data.lists==='object' && data.lists._crm){ try{ if(wsInbox(data.lists._crm)) changed=true; }catch(e){ console.warn('ws inbox',e); } try{ if(cbInbox(data.lists._crm)) changed=true; }catch(e){ console.warn('cb inbox',e); } data.lists=Object.assign({},data.lists); delete data.lists._crm; }
       if(data.lists && typeof data.lists==='object' && JSON.stringify(data.lists)!==JSON.stringify(state.meta.ld.lists||{})){ state.meta.ld.lists=data.lists; changed=true; }
       const n=ldMerge(data.leads||[], 'harvest');
+      try{ if(ldAgain(data.leads||[])) changed=true; }catch(e){ console.warn('ld again',e); }
       this.lastAt=Date.now();
       state.meta.ld.poolAt=data.updated||''; state.meta.ld.pulledAt=Date.now();
       if(n||changed){ save(); renderLeads(); renderHome(); try{ if(typeof renderAdl==='function') renderAdl(); }catch(e){} if(n){ const L=ldLists(); const fresh=Object.keys(L).find(k=>L[k].fresh); const ads=state.leads.filter(l=>l.list==='ads'&&ldOpen(l)&&Date.now()-(l.created||0)<60000).length; toast(n+' new lead'+(n>1?'s':'')+' added'+(ads?' — '+ads+' from the ads, call now':(fresh?' — in their own category «'+L[fresh].t+'»':''))); } }
@@ -16494,7 +16521,7 @@ function adlEntries(){
     if(!l || !(l.list==='ads'||l.src==='ads') || adlIsTest(l.name+' '+(l.spec||'')) || adlP9(l.phone)==='934088046') return;
     const c=adlCardFor(l); if(c) used.add(c.id);
     if(l.adNo || (c && (c.ad==='no'||c.ad===false))) return;
-    const ts=Date.parse(l.at||'')||l.created||Date.parse((l.added||todayIso())+'T12:00');
+    const ts=Math.max(Date.parse(l.at||'')||l.created||Date.parse((l.added||todayIso())+'T12:00'), (l.again&&l.again.length&&Date.parse(l.again[l.again.length-1]))||0);
     out.push({k:'l', id:l.id, l, c, ts, name:l.name, spec:l.spec||'', phone:l.phone||(c&&c.phone)||'', email:adlEmailOf(l)||(c&&c.email)||'', ad:adlAdOf(l), msg:adlMsgOf(l), memo:l.memo||'', src:'Form on the ad page'});
   });
   (state.clients||[]).forEach(c=>{
@@ -16718,6 +16745,7 @@ const adbOpenSt=k=>k!=='won'&&k!=='lost';
 const ADB_OUT=[['done','✔ Step done',null],['talk','📞 Talked','talk'],['noans','📵 No answer','silent'],['noshow','🙈 No-show','noshow'],['resched','📆 Moved the meeting',null],['offer','📨 Sent offer / info','offer'],
   ['think','🤔 Thinking it over','think'],['pos','💚 Positive — push to yes','pos'],['yes','✅ Said yes','pay'],['paid','💶 Paid','won'],['no','👎 Not interested','lost']];
 const ADB_OM={note:['note','📝 Note',null]}; ADB_OUT.forEach(o=>ADB_OM[o[0]]=o);
+ADB_OM.again=['again','🔁 Sent the form again',null];
 const ADB_OICON={talk:'📞',noans:'📵',noshow:'🙈',resched:'📆',lostns:'🗑',offer:'📨',think:'🤔',pos:'💚',yes:'✅',paid:'💶',no:'👎',note:'📝',done:'✔',stage:'➜',next:'⏰',meet:'📅'};
 const ADB_WHAT=['📞 Call','💬 Viber','✉ E-mail','📅 Meeting','📨 Send offer','💶 Check payment','📦 Ask for material','🛠 Send the draft'];
 const ADB_KEYS=[['↑ ↓','move between people'],['Enter','open the person'],['C','call'],['V','Viber'],['E','e-mail'],['D','done — log what happened'],['N','no answer → try again tomorrow'],['T','move the step to tomorrow'],['W','move the step one week'],['1 2 3 4','To do · Pipeline · By day · All leads'],['/','search'],['⌘ Enter','save the form'],['Esc','close']];
