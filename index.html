@@ -6007,12 +6007,23 @@ const Sync={
 
   async request(method, body){
     const url=SYNC_URL+'?t='+Date.now()+'&d='+encodeURIComponent(deviceId());
-    const res=await fetch(url,{
-      method,
-      cache:'no-store',
-      headers:this.headers(),
-      body: body?JSON.stringify(body):undefined
-    });
+    /* 14 Nov 2026: a request that never answers used to keep `busy` on for ever, so every later save
+       was skipped and the banner sat on «Retrying…». Give up after 40 s (GET 25 s) and retry instead. */
+    const ctl=(typeof AbortController!=='undefined')? new AbortController() : null;
+    const tmo=ctl? setTimeout(()=>{ try{ ctl.abort(); }catch(e){} }, method==='GET'?25000:40000) : null;
+    let res;
+    try{
+      res=await fetch(url,{
+        method,
+        cache:'no-store',
+        headers:this.headers(),
+        body: body?JSON.stringify(body):undefined,
+        signal: ctl?ctl.signal:undefined
+      });
+    }catch(e){
+      if(e && e.name==='AbortError') throw new Error('the server did not answer in time');
+      throw e;
+    }finally{ if(tmo) clearTimeout(tmo); }
     let payload=null;
     try{ payload=await res.json(); }catch(e){}
     return {res, payload};
@@ -6044,7 +6055,14 @@ const Sync={
       await this.handlePull(out, false);
     }catch(e){
       this.setState('error', e.message||'network unreachable');
-    }finally{ this.busy=false; this.lastCheck=Date.now(); }
+    }finally{
+      this.busy=false; this.lastCheck=Date.now();
+      /* a change made during the check is still waiting → send it now (not in a minute) */
+      if(this.pendingFlag() && !this.conflictOpen){
+        clearTimeout(this.pushTimer);
+        this.pushTimer=setTimeout(()=>this.push(false), 1200);
+      }
+    }
   },
 
   async handlePull(out, isLoad){
@@ -6113,7 +6131,14 @@ const Sync={
 
   async push(force){
     if(!SYNC_TOKEN || !CUR_KEY || !state) return;
-    if(this.busy || this.conflictOpen) return;
+    if(this.conflictOpen) return;
+    /* 14 Nov 2026: a save that arrived while a server check was running was dropped without a retry
+       (also «Retry now» during a check) — the banner then sat on «Retrying…». Try again shortly instead. */
+    if(this.busy){
+      clearTimeout(this.pushTimer);
+      this.pushTimer=setTimeout(()=>this.push(force), 1500);
+      return;
+    }
     this.busy=true; this.setState('syncing');
     try{
       const stamp=LOCAL_UPDATED_AT||new Date().toISOString();
@@ -14655,6 +14680,14 @@ let syncWired=false;
 function wireSyncEvents(){
   if(syncWired) return; syncWired=true;
 
+  /* 14 Nov 2026: two CRM tabs in the same browser share the «waiting to sync» flag. When the other tab
+     has saved (flag cleared / new server stamp), this tab fetches that copy and drops its stale banner. */
+  window.addEventListener('storage',e=>{
+    if(e.key!==PEND_KEY && e.key!==META_KEY) return;
+    if(Sync.busy || Sync.conflictOpen) return;
+    if(!Sync.pendingFlag()){ setTimeout(()=>{ try{ Sync.pull(true); }catch(err){} }, 300); }
+  });
+
   /* switching back to an already-open tab re-checks the server */
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState!=='visible') return;
@@ -14698,7 +14731,8 @@ function wireSyncEvents(){
     if(Sync.pendingFlag()) Sync.push(false); else Sync.pull(false);
   });
   $('#syncBannerRetry').addEventListener('click',()=>{
-    Sync.retryDelay=5000;
+    Sync.retryDelay=5000; Sync.failCount=0;
+    clearTimeout(Sync.retryTimer);
     if(Sync.pendingFlag()) Sync.push(false); else Sync.pull(false);
   });
   /* two-step: the first tap only arms the button (red, stronger wording), the second within 8 s keeps this device */
