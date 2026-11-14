@@ -3247,6 +3247,29 @@ body.dark .rm-new input{background:var(--surface);}
 .m-site-auto:empty{display:none}
 .m-site-auto i{font-style:normal;opacity:.8}
 .card .c-draft.live{background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 3px 8px -4px rgba(5,150,105,.6)}
+
+/* «Copy text» on every Board card (14 Nov 2026) */
+.card .c-tx{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto;padding:4px 10px;border:0;border-radius:8px;background:#fff;color:#1B2433;box-shadow:inset 0 0 0 1.5px rgba(47,127,224,.45);font-family:inherit;font-weight:800;font-size:11px;letter-spacing:.02em;cursor:pointer}
+.card .c-tx svg{width:12px;height:12px;flex:none;color:#2F7FE0}
+.card .c-tx:hover{background:#EAF3FF}
+.card .c-tx:active{transform:scale(.96)}
+body.dark .card .c-tx{background:rgba(255,255,255,.06);color:#E6EDF7}
+.tx-modal{max-width:640px;width:calc(100vw - 24px)}
+.tx-sit{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.tx-sit button{border:0;border-radius:999px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:700;background:#F2F5FA;color:#1B2433;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(27,36,51,.12)}
+.tx-sit button.on{background:#2F7FE0;color:#fff;box-shadow:none}
+.tx-row{display:flex;align-items:center;gap:8px;margin:0 0 8px;flex-wrap:wrap}
+.tx-row>span{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8A94A8;min-width:62px}
+.tx-row input{flex:1;min-width:160px;padding:7px 10px;border-radius:9px;border:1px solid rgba(27,36,51,.18);font:inherit;font-size:13px;background:#fff;color:inherit}
+.tx-row input.tx-saln{flex:0 1 180px}
+.tx-row.miss input{border-color:#FF8A00;background:#FFF6EA}
+.tx-row button{border:0;border-radius:8px;padding:6px 10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer;background:#F2F5FA;color:inherit;box-shadow:inset 0 0 0 1px rgba(27,36,51,.12)}
+.tx-row button.on{background:#1B2433;color:#fff}
+.tx-msg{width:100%;min-height:290px;resize:vertical;padding:12px;border-radius:12px;border:1px solid rgba(27,36,51,.18);font:inherit;font-size:14px;line-height:1.5;background:#fff;color:inherit;box-sizing:border-box}
+.tx-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
+.tx-foot .tx-l{flex:1;display:flex;gap:12px;flex-wrap:wrap}
+.tx-foot .tx-l button{border:0;background:none;padding:0;font:inherit;font-size:13px;font-weight:700;color:#2F7FE0;cursor:pointer}
+.tx-hint{font-size:12px;color:#8A94A8;margin:6px 0 0}
 /* Paid card → gold «REVIEW» button (Angelo, 14 Oct 2026): opens the «domain connected + review» message */
 .card .c-acts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:7px}
 /* «Contact note» (16 Oct 2026, GKINI: no Viber → SMS + e-mail only) — always visible on the Board card and in the chat header */
@@ -6655,15 +6678,17 @@ function newGoal(key){ ensureNewTargets(); const v=state.targets.newMonthly[key]
    Remaining, which is the same thing — stays on the Board with a red dashed badge, but its UNPAID money leaves
    New money, To collect, Total generated, the goal and the Year «generated» until they pay; it shows beside them as
    «not sure». Money already paid stays counted. Booked / Thinking money is never counted anyway. Paid → the mark is ignored. */
+/* 14 Nov 2026 (Angelo): only TWO reasons now.
+   👻 ghost = «Not answering · later sometime» → the card moves into the ⚠ Not sure column, money not counted.
+   🤔 maybe = «Not 100% sure he will pay» → the card stays in its own column, only its money is not counted.
+   Older marks are read the same way: later → ghost; slow / promise / other → maybe. */
 var DOUBT_KINDS=[
-  {id:'ghost', n:'Not answering', d:'Messages and calls, no reply', ic:'👻'},
-  {id:'later', n:'Says later', d:'Money problem, or wants to start later', ic:'⏳'},
-  {id:'slow',  n:'Delaying', d:'Will probably pay, but slowly', ic:'🐢'},
-  {id:'promise', n:'Promised a date', d:'Said they will pay on a set day', ic:'📅'},
-  {id:'other', n:'Other reason', d:'Something else feels off', ic:'⚠'}
+  {id:'ghost', n:'Not answering · later sometime', d:'Messages and calls — goes to the ⚠ Not sure column', ic:'👻'},
+  {id:'maybe', n:'Not 100% sure he will pay', d:'Stays in its column — only the money is not counted', ic:'🤔'}
 ];
 var dbCur=null;
-function dbKind(id){ return DOUBT_KINDS.find(k=>k.id===id)||DOUBT_KINDS.find(k=>k.id==='other'); }
+function dbGroup(id){ return !id ? '' : (id==='ghost'||id==='later') ? 'ghost' : 'maybe'; }
+function dbKind(id){ return DOUBT_KINDS.find(k=>k.id===dbGroup(id))||DOUBT_KINDS[1]; }
 function rnDoubt(r){ return (r && r.doubt && typeof r.doubt==='object' && !r.lost) ? r.doubt : null; }
 function dbObj(id,k){ return k==='rn' ? (state.renewals||[]).find(x=>x.id===id) : (state.clients||[]).find(x=>x.id===id); }
 function dbWhen(d,due){ if(!d||!d.until) return ''; const t=todayIso(); if(d.kind==='promise') return d.until===t ? '⏰ PROMISED FOR TODAY' : d.until<t ? '⏰ PROMISED '+fmtDay(d.until)+' — CHASE NOW' : 'promised for '+fmtDay(d.until); return due ? '⏰ CHECK AGAIN TODAY' : 'check again '+fmtDay(d.until); }
@@ -6714,8 +6739,10 @@ function dbKeep(){ if(!dbCur) return; const n=$('#dbNote'), u=$('#dbUntil'); if(
 function dbOpen(id,k){
   k=k||'c'; const c=dbObj(id,k); if(!c) return;
   dbEnsure(); const d=c.doubt||{};
-  dbCur={id, k, kind:d.kind||'', note:d.note||'', until:d.until||''};
-  if(!d.kind && k==='c' && notSure(c)) dbCur.kind='other';
+  dbCur={id, k, kind:dbGroup(d.kind), note:d.note||'', until:d.until||''};
+  if(!dbCur.kind && k==='c' && notSure(c)){ let f=''; try{ f=remFlag(c); }catch(e){} dbCur.kind=f==='red'?'ghost':'maybe'; }
+  if(!dbCur.kind && k==='c' && window._dbPre){ dbCur.kind=window._dbPre; }
+  window._dbPre='';
   dbRender(); $('#dbOverlay').classList.add('open');
 }
 function dbRender(){
@@ -6739,7 +6766,8 @@ function dbRender(){
     <p class="db-hint">${dbCur.kind
       ? (isR ? 'Its <b>'+fmtMoney(owed)+'</b> leaves <b>Overdue</b>, <b>Due this month</b> and the <b>cash forecast</b>, and shows in red as «not sure» — until you press <b>Renewed</b>.'
        : pot ? 'This card is in '+esc(stageById(c.stage).name)+' — that money is not counted yet anyway. The mark stays on the card for when it moves on.'
-             : 'Its <b>'+fmtMoney(owed)+'</b> leaves <b>New money</b>, <b>To collect</b> and the <b>goal</b>, and shows beside them in red as «not sure» — until they pay.'+(paid?' The '+fmtMoney(paid)+' already paid stays counted.':''))
+             : (dbCur.kind==='ghost' ? 'The card moves into the <b>⚠ Not sure</b> column. ' : 'The card <b>stays in '+esc(stageById(c.stage).name)+'</b>. ')
+               +'Its <b>'+fmtMoney(owed)+'</b> is <b>not counted in New money</b> (nor To collect / the goal) and shows in red as «not sure» — until they pay.'+(paid?' The '+fmtMoney(paid)+' already paid stays counted.':''))
       : 'Counted as normal money.'}</p>
     <div class="db-foot">
       ${(isR && dbCur.kind)?`<button type="button" class="btn btn-ghost db-rnlost" title="They will not renew — move to Lost (domain can expire)">${IC.ban} Won't renew → Lost</button>`:(!pot && dbCur.kind)?`<button type="button" class="btn btn-ghost db-trash" title="The money is truly gone — move it to the Trash (Remaining tab)">${IC.trash} Give up → Trash</button>`:''}
@@ -7291,11 +7319,137 @@ function renderBookedTray(mc){
     ab.appendChild(card);
   });
 }
+
+/* ---------- «Copy text» on every Board card (Angelo, 14 Nov 2026) ----------
+   One tap on a card → the ready message for the situation it is in (its stage), in Angelo's voice, greeting
+   by SURNAME (κα / κ., remembered as c.salut) and with THEIR website (draft link, or the live domain).
+   Several situations per stage = chips on top. Edit freely, then Copy / Copy + open Viber / E-mail it.
+   Nothing is ever sent by itself. */
+var txCur=null;
+const TX_SIT={
+  booked:[['meet','Meeting reminder'],['yes','After the meeting · yes']],
+  thinking:[['think','After the meeting · thinking'],['nudge','Gentle nudge']],
+  needinfo:[['material','Ask for material'],['material2','Draft ready with temporary photos']],
+  building:[['building','We are building it']],
+  review:[['draft','First draft · plain'],['draft_form','First draft · with form'],['draft_art','First draft · with articles'],['draft_rem','Did you see the draft?']],
+  changes:[['done','Changes done'],['ch_rem','Any more changes?']],
+  pay:[['pay','Payment reminder'],['pay_live','Ready — payment to go live']],
+  paid:[['review','Domain connected · review ask'],['thanks','Thank you']],
+  lost:[['back','Door open — no pressure']]
+};
+function txHi(){ return new Date().getHours()<12?'Καλημέρα':'Καλησπέρα'; }
+function txWho(){ return txCur?(txCur.sal.t+' '+txCur.sal.n).trim():''; }
+function txMoney(v){ const x=Math.round((+v||0)*100)/100, vat=Math.round(x*24)/100, tot=Math.round((x+vat)*100)/100; const f2=n=>n.toFixed(2).replace('.',','); return (Number.isInteger(x)?String(x):f2(x))+'€ + 24% ΦΠΑ ('+f2(vat)+'€) = '+f2(tot)+'€'; }
+const TX_IBAN='Alpha Bank:\nIBAN: GR7301401630163002002013569\nΕπωνυμία: ΜΕΤΡΙΔΗΣ ΑΓΓΕΛΟΣ - ADVON MEDIA';
+function txDomEx(c){ try{ const sur=chTranslit(mqSurname(c.name||'').n); const prof=chProfFor(c,null); return (sur||'eponymo')+'-'+(prof||'epaggelma')+'.gr'; }catch(e){ return 'eponymo-epaggelma.gr'; } }
+function txQuick(name){ try{ if(window.Tpl && Tpl.loaded){ const v=Tpl.get('q:'+name); if(v) return v; } }catch(e){} const q=CH_QUICK.find(x=>x[0]===name); return q?q[1]:''; }
+function txFill(t,c,link){ const first=String(c.name||'').trim().split(/\s+/)[0]||'';
+  return String(t).replace(/\{hi\}/g,txHi()).replace(/\{sal\}/g,txWho()).replace(/\{name\}/g,txWho()||first)
+    .replace(/\{site\}/g,link||'…').replace(/\{domain_ex\}/g,txDomEx(c)).replace(/\{domain\}/g,link||'…'); }
+function txDefaultLink(c){ let u=''; try{ u=cDraftUrl(c)||''; }catch(e){} if(c.stage==='paid'){ try{ const d=rvDomain(c); if(d) return 'https://'+d; }catch(e){} } return u; }
+function txSwapLink(t,c,L){ let u=''; try{ u=cDraftUrl(c)||''; }catch(e){} return (u && L && L!==u) ? String(t).split(u).join(L) : t; }
+function txText(c,sit,link){
+  const hi=txHi(), who=txWho(), H=hi+(who?' σας '+who:'')+',';
+  const L=link||'…', owed=(()=>{ try{ return cowed(c)||cval(c)||130; }catch(e){ return 130; } })();
+  const sal=txCur?txCur.sal:mqGuessSal(c);
+  switch(sit){
+    case 'meet': {
+      const when=c.day?((()=>{ try{ return grWhen(c.day); }catch(e){ return fmtDay(c.day); } })()):'';
+      return H+'\n\nσας θυμίζω τη σύντομη συνάντησή μας'+(when?' '+when:'')+(c.time?' στις '+c.time:'')+' για την ιστοσελίδα σας. Θα τα πούμε από τον σύνδεσμο Google Meet που λάβατε στο email σας — ή τηλεφωνικά, αν σας βολεύει περισσότερο.\n\n'+(link?'Μέχρι τότε, μπορείτε να δείτε μια πρώτη ιδέα εδώ:\n'+link+'\n\n':'')+'Τα λέμε τότε!\n\n'+MQ_SIGN;
+    }
+    case 'yes': { try{ return mqMsgText(c,{out:'yes',next:'',tags:[],ext:[]},sal); }catch(e){ return H; } }
+    case 'think': { try{ return mqMsgText(c,{out:'think',tags:[],ext:[]},sal); }catch(e){ return H; } }
+    case 'nudge':
+      return H+'\n\nήθελα μόνο να ρωτήσω αν σκεφτήκατε για την ιστοσελίδα σας. '+(link?'Ετοιμάσαμε ήδη μια πρώτη εικόνα για να έχετε μια ιδέα:\n'+link+'\n\n':'')+'Όποτε θέλετε, ξεκινάμε αμέσως — η κατασκευή δεν χρεώνεται, πληρώνετε μόνο τη φιλοξενία και το domain (130€ + ΦΠΑ τον χρόνο), χωρίς προκαταβολή.\n\nΕίμαι στη διάθεσή σας για ό,τι χρειαστείτε.\n\n'+MQ_SIGN;
+    case 'material': { try{ return ndText(c,'c','material',null); }catch(e){ return H; } }
+    case 'material2':
+      return H+'\n\nγια να έχετε μια εικόνα, ετοιμάσαμε ήδη την ιστοσελίδα σας με προσωρινές φωτογραφίες και μπορείτε να τη δείτε εδώ:\n'+L+'\n\nΤις δικές σας φωτογραφίες (εσάς, τον χώρο σας και το λογότυπο αν υπάρχει) μπορείτε να μας τις στείλετε όποτε σας βολεύει στο advonmd@gmail.com, για να έχουν καλή ανάλυση, και τις βάζουμε αμέσως.\n\nΕυχαριστώ πολύ!';
+    case 'building':
+      return H+'\n\nσας ενημερώνω ότι δουλεύουμε ήδη την ιστοσελίδα σας και σε 1–5 ημέρες θα σας στείλουμε μια ολοκληρωμένη, καλή πρώτη εικόνα. Αν θέλετε να προσθέσετε κάτι (φωτογραφίες, κείμενα ή ιδέες), στείλτε το μας όποτε σας βολεύει.\n\nΕυχαριστώ πολύ!';
+    case 'draft': return txFill(txQuick('First draft · plain (hosting + domain)'),c,link);
+    case 'draft_form': return txFill(txQuick('First draft · with contact form'),c,link);
+    case 'draft_art': return txFill(txQuick('First draft · with articles section'),c,link);
+    case 'draft_rem': { try{ return txSwapLink(ndText(c,'c','draft',null),c,link); }catch(e){ return H; } }
+    case 'done':
+      return H+'\n\nοι αλλαγές σας έγιναν και μπορείτε να τις δείτε εδώ:\n'+L+'\n(Αν δεν φαίνονται αμέσως, κάντε ανανέωση της σελίδας.)\n\nΕλέγξτε, παρακαλώ, όλη την ιστοσελίδα μία φορά, από την αρχή μέχρι το τέλος, και πείτε μου αν είναι όλα εντάξει τώρα. Αν είναι όλα καλά, στείλτε μου και το domain name που θέλετε (π.χ. www.'+txDomEx(c)+') για να την ανεβάσουμε.\n\nΕυχαριστώ πολύ!';
+    case 'ch_rem': { try{ return txSwapLink(ndText(c,'c','changes',null),c,link); }catch(e){ return H; } }
+    case 'pay':
+      return H+'\n\nμια μικρή υπενθύμιση για τη μεταφορά της φιλοξενίας της ιστοσελίδας σας'+(link?' ('+link+')':'')+': '+txMoney(owed)+', με κατάθεση στην '+TX_IBAN+'\n\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΕυχαριστώ πολύ!';
+    case 'pay_live':
+      return H+'\n\nη ιστοσελίδα σας είναι έτοιμη για να ανέβει online:\n'+L+'\n\nΜόλις γίνει η μεταφορά της φιλοξενίας, αγοράζουμε το domain και τη συνδέουμε αμέσως: '+txMoney(owed)+', με κατάθεση στην '+TX_IBAN+'\n\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΕυχαριστώ πολύ!';
+    case 'review': { try{ return rvText(sal, rvClean(link)); }catch(e){ return H; } }
+    case 'thanks':
+      return H+'\n\nσας ευχαριστούμε πολύ για τη συνεργασία! Η ιστοσελίδα σας είναι online εδώ:\n'+L+'\n\nΑν χρειαστείτε οτιδήποτε στο μέλλον, είμαστε πάντα στη διάθεσή σας.\n\n'+MQ_SIGN;
+    case 'back':
+      return H+'\n\nδεν θέλω να σας ενοχλώ άλλο με μηνύματα. Από τη μεριά μας όλα μένουν έτοιμα'+(link?' — η ιστοσελίδα σας είναι εδώ: '+link:'')+'. Όποτε θελήσετε να συνεχίσουμε, ένα μήνυμά σας αρκεί και προχωράμε αμέσως.\n\nΣας εύχομαι ό,τι καλύτερο!';
+  }
+  return H;
+}
+function txEnsure(){
+  if($('#txOverlay')) return;
+  const o=document.createElement('div'); o.className='overlay'; o.id='txOverlay';
+  o.innerHTML=`<div class="modal tx-modal" role="dialog" aria-modal="true" aria-labelledby="txTitle"><div class="modal-head"><div><h3 id="txTitle">Copy text</h3><small id="txSub"></small></div><button class="modal-close" id="txClose" title="Close">✕</button></div><div class="modal-body" id="txBody"></div></div>`;
+  document.body.appendChild(o);
+  o.addEventListener('click',e=>{ if(e.target===o) txClose(); });
+  o.querySelector('#txClose').addEventListener('click',txClose);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && o.classList.contains('open')) txClose(); });
+}
+function txClose(){ const o=$('#txOverlay'); if(o) o.classList.remove('open'); txCur=null; }
+function txOpen(id){
+  const c=state && state.clients.find(x=>x.id===id); if(!c) return;
+  txEnsure(); if(window.Tpl && !Tpl.loaded){ try{ Tpl.load(); }catch(e){} }
+  const sits=TX_SIT[c.stage]||TX_SIT.review;
+  let first=sits[0][0];
+  if(c.stage==='review'){ const v=+c.value||0; if(v>=195) first='draft_art'; else if(v>=175) first='draft_form'; }
+  if(c.stage==='needinfo' && txDefaultLink(c)) first='material2';
+  txCur={id, sit:first, sal:mqGuessSal(c), link:txDefaultLink(c), edited:false};
+  txRender(); $('#txOverlay').classList.add('open');
+}
+function txRender(){
+  const c=txCur && state.clients.find(x=>x.id===txCur.id); if(!c) return txClose();
+  const st=stageById(c.stage), sits=TX_SIT[c.stage]||TX_SIT.review;
+  $('#txTitle').textContent='Copy text · '+c.name;
+  $('#txSub').textContent=st.name+' — ready message with their website. Edit it if you like, then copy.';
+  const needLink=!['yes','think','material','building','back','meet','nudge'].includes(txCur.sit);
+  txCur.text=txText(c,txCur.sit,txCur.link); txCur.edited=false;
+  const phone=String(c.viber||c.phone||'').replace(/[^\d+]/g,'');
+  const vib=phone ? (phone.startsWith('+')?phone:(phone.startsWith('30')?'+'+phone:'+30'+phone)) : '';
+  $('#txBody').innerHTML=`
+    ${sits.length>1?`<div class="tx-sit">${sits.map(([k,l])=>`<button type="button" data-sit="${k}" class="${k===txCur.sit?'on':''}">${esc(l)}</button>`).join('')}</div>`:''}
+    <div class="tx-row"><span>Greeting</span>
+      <button type="button" data-salt="κα" class="${txCur.sal.t==='κα'?'on':''}">κα</button>
+      <button type="button" data-salt="κ." class="${txCur.sal.t==='κ.'?'on':''}">κ.</button>
+      <input id="txSalN" class="tx-saln" value="${esc(txCur.sal.n)}" placeholder="Surname" autocomplete="off"></div>
+    <div class="tx-row${needLink&&!txCur.link?' miss':''}" id="txLinkRow"><span>Website</span><input id="txLink" value="${esc(txCur.link)}" placeholder="https://drafts.advonmedia.com/… or their domain" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url"></div>
+    <textarea id="txMsg" class="tx-msg" spellcheck="false">${esc(txCur.text)}</textarea>
+    ${needLink&&!txCur.link?'<p class="tx-hint">No website link found on this card — paste it above and the message updates.</p>':''}
+    <div class="tx-foot"><div class="tx-l">${c.email?'<button type="button" id="txMail">E-mail it</button>':''}${vib?'<button type="button" id="txViber">Copy + open Viber</button>':''}</div>
+      <button type="button" class="btn btn-ghost" id="txCancel">Close</button>
+      <button type="button" class="btn btn-brand" id="txCopy">Copy message</button></div>`;
+  const B=$('#txBody'), ta=$('#txMsg');
+  const regen=()=>{ if(txCur.edited) return; txCur.text=txText(c,txCur.sit,txCur.link); ta.value=txCur.text; };
+  const keepSal=()=>{ c.salut={t:txCur.sal.t, n:txCur.sal.n}; c.updated=Date.now(); save(); };
+  B.querySelectorAll('[data-sit]').forEach(b=>b.addEventListener('click',()=>{ txCur.sit=b.dataset.sit; txRender(); }));
+  B.querySelectorAll('[data-salt]').forEach(b=>b.addEventListener('click',()=>{ txCur.sal.t=b.dataset.salt; B.querySelectorAll('[data-salt]').forEach(x=>x.classList.toggle('on',x===b)); txCur.edited=false; regen(); keepSal(); }));
+  const sn=$('#txSalN'); sn.addEventListener('input',()=>{ txCur.sal.n=sn.value.trim(); txCur.edited=false; regen(); }); sn.addEventListener('change',keepSal);
+  const li=$('#txLink'); li.addEventListener('input',()=>{ let v=li.value.trim(); if(v && !/^https?:\/\//i.test(v)) v='https://'+v.replace(/^\/+/,''); txCur.link=v; $('#txLinkRow').classList.toggle('miss',needLink&&!v); txCur.edited=false; regen(); });
+  li.addEventListener('change',()=>{ const v=txCur.link; if(!v) return; if(/drafts\.advonmedia\.com|github\.io/.test(v)){ if(!c.draft){ c.draft=v; c.updated=Date.now(); save(); } } else if(rvIsLive(v) && !c.domain){ c.domain=rvClean(v); c.updated=Date.now(); save(); } });
+  ta.addEventListener('input',()=>{ txCur.text=ta.value; txCur.edited=true; });
+  const copy=()=>{ const t=ta.value; const ok=()=>toast('Copied — paste it to '+c.name);
+    if(txCur.sit==='review'){ try{ if(rvIsLive(txCur.link)) c.domain=rvClean(txCur.link); c.reviewAsked=Date.now(); c.updated=Date.now(); save(); }catch(e){} }
+    if(navigator.clipboard && window.isSecureContext!==false) return navigator.clipboard.writeText(t).then(ok).catch(()=>{ ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){} });
+    ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){} return Promise.resolve(); };
+  $('#txCopy').addEventListener('click',()=>{ copy(); const b=$('#txCopy'); b.textContent='Copied ✓'; setTimeout(()=>{ if(b.isConnected) b.textContent='Copy message'; },1600); });
+  $('#txCancel').addEventListener('click',txClose);
+  const v=$('#txViber'); if(v) v.addEventListener('click',()=>{ copy(); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(vib); },250); });
+  const m=$('#txMail'); if(m) m.addEventListener('click',()=>{ location.href='mailto:'+encodeURIComponent(c.email)+'?subject='+encodeURIComponent('Η ιστοσελίδα σας — Advon Media')+'&body='+encodeURIComponent(ta.value); });
+}
 /* «Not sure» column (Angelo, 12 Nov 2026): every working card he is not sure will pay (c.doubt, or orange/red in
    Remaining) sits in ONE column left of Need info, with its real stage shown on the card. Drop a card there →
    «Will they pay?» opens. Drag it out into a stage → it is sure again (Undo in the toast). */
 const NS_WORK=['needinfo','building','review','changes','pay'];
-const nsOnBoard=c=>NS_WORK.includes(c.stage) && notSure(c);
+function nsGhost(c){ if(c && c.doubt && typeof c.doubt==='object') return dbGroup(c.doubt.kind)==='ghost'; try{ return remFlag(c)==='red'; }catch(e){ return false; } }
+const nsOnBoard=c=>NS_WORK.includes(c.stage) && notSure(c) && nsGhost(c);
 function nsMakeSure(cl){
   const prev=cl.doubt?JSON.parse(JSON.stringify(cl.doubt)):null, rf=cl.remFlag, rfs=cl.remFlagStage;
   delete cl.doubt; if(cl.remFlag==='orange'||cl.remFlag==='red'){ delete cl.remFlag; delete cl.remFlagStage; }
@@ -7308,6 +7462,7 @@ function nsDropHandlers(el){
     e.preventDefault(); el.classList.remove('dragover');
     const cl=state.clients.find(x=>x.id===e.dataTransfer.getData('text/plain')); if(!cl || nsOnBoard(cl)) return;
     if(!NS_WORK.includes(cl.stage)){ cl.stage='needinfo'; cl.stageAt=Date.now(); cl.thinkAt=null; delete cl.thinkAck; delete cl.lostReason; cl.lostAt=null; cl.updated=Date.now(); save(); renderAll(); try{ chSyncBoard(); }catch(err){} }
+    if(!cl.doubt) window._dbPre='ghost';
     dbOpen(cl.id,'c');
   });
 }
@@ -7770,7 +7925,8 @@ function cardEl(c,st){
     ${(c.stage!=='paid'&&!isLost)?ndLineHtml(c,'c'):''}
     ${(()=>{ const u=cDraftUrl(c); const d=!u?'':(()=>{ const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Open draft':'▶ Open website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })();
       const rv= c.stage==='paid' && !isJob(c) ? `<button type="button" class="c-review${c.reviewAsked?' sent':''}" draggable="false" title="${c.reviewAsked?'Review message already copied on '+esc(fmtDay(rvDay(c.reviewAsked)))+' — tap to open it again':'Domain connected → open the review message for '+esc(c.name)}">${RV_STAR}REVIEW${c.reviewAsked?' <i>✓</i>':''}</button>` : '';
-      return (d||rv) ? `<div class="c-acts">${d}${rv}</div>` : ''; })()}
+      const tx=`<button type="button" class="c-tx" draggable="false" title="Copy the ready message for this stage (${esc(st.name)}) — with their website">${IC.message||''}Copy text</button>`;
+      return `<div class="c-acts">${d}${rv}${tx}</div>`; })()}
     
     ${isLost&&c.lostReason?`<div class="c-reason" title="Reason">${IC.ban} ${esc(c.lostReason)}</div>`:''}
     ${(!isLost && c.stage!=='paid' && !cDoubt(c) && !notSure(c))?`<button type="button" class="c-unsure" data-doubt="${c.id}" title="Not sure they will pay? Mark it — the money leaves New money until they pay">?</button>`:''}
@@ -7778,7 +7934,7 @@ function cardEl(c,st){
     ${nextName?`<button class="c-next" title="Move to ${nextName}">${IC.arrowRight}</button>`:''}`;
   el.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',c.id); el.classList.add('dragging'); });
   el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-  el.addEventListener('click',e=>{ if(e.target.closest('.c-next')||e.target.closest('.c-lost')) return; if(e.target.closest('.c-review')){ e.stopPropagation(); rvOpen(c.id); return; } const ch=e.target.closest('[data-chat]'); if(ch){ e.stopPropagation(); switchView('chats'); Chats.open(ch.dataset.chat); return; } openModal(c.id); });
+  el.addEventListener('click',e=>{ if(e.target.closest('.c-next')||e.target.closest('.c-lost')) return; if(e.target.closest('.c-review')){ e.stopPropagation(); rvOpen(c.id); return; } if(e.target.closest('.c-tx')){ e.stopPropagation(); txOpen(c.id); return; } const ch=e.target.closest('[data-chat]'); if(ch){ e.stopPropagation(); switchView('chats'); Chats.open(ch.dataset.chat); return; } openModal(c.id); });
   const nx=el.querySelector('.c-next');
   if(nx) nx.addEventListener('click',()=>{ c.stage=FLOW[idx+1].id; c.updated=Date.now(); save(); renderAll(); toast(c.name+' → '+FLOW[idx+1].name); });
   const lx=el.querySelector('.c-lost');
