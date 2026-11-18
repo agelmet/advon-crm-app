@@ -5421,7 +5421,7 @@ body.dark .adl-hr-great::after{display:none}
       <div class="field"><label>Email <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label><input id="mEmail" type="email" placeholder="name@email.gr"></div>
       <div class="field"><label>Draft / website link <span style="font-weight:400;text-transform:none;letter-spacing:0;">(shows a big «Open draft» button on the card)</span></label><input id="mDraft" type="url" placeholder="https://drafts.advonmedia.com/NAME/"><div id="mDraftAuto" class="m-site-auto"></div></div>
       <div class="field"><label>Contact note <span style="font-weight:400;text-transform:none;letter-spacing:0;">(always visible on the card — e.g. «No Viber — SMS & e-mail only»)</span></label><input id="mCnote" type="text" maxlength="140" placeholder="No Viber — SMS & e-mail only"></div>
-      <div class="m-adrow"><label class="chk" title="Shows the card in the ad colours on the Board"><input id="mAd" type="checkbox"> From a Meta ad</label><div class="field"><label>What the website is about</label><input id="mAbout" type="text" maxlength="80" placeholder="e.g. Τουριστικό κατάλυμα"></div></div>
+      <div class="m-adrow"><label class="chk" title="Shows the card in the ad colours on the Board. Online bookings from the calendar are ticked by themselves — untick if this one did not come from the ads"><input id="mAd" type="checkbox"> From a Meta ad</label><div class="field"><label>What the website is about</label><input id="mAbout" type="text" maxlength="80" placeholder="e.g. Τουριστικό κατάλυμα"></div></div>
       <div class="field"><label>Notes</label><textarea id="mNotes" placeholder="Viber, needs images, waiting for logo…"></textarea></div>
       <div class="field"><label>Card color</label><div class="swatches" id="mColors"></div>
         <label class="remember" style="margin:10px 0 0;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:500;cursor:pointer;"><input type="checkbox" id="mFill"> Fill the whole card with a light shade</label>
@@ -11981,6 +11981,9 @@ function bkPut(b, quiet){
   const c={id:uid(), name:b.name, value:0, day:b.day||'', time:b.time||'', stage:'booked',
     month:(b.day||todayIso()).slice(0,7), notes, phone:b.phone||'', email:b.email||'',
     fromBooking:b.uid, bookingSrc:b.source||'', created:Date.now(), updated:Date.now()};
+  /* Angelo, 18 Nov 2026: every new client the calendar puts on the Board came from the Meta ads, unless he unticks
+     «From a Meta ad» in the card window (that sets c.ad=false, and it is never ticked again by itself) */
+  c.ad=true; c.adAt=Date.now();
   state.clients.push(c);
   bk.seen[b.uid]='added';
   BK_DONE=BK_DONE.filter(x=>x.uid!==b.uid);
