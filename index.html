@@ -4740,6 +4740,7 @@ body.dark .adl-hr-great::after{display:none}
 .meet.o-noshow .mo{opacity:1;color:#fff;background:#FF6A00;border-radius:999px;padding:1px 6px;letter-spacing:.05em}
 .meet.o-won .mab{color:#08794A} .meet.o-think .mab{color:#7A5A00} .meet.o-noshow .mab{color:#A64600}
 .mag-day .meet.o-noshow .mo{justify-self:start}
+.meet.ghost{border-left-style:dashed}
 .meet .mns{display:inline-block;font:800 8px/1.5 'Inter',sans-serif;letter-spacing:.05em;color:#fff;background:#FF6A00;border-radius:999px;padding:0 5px;margin-right:3px;vertical-align:1px}
 .mcell .meet.mini.ad .mns{padding:0 4px;font-size:7.5px;margin-right:2px}
 body.dark .meet.o-won,body.dark .meet.ad.o-won{background:rgba(14,198,115,.24)}
@@ -8032,16 +8033,30 @@ const MEET_OUT={
   lost:  {name:'Lost',     c:'var(--muted)'},
   noshow:{name:'No show',  c:'var(--red)'},
 };
+/* Ad-leads stage → calendar colour. The Ad leads tab is where most ad meetings get logged
+   (no-show, positive, offer sent…), often without touching the Board card — so the calendar
+   reads it too (19 Nov 2026). */
+const CAL_ADL={won:'won',pay:'won',noshow:'noshow',lost:'lost',think:'think',pos:'think',offer:'think',talk:'think'};
+const CAL_ADL_LBL={pos:'POSITIVE',offer:'OFFER SENT',talk:'TALKING'};
+let calAdlMap=null;
+function calAdlOf(c){
+  if(!c || c.ghost) return '';
+  if(!calAdlMap){ calAdlMap={}; try{ adlEntries().forEach(e=>{ if(e.c){ e.rec=adbRec(e); calAdlMap[e.c.id]=adbStage(e); } }); }catch(err){ console.warn('cal adl',err); } }
+  return calAdlMap[c.id]||'';
+}
 function meetOut(c){
-  /* the colour of a meeting = how it went (19 Nov 2026): the card's CURRENT stage first, so
-     October/November meetings logged only by moving the Board card colour too.
-     Any working stage (Need info → Paid) = said yes · Thinking = thinking ·
-     a no-show stays a no-show unless they were rebooked to a new time · Lost = lost. */
+  /* the colour of a meeting = how it went (19 Nov 2026). Sources, in order:
+     1. an earlier meeting of the same person (ghost) keeps the outcome logged for that slot;
+     2. ad meetings: the Ad leads stage (no-show / positive / offer / thinking / yes / lost);
+     3. the Board card: any working stage = said yes, Thinking, Lost, or the logged outcome. */
   if(!c) return '';
+  if(c.ghost) return c._out||'';
   const o=(c.meetOutcome && MEET_OUT[c.meetOutcome]) ? c.meetOutcome : '';
   const slot=(c.day && c.time) ? c.day+' '+c.time : '';
   const rebooked=!!(c.mqDone && slot && c.mqDone!==slot);
+  const future=!!(c.day && Date.parse(c.day+'T'+(c.time||'23:59'))>Date.now());
   const st=c.stage||'';
+  if(cFromAd(c)){ const a=calAdlOf(c), m=CAL_ADL[a]; if(m && !(future && (m==='think'||m==='noshow'))) return m; }
   if(st && !['booked','thinking','lost'].includes(st) && STAGES.some(x=>x.id===st)) return 'won';
   if(o==='noshow' && !rebooked) return 'noshow';
   if(st==='lost') return 'lost';
@@ -8049,6 +8064,25 @@ function meetOut(c){
   if(o && o!=='noshow' && !rebooked) return o;
   return '';
 }
+function meetLbl(c,o){
+  if(o==='noshow') return 'NO-SHOW'; if(o==='won') return 'YES';
+  if(o==='think' && cFromAd(c)){ const l=CAL_ADL_LBL[calAdlOf(c)]; if(l) return l; }
+  return MEET_OUT[o].name;
+}
+/* earlier meetings of the same person stay on their day with the outcome logged then:
+   «How did it go?» history (mlog) + the no-show list. They are copies for display only. */
+const CAL_MQ={yes:'won',think:'think',noshow:'noshow',no:'lost'};
+function calGhosts(iso){
+  const out=[], seen=new Set();
+  state.clients.forEach(c=>{ if(isTrashed(c)) return; const cur=(c.day&&c.time)?c.day+' '+c.time:'';
+    (c.mlog||[]).forEach(m=>{ const sl=String(m.slot||''); if(!sl.startsWith(iso) || sl===cur) return; const k=c.id+'|'+sl; if(seen.has(k)) return; seen.add(k);
+      out.push({id:c.id,name:c.name,day:iso,time:sl.slice(11),ghost:true,_out:CAL_MQ[m.out]||'',ad:c.ad,leadId:c.leadId,about:c.about,value:0}); }); });
+  (state.noshows||[]).forEach(n=>{ const sl=String(n.slot||''); if(!sl.startsWith(iso)) return; const k=(n.cid||n.id)+'|'+sl; if(seen.has(k)) return;
+    const c=n.cid?state.clients.find(x=>x.id===n.cid):null; if(c && (isTrashed(c) || (c.day&&c.time&&c.day+' '+c.time===sl))) return; seen.add(k);
+    out.push({id:n.cid||n.id,name:(c&&c.name)||n.name||'',day:iso,time:n.time||sl.slice(11),ghost:true,_out:'noshow',ad:c?c.ad:undefined,leadId:c?c.leadId:undefined,value:0}); });
+  return out;
+}
+function calDay(iso){ return meetingsOn(iso).concat(calGhosts(iso)).sort((a,b)=>(a.time||'99')<(b.time||'99')?-1:1); }
 function setMeetOutcome(c,o){
   c.meetOutcome=o||''; c.updated=Date.now();
   if(o==='won'){ if(c.stage==='booked'||c.stage==='thinking'||c.stage==='lost'){ c.stage='needinfo'; delete c.lostReason; c.lostAt=null; } }
@@ -9061,6 +9095,7 @@ function renderAfterMeet(){
 /* the month's meetings, their outcomes and what they turned into */
 function meetingsOfMonth(key){ return state.clients.filter(c=>c.day && c.day.slice(0,7)===key && !isTrashed(c)); }
 function renderCalExtras(){
+  calAdlMap=null;
   const list=meetingsOfMonth(curMonth);
   const n=o=>list.filter(c=>meetOut(c)===o).length;
   const open=list.filter(c=>!meetOut(c)).length;
@@ -9115,20 +9150,21 @@ function meetingsOn(iso){
 }
 function meetHtml(c){
   const o=meetOut(c), ad=cFromAd(c), ab=cAbout(c);
-  return `<div class="meet${o?' o-'+o:''}${ad?' ad':''}" data-id="${c.id}" title="${ad?'From the Meta ads · ':''}${o?MEET_OUT[o].name+' — click to change':'Click to say how it went'}">
-    ${o?`<span class="mo">${o==='noshow'?'NO-SHOW':o==='won'?'YES':MEET_OUT[o].name}</span>`:''}
+  return `<div class="meet${o?' o-'+o:''}${ad?' ad':''}${c.ghost?' ghost':''}" data-id="${c.id}" title="${c.ghost?'Earlier meeting with '+esc(c.name)+' — '+(o?MEET_OUT[o].name:'')+' · click to open the person':(ad?'From the Meta ads · ':'')+(o?MEET_OUT[o].name+' — click to change':'Click to say how it went')}">
+    ${o?`<span class="mo">${meetLbl(c,o)}</span>`:''}
     ${c.time?`<div class="mt">${esc(c.time)}</div>`:''}
     <div class="mn">${ad?'<span class="adm">AD</span>':''}${esc(c.name)}</div>${ab?`<div class="mab">${esc(ab)}</div>`:''}
     ${cval(c)?`<div class="mv">${fmtMoney(cval(c))}</div>`:''}
-    <button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button>
-    <button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button>
+    ${c.ghost?'':`<button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button>
+    <button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button>`}
   </div>`;
 }
 function meetMini(c){
   const o=meetOut(c), ad=cFromAd(c);
-  return `<div class="meet mini${o?' o-'+o:''}${ad?' ad':''}" data-id="${c.id}" title="${ad?'Meta ad · ':''}${esc((c.time?c.time+' · ':'')+c.name)}${cAbout(c)?' · '+esc(cAbout(c)):''}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${o==='noshow'?'<span class="mns">NO-SHOW</span>':''}${ad?'<span class="adm">AD</span>':''}${esc(c.name)}</span><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button></div>`;
+  return `<div class="meet mini${o?' o-'+o:''}${ad?' ad':''}${c.ghost?' ghost':''}" data-id="${c.id}" title="${ad?'Meta ad · ':''}${esc((c.time?c.time+' · ':'')+c.name)}${cAbout(c)?' · '+esc(cAbout(c)):''}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${o==='noshow'?'<span class="mns">NO-SHOW</span>':''}${ad?'<span class="adm">AD</span>':''}${esc(c.name)}</span>${c.ghost?'':`<button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button>`}</div>`;
 }
 function renderCalendar(){
+  calAdlMap=null;
   const body=$('#calBody');
   if(calMode==='week'){
     const days=[...Array(7)].map((_,i)=>{ const d=new Date(weekStart); d.setDate(d.getDate()+i); return d; });
@@ -9137,7 +9173,7 @@ function renderCalendar(){
     let html='<div class="week-grid">';
     days.forEach((d,i)=>{
       const iso=isoDate(d);
-      const items=meetingsOn(iso);
+      const items=calDay(iso);
       const sum=meetLive(items).reduce((s,c)=>s+cval(c),0);
       html+=`<div class="day-col ${iso===todayIso()?'today':''}">
         <div class="day-head"><span class="dn">${DOW[i]}</span><span class="dd">${d.getDate()}</span>${sum?`<span class="dsum">${fmtMoney(sum)}</span>`:''}</div>
@@ -9159,7 +9195,7 @@ function renderCalendar(){
       const d=new Date(gridStart); d.setDate(gridStart.getDate()+i);
       const iso=isoDate(d);
       const inMonth=d.getMonth()===m-1;
-      const items=meetingsOn(iso);
+      const items=calDay(iso);
       /* every meeting of the day is shown — no «+N more» (7 Oct 2026) */
       html+=`<div class="mcell ${inMonth?'':'out'} ${iso===todayIso()?'today':''}${items.length>4?' busy':''}" data-day="${iso}">
         <div class="num">${d.getDate()}${meetLive(items).length?`<span class="mcnt">${meetLive(items).length}</span>`:''}</div>
