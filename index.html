@@ -5420,6 +5420,7 @@ body.dark .adl-hr-great::after{display:none}
       </div>
       <div class="field"><label>Email <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label><input id="mEmail" type="email" placeholder="name@email.gr"></div>
       <div class="field"><label>Draft / website link <span style="font-weight:400;text-transform:none;letter-spacing:0;">(shows a big «Open draft» button on the card)</span></label><input id="mDraft" type="url" placeholder="https://drafts.advonmedia.com/NAME/"><div id="mDraftAuto" class="m-site-auto"></div></div>
+      <div class="field"><label>Second draft / website <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional — a 2nd site for the same client; second button on the card)</span></label><input id="mDraft2" type="url" placeholder="https://drafts.advonmedia.com/NAME2/"></div>
       <div class="field"><label>Contact note <span style="font-weight:400;text-transform:none;letter-spacing:0;">(always visible on the card — e.g. «No Viber — SMS & e-mail only»)</span></label><input id="mCnote" type="text" maxlength="140" placeholder="No Viber — SMS & e-mail only"></div>
       <div class="m-adrow"><label class="chk" title="Shows the card in the ad colours on the Board. Online bookings from the calendar are ticked by themselves — untick if this one did not come from the ads"><input id="mAd" type="checkbox"> From a Meta ad</label><div class="field"><label>What the website is about</label><input id="mAbout" type="text" maxlength="80" placeholder="e.g. Τουριστικό κατάλυμα"></div></div>
       <div class="field"><label>Notes</label><textarea id="mNotes" placeholder="Viber, needs images, waiting for logo…"></textarea></div>
@@ -7926,7 +7927,7 @@ function cardEl(c,st){
     ${(()=>{ const u=cDraftUrl(c); const d=!u?'':(()=>{ const dr=/drafts\.advonmedia\.com|github\.io/.test(u); return `<a class="c-draft${dr?'':' live'}" href="${esc(u)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u)}">${dr?'▶ Open draft':'▶ Open website'}<span>${esc(u.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })();
       const rv= c.stage==='paid' && !isJob(c) ? `<button type="button" class="c-review${c.reviewAsked?' sent':''}" draggable="false" title="${c.reviewAsked?'Review message already copied on '+esc(fmtDay(rvDay(c.reviewAsked)))+' — tap to open it again':'Domain connected → open the review message for '+esc(c.name)}">${RV_STAR}REVIEW${c.reviewAsked?' <i>✓</i>':''}</button>` : '';
       const tx=`<button type="button" class="c-tx" draggable="false" title="Copy the ready message for this stage (${esc(st.name)}) — with their website">${IC.message||''}Copy text</button>`;
-      return `<div class="c-acts">${d}${rv}${tx}</div>`; })()}
+      const u2=c.draft2?(/^https?:\/\//i.test(c.draft2)?String(c.draft2).trim():'https://'+String(c.draft2).trim()):''; const d2=!u2?'':(()=>{ const dr=/drafts\.advonmedia\.com|github\.io/.test(u2); return `<a class="c-draft${dr?'':' live'}" href="${esc(u2)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u2)}">${dr?'▶ Draft 2':'▶ Website 2'}<span>${esc(u2.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })(); return `<div class="c-acts">${d}${d2}${rv}${tx}</div>`; })()}
     
     ${isLost&&c.lostReason?`<div class="c-reason" title="Reason">${IC.ban} ${esc(c.lostReason)}</div>`:''}
     ${(!isLost && c.stage!=='paid' && !cDoubt(c) && !notSure(c))?`<button type="button" class="c-unsure" data-doubt="${c.id}" title="Not sure they will pay? Mark it — the money leaves New money until they pay">?</button>`:''}
@@ -9456,9 +9457,14 @@ function cbInbox(box){
       l.updated=Date.now(); dn[u.id]=Date.now(); adQ=true; }); } }catch(e){}
   /* 12 Nov 2026: lists._crm.board = [{id, phone, email, name, stage, value, notes, draft, ad}] — Claude puts a client on the Board or moves their card
      (same phone / e-mail = that card; otherwise a new card, linked to their lead in Leads when the phone matches); each id ONCE (meta.boardIn) */
-  try{ if(box && Array.isArray(box.board) && box.board.length){ ensureMeta(); const dn=state.meta.boardIn||(state.meta.boardIn={}); const q9=v=>String(v||'').replace(/\D/g,'').slice(-9); const done=[];
-    box.board.forEach(o=>{ if(!o || !o.id || dn[o.id]) return; const p=q9(o.phone), em=String(o.email||'').trim().toLowerCase();
-      let c=(state.clients||[]).find(x=>x && x.stage!=='lost' && !isJob(x) && ((p.length===9 && q9(x.phone)===p) || (em && String(x.email||'').trim().toLowerCase()===em)));
+  /* 19 Nov 2026: lists._crm.board2 = same shape + match / valueSet / draft2 / merge (a new key, so an older open CRM tab can't use the id up without these fields) */
+  try{ const BB=[].concat(box&&Array.isArray(box.board)?box.board:[], box&&Array.isArray(box.board2)?box.board2:[]); if(BB.length){ ensureMeta(); const dn=state.meta.boardIn||(state.meta.boardIn={}); const q9=v=>String(v||'').replace(/\D/g,'').slice(-9); const done=[];
+    BB.forEach(o=>{ if(!o || !o.id || dn[o.id]) return; const p=q9(o.phone), em=String(o.email||'').trim().toLowerCase();
+      const nk=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      let c=(state.clients||[]).find(x=>x && x.stage!=='lost' && !x.trashed && !isJob(x) && ((p.length===9 && q9(x.phone)===p) || (em && String(x.email||'').trim().toLowerCase()===em)));
+      /* 19 Nov 2026: o.match = [name parts] finds a card with no phone/e-mail (e.g. «siamos»), all parts must be in the card name */
+      if(!c && Array.isArray(o.match) && o.match.length) c=(state.clients||[]).find(x=>x && x.stage!=='lost' && !x.trashed && !isJob(x) && o.match.every(m=>nk(x.name).includes(nk(m))));
+      if(!c && o.matchOnly) return;
       if(!c){ const l=(state.leads||[]).find(x=>x && p.length===9 && q9(x.phone)===p);
         const log={id:uid(), type:'g', name:String(o.name||(l&&l.name)||'—'), value:+o.value||0, source:'cold', note:'', date:todayIso(), created:Date.now(), updated:Date.now()};
         if(l) log.leadId=l.id; state.logs.push(log); linkClientForLog(log,'',''); c=state.clients.find(x=>x.id===log.clientId);
@@ -9466,8 +9472,10 @@ function cbInbox(box){
       if(!c) return;
       if(o.name) c.name=String(o.name); if(o.phone && !c.phone) c.phone=String(o.phone).replace(/\D/g,'').slice(-10); if(em && !c.email) c.email=em;
       if(o.stage && STAGES.some(x=>x.id===o.stage) && c.stage!==o.stage){ c.stage=o.stage; c.stageAt=Date.now(); }
-      if(+o.value>0 && !(+c.value>0)) c.value=+o.value; if(!c.month) c.month=todayIso().slice(0,7);
-      if(o.draft) c.draft=String(o.draft);
+      if(+o.value>0 && (o.valueSet || !(+c.value>0))) c.value=+o.value; if(!c.month) c.month=todayIso().slice(0,7);
+      if(o.draft) c.draft=String(o.draft); if(o.draft2) c.draft2=String(o.draft2);
+      /* 19 Nov 2026: o.merge = [name parts] of a duplicate card → it leaves the Board quietly (value 0, Trash «Merged into …», nothing written off) */
+      if(Array.isArray(o.merge) && o.merge.length){ (state.clients||[]).filter(x=>x && x!==c && !x.trashed && o.merge.every(m=>nk(x.name).includes(nk(m)))).forEach(x=>{ x.value=0; x.extras=[]; x.trashed=true; x.trashedAt=Date.now(); x.trashReason='Merged into «'+c.name+'»'; x.trashStage=x.stage; x.updated=Date.now(); }); }
       if(o.notes){ const a=String(o.notes); if(!String(c.notes||'').includes(a)) c.notes=(a+(c.notes?'\n'+c.notes:'')).slice(0,4000); }
       if(o.ad && c.ad!=='no' && c.ad!==false){ c.ad=true; if(!c.adAt) c.adAt=Date.now(); }
       c.updated=Date.now(); dn[o.id]=Date.now(); done.push(c.name+' → '+((STAGES.find(x=>x.id===c.stage)||{}).name||c.stage)); adQ=true; });
@@ -12406,7 +12414,7 @@ function openModal(id, presetDay){
   $('#mMonth').value=c?c.month:(presetDay?presetDay.slice(0,7):curMonth);
   $('#mNotes').value=c?(c.notes||''):'';
   try{ mDoubtRender(); }catch(e){}
-  $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; $('#mAd').checked=!!(c&&cFromAd(c)); $('#mAbout').value=c?cAbout(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
+  $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; if($('#mDraft2')) $('#mDraft2').value=c?(c.draft2||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; $('#mAd').checked=!!(c&&cFromAd(c)); $('#mAbout').value=c?cAbout(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
   const sel=$('#mStage'); sel.innerHTML=STAGES.map(s=>`<option value="${s.id}" ${c&&s.id===c.stage?'selected':''}>${s.name}</option>`).join('');
   modalColor = c ? (c.color||'') : '';
   $('#mFill').checked = c ? !!c.fill : false;
@@ -12489,7 +12497,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 $('#mSave').addEventListener('click',()=>{
   const name=$('#mName').value.trim(); if(!name){ $('#mName').focus(); return; }
   const data={ name, value:+$('#mValue').value||0, day:$('#mDay').value, time:$('#mTime').value, color:modalColor, fill:$('#mFill').checked,
-    phone:$('#mPhone').value.trim(), viber:$('#mViber').value.trim(), email:$('#mEmail').value.trim(), draft:$('#mDraft').value.trim(),
+    phone:$('#mPhone').value.trim(), viber:$('#mViber').value.trim(), email:$('#mEmail').value.trim(), draft:$('#mDraft').value.trim(), draft2:($('#mDraft2')?$('#mDraft2').value.trim():''),
     stage:$('#mStage').value, month:$('#mMonth').value|| ($('#mDay').value? $('#mDay').value.slice(0,7):curMonth), notes:$('#mNotes').value.trim(),
     extras: modalXtras.filter(e=>String(e.name||'').trim()).map(e=>({id:e.id||uid(), name:String(e.name).trim(), value:+e.value||0})),
     pays: modalPays.filter(x=>(+x.amount||0)>0).map(x=>({id:x.id||uid(), amount:+x.amount, date:x.date||todayIso(), note:String(x.note||'').trim()})) };
