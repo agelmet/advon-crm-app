@@ -4110,13 +4110,13 @@ body.dark .tab.tab-xs:not(.active){color:#8AB4F8;}
 .xs-when b{font-weight:800;}
 .xs-when.now{background:var(--red-soft); color:#C8102E; border-color:rgba(255,77,94,.3);}
 body.dark .xs-when{color:#8AB4F8;} body.dark .xs-when.now{color:#ff8a96;}
-.xs-stats{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin:16px 0 14px;}
+.xs-stats{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; margin:16px 0 14px;}
 .xs-stat{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:13px 15px; box-shadow:var(--shadow); text-align:left; cursor:pointer; transition:transform .12s, box-shadow .12s, border-color .12s;}
 .xs-stat:hover{transform:translateY(-1px); border-color:#BFD4F2;}
 .xs-stat.on{border-color:var(--blue); box-shadow:0 0 0 2px rgba(47,127,224,.25), var(--shadow);}
 .xs-stat .n{font-size:26px; font-weight:800; line-height:1.05; letter-spacing:-.02em;}
 .xs-stat .l{font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-top:3px;}
-.xs-stat.todo .n{color:#C8102E;} .xs-stat.ads .n{color:#1A73E8;} .xs-stat.soc .n{color:#C13584;} .xs-stat.both .n{color:#7C5CFC;} .xs-stat.yes .n{color:var(--deep);}
+.xs-stat.todo .n{color:#C8102E;} .xs-stat.ads .n{color:#1A73E8;} .xs-stat.soc .n{color:#C13584;} .xs-stat.both .n{color:#7C5CFC;} .xs-stat.yes .n{color:var(--deep);} .xs-stat.shop .n{color:#0B8A5E;}
 .xs-bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
 .xs-pill{padding:7px 13px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-weight:700; font-size:12.5px; color:var(--ink);}
 .xs-pill .c{color:var(--muted); font-weight:700; margin-left:4px;}
@@ -4157,6 +4157,8 @@ body.dark .xs-st.todo{color:#FFD45C;} body.dark .xs-st.contacted{color:#8AB4F8;}
 .xs-svc svg{width:13px; height:13px;}
 .xs-svc.ads{background:rgba(66,133,244,.12); color:#1A73E8;}
 .xs-svc.soc{background:rgba(221,42,123,.10); color:#C13584;}
+.xs-svc.shop{background:rgba(14,159,110,.12); color:#0B7A52;}
+body.dark .xs-svc.shop{color:#5EE0AE;}
 .xs-svc.uns{background:var(--bg); color:var(--muted); border:1px dashed var(--line);}
 body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 .xs-note{font-size:13px; line-height:1.45; color:var(--ink); white-space:pre-wrap; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
@@ -4182,12 +4184,18 @@ body.dark .xs-svc.ads{color:#8AB4F8;} body.dark .xs-svc.soc{color:#ff7ab8;}
 .xs-chip{padding:8px 13px; border-radius:11px; border:1px solid var(--line); background:var(--bg); font-weight:700; font-size:13px; color:var(--ink);}
 .xs-chip.on{border-color:var(--blue); background:var(--blue-soft); color:#1A5FC4;}
 .xs-chip.on.soc{border-color:#DD2A7B; background:rgba(221,42,123,.1); color:#C13584;}
+.xs-chip.on.shop{border-color:#0E9F6E; background:rgba(14,159,110,.1); color:#0B7A52;}
 .xs-chip.on.uns{border-color:var(--muted); background:var(--bg); color:var(--ink);}
 .xs-msg{width:100%; min-height:250px; border:1px solid var(--line); border-radius:12px; padding:12px; font:inherit; font-size:13.5px; line-height:1.5; background:var(--bg); color:var(--ink); resize:vertical;}
 .xs-sal{display:flex; gap:8px; align-items:center;}
 .xs-sal input{flex:1;}
 #xsOverlay .modal,#xsMsgOverlay .modal{max-width:540px;}
 .xs-hint{font-size:12px; color:var(--muted);}
+/* E-shop section (19 Nov 2026) */
+.xs-shop{background:color-mix(in srgb, #0E9F6E 5%, var(--bg)); border:1px solid color-mix(in srgb, #0E9F6E 22%, var(--line)); border-radius:18px; padding:12px; margin:0 0 22px; --xs-c:#0E9F6E;}
+.xs-shop .xs-ch{margin-bottom:4px;}
+.xs-shop .xs-ch p{font-size:12px; color:var(--muted); margin-left:4px;}
+.xs-shop-g{display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:10px; align-items:start;}
 @media (max-width:1250px){ .xs-cols{grid-template-columns:repeat(2,minmax(0,1fr));} }
 @media (max-width:1100px){ .xs-stats{grid-template-columns:repeat(3,minmax(0,1fr));} }
 @media (max-width:700px){ .xs-cols{grid-template-columns:1fr;} .xs-col.empty{display:none;} }
@@ -4763,7 +4771,7 @@ body.dark .adl-hr-great::after{display:none}
       <button class="tab" data-view="year">Year</button>
       <span class="tab-sep" aria-hidden="true"></span>
       <button class="tab tab-meta" data-view="meta"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg>Meta</button>
-      <button class="tab tab-xs" data-view="xs" title="Clients interested in Google Ads / Social media"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9.5 4.5 3.8 14.4a3 3 0 1 0 5.2 3l5.7-9.9"/><path d="m14.5 4.5 5.7 9.9a3 3 0 1 1-5.2 3L9.3 7.5"/></svg>Ads &amp; Social<span class="tab-n" id="xsTabN" hidden>0</span></button>
+      <button class="tab tab-xs" data-view="xs" title="Clients interested in Google Ads, Social media or an e-shop"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9.5 4.5 3.8 14.4a3 3 0 1 0 5.2 3l5.7-9.9"/><path d="m14.5 4.5 5.7 9.9a3 3 0 1 1-5.2 3L9.3 7.5"/></svg>Ads &amp; Social<span class="tab-n" id="xsTabN" hidden>0</span></button>
     </nav>
     <div class="topbar-right">
       <div class="search-wrap">
@@ -4970,8 +4978,8 @@ body.dark .adl-hr-great::after{display:none}
 <main class="view" id="view-xs">
   <div class="xs-head">
     <div>
-      <h2>Ads &amp; Social</h2>
-      <p class="xs-sub">Clients who asked about <b>Google Ads</b> or <b>Social media management</b>. You told them you'd get in touch in November — everyone here is waiting for that message.</p>
+      <h2>Ads, Social &amp; E-shops</h2>
+      <p class="xs-sub">Clients who asked about <b>Google Ads</b> or <b>Social media management</b>. You told them you'd get in touch in November — everyone here is waiting for that message. Below them: everyone interested in an <b>e-shop</b>.</p>
     </div>
     <span class="xs-sp"></span>
     <button class="xs-when" id="xsWhen" title="When you start contacting them — tap to change"></button>
@@ -4992,6 +5000,7 @@ body.dark .adl-hr-great::after{display:none}
         <div class="xs-chips">
           <button type="button" class="xs-chip" data-svc="ads">Google Ads</button>
           <button type="button" class="xs-chip soc" data-svc="social">Social media</button>
+          <button type="button" class="xs-chip shop" data-svc="eshop">E-shop</button>
           <button type="button" class="xs-chip uns" data-svc="unsure">Not sure which yet</button>
         </div></div>
       <div class="field-row">
@@ -9498,16 +9507,18 @@ function cbInbox(box){
           if(o.card.fu){ const d=String(o.card.fu.day||'').slice(0,10); if((o.log||[]).some(x=>x && x.o==='resched')) adbCardResched(cc, d, o.card.fu.what); else adbCardFollow(cc, d, o.card.fu.what, o.card.note); } } }catch(e){ console.warn('adp card',e); }
       dn[o.id]=Date.now(); nn++; adQ=true; });
     if(nn) setTimeout(()=>{ try{ renderAdl(); }catch(e){} toast('Ad leads: '+nn+(nn===1?' person':' people')+' updated'); },80); } }catch(e){ console.warn('adp inbox',e); }
-  /* 11 Nov 2026: lists._crm.xs = [{id, name, phone, email, ads, social, unsure, day, note}] — Claude adds a client to the «Ads & Social» tab; each id ONCE (meta.xsIn); same phone = updates that row */
+  /* 11 Nov 2026: lists._crm.xs = [{id, name, phone, email, ads, social, eshop, unsure, day, note}] (eshop: 19 Nov 2026; matches by phone, then e-mail) — Claude adds a client to the «Ads & Social» tab; each id ONCE (meta.xsIn); same phone = updates that row */
   try{ if(box && Array.isArray(box.xs) && box.xs.length && xsEnsure()){ ensureMeta(); const dn=state.meta.xsIn||(state.meta.xsIn={}); const q9=v=>String(v||'').replace(/\D/g,'').slice(-9); let nn=0;
     box.xs.forEach(o=>{ if(!o || !o.id || dn[o.id] || !o.name) return; const ph=q9(o.phone);
       let e=ph.length===9 ? state.xsvc.find(x=>x && q9(x.phone)===ph) : null;
+      const em=String(o.email||'').trim().toLowerCase(); if(!e && em) e=state.xsvc.find(x=>x && String(x.email||'').trim().toLowerCase()===em) || null;
       if(!e){ e={id:uid(), src:'manual', at:Date.now(), log:[], st:'todo'}; state.xsvc.push(e); }
       e.name=String(o.name); e.phone=String(o.phone||e.phone||''); e.email=String(o.email||e.email||'');
-      e.ads=!!o.ads; e.social=!!o.social; e.unsure=!!o.unsure; e.day=String(o.day||e.day||xsStart()).slice(0,10); e.note=String(o.note||e.note||'');
+      e.ads=!!o.ads; e.social=!!o.social; e.eshop=!!o.eshop; e.unsure=!!o.unsure && !o.eshop;
+      if(!e.cid && !e.rid){ const bc=(state.clients||[]).filter(c=>c && !isTrashed(c) && ((ph.length===9 && q9(c.phone||c.viber)===ph) || (em && String(c.email||'').trim().toLowerCase()===em))).sort((a,b)=>(b.updated||0)-(a.updated||0))[0]; if(bc) e.cid=bc.id; } e.day=String(o.day||e.day||xsStart()).slice(0,10); e.note=String(o.note||e.note||'');
       if(!e.st) e.st='todo'; if(!Array.isArray(e.log)) e.log=[];
       dn[o.id]=Date.now(); nn++; adQ=true; });
-    if(nn) setTimeout(()=>{ try{ renderXs(); }catch(e){} toast('Ads & Social: '+nn+(nn===1?' client':' clients')+' added'); },90); } }catch(e){ console.warn('xs inbox',e); }
+    if(nn) setTimeout(()=>{ try{ renderXs(); }catch(e){} toast('Ads, Social & E-shops: '+nn+(nn===1?' client':' clients')+' added'); },90); } }catch(e){ console.warn('xs inbox',e); }
   if(!box || !Array.isArray(box.cb) || !box.cb.length) return adQ;
   ensureMeta(); const seen=state.meta.cbIn||(state.meta.cbIn={}); const names=[];
   const p9=v=>String(v||'').replace(/\D/g,'').slice(-9);
@@ -16329,6 +16340,7 @@ const XS_ST={todo:'To contact', contacted:'Contacted', yes:'Said yes', no:'Not n
 const XS_IC={
   ads:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9.5 4.5 3.8 14.4a3 3 0 1 0 5.2 3l5.7-9.9"/><path d="m14.5 4.5 5.7 9.9a3 3 0 1 1-5.2 3L9.3 7.5"/></svg>',
   soc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg>',
+  shop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 11h10.8l2-8H6.3"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg>',
 };
 let xsF={svc:'all', st:'open'}, xsShowDone=false, xsEditing=null, xsMsgCur=null;
 
@@ -16340,7 +16352,7 @@ function xsRenewal(e){ return e && e.rid ? (state.renewals||[]).find(r=>r.id===e
 function xsName(e){ const c=xsClient(e); if(c) return c.name; const r=xsRenewal(e); if(r) return r.name; return e.name||'—'; }
 function xsPhone(e){ const c=xsClient(e); return (c&&(c.viber||c.phone))||e.phone||''; }
 function xsEmail(e){ const c=xsClient(e); return (c&&c.email)||e.email||''; }
-function xsKind(e){ return e.unsure && !e.ads && !e.social ? 'uns' : (e.ads&&e.social ? 'both' : e.ads ? 'ads' : e.social ? 'soc' : 'uns'); }
+function xsKind(e){ if(e.eshop) return 'shop'; return e.unsure && !e.ads && !e.social ? 'uns' : (e.ads&&e.social ? 'both' : e.ads ? 'ads' : e.social ? 'soc' : 'uns'); }
 function xsDue(e){ return e.st==='todo' && (e.day||xsStart())<=todayIso(); }
 function xsFind(keys){
   const ks=keys.map(xsN).filter(Boolean); const hit=s=>{ const n=xsN(s); return ks.some(k=>n.includes(k)); };
@@ -16403,12 +16415,12 @@ function xsSuggest(){
 function xsDayLbl(iso){ if(!iso) return ''; const d=new Date(iso+'T12:00'); const t=todayIso(); if(iso===t) return 'today';
   return d.toLocaleDateString('en-GB',{weekday:'short', day:'numeric', month:'short'}); }
 function xsSvcHtml(e){
-  const h=[]; if(e.ads) h.push(`<span class="xs-svc ads">${XS_IC.ads}Google Ads</span>`); if(e.social) h.push(`<span class="xs-svc soc">${XS_IC.soc}Social media</span>`);
+  const h=[]; if(e.ads) h.push(`<span class="xs-svc ads">${XS_IC.ads}Google Ads</span>`); if(e.social) h.push(`<span class="xs-svc soc">${XS_IC.soc}Social media</span>`); if(e.eshop) h.push(`<span class="xs-svc shop">${XS_IC.shop}E-shop</span>`);
   if(!h.length) h.push(`<span class="xs-svc uns">Not sure which yet — ask</span>`); return h.join('');
 }
 function xsCard(e){
   const c=xsClient(e), r=xsRenewal(e), k=xsKind(e);
-  const col={ads:'#4285F4', soc:'#DD2A7B', both:'#7C5CFC', uns:'#8A94A8'}[k];
+  const col={ads:'#4285F4', soc:'#DD2A7B', both:'#7C5CFC', shop:'#0E9F6E', uns:'#8A94A8'}[k];
   const meta=[];
   if(c){ const s=STAGES.find(x=>x.id===c.stage); if(s) meta.push('Board · '+s.name); let u=''; try{ u=cDraftUrl(c); }catch(_){} if(u) meta.push(`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').replace(/\/$/,''))}</a>`); }
   else if(r) meta.push('Renewals'+(r.date?' · renews '+fmtDay(r.date):''));
@@ -16437,6 +16449,7 @@ function xsMatch(e){
   if(xsF.svc==='soc' && !e.social) return false;
   if(xsF.svc==='both' && k!=='both') return false;
   if(xsF.svc==='uns' && k!=='uns') return false;
+  if(xsF.svc==='shop' && !e.eshop) return false;
   if(xsF.st==='open') return e.st==='todo'||e.st==='contacted';
   if(xsF.st!=='all') return e.st===xsF.st;
   return true;
@@ -16452,13 +16465,13 @@ function renderXs(){
   const w=$('#xsWhen'); w.classList.toggle('now', days<=0);
   w.innerHTML= days>0 ? `Contact them from <b>${esc(xsDayLbl(start))}</b> · in ${days} day${days===1?'':'s'}` : `Contact time — <b>${dueN} waiting</b>`;
   const open=all.filter(e=>e.st==='todo'||e.st==='contacted');
-  const cnt={todo:all.filter(e=>e.st==='todo').length, ads:open.filter(e=>e.ads).length, soc:open.filter(e=>e.social).length, both:open.filter(e=>xsKind(e)==='both').length, yes:all.filter(e=>e.st==='yes').length};
+  const cnt={todo:all.filter(e=>e.st==='todo').length, ads:open.filter(e=>e.ads).length, soc:open.filter(e=>e.social).length, both:open.filter(e=>xsKind(e)==='both').length, shop:open.filter(e=>e.eshop).length, yes:all.filter(e=>e.st==='yes').length};
   const tile=(cls,n,l,act)=>`<button class="xs-stat ${cls}${act?' on':''}" data-xs-tile="${cls}"><div class="n">${n}</div><div class="l">${l}</div></button>`;
-  $('#xsStats').innerHTML=tile('todo',cnt.todo,'To contact',xsF.st==='todo'&&xsF.svc==='all')+tile('ads',cnt.ads,'Google Ads',xsF.svc==='ads')+tile('soc',cnt.soc,'Social media',xsF.svc==='soc')+tile('both',cnt.both,'Want both',xsF.svc==='both')+tile('yes',cnt.yes,'Said yes',xsF.st==='yes');
+  $('#xsStats').innerHTML=tile('todo',cnt.todo,'To contact',xsF.st==='todo'&&xsF.svc==='all')+tile('ads',cnt.ads,'Google Ads',xsF.svc==='ads')+tile('soc',cnt.soc,'Social media',xsF.svc==='soc')+tile('both',cnt.both,'Want both',xsF.svc==='both')+tile('shop',cnt.shop,'E-shop',xsF.svc==='shop')+tile('yes',cnt.yes,'Said yes',xsF.st==='yes');
   const svcN=f=>all.filter(e=>{ const s=xsF.svc; xsF.svc=f; const r=xsMatch(e); xsF.svc=s; return r; }).length;
   const stN=f=>all.filter(e=>{ const s=xsF.st; xsF.st=f; const r=xsMatch(e); xsF.st=s; return r; }).length;
   const pill=(grp,v,l,n)=>`<button class="xs-pill${xsF[grp]===v?' on':''}" data-xs-f="${grp}:${v}">${l}<span class="c">${n}</span></button>`;
-  $('#xsBar').innerHTML=pill('svc','all','All',svcN('all'))+pill('svc','ads','Google Ads',svcN('ads'))+pill('svc','soc','Social media',svcN('soc'))+pill('svc','both','Both',svcN('both'))+pill('svc','uns','Not sure yet',svcN('uns'))
+  $('#xsBar').innerHTML=pill('svc','all','All',svcN('all'))+pill('svc','ads','Google Ads',svcN('ads'))+pill('svc','soc','Social media',svcN('soc'))+pill('svc','both','Both',svcN('both'))+pill('svc','shop','E-shop',svcN('shop'))+pill('svc','uns','Not sure yet',svcN('uns'))
     +'<span class="xs-sep"></span>'+pill('st','open','Open',stN('open'))+pill('st','todo','To contact',stN('todo'))+pill('st','contacted','Contacted',stN('contacted'))+pill('st','yes','Said yes',stN('yes'))+pill('st','no','Not now',stN('no'))+pill('st','all','Everything',stN('all'))
     +'<button class="btn btn-brand xs-add" id="xsAddBtn">＋ Add client</button>';
   /* suggestions */
@@ -16476,6 +16489,9 @@ function renderXs(){
       const g=rows.filter(e=>xsKind(e)===k);
       return `<section class="xs-col${g.length?'':' empty'}" style="--xs-c:${col}"><div class="xs-ch"><span class="ic">${ic||'<i></i>'}</span><h3>${l}</h3><span class="n">${g.length}</span></div>${g.length?g.map(xsCard).join(''):'<div class="xs-none">Nobody yet</div>'}</section>`;
     }).join('')+'</div>';
+    const sh=rows.filter(e=>xsKind(e)==='shop');
+    h+=`<section class="xs-shop"><div class="xs-ch"><span class="ic">${XS_IC.shop}</span><h3>E-shop</h3><p>Clients who asked about an online shop</p><span class="n">${sh.length}</span></div>`
+      +(sh.length?`<div class="xs-shop-g">${sh.map(xsCard).join('')}</div>`:'<div class="xs-none">Nobody yet</div>')+'</section>';
   } else h=`<div class="xs-grid">${rows.map(xsCard).join('')}</div>`;
   const doneN=all.filter(e=>e.st==='yes'||e.st==='no').length;
   if(xsF.st==='open' && doneN) h+=`<div class="xs-done-t" data-xs-done>${xsShowDone?'▾':'▸'} Finished (said yes / not now) · ${doneN}</div>`+(xsShowDone?`<div class="xs-grid">${all.filter(e=>(e.st==='yes'||e.st==='no')&&(()=>{const s=xsF.st; xsF.st='all'; const r=xsMatch(e); xsF.st=s; return r;})()).map(xsCard).join('')}</div>`:'');
@@ -16516,7 +16532,7 @@ function xsLinkHint(){
   const c=l.cid?state.clients.find(x=>x.id===l.cid):null, r=l.rid?(state.renewals||[]).find(x=>x.id===l.rid):null;
   $('#xsLinkHint').textContent= c ? '✓ Linked to the Board card «'+c.name+'»' : r ? '✓ Linked to Renewals «'+r.name+'»' : ($('#xsName').value.trim()?'Not found on the Board — saved with this name':'');
 }
-let xsSvc={ads:false, social:false, unsure:false};
+let xsSvc={ads:false, social:false, eshop:false, unsure:false};
 function xsPaintSvc(){ document.querySelectorAll('#xsOverlay [data-svc]').forEach(b=>b.classList.toggle('on', !!xsSvc[b.dataset.svc])); }
 function xsOpenEdit(id){
   xsEnsure(); xsNamesList();
@@ -16524,13 +16540,13 @@ function xsOpenEdit(id){
   $('#xsMTitle').textContent=e?'Edit — '+xsName(e):'Add a client';
   $('#xsName').value=e?xsName(e):''; $('#xsDay').value=e?(e.day||xsStart()):xsStart(); $('#xsSt').value=e?e.st:'todo';
   $('#xsPhone').value=e?(e.phone||''):''; $('#xsEmail').value=e?(e.email||''):''; $('#xsNote').value=e?(e.note||''):'';
-  xsSvc={ads:!!(e&&e.ads), social:!!(e&&e.social), unsure:!!(e&&xsKind(e)==='uns')}; xsPaintSvc();
+  xsSvc={ads:!!(e&&e.ads), social:!!(e&&e.social), eshop:!!(e&&e.eshop), unsure:!!(e&&xsKind(e)==='uns')}; xsPaintSvc();
   $('#xsDel').style.display=e?'':'none'; xsLinkHint();
   $('#xsOverlay').classList.add('open'); setTimeout(()=>{ if(!e) $('#xsName').focus(); },60);
 }
 function xsSaveEdit(){
   const name=$('#xsName').value.trim(); if(!name){ toast('Write the client\'s name'); return; }
-  if(!xsSvc.ads && !xsSvc.social && !xsSvc.unsure){ toast('Pick Google Ads, Social media or «Not sure»'); return; }
+  if(!xsSvc.ads && !xsSvc.social && !xsSvc.eshop && !xsSvc.unsure){ toast('Pick Google Ads, Social media, E-shop or «Not sure»'); return; }
   const link=xsLinkFor(name);
   let e=xsEditing?state.xsvc.find(x=>x.id===xsEditing):null;
   if(!e && link.cid && state.xsvc.some(x=>x.cid===link.cid)){ e=state.xsvc.find(x=>x.cid===link.cid); toast('Already on the list — updated it'); }
@@ -16538,7 +16554,7 @@ function xsSaveEdit(){
   const st=$('#xsSt').value;
   if(!isNew && st!==e.st) e.log=(e.log||[]).concat({at:Date.now(), st}).slice(-12);
   delete e.cid; delete e.rid;
-  Object.assign(e, link, {name, phone:$('#xsPhone').value.trim(), email:$('#xsEmail').value.trim(), ads:xsSvc.ads, social:xsSvc.social, unsure:!xsSvc.ads&&!xsSvc.social,
+  Object.assign(e, link, {name, phone:$('#xsPhone').value.trim(), email:$('#xsEmail').value.trim(), ads:xsSvc.ads, social:xsSvc.social, eshop:xsSvc.eshop, unsure:!xsSvc.ads&&!xsSvc.social&&!xsSvc.eshop,
     st, day:$('#xsDay').value||xsStart(), note:$('#xsNote').value.trim(), updated:Date.now()});
   $('#xsOverlay').classList.remove('open'); save(); renderAll(); toast(isNew?name+' added':'Saved');
 }
@@ -16550,6 +16566,12 @@ function xsMsgText(e, sal){
   const who=(sal.t+' '+sal.n).trim();
   const A='τις διαφημίσεις στο Google (Google Ads)', S='τη διαχείριση των social media (Instagram & Facebook)';
   const k=xsKind(e);
+  if(e.eshop){
+    const L=[hi+' σας '+who+',', 'Σε συνέχεια της επικοινωνίας μας για το ηλεκτρονικό σας κατάστημα (e-shop), θα θέλατε να σας στείλω τις λεπτομέρειες ή να τα πούμε σε ένα σύντομο τηλεφώνημα;'];
+    if(e.ads||e.social) L.push('Μπορούμε να δούμε μαζί και '+(e.ads&&e.social?A+' και '+S:e.ads?A:S)+'.');
+    L.push('Είμαστε στη διάθεσή σας για ό,τι χρειαστείτε.');
+    return L.join('\n\n')+'\n\n'+MQ_SIGN;
+  }
   const what= k==='both' ? A+' και '+S : k==='ads' ? A : k==='soc' ? S : A+' και '+S;
   const L=[hi+' σας '+who+',', 'Όπως είχαμε πει, από τον Νοέμβριο ξεκινάμε '+what+' για τους πελάτες μας.'];
   if(k==='uns') L.push('Θα θέλατε να σας στείλω τις λεπτομέρειες για κάποιο από τα δύο ή να τα πούμε σε ένα σύντομο τηλεφώνημα;');
@@ -16606,7 +16628,7 @@ function xsCopy(){ const t=$('#xsMsg').value, ta=$('#xsMsg'); const ok=()=>toast
   document.querySelectorAll('[data-xs-close]').forEach(b=>b.addEventListener('click',()=>{ $('#xsOverlay').classList.remove('open'); $('#xsMsgOverlay').classList.remove('open'); }));
   ['xsOverlay','xsMsgOverlay'].forEach(o=>$('#'+o).addEventListener('click',ev=>{ if(ev.target.id===o) ev.target.classList.remove('open'); }));
   document.querySelectorAll('#xsOverlay [data-svc]').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.svc;
-    if(k==='unsure'){ xsSvc={ads:false, social:false, unsure:!xsSvc.unsure}; } else { xsSvc[k]=!xsSvc[k]; xsSvc.unsure=false; } xsPaintSvc(); }));
+    if(k==='unsure'){ xsSvc={ads:false, social:false, eshop:false, unsure:!xsSvc.unsure}; } else { xsSvc[k]=!xsSvc[k]; xsSvc.unsure=false; } xsPaintSvc(); }));
   $('#xsName').addEventListener('input',xsLinkHint);
   $('#xsSave').addEventListener('click',xsSaveEdit);
   $('#xsDel').addEventListener('click',()=>{ const i=state.xsvc.findIndex(x=>x.id===xsEditing); if(i<0) return; const [e]=state.xsvc.splice(i,1);
