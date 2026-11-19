@@ -9507,7 +9507,7 @@ function cbInbox(box){
           if(o.card.fu){ const d=String(o.card.fu.day||'').slice(0,10); if((o.log||[]).some(x=>x && x.o==='resched')) adbCardResched(cc, d, o.card.fu.what); else adbCardFollow(cc, d, o.card.fu.what, o.card.note); } } }catch(e){ console.warn('adp card',e); }
       dn[o.id]=Date.now(); nn++; adQ=true; });
     if(nn) setTimeout(()=>{ try{ renderAdl(); }catch(e){} toast('Ad leads: '+nn+(nn===1?' person':' people')+' updated'); },80); } }catch(e){ console.warn('adp inbox',e); }
-  /* 11 Nov 2026: lists._crm.xs = [{id, name, phone, email, ads, social, eshop, unsure, day, note}] (eshop: 19 Nov 2026; matches by phone, then e-mail) — Claude adds a client to the «Ads & Social» tab; each id ONCE (meta.xsIn); same phone = updates that row */
+  /* 11 Nov 2026: lists._crm.xs = [{id, name, phone, email, ads, social, eshop, unsure, day, note}] (eshop: 19 Nov 2026; matches by phone, then e-mail; optional keys:[…] links a Board card / Renewals row by name) — Claude adds a client to the «Ads & Social» tab; each id ONCE (meta.xsIn); same phone = updates that row */
   try{ if(box && Array.isArray(box.xs) && box.xs.length && xsEnsure()){ ensureMeta(); const dn=state.meta.xsIn||(state.meta.xsIn={}); const q9=v=>String(v||'').replace(/\D/g,'').slice(-9); let nn=0;
     box.xs.forEach(o=>{ if(!o || !o.id || dn[o.id] || !o.name) return; const ph=q9(o.phone);
       let e=ph.length===9 ? state.xsvc.find(x=>x && q9(x.phone)===ph) : null;
@@ -9515,7 +9515,8 @@ function cbInbox(box){
       if(!e){ e={id:uid(), src:'manual', at:Date.now(), log:[], st:'todo'}; state.xsvc.push(e); }
       e.name=String(o.name); e.phone=String(o.phone||e.phone||''); e.email=String(o.email||e.email||'');
       e.ads=!!o.ads; e.social=!!o.social; e.eshop=!!o.eshop; e.unsure=!!o.unsure && !o.eshop;
-      if(!e.cid && !e.rid){ const bc=(state.clients||[]).filter(c=>c && !isTrashed(c) && ((ph.length===9 && q9(c.phone||c.viber)===ph) || (em && String(c.email||'').trim().toLowerCase()===em))).sort((a,b)=>(b.updated||0)-(a.updated||0))[0]; if(bc) e.cid=bc.id; } e.day=String(o.day||e.day||xsStart()).slice(0,10); e.note=String(o.note||e.note||'');
+      if(!e.cid && !e.rid){ const bc=(state.clients||[]).filter(c=>c && !isTrashed(c) && ((ph.length===9 && q9(c.phone||c.viber)===ph) || (em && String(c.email||'').trim().toLowerCase()===em))).sort((a,b)=>(b.updated||0)-(a.updated||0))[0]; if(bc) e.cid=bc.id; }
+      if(!e.cid && !e.rid && Array.isArray(o.keys) && o.keys.length){ const l=xsFind(o.keys); if(l.cid) e.cid=l.cid; else if(l.rid) e.rid=l.rid; } e.day=String(o.day||e.day||xsStart()).slice(0,10); e.note=String(o.note||e.note||'');
       if(!e.st) e.st='todo'; if(!Array.isArray(e.log)) e.log=[];
       dn[o.id]=Date.now(); nn++; adQ=true; });
     if(nn) setTimeout(()=>{ try{ renderXs(); }catch(e){} toast('Ads, Social & E-shops: '+nn+(nn===1?' client':' clients')+' added'); },90); } }catch(e){ console.warn('xs inbox',e); }
