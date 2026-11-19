@@ -8038,10 +8038,10 @@ const MEET_OUT={
    reads it too (19 Nov 2026). */
 const CAL_ADL={won:'won',pay:'won',noshow:'noshow',lost:'lost',think:'think',pos:'think',offer:'think',talk:'think'};
 const CAL_ADL_LBL={pos:'POSITIVE',offer:'OFFER SENT',talk:'TALKING'};
-let calAdlMap=null;
+let calAdlMap=null, calAdlAt={};
 function calAdlOf(c){
   if(!c || c.ghost) return '';
-  if(!calAdlMap){ calAdlMap={}; try{ adlEntries().forEach(e=>{ if(e.c){ e.rec=adbRec(e); calAdlMap[e.c.id]=adbStage(e); } }); }catch(err){ console.warn('cal adl',err); } }
+  if(!calAdlMap){ calAdlMap={}; calAdlAt={}; try{ adlEntries().forEach(e=>{ if(e.c){ e.rec=adbRec(e); calAdlMap[e.c.id]=adbStage(e); calAdlAt[e.c.id]=(e.rec&&e.rec.sAt)||0; } }); }catch(err){ console.warn('cal adl',err); } }
   return calAdlMap[c.id]||'';
 }
 function meetOut(c){
@@ -8056,7 +8056,11 @@ function meetOut(c){
   const rebooked=!!(c.mqDone && slot && c.mqDone!==slot);
   const future=!!(c.day && Date.parse(c.day+'T'+(c.time||'23:59'))>Date.now());
   const st=c.stage||'';
-  if(cFromAd(c)){ const a=calAdlOf(c), m=CAL_ADL[a]; if(m && !(future && (m==='think'||m==='noshow'))) return m; }
+  if(cFromAd(c)){ const a=calAdlOf(c), m=CAL_ADL[a];
+    /* a meeting still ahead keeps an Ad-leads «no-show» only if it was marked on the meeting's own day
+       (they told you they won't come) — an older no-show belongs to the meeting before the rebooking */
+    const markedToday=!!(calAdlAt[c.id] && isoDate(new Date(calAdlAt[c.id]))===c.day);
+    if(m && !(future && (m==='think' || (m==='noshow' && !markedToday)))) return m; }
   if(st && !['booked','thinking','lost'].includes(st) && STAGES.some(x=>x.id===st)) return 'won';
   if(o==='noshow' && !rebooked) return 'noshow';
   if(st==='lost') return 'lost';
@@ -16905,6 +16909,7 @@ function renderAdl(){
   try{ ensureMeta(); if(!state.meta.adbWonB1){ state.meta.adbWonB1=Date.now(); const W=all.filter(e=>e.bs==='won' && !(e.c && !e.c.trashed && ADB_WORK(e.c)));
     if(W.length){ W.forEach(e=>adbToBoard(e,null)); save(); all=adlEntries(); adbDecorate(all); setTimeout(()=>{ try{ renderAll(); }catch(x){} toast('Board · Need info: '+W.map(e=>e.name).join(', ')); },150); } else save(); } }catch(e){ console.warn('won→board',e); }
   adlBadge(all);
+  if(curView==='calendar'){ try{ renderCalendar(); renderCalExtras(); }catch(e){ console.warn('cal repaint',e); } }   /* a change made in the Ad-leads card over the Calendar shows at once (19 Nov 2026) */
   if(curView!=='adl'){ const H=adbHostEl();
     if(adlHost && adlX){ const sel=all.find(e=>e.id===adlX); if(sel){ const kd=H.querySelector('.adb-dr'), dsl=kd&&kd.dataset.id===sel.id?kd.scrollTop:null;
         H.innerHTML=adbDrawer(sel); document.body.classList.add('adl-mopen'); const nd=H.querySelector('.adb-dr'); if(nd && dsl!=null) nd.scrollTop=dsl; try{ adbAfterRender(H); }catch(e){} return; } }
