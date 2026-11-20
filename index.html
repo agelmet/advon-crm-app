@@ -5945,6 +5945,7 @@ const CB_ICO={
   cal:'<rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M16 3v4M8 3v4M3.5 10.5h17M8 15h2.5M13.5 15H16"/>',
   phone:'<path d="M4 9.5c4.8-3.3 11.2-3.3 16 0l-1.6 2.9-3.1-.9V9.6a8.8 8.8 0 0 0-6.6 0v1.9l-3.1.9Z"/><rect x="6" y="13.5" width="12" height="7.5" rx="2"/><circle cx="12" cy="17.2" r="1.5"/>',
   bld:'<path d="M5 21V5.5A2.5 2.5 0 0 1 7.5 3h6A2.5 2.5 0 0 1 16 5.5V21M16 10h2.5a1.5 1.5 0 0 1 1.5 1.5V21M3 21h18M9 7.5h3M9 11.5h3M9 15.5h3"/>',
+  target:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><path d="M12 1.8v3.2M12 19v3.2M1.8 12H5M19 12h3.2"/>',
   mega:'<path d="M3 10.5v3a1.5 1.5 0 0 0 1.5 1.5H7l6 4V5L7 9H4.5A1.5 1.5 0 0 0 3 10.5Z"/><path d="M16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11"/>',
   rcpt:'<path d="M5 3v18l2-1.2 2 1.2 2-1.2 2 1.2 2-1.2 2 1.2 2-1.2V3l-2 1.2-2-1.2-2 1.2-2-1.2-2 1.2-2-1.2Z"/><path d="M9 8h6M9 12h6M9 16h3"/>'
 };
@@ -5953,7 +5954,7 @@ function cbMeta(name){
   const n=String(name||'').toLowerCase();
   if(/domain|domains/.test(n)) return {ic:'globe', c:'#2F7FE0'};
   if(/claude/.test(n)) return {ic:'spark', c:'#D97757'};
-  if(/meta|facebook|instagram/.test(n)) return {ic:'mega', c:'#1877F2'};
+  if(/meta|facebook|instagram/.test(n)) return {ic:'target', c:'linear-gradient(135deg,#0A84FF 0%,#4F46E5 55%,#9333EA 100%)', dot:'#4F46E5'};
   if(/ασφαλ|insur|εφκα|efka/.test(n)) return {ic:'shield', c:'#0B9E5C'};
   if(/netlify|hosting/.test(n)) return {ic:'cloud', c:'#14B8A6'};
   if(/eleven/.test(n)) return {ic:'wave', c:'#1F2937'};
