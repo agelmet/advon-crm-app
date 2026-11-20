@@ -6004,9 +6004,9 @@ function costsBoardHtml(){
 
   /* ---- the list: what you pay every month now ---- */
   const rows=[];
-  const soldRef=websitesSold(refKey);
-  rows.push({m:'Domains', meta:cbMeta('domain'), mo:avgDom, yr:yearOf(domFor), edit:'rate',
-    sub:`${cbF(rate)} per website you sell · ${String(Math.round(avgSold*10)/10).replace('.',',')} sites/month on average · ${MONTHS[+refKey.slice(5,7)-1]}: ${soldRef}`});
+  /* 20 Nov 2026 — Angelo: domains are NOT a monthly cost. They stay a per-website expense (still taken off the profit)
+     and are shown on their own line, never in the monthly totals or the month bars. */
+  let soldYr=0; months.forEach(k=>{ if(!fut(k)) soldYr+=websitesSold(k); });
   E.recurring.forEach(r=>{
     const mo=recAmount(r,refKey), yr=yearOf(k=>recAmount(r,k));
     const diff=months.filter(k=>Math.abs(recAmount(r,k)-mo)>0.004);
@@ -6043,7 +6043,7 @@ function costsBoardHtml(){
     : `<div class="cb-what off"><div class="k">If you took all ${E.considering.length} ideas</div><div class="v">${f(nowM+consAllM)} / month</div><div class="s">+${f(consAllM)} a month · tick the grey ones below to try a mix</div></div>`;
 
   /* ---- 12 months chart ---- */
-  const segs=k=>{ const a=[{c:cbMeta('domain').c, v:domFor(k), n:'Domains'}]; E.recurring.forEach(r=>a.push({c:cbMeta(r.name).c, v:recAmount(r,k), n:r.name})); return a; };
+  const segs=k=>{ const a=[]; E.recurring.forEach(r=>a.push({c:cbMeta(r.name).c, v:recAmount(r,k), n:r.name})); return a; };
   const grayFor=k=> (k>=thisKey) ? consOnM : 0;
   const tots=months.map(k=>segs(k).reduce((a,s)=>a+s.v,0));
   const max=Math.max(1,...months.map((k,i)=>tots[i]+grayFor(k)));
@@ -6053,21 +6053,21 @@ function costsBoardHtml(){
     const fu=fut(k), g=grayFor(k), sg=segs(k);
     const parts=sg.filter(s=>s.v>0).map(s=>`<i class="${fu?'fut':''}" style="background:${s.c};height:${Math.max(1,s.v/max*H)}px" title="${esc(s.n)} ${f(s.v)}"></i>`).join('')+(g>0?`<i class="gry" style="height:${g/max*H}px" title="Ideas you ticked +${f(g)}"></i>`:'');
     const hh=(tots[i]+g)/max*H;
-    return `<div class="cb-bar${fu?' fut':''}${k===cbSel?' sel':''}" data-cb="sel" data-k="${k}" title="${fmtMonth(k)}: ${f(tots[i])}${g?` (+${f(g)} if you take the ticked ideas)`:''}${fu?' · estimate':''}">
+    return `<div class="cb-bar${fu?' fut':''}${k===cbSel?' sel':''}" data-cb="sel" data-k="${k}" title="${fmtMonth(k)}: ${f(tots[i])}${g?` (+${f(g)} if you take the ticked ideas)`:''}${fu?' · to come':''}">
       <span class="cb-val" style="bottom:${hh+4}px">${fr(tots[i])}${g?`<em>+${fr(g)}</em>`:''}</span>
       <div class="cb-stack">${parts}</div></div>`;
   }).join('');
   const mon=months.map(k=>`<span class="${k===thisKey?'now':''}">${MONTHS[+k.slice(5,7)-1].slice(0,3)}</span>`).join('');
-  const legend=[{c:cbMeta('domain').c,n:'Domains'}].concat(E.recurring.map(r=>({c:cbMeta(r.name).c,n:r.name}))).map(l=>`<span><i style="background:${l.c}"></i>${esc(l.n)}</span>`).join('')
-    +`<span><i class="gry"></i>ideas you ticked</span><span style="opacity:.8">faded = months still to come (estimate)</span>`;
+  const legend=[].concat(E.recurring.map(r=>({c:cbMeta(r.name).c,n:r.name}))).map(l=>`<span><i style="background:${l.c}"></i>${esc(l.n)}</span>`).join('')
+    +`<span><i class="gry"></i>ideas you ticked</span><span style="opacity:.8">faded = months still to come</span>`;
 
   /* ---- the month you clicked ---- */
   const k=cbSel, fu=fut(k), sg=segs(k), tot=sg.reduce((a,s)=>a+s.v,0);
   const soldK=websitesSold(k);
-  let det=`<div class="cb-dl"><span class="dot" style="background:${cbMeta('domain').c}"></span><span class="n">Domains <small>${fu?`estimate · ${f(rate)} × ~${String(Math.round(avgSold*10)/10).replace('.',',')} sites`:`${soldK} site${soldK===1?'':'s'} paid × ${f(rate)}`}</small></span><span class="a">${f(domFor(k))}</span></div>`;
+  let det='';
   E.recurring.forEach(r=>{ const ov=recHasOverride(r,k);
     det+=`<div class="cb-dl"><span class="dot" style="background:${cbMeta(r.name).c}"></span><span class="n">${esc(r.name)}${ov?' <small>· this month only</small>':''}</span><span class="a ed" data-cb="mamt" data-id="${r.id}" data-k="${k}" title="Set the amount for ${fmtMonth(k)} only">${f(recAmount(r,k))}</span></div>`; });
-  det+=`<div class="cb-dl t"><span class="n">Total ${fmtMonth(k)}${fu?' <small>· estimate</small>':''}</span><span class="a">${f(tot)}</span></div>`;
+  det+=`<div class="cb-dl t"><span class="n">Total ${fmtMonth(k)}${fu?' <small>· to come</small>':''}</span><span class="a">${f(tot)}</span></div>`;
   if(k>=thisKey && E.considering.length){
     E.considering.forEach(it=>{ det+=`<div class="cb-dl g"><span class="dot" style="background:#C3C9D3"></span><span class="n">${esc(it.name)} <small>· ${it.on?'ticked':'idea'}</small></span><span class="a">+${f(cbConsAmt(it))}</span></div>`; });
     if(consOnM) det+=`<div class="cb-dl g"><span class="n"><b>With the ticked ideas</b></span><span class="a" style="font-size:14px">${f(tot+consOnM)}</span></div>`;
@@ -6085,7 +6085,13 @@ function costsBoardHtml(){
       <div>
         <div class="cb-sec">Paying now<span class="ln"></span></div>
         ${rows.map(rowHtml).join('')}
-        <div class="cb-tot"><div class="cb-nm"><b>Every month now</b><small>domains = your monthly average · click any amount to change it</small></div><div class="cb-am"><span class="m">${f(nowM)}<i> /mo</i></span><span class="yr">≈ ${fr(yrAll)} in ${curYear}</span></div></div>
+        <div class="cb-tot"><div class="cb-nm"><b>Every month now</b><small>click any amount to change it</small></div><div class="cb-am"><span class="m">${f(nowM)}<i> /mo</i></span><span class="yr">≈ ${fr(yrAll)} in ${curYear}</span></div></div>
+        <div class="cb-sec" style="margin-top:16px">Per website you sell · not monthly<span class="ln"></span></div>
+        <div class="cb-row">
+          <span class="cb-ico" style="background:${cbMeta('domain').c}">${cbSvg('globe')}</span>
+          <div class="cb-nm"><b>Domain</b><small>paid once for each website you sell · taken off your profit, not part of the monthly costs · ${soldYr} website${soldYr===1?'':'s'} in ${curYear} so far</small></div>
+          <div class="cb-am cb-edit" data-cb="rate" title="Change the cost per website"><span class="m">${f(rate)}<i> /site</i></span><span class="yr">${fr(soldYr*rate)} in ${curYear}</span></div>
+        </div>
         <div class="cb-sec" style="margin-top:16px">Thinking about it · not paying yet<span class="ln"></span></div>
         ${consHtml||'<div class="cb-hint">No ideas yet.</div>'}
         <button class="cb-add" data-cb="cadd">＋ Add something you are thinking about</button>
