@@ -489,6 +489,100 @@ body.dark .ycard .m-earned b{color:#3BE38F;}
 .fin-row .fr-sub{display:block; font-size:11px; color:var(--muted); font-weight:500; margin-top:2px;}
 .fin-row .fr-amt{margin-left:auto; font-family:'Sora'; font-weight:800; font-size:14.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
 .fin-row .fr-amt.cost{color:var(--coral);} .fin-row .fr-amt.pos{color:var(--deep);} .fin-row .fr-amt.neg{color:var(--coral);}
+/* ---------- COSTS BOARD (20 Nov 2026) — every cost with its icon, per month, + «considering» in grey ---------- */
+.cb{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 20px 16px; margin-bottom:16px;}
+.cb-top{display:flex; align-items:flex-end; gap:18px; flex-wrap:wrap; margin-bottom:14px;}
+.cb-top h4{font-family:'Sora'; font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted);}
+.cb-big{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-top:4px;}
+.cb-big .v{font-family:'Sora'; font-weight:800; font-size:34px; line-height:1; color:var(--coral); font-variant-numeric:tabular-nums; letter-spacing:-.02em;}
+.cb-big .u{font-weight:700; font-size:14px; color:var(--ink);}
+.cb-big .y{font-size:12px; color:var(--muted); font-weight:600;}
+.cb-what{margin-left:auto; text-align:right; padding:10px 14px; border-radius:14px; border:1.5px dashed #C9D0DC; background:repeating-linear-gradient(135deg,#F6F7FA 0 8px,#EEF1F5 8px 16px); min-width:220px;}
+.cb-what .k{font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A93A3;}
+.cb-what .v{font-family:'Sora'; font-weight:800; font-size:22px; color:#5E6676; font-variant-numeric:tabular-nums;}
+.cb-what .s{font-size:11.5px; color:#8A93A3; font-weight:600;}
+.cb-what.off .v{font-size:15px;}
+.cb-cols{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:22px; align-items:start;}
+@media(max-width:980px){.cb-cols{grid-template-columns:minmax(0,1fr);} .cb-what{margin-left:0; text-align:left; width:100%;}}
+.cb-sec{font-family:'Sora'; font-size:10.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:2px 0 8px; display:flex; align-items:center; gap:8px;}
+.cb-sec .ln{flex:1; height:1px; background:var(--line);}
+.cb-row{display:flex; align-items:center; gap:11px; padding:9px 4px; border-bottom:1px dashed var(--line);}
+.cb-row:last-child{border-bottom:none;}
+.cb-ico{width:34px; height:34px; border-radius:10px; display:grid; place-items:center; flex-shrink:0; color:#fff; box-shadow:0 2px 6px rgba(16,20,31,.12);}
+.cb-ico svg{width:18px; height:18px;}
+.cb-nm{min-width:0; flex:1;}
+.cb-nm b{display:block; font-size:13.5px; font-weight:700; color:var(--ink); word-break:break-word;}
+.cb-nm small{display:block; font-size:11px; color:var(--muted); font-weight:500; margin-top:1px; line-height:1.35;}
+.cb-am{text-align:right; white-space:nowrap;}
+.cb-am .m{display:block; font-family:'Sora'; font-weight:800; font-size:15px; color:var(--ink); font-variant-numeric:tabular-nums;}
+.cb-am .m i{font-style:normal; font-size:11px; font-weight:700; color:var(--muted);}
+.cb-am .yr{display:block; font-size:10.5px; color:var(--muted); font-weight:600; font-variant-numeric:tabular-nums;}
+.cb-tot{display:flex; align-items:center; gap:10px; margin-top:6px; padding:11px 12px; border-radius:12px; background:var(--coral-soft); border:1px solid #FFD1C9;}
+.cb-tot b{font-size:13px;} .cb-tot small{display:block; font-size:11px; color:var(--muted); font-weight:500;}
+.cb-tot .cb-am .m{color:var(--coral); font-size:18px;}
+/* considering = grey */
+.cb-row.cons .cb-ico{background:#C3C9D3!important; box-shadow:none;}
+.cb-row.cons .cb-nm b,.cb-row.cons .cb-am .m{color:#7D8595;}
+.cb-row.cons.on .cb-ico{background:#8E97A6!important;}
+.cb-row.cons.on{background:repeating-linear-gradient(135deg,rgba(142,151,166,.06) 0 8px,rgba(142,151,166,.12) 8px 16px); border-radius:10px;}
+.cb-tag{display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:#7D8595; background:#ECEFF3; border-radius:99px; padding:2px 7px; margin-left:6px; vertical-align:1px;}
+.cb-tag.hot{color:#B45309; background:#FFF1D6;}
+.cb-acts{display:flex; align-items:center; gap:6px; flex-shrink:0;}
+.cb-sw{position:relative; width:34px; height:20px; border-radius:99px; background:#D5DAE2; border:none; cursor:pointer; flex-shrink:0; transition:background .18s;}
+.cb-sw::after{content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .18s;}
+.cb-sw[aria-pressed="true"]{background:#7D8595;}
+.cb-sw[aria-pressed="true"]::after{transform:translateX(14px);}
+.cb-took{font-size:10.5px; font-weight:800; color:var(--deep); background:var(--green-soft); border:none; border-radius:8px; padding:5px 8px; cursor:pointer; white-space:nowrap;}
+.cb-took:hover{filter:brightness(.96);}
+.cb-x{font-size:12px; color:var(--muted); background:none; border:none; padding:3px 5px; border-radius:6px; cursor:pointer; opacity:.55;}
+.cb-x:hover{opacity:1; background:rgba(0,0,0,.06);}
+.cb-edit{cursor:pointer;} .cb-edit:hover .m{text-decoration:underline;}
+.cb-add{margin-top:6px; font-size:11.5px; font-weight:700; color:var(--muted); background:none; border:1px dashed var(--line); border-radius:10px; padding:7px 10px; width:100%; cursor:pointer;}
+.cb-add:hover{color:var(--ink); border-color:#C9D0DC;}
+/* month chart */
+.cb-chart{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:6px; align-items:end; height:210px; padding:22px 2px 0; border-bottom:1px solid var(--line);}
+.cb-bar{position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end; cursor:pointer; border-radius:8px 8px 0 0;}
+.cb-bar:hover{background:rgba(47,127,224,.05);}
+.cb-bar.sel{background:rgba(47,127,224,.09);}
+.cb-stack{display:flex; flex-direction:column-reverse; border-radius:6px 6px 0 0; overflow:hidden; margin:0 3px;}
+.cb-stack i{display:block; min-height:1px;}
+.cb-stack i.fut{opacity:.42;}
+.cb-stack i.gry{background:repeating-linear-gradient(135deg,#B9C0CB 0 4px,#D7DCE3 4px 8px)!important;}
+.cb-val{position:absolute; left:50%; transform:translateX(-50%); font-family:'Sora'; font-weight:800; font-size:10.5px; color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums; text-align:center; line-height:1.15;}
+.cb-val em{display:block; font-style:normal; font-size:9.5px; color:#8A93A3; font-weight:700;}
+.cb-bar.fut .cb-val{color:var(--muted);}
+.cb-mon{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:6px; margin-top:6px;}
+.cb-mon span{text-align:center; font-size:10.5px; font-weight:700; color:var(--muted);}
+.cb-mon span.now{color:var(--brand);}
+.cb-legend{display:flex; flex-wrap:wrap; gap:6px 12px; margin:10px 0 2px; font-size:11px; color:var(--muted); font-weight:600;}
+.cb-legend span{display:inline-flex; align-items:center; gap:5px;}
+.cb-legend i{width:10px; height:10px; border-radius:3px; display:inline-block;}
+.cb-legend i.gry{background:repeating-linear-gradient(135deg,#B9C0CB 0 3px,#D7DCE3 3px 6px);}
+.cb-det{margin-top:12px; border:1px solid var(--line); border-radius:14px; padding:12px 14px; background:var(--bg);}
+.cb-det h5{font-family:'Sora'; font-size:13px; font-weight:800; display:flex; align-items:center; gap:8px; margin-bottom:6px;}
+.cb-det h5 .tg{font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); background:var(--surface); border:1px solid var(--line); border-radius:99px; padding:2px 8px;}
+.cb-dl{display:flex; align-items:center; gap:9px; padding:5px 0; font-size:12.5px;}
+.cb-dl .dot{width:9px; height:9px; border-radius:3px; flex-shrink:0;}
+.cb-dl .n{flex:1; min-width:0; font-weight:600;}
+.cb-dl .n small{color:var(--muted); font-weight:500;}
+.cb-dl .a{font-family:'Sora'; font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.cb-dl .a.ed{cursor:pointer;} .cb-dl .a.ed:hover{text-decoration:underline;}
+.cb-dl.g .n,.cb-dl.g .a{color:#8A93A3;}
+.cb-dl.t{border-top:1px solid var(--line); margin-top:4px; padding-top:8px;}
+.cb-dl.t .a{color:var(--coral); font-size:15px;}
+.cb-hint{font-size:11px; color:var(--muted); margin-top:8px;}
+.fin-grid.one{grid-template-columns:1fr;}
+@media(max-width:640px){
+  .cb{padding:14px 12px;}
+  .cb-big .v{font-size:28px;}
+  .cb-row.cons{flex-wrap:wrap;}
+  .cb-row.cons .cb-nm{flex:1 1 0;}
+  .cb-row.cons .cb-am{margin-left:auto;}
+  .cb-row.cons .cb-acts{width:100%; padding-left:45px; justify-content:flex-start; gap:10px;}
+  .cb-chart{gap:3px; height:190px;} .cb-mon{gap:3px;}
+  .cb-val{font-size:9px;} .cb-val em{font-size:8.5px;}
+  .cb-stack{margin:0 1px;}
+}
 .fin-row.tot{border-top:2px solid var(--line); border-bottom:none; margin-top:4px; padding-top:12px;}
 .fin-net{border-radius:14px; padding:15px 16px; background:var(--green-soft); border:1px solid rgba(14,198,115,.28);}
 .fin-wealth{margin-top:10px; border-radius:14px; padding:14px 16px; background:linear-gradient(135deg,#0B2A1C,#0E4A2F); color:#fff; cursor:pointer; box-shadow:0 12px 26px -16px rgba(11,158,92,.7); transition:transform .15s;}
@@ -5838,6 +5932,203 @@ const IC={
   wallet:SVG('<path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M4 5v14a2 2 0 0 0 2 2h14V7"/><path d="M16 13h4v4h-4a2 2 0 0 1 0-4Z"/>'),
   hourglass:SVG('<path d="M6 2h12M6 22h12"/><path d="M7 2v5l5 5-5 5v5"/><path d="M17 2v5l-5 5 5 5v5"/>'),
 };
+/* ---------- COSTS BOARD (20 Nov 2026) — Angelo: «super clear all expenses with icons, the monthly sum big, yearly small,
+   each month's total, and the things I'm only considering in grey so I can see if they are worth it».
+   Real costs = state.expenses (domains per website + recurring). Ideas = state.expenses.considering (never counted in
+   any profit number until «I took it» moves them into recurring, starting that month — r.from). ---------- */
+const CB_ICO={
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  spark:'<path d="M12 3v5M12 16v5M3 12h5M16 12h5M5.6 5.6l3.5 3.5M14.9 14.9l3.5 3.5M5.6 18.4l3.5-3.5M14.9 9.1l3.5-3.5"/>',
+  shield:'<path d="M12 3 4.5 6v5.5c0 4.6 3.1 7.9 7.5 9.5 4.4-1.6 7.5-4.9 7.5-9.5V6Z"/><path d="m9 12 2.2 2.2L15.5 10"/>',
+  cloud:'<path d="M7 18.5h10.2a4.3 4.3 0 0 0 .5-8.6 6 6 0 0 0-11.5 1.4A3.6 3.6 0 0 0 7 18.5Z"/>',
+  wave:'<path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10.5v3"/>',
+  cal:'<rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M16 3v4M8 3v4M3.5 10.5h17M8 15h2.5M13.5 15H16"/>',
+  phone:'<path d="M4 9.5c4.8-3.3 11.2-3.3 16 0l-1.6 2.9-3.1-.9V9.6a8.8 8.8 0 0 0-6.6 0v1.9l-3.1.9Z"/><rect x="6" y="13.5" width="12" height="7.5" rx="2"/><circle cx="12" cy="17.2" r="1.5"/>',
+  bld:'<path d="M5 21V5.5A2.5 2.5 0 0 1 7.5 3h6A2.5 2.5 0 0 1 16 5.5V21M16 10h2.5a1.5 1.5 0 0 1 1.5 1.5V21M3 21h18M9 7.5h3M9 11.5h3M9 15.5h3"/>',
+  rcpt:'<path d="M5 3v18l2-1.2 2 1.2 2-1.2 2 1.2 2-1.2 2 1.2 2-1.2V3l-2 1.2-2-1.2-2 1.2-2-1.2-2 1.2-2-1.2Z"/><path d="M9 8h6M9 12h6M9 16h3"/>'
+};
+const cbSvg=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CB_ICO[k]||CB_ICO.rcpt}</svg>`;
+function cbMeta(name){
+  const n=String(name||'').toLowerCase();
+  if(/domain|domains/.test(n)) return {ic:'globe', c:'#2F7FE0'};
+  if(/claude/.test(n)) return {ic:'spark', c:'#D97757'};
+  if(/ασφαλ|insur|εφκα|efka/.test(n)) return {ic:'shield', c:'#0B9E5C'};
+  if(/netlify|hosting/.test(n)) return {ic:'cloud', c:'#14B8A6'};
+  if(/eleven/.test(n)) return {ic:'wave', c:'#1F2937'};
+  if(/calendly/.test(n)) return {ic:'cal', c:'#006BFF'};
+  if(/yuboto|uboto|τηλεφ|phone/.test(n)) return {ic:'phone', c:'#E8457C'};
+  if(/bco|έδρα|εδρα|office/.test(n)) return {ic:'bld', c:'#B7791F'};
+  const pal=['#7C5CFC','#F59E0B','#0EA5E9','#EC4899','#64748B','#8B5CF6']; let h=0; for(const ch of n) h=(h*31+ch.charCodeAt(0))>>>0;
+  return {ic:'rcpt', c:pal[h%pal.length]};
+}
+function ensureConsidering(){
+  ensureExpenses();
+  const E=state.expenses;
+  if(!Array.isArray(E.considering)) E.considering=[];
+  if(!E.consSeed2026){
+    E.considering.push(
+      {id:uid(), name:'Claude Ultra', kind:'upgrade', amount:180, note:'Upgrade of your Claude plan — €180 a month instead of today’s amount. Shown here as the EXTRA you would pay.', on:false},
+      {id:uid(), name:'ElevenLabs Creator · yearly', amount:7.1, hot:'Offer until 1 Dec', note:'Black Friday: half price for the first year on Creator & Pro yearly plans. Creator ≈ €85 paid once for 12 months ($99) ≈ €7.10/month · from year 2 the normal ≈ €190/year.', on:false},
+      {id:uid(), name:'Calendly · paid plan (Standard)', amount:8.6, note:'1 person: $10/month paid yearly (≈ €103/year) or $12 if paid month by month. Today you book with Zoho Bookings for free.', on:false},
+      {id:uid(), name:'Yuboto · σταθερό τηλέφωνο', amount:2, note:'Greek landline number (210…) over the internet, rings on your mobile: 24€/year incl. ΦΠΑ. Calls are prepaid, you pay only what you use.', on:false},
+      {id:uid(), name:'BCO · έδρα Κολωνάκι ή Κηφισιά', amount:52, note:'Φορολογική έδρα (virtual office) with mail handling. Κολωνάκι, Ζαλοκώστα 8: listed €52/month (was €69) ≈ €624/year. Κηφισιά, Λ. Κηφισίας 265: price only on request — 210 009 0000.', on:false}
+    );
+    E.consSeed2026=true;
+  }
+}
+const cbThisKey=()=>todayIso().slice(0,7);
+const cbClaude=()=>state.expenses.recurring.find(r=>/claude/i.test(r.name||''));
+function cbConsAmt(it){
+  if(it.kind==='upgrade'){ const c=cbClaude(); const cur=c?recAmount(c,cbThisKey()):0; return Math.max(0,(+it.amount||0)-cur); }
+  return +it.amount||0;
+}
+let cbSel=null;
+/* money with cents only when there are cents: €90 · €7.10 · €176.70 */
+const cbF=n=>{ const v=Math.round((+n||0)*100)/100; return Number.isInteger(v)? fmtMoney2(v) : '€'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); };
+function costsBoardHtml(){
+  ensureConsidering();
+  const E=state.expenses, rate=+E.perWebsite||0;
+  const thisKey=cbThisKey(), thisY=+thisKey.slice(0,4);
+  const refKey = curYear===thisY ? thisKey : (curYear<thisY ? curYear+'-12' : curYear+'-01');
+  /* domains: the average per month so far (this year, up to this month) — used for «per month» and for months to come */
+  let domSum=0, domN=0, soldN=0;
+  for(let m=1;m<=12;m++){ const k=thisY+'-'+pad(m); if(k>thisKey) break; const s=websitesSold(k); soldN+=s; domSum+=s*rate; domN++; }
+  const avgDom=domN? domSum/domN : 0, avgSold=domN? soldN/domN : 0;
+  const fut=k=>k>thisKey;
+  const domFor=k=>fut(k)? avgDom : websitesSold(k)*rate;
+  const months=[]; for(let m=1;m<=12;m++) months.push(curYear+'-'+pad(m));
+  const yearOf=fn=>months.reduce((a,k)=>a+fn(k),0);
+  const consOn=E.considering.filter(x=>x.on);
+  const consOnM=consOn.reduce((a,x)=>a+cbConsAmt(x),0);
+  const consAllM=E.considering.reduce((a,x)=>a+cbConsAmt(x),0);
+
+  /* ---- the list: what you pay every month now ---- */
+  const rows=[];
+  const soldRef=websitesSold(refKey);
+  rows.push({m:'Domains', meta:cbMeta('domain'), mo:avgDom, yr:yearOf(domFor), edit:'rate',
+    sub:`${cbF(rate)} per website you sell · ${String(Math.round(avgSold*10)/10).replace('.',',')} sites/month on average · ${MONTHS[+refKey.slice(5,7)-1]}: ${soldRef}`});
+  E.recurring.forEach(r=>{
+    const mo=recAmount(r,refKey), yr=yearOf(k=>recAmount(r,k));
+    const diff=months.filter(k=>Math.abs(recAmount(r,k)-mo)>0.004);
+    let sub;
+    if(!diff.length) sub=`${fmtMoney2(mo)} every month`;
+    else { const groups={}; diff.forEach(k=>{ const a=fmtMoney2(recAmount(r,k)); (groups[a]=groups[a]||[]).push(MONTHS[+k.slice(5,7)-1].slice(0,3)); }); sub='not the same every month · '+Object.entries(groups).map(([a,ms])=>`${ms.length>2?ms[0]+'–'+ms[ms.length-1]:ms.join(', ')} ${a}`).join(' · '); }
+    if(r.from && r.from.slice(0,4)==String(curYear)) sub+=` · since ${MONTHS[+r.from.slice(5,7)-1].slice(0,3)}`;
+    rows.push({m:r.name, meta:cbMeta(r.name), mo, yr, edit:'rec', id:r.id, sub});
+  });
+  const nowM=rows.reduce((a,x)=>a+x.mo,0), yrAll=rows.reduce((a,x)=>a+x.yr,0);
+  const f=cbF, fr=n=>fmtMoney2(Math.round(n));
+  const rowHtml=x=>`<div class="cb-row">
+      <span class="cb-ico" style="background:${x.meta.c}">${cbSvg(x.meta.ic)}</span>
+      <div class="cb-nm"><b>${esc(x.m)}</b><small>${x.sub}</small></div>
+      <div class="cb-am cb-edit" data-cb="${x.edit}" ${x.id?`data-id="${x.id}"`:''} title="${x.edit==='rate'?'Change the cost per website':'Change the usual monthly amount'}"><span class="m">${f(x.mo)}<i> /mo</i></span><span class="yr">${fr(x.yr)} in ${curYear}</span></div>
+    </div>`;
+  const consHtml=E.considering.map(it=>{
+    const meta=cbMeta(it.name), mo=cbConsAmt(it);
+    const label = it.kind==='upgrade' ? `+${f(mo)}<i> /mo</i>` : `${f(mo)}<i> /mo</i>`;
+    const yr = it.kind==='upgrade' ? `${f(+it.amount||0)}/mo in total` : `≈ ${fr(mo*12)} / year`;
+    return `<div class="cb-row cons${it.on?' on':''}">
+      <span class="cb-ico" style="background:${meta.c}">${cbSvg(meta.ic)}</span>
+      <div class="cb-nm"><b>${esc(it.name)}<span class="cb-tag${it.hot?' hot':''}">${it.hot?esc(it.hot):'not yet'}</span></b><small>${esc(it.note||'')}</small></div>
+      <div class="cb-am cb-edit" data-cb="camt" data-id="${it.id}" title="Change the amount"><span class="m">${label}</span><span class="yr">${yr}</span></div>
+      <div class="cb-acts">
+        <button class="cb-sw" data-cb="try" data-id="${it.id}" aria-pressed="${it.on?'true':'false'}" title="Add it to the totals to see what you would pay"></button>
+        <button class="cb-took" data-cb="took" data-id="${it.id}" title="You started paying it — it becomes a real cost from this month">✓ I took it</button>
+        <button class="cb-x" data-cb="cdel" data-id="${it.id}" title="Remove the idea">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+  const what = consOn.length
+    ? `<div class="cb-what"><div class="k">With the ${consOn.length} you ticked</div><div class="v">${f(nowM+consOnM)} <span style="font-size:13px">/ month</span></div><div class="s">+${f(consOnM)} a month · ≈ ${fr((nowM+consOnM)*12)} / year</div></div>`
+    : `<div class="cb-what off"><div class="k">If you took all ${E.considering.length} ideas</div><div class="v">${f(nowM+consAllM)} / month</div><div class="s">+${f(consAllM)} a month · tick the grey ones below to try a mix</div></div>`;
+
+  /* ---- 12 months chart ---- */
+  const segs=k=>{ const a=[{c:cbMeta('domain').c, v:domFor(k), n:'Domains'}]; E.recurring.forEach(r=>a.push({c:cbMeta(r.name).c, v:recAmount(r,k), n:r.name})); return a; };
+  const grayFor=k=> (k>=thisKey) ? consOnM : 0;
+  const tots=months.map(k=>segs(k).reduce((a,s)=>a+s.v,0));
+  const max=Math.max(1,...months.map((k,i)=>tots[i]+grayFor(k)));
+  const H=160;
+  if(!cbSel || cbSel.slice(0,4)!=String(curYear)) cbSel=refKey;
+  const bars=months.map((k,i)=>{
+    const fu=fut(k), g=grayFor(k), sg=segs(k);
+    const parts=sg.filter(s=>s.v>0).map(s=>`<i class="${fu?'fut':''}" style="background:${s.c};height:${Math.max(1,s.v/max*H)}px" title="${esc(s.n)} ${f(s.v)}"></i>`).join('')+(g>0?`<i class="gry" style="height:${g/max*H}px" title="Ideas you ticked +${f(g)}"></i>`:'');
+    const hh=(tots[i]+g)/max*H;
+    return `<div class="cb-bar${fu?' fut':''}${k===cbSel?' sel':''}" data-cb="sel" data-k="${k}" title="${fmtMonth(k)}: ${f(tots[i])}${g?` (+${f(g)} if you take the ticked ideas)`:''}${fu?' · estimate':''}">
+      <span class="cb-val" style="bottom:${hh+4}px">${fr(tots[i])}${g?`<em>+${fr(g)}</em>`:''}</span>
+      <div class="cb-stack">${parts}</div></div>`;
+  }).join('');
+  const mon=months.map(k=>`<span class="${k===thisKey?'now':''}">${MONTHS[+k.slice(5,7)-1].slice(0,3)}</span>`).join('');
+  const legend=[{c:cbMeta('domain').c,n:'Domains'}].concat(E.recurring.map(r=>({c:cbMeta(r.name).c,n:r.name}))).map(l=>`<span><i style="background:${l.c}"></i>${esc(l.n)}</span>`).join('')
+    +`<span><i class="gry"></i>ideas you ticked</span><span style="opacity:.8">faded = months still to come (estimate)</span>`;
+
+  /* ---- the month you clicked ---- */
+  const k=cbSel, fu=fut(k), sg=segs(k), tot=sg.reduce((a,s)=>a+s.v,0);
+  const soldK=websitesSold(k);
+  let det=`<div class="cb-dl"><span class="dot" style="background:${cbMeta('domain').c}"></span><span class="n">Domains <small>${fu?`estimate · ${f(rate)} × ~${String(Math.round(avgSold*10)/10).replace('.',',')} sites`:`${soldK} site${soldK===1?'':'s'} paid × ${f(rate)}`}</small></span><span class="a">${f(domFor(k))}</span></div>`;
+  E.recurring.forEach(r=>{ const ov=recHasOverride(r,k);
+    det+=`<div class="cb-dl"><span class="dot" style="background:${cbMeta(r.name).c}"></span><span class="n">${esc(r.name)}${ov?' <small>· this month only</small>':''}</span><span class="a ed" data-cb="mamt" data-id="${r.id}" data-k="${k}" title="Set the amount for ${fmtMonth(k)} only">${f(recAmount(r,k))}</span></div>`; });
+  det+=`<div class="cb-dl t"><span class="n">Total ${fmtMonth(k)}${fu?' <small>· estimate</small>':''}</span><span class="a">${f(tot)}</span></div>`;
+  if(k>=thisKey && E.considering.length){
+    E.considering.forEach(it=>{ det+=`<div class="cb-dl g"><span class="dot" style="background:#C3C9D3"></span><span class="n">${esc(it.name)} <small>· ${it.on?'ticked':'idea'}</small></span><span class="a">+${f(cbConsAmt(it))}</span></div>`; });
+    if(consOnM) det+=`<div class="cb-dl g"><span class="n"><b>With the ticked ideas</b></span><span class="a" style="font-size:14px">${f(tot+consOnM)}</span></div>`;
+  }
+
+  return `<div class="cb" id="costsBoard">
+    <div class="cb-top">
+      <div>
+        <h4>What you pay every month · ${MONTHS[+refKey.slice(5,7)-1]} ${curYear}</h4>
+        <div class="cb-big"><span class="v">${f(nowM)}</span><span class="u">/ month</span><span class="y">≈ ${fr(yrAll)} for all of ${curYear}</span></div>
+      </div>
+      ${what}
+    </div>
+    <div class="cb-cols">
+      <div>
+        <div class="cb-sec">Paying now<span class="ln"></span></div>
+        ${rows.map(rowHtml).join('')}
+        <div class="cb-tot"><div class="cb-nm"><b>Every month now</b><small>domains = your monthly average · click any amount to change it</small></div><div class="cb-am"><span class="m">${f(nowM)}<i> /mo</i></span><span class="yr">≈ ${fr(yrAll)} in ${curYear}</span></div></div>
+        <div class="cb-sec" style="margin-top:16px">Thinking about it · not paying yet<span class="ln"></span></div>
+        ${consHtml||'<div class="cb-hint">No ideas yet.</div>'}
+        <button class="cb-add" data-cb="cadd">＋ Add something you are thinking about</button>
+      </div>
+      <div>
+        <div class="cb-sec">Every month of ${curYear}<span class="ln"></span></div>
+        <div class="cb-chart">${bars}</div>
+        <div class="cb-mon">${mon}</div>
+        <div class="cb-legend">${legend}</div>
+        <div class="cb-det"><h5>${fmtMonth(k)} <span class="tg">${fu?'still to come':k===thisKey?'this month':'paid'}</span></h5>${det}
+          <div class="cb-hint">Click a bar to see that month · click an amount to change it for that month only.</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+function cbNum(v){ const n=parseFloat(String(v).replace(',','.')); return isNaN(n)||n<0 ? null : Math.round(n*100)/100; }
+function cbDone(msg){ state.expenses.updated=Date.now(); save(); renderAll(); if(msg) toast(msg); }
+document.addEventListener('click',e=>{
+  const b=e.target.closest && e.target.closest('#costsBoard [data-cb]'); if(!b) return;
+  ensureConsidering();
+  const E=state.expenses, a=b.dataset.cb, id=b.dataset.id;
+  const it=E.considering.find(x=>x.id===id), r=E.recurring.find(x=>x.id===id);
+  if(a==='sel'){ cbSel=b.dataset.k; renderAll(); return; }
+  if(a==='rate'){ editWebsiteRate(); return; }
+  if(a==='rec' && r){ const v=prompt('USUAL monthly amount (€) for '+r.name+' — every month that has no amount of its own:', r.amount||0); if(v===null) return; const n=cbNum(v); if(n==null){ toast('Enter a number, e.g. 90'); return; } r.amount=n; cbDone(r.name+' — usually '+fmtMoney2(n)+'/month'); return; }
+  if(a==='mamt' && r){ const k=b.dataset.k; const v=prompt(r.name+' — amount for '+fmtMonth(k)+' ONLY (€). Leave empty to go back to the usual '+fmtMoney2(+r.amount||0)+':', recHasOverride(r,k)?r.months[k]:recAmount(r,k)); if(v===null) return; r.months||={}; if(String(v).trim()===''){ delete r.months[k]; cbDone(r.name+' — back to the usual in '+fmtMonth(k)); return; } const n=cbNum(v); if(n==null){ toast('Enter a number, e.g. 88'); return; } r.months[k]=n; cbDone(r.name+' — '+fmtMoney2(n)+' in '+fmtMonth(k)); return; }
+  if(a==='try' && it){ it.on=!it.on; cbDone(); return; }
+  if(a==='camt' && it){ const v=prompt(it.kind==='upgrade'?'Total monthly price of '+it.name+' (€):':'Monthly cost of '+it.name+' (€):', it.amount); if(v===null) return; const n=cbNum(v); if(n==null){ toast('Enter a number'); return; } it.amount=n; cbDone(); return; }
+  if(a==='cdel' && it){ if(!confirm('Remove the idea «'+it.name+'»?')) return; E.considering=E.considering.filter(x=>x!==it); cbDone('Idea removed'); return; }
+  if(a==='cadd'){ const name=prompt('What are you thinking of paying for?'); if(!name||!name.trim()) return; const n=cbNum(prompt('About how much a month (€)?','')||''); E.considering.push({id:uid(), name:name.trim(), amount:n==null?0:n, note:'', on:false}); cbDone('Added to «thinking about it»'); return; }
+  if(a==='took' && it){
+    const from=cbThisKey();
+    if(!confirm('Did you start paying «'+it.name+'»?\nIt becomes a real cost from '+fmtMonth(from)+' and counts in your profit from now on.')) return;
+    if(it.kind==='upgrade'){
+      const c=cbClaude();
+      if(c){ const y=+from.slice(0,4); [y-1,y].forEach(yy=>{ for(let m=1;m<=12;m++){ const k=yy+'-'+pad(m); if(k<from && !recHasOverride(c,k)) c.months[k]=+c.amount||0; } }); c.amount=+it.amount||0; c.name=c.name||'Claude'; }
+      else E.recurring.push({id:uid(), name:'Claude', amount:+it.amount||0, from, months:{}});
+    } else E.recurring.push({id:uid(), name:it.name, amount:+it.amount||0, from, months:{}});
+    E.considering=E.considering.filter(x=>x!==it);
+    cbDone('✓ '+it.name+' is now a real cost from '+fmtMonth(from));
+  }
+});
+
 function prioDotSvg(p){ const col=PRIO_COLOR[p]?PRIO_COLOR[p].c:'var(--muted)'; return `<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="${col}"/></svg>`; }
 
 /* ---------- storage (encrypted at rest) ---------- */
@@ -6508,12 +6799,22 @@ function ensureExpenses(){
     if(c){ c.amount=18; c.months['2026-09']=88; }
     state.expenses.claudeSept2026=true;
   }
+  /* 20 Nov 2026 — Angelo: «Claude is not €90 every month». His own note of 13 Sept: €18/month until August, €88 in September;
+     the usual figure is €90 since October. Months he already set by hand are kept. */
+  if(!state.expenses.claudeHist2026b){
+    const c=state.expenses.recurring.find(r=>/claude/i.test(r.name||''));
+    if(c && +c.amount===90){ for(let m=1;m<=8;m++){ const k='2026-'+pad(m); if(!recHasOverride(c,k)) c.months[k]=18; } }
+    state.expenses.claudeHist2026b=true;
+  }
 }
 /* A fixed cost can have a different amount in ONE specific month — r.months['2026-09']=88 —
    while r.amount stays the usual figure. Every expense/net number asks recAmount(r,key). */
 function recAmount(r,key){
   const o=(r && r.months && key!=null) ? r.months[key] : undefined;
-  return (o!=null && o!=='' && !isNaN(+o)) ? +o : (+r.amount||0);
+  if(o!=null && o!=='' && !isNaN(+o)) return +o;
+  /* a cost taken later (r.from = 'YYYY-MM') or stopped (r.to) costs nothing outside its months — 20 Nov 2026 */
+  if(r && key!=null && ((r.from && key<r.from) || (r.to && key>r.to))) return 0;
+  return +r.amount||0;
 }
 function recHasOverride(r,key){ return !!(r && r.months && r.months[key]!=null && r.months[key]!==''); }
 function recurringMonthly(key){ ensureExpenses(); return state.expenses.recurring.reduce((a,r)=>a+recAmount(r,key),0); }
@@ -9340,13 +9641,8 @@ function renderYearFinance(yGenerated, yExp, yNet, rTotal, pots){
       <div class="pot renew"><div class="k">${IC.repeat} Renewals</div><div class="v">${fmtMoney2(Math.round(pots.rPaid))}</div><div class="sub">${potPct(pots.rPaid)}% of the total · ${pots.rCount} renewed${rTotal?` · ${fmtMoney2(rTotal)} still due`:''}</div><div class="pot-bar"><i style="width:${potPct(pots.rPaid)}%"></i></div></div>
       <div class="pot subs"><div class="k">${IC.calendar} Monthly subscriptions</div><div class="v">${fmtMoney2(Math.round(pots.subCollected))}</div><div class="sub">${potPct(pots.subCollected)}% of the total · months marked paid</div><div class="pot-bar"><i style="width:${potPct(pots.subCollected)}%"></i></div></div>
     </div>
-    <div class="fin-grid">
-      <div class="fin-card">
-        <h4>Expense breakdown</h4>
-        <div class="fin-row"><div><div class="fr-name">Domains<span class="fr-sub">${sold} website${sold===1?'':'s'} paid × ${fmtMoney2(rate)} each</span></div></div><span class="fr-amt cost">${fmtMoney2(Math.round(domainCost))}</span></div>
-        ${recRows}
-        <div class="fin-row tot"><div><div class="fr-name">Total expenses ${curYear}<span class="fr-sub">edit the amounts on the Monthly tab</span></div></div><span class="fr-amt cost">${fmtMoney2(Math.round(yExp))}</span></div>
-      </div>
+    ${costsBoardHtml()}
+    <div class="fin-grid one">
       <div class="fin-card">
         <h4>Net profit</h4>
         <div class="fin-row"><div><div class="fr-name">Generated<span class="fr-sub">booked value + monthly income + renewals, lost excluded</span></div></div><span class="fr-amt pos">${fmtMoney2(Math.round(yGenerated))}</span></div>
