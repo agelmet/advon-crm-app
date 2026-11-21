@@ -12466,7 +12466,7 @@ const Bookings={
   start(){
     this.pull(false);
     clearInterval(this.timer);
-    this.timer=setInterval(()=>this.pull(false), 10*60*1000);
+    this.timer=setInterval(()=>this.pull(false), 2*60*1000);   /* 21 Nov 2026: 2 min (was 10) — new bookings straight from the booking page */
   }
 };
 function renderBookings(){
@@ -15257,11 +15257,11 @@ function wireSyncEvents(){
     if(Date.now()-Sync.lastCheck>4000) Sync.pull(true);
     /* 11 Nov 2026: phones send only visibilitychange when you return to the app — fetch new ad leads + bookings here too */
     try{ if(Date.now()-Leads.lastAt>60*1000) Leads.pull(false); }catch(e){}
-    try{ if(Date.now()-Bookings.lastAt>120000) Bookings.pull(false); }catch(e){}
+    try{ if(Date.now()-Bookings.lastAt>45000) Bookings.pull(false); }catch(e){}
   });
   window.addEventListener('focus',()=>{
     if(Date.now()-Sync.lastCheck>4000) Sync.pull(true);
-    if(Date.now()-Bookings.lastAt>120000) Bookings.pull(false);
+    if(Date.now()-Bookings.lastAt>45000) Bookings.pull(false);
     if(Date.now()-Leads.lastAt>60*1000) Leads.pull(false);
     if(Date.now()-Reminders.lastAt>5*60*1000) Reminders.pull(false);
   });
