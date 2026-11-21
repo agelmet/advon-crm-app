@@ -4846,6 +4846,111 @@ body.dark .meet.o-won .mo,body.dark .meet.o-won .mab{color:#5EE3A4} body.dark .m
 .cal-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 2px 0;font-size:11.5px;font-weight:700;color:var(--muted)}
 .cal-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 </style>
+<style id="cx-css">
+/* ===== Calendar v2 (21 Nov 2026) — week time grid + clean month. Everything is prefixed cx- ===== */
+#calBody .cx-sum{display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;margin:0 0 14px;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);}
+.cx-sum-n{font-size:15px;color:var(--muted);white-space:nowrap;} .cx-sum-n b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums;}
+.cx-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-left:auto;}
+.cx-legend span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink);white-space:nowrap;}
+.cx-legend span i{width:10px;height:10px;border-radius:50%;background:var(--k);}
+.cx-legend span b{font-variant-numeric:tabular-nums;color:var(--k);font-weight:800;}
+.cx-legend span.zero{opacity:.45;}
+/* colour per kind: --k = strong, --kb = soft fill */
+.k-ad{--k:#7C5CFC;--kb:var(--violet-soft);} .k-up{--k:#2F7FE0;--kb:var(--blue-soft);}
+.k-log{--k:#2F7FE0;--kb:var(--blue-soft);} .k-won{--k:#0B9E5C;--kb:var(--green-soft);}
+.k-think{--k:#C98A00;--kb:var(--yellow-soft);} .k-noshow{--k:#F06000;--kb:var(--orange-soft);}
+.k-lost{--k:#8A94A8;--kb:var(--bg);}
+.cx-legend .k-log i{background:transparent;box-shadow:inset 0 0 0 2px var(--k);}
+/* ---------- week ---------- */
+.cx-week{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:clip;}
+.cx-whead,.cx-allday,.cx-wbody{display:grid;grid-template-columns:58px repeat(var(--cols),minmax(0,1fr));}
+.cx-whead{position:sticky;top:var(--cx-top,0px);z-index:6;background:var(--card);border-bottom:1px solid var(--line);}
+.cx-dh{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 12px 10px;border-left:1px solid var(--line);}
+.cx-dow{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+.cx-dn{font-size:26px;font-weight:700;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;}
+.cx-dm{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.cx-dh.today .cx-dow{color:var(--brand);}
+.cx-dn{min-width:34px;height:34px;display:inline-grid;place-items:center;margin-left:-5px;border-radius:999px;}
+.cx-dh.today .cx-dn{background:var(--brand);color:#fff;padding:0 7px;}
+.cx-dh.past .cx-dn{color:var(--muted);}
+.cx-add{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:16px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s,background .15s,color .15s;}
+.cx-dh:hover .cx-add,.cx-add:focus-visible{opacity:1;} .cx-add:hover{background:var(--brand);color:#fff;border-color:var(--brand);}
+@media (hover:none){ .cx-add{opacity:1;} }
+.cx-allday{border-bottom:1px solid var(--line);} .cx-allday .cx-gut{font-size:10.5px;color:var(--muted);padding:8px 6px;text-align:right;}
+.cx-adc{border-left:1px solid var(--line);padding:4px;display:flex;flex-direction:column;gap:3px;} .cx-adc .cx-ev{position:relative;height:22px;}
+.cx-wbody{position:relative;}
+.cx-gut{position:relative;}
+.cx-hr{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;background:var(--card);padding:0 2px;}
+.cx-hr:first-child{transform:none;top:3px!important;}
+.cx-nowlbl{position:absolute;right:4px;transform:translateY(-50%);font-size:10.5px;font-weight:800;color:#fff;background:#EA4335;border-radius:5px;padding:1px 5px;z-index:4;font-variant-numeric:tabular-nums;}
+.cx-col{position:relative;border-left:1px solid var(--line);cursor:copy;
+  background-image:linear-gradient(to bottom,var(--line) 0 1px,transparent 1px),linear-gradient(to bottom,transparent calc(var(--slot)*2 - 1px),color-mix(in srgb,var(--line) 55%,transparent) calc(var(--slot)*2 - 1px) calc(var(--slot)*2),transparent calc(var(--slot)*2));
+  background-size:100% calc(var(--slot)*4);}
+.cx-col.today{background-color:color-mix(in srgb,var(--brand) 4%,transparent);}
+.cx-col.past{background-color:color-mix(in srgb,var(--ink) 1.6%,transparent);}
+.cx-now{position:absolute;left:-1px;right:0;height:2px;background:#EA4335;z-index:3;pointer-events:none;}
+.cx-now::before{content:'';position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:#EA4335;}
+.cx-ev{position:absolute;display:flex;align-items:center;gap:6px;padding:0 7px 0 9px;border-radius:6px;background:var(--kb);box-shadow:inset 3px 0 0 var(--k),0 0 0 1px color-mix(in srgb,var(--k) 22%,transparent);color:var(--ink);font-size:13px;line-height:22px;white-space:nowrap;overflow:hidden;cursor:pointer;z-index:2;transition:box-shadow .15s,transform .15s;}
+.cx-ev:hover{z-index:5;box-shadow:inset 3px 0 0 var(--k),0 0 0 1px var(--k),0 4px 14px rgba(24,49,92,.16);}
+.cx-t{font-weight:800;color:var(--k);font-variant-numeric:tabular-nums;flex:none;font-size:11.5px;}
+.cx-n{font-weight:600;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto;}
+.cx-ad{flex:none;font-size:9px;font-weight:800;letter-spacing:.04em;color:#7C5CFC;background:var(--violet-soft);border-radius:4px;padding:0 4px;line-height:15px;}
+.cx-tag{flex:none;margin-left:auto;font-size:9px;font-weight:800;letter-spacing:.05em;color:var(--k);background:var(--card);border-radius:4px;padding:0 5px;line-height:15px;}
+.cx-ev.split{padding:0 5px 0 7px;gap:4px;} .cx-ev.split .cx-t{display:none;}
+.k-log.src-ad{--k:#7C5CFC;--kb:var(--violet-soft);}
+.cx-ev.k-log{box-shadow:inset 3px 0 0 var(--k);outline:1.5px dashed color-mix(in srgb,var(--k) 70%,transparent);outline-offset:-1.5px;}
+.cx-ev.k-lost .cx-n,.cx-mr.k-lost span,.cx-ar.k-lost b{text-decoration:line-through;color:var(--muted);}
+.cx-ev.ghost,.cx-mr.ghost,.cx-ar.ghost{opacity:.55;}
+.cx-acts{position:absolute;right:3px;top:50%;transform:translateY(-50%);display:none;gap:2px;background:var(--card);border-radius:6px;padding:1px;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.cx-ev:hover .cx-acts,.cx-mr:hover .cx-acts,.cx-ar:hover .cx-acts{display:flex;}
+.cx-acts button{width:22px;height:18px;display:grid;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--muted);cursor:pointer;padding:0;}
+.cx-acts button:hover{background:var(--bg);color:var(--ink);} .cx-acts .rmcb:hover{color:var(--red);}
+.cx-acts svg,.cx-acts .ic{width:13px;height:13px;}
+/* ---------- month ---------- */
+.cx-month{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:clip;}
+.cx-mdow{padding:10px 12px;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);border-left:1px solid var(--line);}
+.cx-mdow:nth-child(1){border-left:0;}
+.cx-mc{min-height:118px;padding:6px 6px 8px;border-left:1px solid var(--line);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:3px;cursor:copy;min-width:0;}
+.cx-mc.out{background:color-mix(in srgb,var(--ink) 2.5%,transparent);} .cx-mc.out>*{opacity:.5;}
+.cx-mc.today{background:color-mix(in srgb,var(--brand) 5%,transparent);}
+.cx-mh{display:flex;align-items:center;justify-content:space-between;padding:0 2px 2px;}
+.cx-md{font-size:13px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:24px;height:24px;display:inline-grid;place-items:center;border-radius:999px;}
+.cx-mc.past:not(.today) .cx-md{color:var(--muted);}
+.cx-mc.today .cx-md{background:var(--brand);color:#fff;padding:0 6px;}
+.cx-mn{font-size:11px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;}
+.cx-mr{position:relative;display:flex;align-items:center;gap:6px;padding:2px 6px 2px 0;border-radius:6px;background:var(--kb);font-size:12.5px;line-height:19px;white-space:nowrap;overflow:hidden;cursor:pointer;min-width:0;}
+.cx-mr:hover{box-shadow:inset 0 0 0 1px var(--k);}
+.cx-mr.k-log{outline:1px dashed color-mix(in srgb,var(--k) 70%,transparent);outline-offset:-1px;}
+.cx-mr.k-lost{background:transparent;}
+.cx-mr i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--k);margin-left:4px;}
+.cx-mr.k-log i{background:var(--card);box-shadow:inset 0 0 0 2px var(--k);}
+.cx-mr b{flex:none;font-weight:800;color:var(--k);font-variant-numeric:tabular-nums;font-size:11.5px;}
+.cx-mr span{overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink);min-width:0;}
+.cx-mr em{flex:none;font-style:normal;font-size:9px;font-weight:800;color:#7C5CFC;background:var(--violet-soft);border-radius:4px;padding:0 4px;line-height:14px;}
+/* ---------- the day-by-day list (phones) ---------- */
+.cx-agenda{display:none;}
+.cx-ag-h{font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:4px 2px 10px;}
+.cx-ag-day{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow);}
+.cx-ag-day.today{border-color:var(--brand);}
+.cx-ag-dh{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px;}
+.cx-ag-day.today .cx-ag-dh b{color:var(--brand);} .cx-ag-dh span{font-size:12px;color:var(--muted);}
+.cx-ar{position:relative;display:grid;grid-template-columns:48px 4px 1fr;gap:10px;align-items:center;padding:9px 14px;border-top:1px solid var(--line);cursor:pointer;}
+.cx-ar:first-of-type{border-top:0;}
+.cx-art{font-weight:800;font-size:13px;color:var(--k);font-variant-numeric:tabular-nums;}
+.cx-arb{width:4px;align-self:stretch;border-radius:4px;background:var(--k);}
+.cx-ar.k-log .cx-arb{background:transparent;box-shadow:inset 0 0 0 2px var(--k);}
+.cx-arx{min-width:0;display:flex;flex-direction:column;} .cx-arx b{font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cx-arx small{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cx-ar .cx-acts{position:static;transform:none;display:none;}
+@media (max-width:760px){
+  .cx-week,.cx-month{display:none!important;}
+  .cx-agenda{display:block;}
+  .cx-legend{margin-left:0;}
+  .cx-ar{grid-template-columns:44px 4px 1fr auto;} .cx-ar .cx-acts{display:flex;box-shadow:none;}
+}
+@media (prefers-reduced-motion:reduce){ .cx-ev,.cx-add{transition:none;} }
+</style>
+
 </head>
 <body class="locked">
 
@@ -9482,60 +9587,124 @@ function meetMini(c){
   const o=meetOut(c), ad=cFromAd(c);
   return `<div class="meet mini${o?' o-'+o:''}${ad?' ad':''}${c.ghost?' ghost':''}" data-id="${c.id}" title="${ad?'Meta ad · ':''}${esc((c.time?c.time+' · ':'')+c.name)}${cAbout(c)?' · '+esc(cAbout(c)):''}${o?' — '+MEET_OUT[o].name:''}">${c.time?`<span class="mt">${esc(c.time)}</span>`:''}<span class="mn">${o==='noshow'?'<span class="mns">NO-SHOW</span>':''}${ad?'<span class="adm">AD</span>':''}${esc(c.name)}</span>${c.ghost?'':`<button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}<span>Callbacks</span></button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button>`}</div>`;
 }
+/* ===== Calendar v2 (21 Nov 2026, Angelo: «too chaotic — like the best calendars, clear names and colours, no Sunday») =====
+   Week = a time grid like Google / Notion Calendar: hours down the side, one column per day, every meeting sits at its
+   real time as a coloured block with the time + name. Month = clean cells with one line per meeting. Sunday is shown
+   only when something is booked on it. Colour = how it went (said yes / thinking / no-show / lost), and for meetings
+   still to come: violet = from the Meta ads, blue = everything else. Phones get a day-by-day list. */
+const CX_SLOT=24;                                   /* px per 15 minutes in the week grid */
+const CX_LBL={ad:'Coming up · Meta ad',up:'Coming up · other',log:'Not logged yet',won:'Said yes',think:'Thinking',noshow:'No-show',lost:'Lost'};
+const CX_ORDER=['ad','up','log','won','think','noshow','lost'];
+const cxMin=t=>{ const m=/^(\d{1,2}):(\d{2})/.exec(t||''); return m? (+m[1])*60+(+m[2]) : null; };
+const cxHM=n=>pad(Math.floor(n/60))+':'+pad(n%60);
+function cxKind(c){
+  const o=meetOut(c); if(o) return o;
+  const past=!!(c.day && Date.parse(c.day+'T'+(c.time||'23:59'))<Date.now());
+  if(past && !c.ghost) return 'log';
+  return cFromAd(c)?'ad':'up';
+}
+function cxTag(c,k){ if(k==='won'||k==='think'||k==='noshow') return meetLbl(c,meetOut(c)); if(k==='log') return 'LOG IT'; return ''; }
+function cxTitle(c,k){
+  return [c.time, c.name, cAbout(c), cFromAd(c)?'Meta ad':'', c.ghost?'earlier meeting':CX_LBL[k], cval(c)?fmtMoney(cval(c)):''].filter(Boolean).join(' · ')
+    + (c.ghost?' — click to open the person':(k==='log'?' — click to say how it went':' — click to open'));
+}
+function cxActs(c){
+  return c.ghost?'':`<span class="cx-acts"><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}</button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button></span>`;
+}
+function cxBits(c,k,narrow){
+  const tag='';
+  return `<span class="cx-t">${esc(c.time||'')}</span><span class="cx-n">${esc(c.name)}</span>${cFromAd(c)&&k!=='ad'&&!narrow?'<span class="cx-ad">AD</span>':''}${tag?`<span class="cx-tag">${esc(tag)}</span>`:''}${cxActs(c)}`;
+}
+/* side-by-side columns for meetings that overlap (each lasts 15 min) */
+function cxLayout(items){
+  const ev=items.map(c=>({c, s:cxMin(c.time), e:cxMin(c.time)+15})).sort((a,b)=>a.s-b.s);
+  let cluster=[], end=-1; const out=[];
+  const flush=()=>{ const cols=[]; cluster.forEach(x=>{ let i=cols.findIndex(e=>e<=x.s); if(i<0){ i=cols.length; cols.push(0);} cols[i]=x.e; x.col=i; }); cluster.forEach(x=>{ x.cols=cols.length; out.push(x); }); cluster=[]; };
+  ev.forEach(x=>{ if(cluster.length && x.s>=end) flush(); cluster.push(x); end=Math.max(end,x.e); });
+  if(cluster.length) flush();
+  return out;
+}
+/* the day-by-day list (phones, and the month's list) */
+function cxAgenda(days, title){
+  const blocks=days.map(d=>{ const iso=isoDate(d), items=calDay(iso); if(!items.length) return '';
+    const live=meetLive(items).length;
+    return `<div class="cx-ag-day${iso===todayIso()?' today':''}"><div class="cx-ag-dh"><b>${DOW[(d.getDay()+6)%7]} ${d.getDate()} ${MONTHS[d.getMonth()].slice(0,3)}</b><span>${live} meeting${live===1?'':'s'}</span></div>`+
+      items.map(c=>{ const k=cxKind(c); return `<div class="cx-ar k-${k}${k==='log'&&cFromAd(c)?' src-ad':''}${c.ghost?' ghost':''}" data-id="${c.id}" title="${esc(cxTitle(c,k))}"><span class="cx-art">${esc(c.time||'—')}</span><span class="cx-arb"></span><span class="cx-arx"><b>${esc(c.name)}</b><small>${esc(c.ghost?'earlier meeting':CX_LBL[k])}${cFromAd(c)&&k!=='ad'?' · Meta ad':''}${cAbout(c)?' · '+esc(cAbout(c)):''}</small></span>${cxActs(c)}</div>`; }).join('')+`</div>`; }).join('');
+  return `<div class="cx-agenda"><div class="cx-ag-h">${esc(title)}</div>${blocks||'<div class="empty-note">No meetings here yet.</div>'}</div>`;
+}
+/* counts for the range = the legend */
+function cxSummary(days){
+  const all=[]; days.forEach(d=>calDay(isoDate(d)).forEach(c=>{ if(!c.ghost) all.push(c); }));
+  const live=meetLive(all), cnt={}; all.forEach(c=>{ const k=cxKind(c); cnt[k]=(cnt[k]||0)+1; });
+  const ads=live.filter(c=>cFromAd(c)).length, val=live.reduce((s,c)=>s+cval(c),0);
+  return `<div class="cx-sum"><div class="cx-sum-n"><b>${live.length}</b> meeting${live.length===1?'':'s'}${ads?` · <b>${ads}</b> from Meta ads`:''}${val?` · <b>${fmtMoney(val)}</b>`:''}</div>
+    <div class="cx-legend">${CX_ORDER.map(k=>`<span class="k-${k}${cnt[k]?'':' zero'}"><i></i>${CX_LBL[k]}${cnt[k]?` <b>${cnt[k]}</b>`:''}</span>`).join('')}</div></div>`;
+}
 function renderCalendar(){
   calAdlMap=null;
   const body=$('#calBody');
+  try{ const tb=document.querySelector('.topbar'); if(tb) document.documentElement.style.setProperty('--cx-top', tb.offsetHeight+'px'); }catch(e){}
   if(calMode==='week'){
-    const days=[...Array(7)].map((_,i)=>{ const d=new Date(weekStart); d.setDate(d.getDate()+i); return d; });
-    const a=days[0], b=days[6];
-    $('#calRange').textContent = a.getDate()+' '+MONTHS[a.getMonth()].slice(0,3)+' – '+b.getDate()+' '+MONTHS[b.getMonth()].slice(0,3)+' '+b.getFullYear();
-    let html='<div class="week-grid">';
-    days.forEach((d,i)=>{
-      const iso=isoDate(d);
-      const items=calDay(iso);
-      const sum=meetLive(items).reduce((s,c)=>s+cval(c),0);
-      html+=`<div class="day-col ${iso===todayIso()?'today':''}">
-        <div class="day-head"><span class="dn">${DOW[i]}</span><span class="dd">${d.getDate()}</span>${sum?`<span class="dsum">${fmtMoney(sum)}</span>`:''}</div>
-        <div class="day-body">
-          ${items.map(meetHtml).join('') || ''}
-          <div class="day-add" data-day="${iso}">＋ Book</div>
-        </div>
-      </div>`;
+    const all7=[...Array(7)].map((_,i)=>{ const d=new Date(weekStart); d.setDate(d.getDate()+i); return d; });
+    const days=calDay(isoDate(all7[6])).length? all7 : all7.slice(0,6);          /* Sunday only when something is on it */
+    const a=days[0], b=days[days.length-1];
+    $('#calRange').textContent = a.getDate()+(a.getMonth()!==b.getMonth()?' '+MONTHS[a.getMonth()].slice(0,3):'')+' – '+b.getDate()+' '+MONTHS[b.getMonth()].slice(0,3)+' '+b.getFullYear();
+    const per=days.map(d=>{ const iso=isoDate(d), items=calDay(iso); return {d, iso, items, timed:items.filter(c=>cxMin(c.time)!==null), untimed:items.filter(c=>cxMin(c.time)===null)}; });
+    const mins=[]; per.forEach(p=>p.timed.forEach(c=>mins.push(cxMin(c.time))));
+    const now=new Date(), nowMin=now.getHours()*60+now.getMinutes(), tIso=todayIso();
+    const hasToday=per.some(p=>p.iso===tIso);
+    let start=9*60, end=19*60;
+    if(mins.length){ start=Math.min(start, Math.floor(Math.min(...mins)/60)*60); end=Math.max(end, Math.ceil((Math.max(...mins)+15)/60)*60); }
+    if(hasToday && nowMin>=7*60 && nowMin<=23*60){ start=Math.min(start, Math.floor(nowMin/60)*60); end=Math.max(end, Math.ceil((nowMin+1)/60)*60); }
+    const H=(end-start)/15*CX_SLOT;
+    let h=cxSummary(days)+`<div class="cx-week" style="--cols:${days.length};--slot:${CX_SLOT}px">`;
+    h+=`<div class="cx-whead"><div class="cx-gut"></div>`+per.map(p=>{ const live=meetLive(p.items), sum=live.reduce((s,c)=>s+cval(c),0), wd=(p.d.getDay()+6)%7;
+      return `<div class="cx-dh${p.iso===tIso?' today':''}${p.iso<tIso?' past':''}"><span class="cx-dow">${DOW[wd]}</span><span class="cx-dn">${p.d.getDate()}</span><span class="cx-dm">${live.length?live.length+' meeting'+(live.length===1?'':'s'):'free'}${sum?' · '+fmtMoney(sum):''}</span><button type="button" class="cx-add" data-day="${p.iso}" title="Book a meeting on ${DOW[wd]} ${p.d.getDate()}" aria-label="Book a meeting">＋</button></div>`; }).join('')+`</div>`;
+    if(per.some(p=>p.untimed.length)) h+=`<div class="cx-allday"><div class="cx-gut">no time</div>`+per.map(p=>`<div class="cx-adc">${p.untimed.map(c=>{ const k=cxKind(c); return `<div class="cx-ev k-${k}${c.ghost?' ghost':''}" data-id="${c.id}" title="${esc(cxTitle(c,k))}">${cxBits(c,k,false)}</div>`; }).join('')}</div>`).join('')+`</div>`;
+    h+=`<div class="cx-wbody"><div class="cx-gut" style="height:${H}px">`;
+    for(let m=start; m<end; m+=60) h+=`<span class="cx-hr" style="top:${(m-start)/15*CX_SLOT}px">${cxHM(m)}</span>`;
+    if(hasToday && nowMin>=start && nowMin<=end) h+=`<span class="cx-nowlbl" style="top:${(nowMin-start)/15*CX_SLOT}px">${cxHM(nowMin)}</span>`;
+    h+=`</div>`;
+    per.forEach(p=>{
+      h+=`<div class="cx-col${p.iso===tIso?' today':''}${p.iso<tIso?' past':''}" data-day="${p.iso}" data-start="${start}" style="height:${H}px">`;
+      cxLayout(p.timed).forEach(x=>{ const k=cxKind(x.c), top=(x.s-start)/15*CX_SLOT, w=100/x.cols, narrow=x.cols>2;
+        h+=`<div class="cx-ev k-${k}${k==='log'&&cFromAd(x.c)?' src-ad':''}${x.c.ghost?' ghost':''}${x.cols>1?' split':''}" data-id="${x.c.id}" title="${esc(cxTitle(x.c,k))}" style="top:${top+1}px;height:${CX_SLOT-2}px;left:calc(${x.col*w}% + 3px);width:calc(${w}% - 6px)">${cxBits(x.c,k,narrow)}</div>`; });
+      if(p.iso===tIso && nowMin>=start && nowMin<=end) h+=`<div class="cx-now" style="top:${(nowMin-start)/15*CX_SLOT}px"></div>`;
+      h+=`</div>`;
     });
-    body.innerHTML=html+'</div>';
+    h+=`</div></div>`;
+    h+=cxAgenda(days, 'This week · day by day');
+    body.innerHTML=h;
   } else {
     const [y,m]=curMonth.split('-').map(Number);
     $('#calRange').textContent=fmtMonth(curMonth);
-    const first=new Date(y,m-1,1);
-    const startOffset=(first.getDay()+6)%7;
+    const first=new Date(y,m-1,1), startOffset=(first.getDay()+6)%7;
     const gridStart=new Date(first); gridStart.setDate(1-startOffset);
-    let html='<div class="mgrid">'+DOW.map(d=>`<div class="dow">${d}</div>`).join(''); const agenda=[];
-    for(let i=0;i<42;i++){
-      const d=new Date(gridStart); d.setDate(gridStart.getDate()+i);
-      const iso=isoDate(d);
-      const inMonth=d.getMonth()===m-1;
-      const items=calDay(iso);
-      /* every meeting of the day is shown — no «+N more» (7 Oct 2026) */
-      html+=`<div class="mcell ${inMonth?'':'out'} ${iso===todayIso()?'today':''}${items.length>4?' busy':''}" data-day="${iso}">
-        <div class="num">${d.getDate()}${meetLive(items).length?`<span class="mcnt">${meetLive(items).length}</span>`:''}</div>
-        ${items.map(meetMini).join('')}
-      </div>`;
-      if(inMonth && items.length) agenda.push({iso, d, items});
-      if(i>=34 && d.getMonth()!==m-1 && (i+1)%7===0) break;
-    }
-    /* phone: the month as a clear list underneath — every day with meetings, every meeting */
-    const tot=agenda.reduce((s,a)=>s+meetLive(a.items).length,0);
-    html+='</div><div class="magenda"><div class="magenda-h">'+fmtMonth(curMonth)+' · '+tot+' meeting'+(tot===1?'':'s')+'</div>'+
-      (agenda.length? agenda.map(a=>`<div class="mag-day${a.iso===todayIso()?' today':''}"><div class="mag-dh"><b>${DOW[(a.d.getDay()+6)%7]} ${a.d.getDate()}</b><span>${meetLive(a.items).length} meeting${meetLive(a.items).length===1?'':'s'}</span></div>${a.items.map(meetHtml).join('')}</div>`).join('') : '<div class="empty-note">No meetings this month yet.</div>')+'</div>';
-    body.innerHTML=html;
+    const cells=[]; for(let i=0;i<42;i++){ const d=new Date(gridStart); d.setDate(gridStart.getDate()+i); cells.push(d); if(i>=34 && d.getMonth()!==m-1 && (i+1)%7===0) break; }
+    const withSun=cells.some(d=>d.getDay()===0 && d.getMonth()===m-1 && calDay(isoDate(d)).length);
+    const show=cells.filter(d=>withSun || d.getDay()!==0);
+    const cols=withSun?7:6, tIso=todayIso();
+    let h=cxSummary(cells.filter(d=>d.getMonth()===m-1))+`<div class="cx-month" style="--cols:${cols}">`+DOW.slice(0,cols).map(d=>`<div class="cx-mdow">${d}</div>`).join('');
+    show.forEach(d=>{ const iso=isoDate(d), inM=d.getMonth()===m-1, items=calDay(iso), live=meetLive(items).length;
+      h+=`<div class="cx-mc${inM?'':' out'}${iso===tIso?' today':''}${iso<tIso?' past':''}" data-day="${iso}"><div class="cx-mh"><span class="cx-md">${d.getDate()===1?MONTHS[d.getMonth()].slice(0,3)+' ':''}${d.getDate()}</span>${live?`<span class="cx-mn">${live}</span>`:''}</div>`+
+        items.map(c=>{ const k=cxKind(c); return `<div class="cx-mr k-${k}${k==='log'&&cFromAd(c)?' src-ad':''}${c.ghost?' ghost':''}" data-id="${c.id}" title="${esc(cxTitle(c,k))}"><i></i><b>${esc(c.time||'')}</b><span>${esc(c.name)}</span>${cFromAd(c)&&k!=='ad'?'<em>AD</em>':''}${cxActs(c)}</div>`; }).join('')+`</div>`; });
+    h+=`</div>`+cxAgenda(cells.filter(d=>d.getMonth()===m-1), fmtMonth(curMonth)+' · day by day');
+    body.innerHTML=h;
   }
-  body.insertAdjacentHTML('beforeend','<div class="cal-legend"><span><i style="background:#CFF5E1;box-shadow:inset 0 0 0 1px #0B9E5C"></i>Said yes</span><span><i style="background:#FFF0B3;box-shadow:inset 0 0 0 1px #E0A800"></i>Thinking</span><span><i style="background:#FFE0C2;box-shadow:inset 0 0 0 1px #FF6A00"></i>No-show</span><span><i style="background:#ECEEF2;box-shadow:inset 0 0 0 1px #8A94A8"></i>Lost</span><span><i style="background:var(--blue-soft);box-shadow:inset 0 0 0 1px var(--brand)"></i>Not logged yet / coming up</span></div>');
   body.querySelectorAll('.m2cb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); m2Open(b.dataset.m2, b); }));
   body.querySelectorAll('.rmcb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); rmOpen(b.dataset.rm, b); }));
-  body.querySelectorAll('.meet').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(!c) return; try{ if(typeof adlOpenFromCal==='function' && adlOpenFromCal(c)) return; }catch(err){} mqOpen(c.id); }));
-  body.querySelectorAll('.day-add').forEach(el=>el.addEventListener('click',()=>openModal(null, el.dataset.day)));
-  body.querySelectorAll('.mcell').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.meet')) return; openModal(null, el.dataset.day); }));
+  body.querySelectorAll('.cx-ev,.cx-mr,.cx-ar').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(!c) return; try{ if(typeof adlOpenFromCal==='function' && adlOpenFromCal(c)) return; }catch(err){} mqOpen(c.id); }));
+  body.querySelectorAll('.cx-add').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); openModal(null, el.dataset.day); }));
+  /* click an empty spot in the week grid = book at that time */
+  body.querySelectorAll('.cx-col').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.cx-ev')) return; const r=el.getBoundingClientRect(); const mm=(+el.dataset.start)+Math.max(0,Math.floor((e.clientY-r.top)/CX_SLOT))*15; openModal(null, el.dataset.day); try{ $('#mTime').value=cxHM(mm); }catch(err){} }));
+  body.querySelectorAll('.cx-mc').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.cx-mr')) return; openModal(null, el.dataset.day); }));
 }
+/* keep the red «now» line moving while the week is on screen (moves the line only — nothing re-renders under the mouse) */
+setInterval(()=>{ try{ const col=document.querySelector('#calBody .cx-col.today'), ln=col&&col.querySelector('.cx-now'); if(!ln) return;
+  const n=new Date(), mm=n.getHours()*60+n.getMinutes(), st=+col.dataset.start, top=(mm-st)/15*CX_SLOT;
+  if(top<0 || top>col.offsetHeight){ ln.remove(); return; } ln.style.top=top+'px';
+  const lb=document.querySelector('#calBody .cx-nowlbl'); if(lb){ lb.style.top=top+'px'; lb.textContent=cxHM(mm); } }catch(e){} }, 60*1000);
+
 document.querySelectorAll('[data-cal]').forEach(b=>b.addEventListener('click',()=>{
   calMode=b.dataset.cal;
   document.querySelectorAll('[data-cal]').forEach(x=>x.classList.toggle('active',x===b));
