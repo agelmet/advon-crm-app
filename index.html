@@ -5003,6 +5003,163 @@ body.dark .meet.o-won .mo,body.dark .meet.o-won .mab{color:#5EE3A4} body.dark .m
 .adb-sec .cj{border:0;border-radius:0;background:none}
 .adb-sec .cj-r{padding:9px 0}
 </style>
+<style>
+/* ---------- 💰 MONEY CALENDAR (24 Nov 2026) ---------- */
+.tab.tab-mny{display:inline-flex; align-items:center; gap:6px; color:#B7791F; background:linear-gradient(135deg,rgba(255,213,74,.22),rgba(255,159,28,.14)); border:1px solid rgba(245,179,1,.45); font-weight:800;}
+.tab.tab-mny:hover:not(.active){color:#8a5a12; background:linear-gradient(135deg,rgba(255,213,74,.36),rgba(255,159,28,.24));}
+.tab.tab-mny.active{color:#3b2500; border-color:transparent; background:linear-gradient(135deg,#FFE27A,#FFC21A 45%,#FF9F1C); box-shadow:0 3px 14px rgba(255,170,0,.45);}
+body.dark .tab.tab-mny:not(.active){color:#FFD15C;}
+.year-banner .cell.mny-link{cursor:pointer; border-radius:12px; transition:background .15s, transform .15s; margin:-8px; padding:8px;}
+.year-banner .cell.mny-link:hover{background:rgba(255,255,255,.08); transform:translateY(-1px);}
+.year-banner .cell.mny-link .mny-go{display:inline-block; margin-top:6px; font-size:11px; font-weight:800; color:#FFD54A; letter-spacing:.02em;}
+
+#view-money{--gold:#FFC21A; --gold2:#FF9F1C;}
+body[data-view=money] .gm-bar{display:none;}
+.mny-wrap{display:grid; gap:18px;}
+.mny-hero{position:relative; overflow:hidden; border-radius:22px; padding:22px 26px 20px; color:#fff;
+  background:radial-gradient(120% 140% at 100% 0%,rgba(255,213,74,.35),transparent 45%),linear-gradient(135deg,#062B20 0%,#0A5A3C 45%,#0EA463 100%);
+  box-shadow:0 14px 44px rgba(6,60,40,.32); display:grid; grid-template-columns:1fr auto; gap:14px 24px; align-items:center;}
+.mny-hero::after{content:''; position:absolute; inset:0; background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.13) 45%,transparent 60%); background-size:250% 100%; animation:mnyShine 6s ease-in-out infinite; pointer-events:none;}
+@keyframes mnyShine{0%{background-position:150% 0;}60%,100%{background-position:-100% 0;}}
+.mny-nav{display:flex; align-items:center; gap:8px; position:relative; z-index:1;}
+.mny-nav button{width:34px; height:34px; border-radius:11px; background:rgba(255,255,255,.14); color:#fff; font-size:18px; font-weight:700; display:grid; place-items:center; transition:background .15s;}
+.mny-nav button:hover{background:rgba(255,255,255,.26);}
+.mny-nav .mny-mon{font-family:'Sora'; font-weight:800; font-size:17px; letter-spacing:-.01em; min-width:150px; text-align:center;}
+.mny-nav .mny-today{width:auto; padding:0 12px; font-size:12px; font-weight:800;}
+.mny-k{font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.72); margin-top:12px; position:relative; z-index:1;}
+.mny-big{font-family:'Sora'; font-weight:800; font-size:clamp(40px,6vw,64px); line-height:1.02; letter-spacing:-.035em; position:relative; z-index:1; text-shadow:0 4px 24px rgba(0,0,0,.18);}
+.mny-big small{font-size:15px; font-weight:700; letter-spacing:0; color:rgba(255,255,255,.75); margin-left:10px; text-shadow:none;}
+.mny-sub{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; position:relative; z-index:1;}
+.mny-chip{display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:99px; font-size:12px; font-weight:700; background:rgba(255,255,255,.14); color:#fff; white-space:nowrap;}
+.mny-chip.up{background:#FFE27A; color:#4a3000;}
+.mny-chip.down{background:rgba(255,255,255,.12); color:rgba(255,255,255,.85);}
+.mny-chip.rec{background:linear-gradient(135deg,#FFE27A,#FF9F1C); color:#3b2500; box-shadow:0 4px 16px rgba(255,170,0,.4); animation:mnyPulse 2.2s ease-in-out infinite;}
+.mny-chip.risk{background:rgba(255,77,94,.22); color:#FFD2D7; cursor:pointer;}
+@keyframes mnyPulse{50%{transform:scale(1.05);}}
+.mny-side{position:relative; z-index:1; display:grid; gap:10px; justify-items:end; align-self:start;}
+.mny-yr{text-align:right;}
+.mny-yr .l{font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.7);}
+.mny-yr .v{font-family:'Sora'; font-weight:800; font-size:26px; letter-spacing:-.02em;}
+.mny-yr .s{font-size:12px; color:rgba(255,255,255,.75); font-weight:600;}
+.mny-tog{display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:99px; background:rgba(255,255,255,.12); color:#fff; font-size:12px; font-weight:700;}
+.mny-tog i{width:30px; height:17px; border-radius:99px; background:rgba(255,255,255,.3); position:relative; transition:background .2s;}
+.mny-tog i::after{content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%; background:#fff; transition:transform .2s;}
+.mny-tog.on i{background:#4FA3FF;} .mny-tog.on i::after{transform:translateX(13px);}
+
+.mny-recs{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px;}
+.mny-rec{position:relative; text-align:left; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px 14px 12px; box-shadow:var(--shadow); transition:transform .15s, box-shadow .15s; min-width:0; overflow:hidden;}
+.mny-rec:hover{transform:translateY(-2px); box-shadow:var(--shadow-lg);}
+.mny-rec::before{content:''; position:absolute; left:0; top:0; right:0; height:3px; background:linear-gradient(90deg,#FFE27A,#FF9F1C);}
+.mny-rec .ic{font-size:20px; line-height:1;}
+.mny-rec .l{font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-top:7px;}
+.mny-rec .v{font-family:'Sora'; font-weight:800; font-size:21px; letter-spacing:-.02em; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.mny-rec .s{font-size:11.5px; color:var(--muted); font-weight:600; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.mny-rec.gold{background:linear-gradient(160deg,#FFF8DC,#FFE9B0); border-color:#FFD66B;}
+.mny-rec.gold .l,.mny-rec.gold .s{color:#8a5a12;}
+.mny-rec.gold .v{color:#3b2500;}
+body.dark .mny-rec.gold{background:linear-gradient(160deg,#3a2c06,#2a1f05); border-color:#6b5110;}
+body.dark .mny-rec.gold .l,body.dark .mny-rec.gold .s{color:#E8C25A;} body.dark .mny-rec.gold .v{color:#FFE27A;}
+.mny-rec .now{position:absolute; top:10px; right:10px; font-size:10px; font-weight:800; padding:2px 7px; border-radius:99px; background:#0EC673; color:#fff;}
+
+.mny-main{display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:18px; align-items:start;}
+.mny-cal{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; box-shadow:var(--shadow);}
+.mny-grid{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)) minmax(0,.85fr); gap:7px;}
+.mny-dow{font-size:10.5px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); text-align:center; padding:2px 0 4px;}
+.mny-dow.wk{color:#B7791F;}
+.mny-day{position:relative; min-height:96px; border-radius:14px; padding:8px 8px 7px; text-align:left; background:var(--bg); border:1.5px solid transparent; display:flex; flex-direction:column; gap:3px; transition:transform .12s, box-shadow .12s, border-color .12s; min-width:0; overflow:hidden; opacity:0; animation:mnyIn .35s ease forwards;}
+@keyframes mnyIn{from{opacity:0; transform:translateY(6px) scale(.98);}to{opacity:1; transform:none;}}
+.mny-day:hover{transform:translateY(-2px); box-shadow:0 8px 22px rgba(24,49,92,.14);}
+.mny-day.blank{background:transparent; pointer-events:none; animation:none; opacity:1;}
+.mny-day.we{background:repeating-linear-gradient(135deg,var(--bg),var(--bg) 6px,transparent 6px,transparent 9px); }
+.mny-day.fut{opacity:.55 !important;}
+.mny-day .dn{font-family:'Sora'; font-weight:800; font-size:13px; color:var(--muted);}
+.mny-day .am{font-family:'Sora'; font-weight:800; font-size:17px; letter-spacing:-.02em; color:var(--ink); margin-top:auto; white-space:nowrap;}
+.mny-day .am .cmp{display:none;}
+.mny-day .ppl{display:flex; gap:2px; flex-wrap:nowrap; min-height:20px; align-items:center;}
+.mny-day .av{width:20px; height:20px; border-radius:50%; display:grid; place-items:center; font-size:8.5px; font-weight:800; color:#fff; background:#0B9E5C; border:1.5px solid var(--surface); margin-left:-5px; flex-shrink:0;}
+.mny-day .av:first-child{margin-left:0;}
+.mny-day .av.ren{background:#2F7FE0;}
+.mny-day .av.more{background:var(--ink); color:var(--surface);}
+.mny-day .fl{position:absolute; top:6px; right:7px; font-size:14px; line-height:1;}
+.mny-day.h1{background:#E6FAF0;} .mny-day.h2{background:#BDF2D6;} .mny-day.h3{background:#7FE3B0;}
+.mny-day.h4{background:linear-gradient(150deg,#19C27A,#0B9E5C);} .mny-day.h4 .dn,.mny-day.h4 .am{color:#fff;} .mny-day.h4 .av{border-color:#0B9E5C;}
+body.dark .mny-day.h1{background:#0F2A1F;} body.dark .mny-day.h2{background:#13432F;} body.dark .mny-day.h3{background:#17694A;}
+body.dark .mny-day.h3 .am,body.dark .mny-day.h2 .am{color:#E9FFF4;}
+.mny-day.best{background:linear-gradient(150deg,#FFE27A,#FFC21A 55%,#FF9F1C) !important; box-shadow:0 8px 26px rgba(255,170,0,.45);}
+.mny-day.best .dn,.mny-day.best .am{color:#3b2500 !important;} .mny-day.best .av{border-color:#FFC21A;}
+.mny-day.today{border-color:var(--brand); box-shadow:0 0 0 3px rgba(47,127,224,.18);}
+.mny-day.today .dn::after{content:' · today'; font-family:'Inter'; font-size:10px; font-weight:800; color:var(--brand);}
+.mny-day.sel{border-color:var(--ink); box-shadow:0 0 0 3px rgba(16,20,31,.14), 0 10px 26px rgba(24,49,92,.16);}
+body.dark .mny-day.sel{border-color:#fff;}
+.mny-wkt{min-height:96px; border-radius:14px; padding:8px; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; text-align:right; background:linear-gradient(160deg,#FFF8DC,#FFF1C9); border:1px dashed #F1CF6A;}
+body.dark .mny-wkt{background:#251d07; border-color:#5a4512;}
+.mny-wkt .l{font-size:9.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#B7791F;}
+.mny-wkt .v{font-family:'Sora'; font-weight:800; font-size:16px; color:#5a3a00; white-space:nowrap;}
+body.dark .mny-wkt .v{color:#FFE27A;}
+.mny-wkt .s{font-size:10.5px; font-weight:700; color:#B7791F;}
+.mny-wkt.top{background:linear-gradient(150deg,#FFE27A,#FF9F1C); border-style:solid; border-color:#FFB020;}
+.mny-wkt.top .l,.mny-wkt.top .s,.mny-wkt.top .v{color:#3b2500;}
+.mny-wkt.zero .v{color:var(--muted); font-size:14px;}
+.mny-legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-size:11.5px; color:var(--muted); font-weight:600; align-items:center;}
+.mny-legend i{display:inline-block; width:12px; height:12px; border-radius:4px; vertical-align:-2px; margin-right:5px;}
+
+.mny-panel{background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); overflow:hidden; position:sticky; top:86px;}
+.mny-ph{padding:16px 18px 14px; background:linear-gradient(135deg,#0A5A3C,#0EA463); color:#fff;}
+.mny-ph.empty{background:linear-gradient(135deg,#2A3346,#3D4A63);}
+.mny-ph.best{background:linear-gradient(135deg,#FFD54A,#FF9F1C); color:#3b2500;}
+.mny-ph .d{font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; opacity:.85;}
+.mny-ph .v{font-family:'Sora'; font-weight:800; font-size:34px; letter-spacing:-.03em; line-height:1.1; margin-top:2px;}
+.mny-ph .s{font-size:12.5px; font-weight:700; opacity:.9; margin-top:2px;}
+.mny-list{padding:8px; display:grid; gap:6px; max-height:520px; overflow-y:auto;}
+.mny-p{display:grid; grid-template-columns:34px minmax(0,1fr) auto; gap:10px; align-items:center; text-align:left; padding:9px 10px; border-radius:13px; background:var(--bg); transition:background .12s, transform .12s; animation:mnyIn .3s ease both;}
+.mny-p:hover{transform:translateX(2px); background:var(--green-soft);}
+.mny-p .pa{width:34px; height:34px; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:800; color:#fff; background:#0B9E5C;}
+.mny-p.ren .pa{background:#2F7FE0;}
+.mny-p .pn{font-weight:700; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.mny-p .ps{font-size:11.5px; color:var(--muted); font-weight:600; display:flex; gap:6px; flex-wrap:wrap; margin-top:2px; align-items:center;}
+.mny-p .ps b{font-weight:800; padding:1px 7px; border-radius:99px; font-size:10.5px;}
+.mny-p .ps b.ok{background:var(--green-soft); color:var(--deep);}
+.mny-p .ps b.ow{background:var(--orange-soft); color:#C26A00;}
+.mny-p .ps b.rn{background:var(--blue-soft); color:var(--brand);}
+.mny-p .pv{font-family:'Sora'; font-weight:800; font-size:16px; white-space:nowrap;}
+.mny-none{padding:22px 18px; text-align:center; color:var(--muted); font-weight:600; font-size:13px; line-height:1.5;}
+.mny-none b{display:block; font-size:28px; margin-bottom:6px;}
+
+.mny-year{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px 18px 12px; box-shadow:var(--shadow);}
+.mny-yh{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:10px;}
+.mny-yh h3{font-size:15px; font-weight:800;}
+.mny-yh span{font-size:12.5px; color:var(--muted); font-weight:700;}
+.mny-bars{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:8px; align-items:end; height:170px;}
+.mny-bar{display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:5px; border-radius:10px; padding:4px 0; transition:background .12s;}
+.mny-bar:hover{background:var(--bg);}
+.mny-bar .bv{font-size:10.5px; font-weight:800; color:var(--ink); white-space:nowrap;}
+.mny-bar .bb{width:72%; max-width:46px; border-radius:8px 8px 4px 4px; background:linear-gradient(180deg,#3BDD95,#0B9E5C); min-height:4px; transform-origin:bottom; animation:mnyGrow .7s cubic-bezier(.2,.9,.3,1.2) both;}
+@keyframes mnyGrow{from{transform:scaleY(0);}to{transform:scaleY(1);}}
+.mny-bar.zero .bb{background:var(--line);}
+.mny-bar.top .bb{background:linear-gradient(180deg,#FFE27A,#FF9F1C); box-shadow:0 6px 18px rgba(255,170,0,.4);}
+.mny-bar.cur .bl{background:var(--ink); color:var(--surface);}
+.mny-bar .bl{font-size:10.5px; font-weight:800; color:var(--muted); padding:2px 7px; border-radius:99px;}
+.mny-bar.fut{opacity:.4;}
+
+.mny-fx{position:fixed; inset:0; pointer-events:none; z-index:300; overflow:hidden;}
+.mny-fx i{position:absolute; top:-12px; width:9px; height:14px; border-radius:2px; animation:mnyFall linear forwards;}
+@keyframes mnyFall{to{transform:translate3d(var(--dx),105vh,0) rotate(var(--r)); opacity:.9;}}
+
+@media(max-width:1250px){ .mny-recs{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@media(max-width:1050px){ .mny-main{grid-template-columns:1fr;} .mny-panel{position:static;} }
+@media(max-width:700px){
+  .mny-hero{grid-template-columns:1fr; padding:18px;} .mny-side{justify-items:start;} .mny-yr{text-align:left;}
+  .mny-recs{grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px;}
+  .mny-cal{padding:9px;} .mny-grid{grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px;}
+  .mny-wkt,.mny-dow.wk{display:none;}
+  .mny-day{min-height:62px; padding:5px 4px; border-radius:10px;}
+  .mny-day .dn{font-size:11px;} .mny-day.today .dn::after{content:'';}
+  .mny-day .am{font-size:12px;} .mny-day .am .full{display:none;} .mny-day .am .cmp{display:inline;}
+  .mny-day .ppl{display:none;} .mny-day .fl{font-size:11px; top:4px; right:4px;}
+  .mny-bars{height:130px; gap:3px;} .mny-bar .bv{font-size:8.5px; visibility:hidden;} .mny-bar.cur .bv{visibility:visible;} .mny-bar .bl{font-size:9px; padding:1px 4px;}
+}
+@media (prefers-reduced-motion:reduce){ .mny-hero::after,.mny-chip.rec{animation:none;} .mny-day,.mny-p,.mny-bar .bb{animation:none; opacity:1;} }
+</style>
 </head>
 <body class="locked">
 
@@ -5043,6 +5200,7 @@ body.dark .meet.o-won .mo,body.dark .meet.o-won .mab{color:#5EE3A4} body.dark .m
       <button class="tab" data-view="renewals">Renewals</button>
       <button class="tab" data-view="remaining">Remaining</button>
       <button class="tab" data-view="year">Year</button>
+      <button class="tab tab-mny" data-view="money" title="Money made — every day of the month, who said yes and how much, plus your records">💰 Money</button>
       <span class="tab-sep" aria-hidden="true"></span>
       <button class="tab tab-meta" data-view="meta"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg>Meta</button>
       <button class="tab tab-xs" data-view="xs" title="Clients interested in Google Ads, Social media or an e-shop"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9.5 4.5 3.8 14.4a3 3 0 1 0 5.2 3l5.7-9.9"/><path d="m14.5 4.5 5.7 9.9a3 3 0 1 1-5.2 3L9.3 7.5"/></svg>Ads &amp; Social<span class="tab-n" id="xsTabN" hidden>0</span></button>
@@ -5388,6 +5546,9 @@ body.dark .meet.o-won .mo,body.dark .meet.o-won .mab{color:#5EE3A4} body.dark .m
   <section class="ysec" id="yearFinance"></section>
   <section class="ysec" id="yearStats"></section>
 </main>
+
+<!-- 💰 MONEY CALENDAR — money made on the day each client said yes (24 Nov 2026) -->
+<main class="view" id="view-money"><div id="mnyBody"></div></main>
 
 <!-- QUICK LOG — speed first: log a call outcome in under two seconds -->
 <main class="view" id="view-quicklog">
@@ -9995,12 +10156,13 @@ function renderYear(){
     </div>`;
   $('#yearBanner').innerHTML=`
     <div class="cell"><div class="k">Generated ${curYear}</div><div class="big">${fmtMoney2(yGenerated)}</div><div class="k ysplit" style="margin-top:4px;"><span class="ys new">${fmtMoney2(yParts.booked)} new</span> <span class="ys ren">${fmtMoney2(yParts.renew)} renewals</span> <span class="ys sub">${fmtMoney2(yParts.subs)} monthly</span></div></div>
-    <div class="cell paid"><div class="k">Earned ${curYear} · money made</div><div class="big">${fmtMoney2(ytd)}</div><div class="k ysplit" style="margin-top:4px;"><span class="ys new">${fmtMoney2(yPaid)} new</span> <span class="ys ren">${fmtMoney2(rPaid)} renewals</span> <span class="ys sub">${fmtMoney2(subCollected)} monthly</span></div></div>
+    <div class="cell paid mny-link" id="yMoneyCell" title="Open the Money calendar — every day, who said yes and how much"><div class="k">Earned ${curYear} · money made</div><div class="big">${fmtMoney2(ytd)}</div><div class="k ysplit" style="margin-top:4px;"><span class="ys new">${fmtMoney2(yPaid)} new</span> <span class="ys ren">${fmtMoney2(rPaid)} renewals</span> <span class="ys sub">${fmtMoney2(subCollected)} monthly</span></div><span class="mny-go">💰 See it day by day →</span></div>
     <div class="cell renew" id="yRenewCell" title="Open the Renewals tab"><div class="k">Renewals ${curYear}</div><div class="big">${fmtMoney2(rPaid)}</div><div class="k" style="margin-top:4px;">${renewalsPaidCountForYear(curYear)} paid · ${fmtMoney2(rTotal)} still due</div></div>
     <div class="cell"><div class="k">To collect</div><div class="big" style="color:#FFB39F;">${fmtMoney2(Math.max(0,yTotal-yPaid-yGiven))}</div>${yGiven?`<div class="k" style="margin-top:4px;">${fmtMoney2(yGiven)} given up (orange/red) is not counted</div>`:''}</div>
     <div class="cell"><div class="k">Paying clients now</div><div class="big">${liveRenewals().length+(state.subs||[]).length}</div><div class="k" style="margin-top:4px;">${liveRenewals().length} yearly · ${(state.subs||[]).length} monthly · ${yCount} new in ${curYear}</div></div>
     ${targetCell}`;
   { const yc=$('#yRenewCell'); if(yc) yc.addEventListener('click',()=>{ rnYear=curYear; switchView('renewals'); }); }
+  { const ym=$('#yMoneyCell'); if(ym) ym.addEventListener('click',()=>{ const nk=todayIso().slice(0,7); openMoney(String(curYear)===nk.slice(0,4) ? nk : curYear+'-12'); }); }
   renderYearFinance(yGenerated, yExp, yNet, rTotal, {yPaid, subCollected, rPaid, ytd, toCollect:Math.max(0,yTotal-yPaid-yGiven), givenUp:yGiven, rCount:renewalsPaidCountForYear(curYear)});
   renderYearStats();
 }
@@ -14248,7 +14410,7 @@ function switchView(v){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+v));
   /* the money strip also sits on Home, Calendar and To Do (the Calendar keeps its own month arrows, so the strip's are hidden there via CSS) */
-  $('#strip').style.display = (v==='year'||v==='renewals'||v==='ideas'||v==='monthly'||v==='remaining'||v==='leads'||v==='chats'||v==='meta'||v==='xs'||v==='adl') ? 'none' : 'flex';
+  $('#strip').style.display = (v==='year'||v==='renewals'||v==='ideas'||v==='monthly'||v==='remaining'||v==='leads'||v==='chats'||v==='meta'||v==='xs'||v==='adl'||v==='money') ? 'none' : 'flex';
   if(v==='meta' && Date.now()-Meta.lastAt>20*1000) Meta.pull(false);
   if(v==='chats'){ if(Date.now()-Chats.lastAt>15*1000) Chats.pull(false); if(Chats.cur) Chats.pullThread(false); setTimeout(()=>Chats.seen(),400); }
   if((v==='leads'||v==='adl') && Date.now()-Leads.lastAt>45*1000) Leads.pull(false);
@@ -14866,6 +15028,233 @@ function alSync(){
 }
 window.addEventListener('storage',e=>{ if(e.key===AL_KEY){ try{ alSync(); }catch(err){} } });
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ try{ alSync(); }catch(e){} } });
+/* ---------- 💰 MONEY CALENDAR (Angelo, 24 Nov 2026) ----------
+   «Click on the money made → how much money I made each day since I "Won" the clients of the month, with the people
+   that said the yes and their amount, records of the year, of the month… as a calendar showing the entire month.»
+   Every euro sits on the day the client said YES (c.wonAt) — the exact same rows and the same month total as the
+   «New money» card (goalRows), so the two never disagree. «+ Renewals» adds renewal payments on the day they were paid. */
+var MNY={key:null, sel:null, ren:false, fxDone:{}, shown:{}};
+try{ MNY.ren = localStorage.getItem('mnyRen')==='1'; }catch(e){}
+function mnyMonthsList(){
+  const now=todayIso().slice(0,7); let first=now;
+  (state.clients||[]).forEach(c=>{ if(c && /^\d{4}-\d{2}$/.test(c.month||'') && c.month<first) first=c.month; });
+  if(MNY.ren) renewalHistory().forEach(x=>{ const k=String(x.h.at||'').slice(0,7); if(/^\d{4}-\d{2}$/.test(k) && k<first) first=k; });
+  const end=(MNY.key && MNY.key>now) ? MNY.key : now, out=[];
+  let [y,m]=first.split('-').map(Number);
+  while(out.length<240){ const k=y+'-'+pad(m); out.push(k); if(k>=end) break; m++; if(m>12){ m=1; y++; } }
+  return out;
+}
+function mnyData(){
+  const days={}, months={};
+  const mo=k=>months[k]||(months[k]={sum:0, n:0, paid:0, owed:0, ren:0, risk:[], pot:[]});
+  const add=(dk,row)=>{ const d=days[dk]||(days[dk]={sum:0, n:0, rows:[]}); d.sum+=row.amount; d.rows.push(row);
+    const M=mo(dk.slice(0,7)); M.sum+=row.amount;
+    if(row.kind==='ren'){ M.ren+=row.amount; } else { d.n++; M.n++; M.paid+=row.paid; M.owed+=row.owed; } };
+  mnyMonthsList().forEach(key=>{
+    let g; try{ g=goalRows(key); }catch(e){ return; }
+    const M=mo(key); M.risk=g.risk||[]; M.pot=g.pot||[];
+    g.rows.forEach(r=>{ if(!(r.amount>0)) return;
+      add(key+'-'+pad(r.day), {kind:r.kept?'kept':(r.owed>0.004?'owed':'paid'), c:r.c, amount:r.amount, paid:r.kept?r.amount:r.paid, owed:r.kept?0:r.owed, when:r.when}); });
+  });
+  if(MNY.ren) renewalHistory().forEach(x=>{ const dk=String(x.h.at||'').slice(0,10), v=+x.h.value||0;
+    if(/^\d{4}-\d{2}-\d{2}$/.test(dk) && v>0) add(dk, {kind:'ren', r:x.r, amount:v, paid:v, owed:0, when:dk}); });
+  Object.values(days).forEach(d=>d.rows.sort((a,b)=>b.amount-a.amount));
+  return {days, months};
+}
+function mnyIsWork(dk){ const w=new Date(dk+'T12:00').getDay(); return w>=1 && w<=5; }
+function mnyRecords(D, year, key){
+  const best=(f,by)=>{ let b=null; for(const dk in D.days){ if(f && !f(dk)) continue; const d=D.days[dk], v=by==='n'?d.n:d.sum; if(v>0 && (!b || v>b.v)) b={dk, v, sum:d.sum, n:d.n}; } return b; };
+  const inY=dk=>dk.startsWith(year+'-');
+  const R={dayEver:best(), dayYear:best(inY), dayMonth:best(dk=>dk.startsWith(key+'-')), yesDay:best(inY,'n')};
+  const wk={}; for(const dk in D.days){ if(!inY(dk)) continue; const mon=isoDate(mondayOf(new Date(dk+'T12:00'))); const w=wk[mon]||(wk[mon]={sum:0,n:0}); w.sum+=D.days[dk].sum; w.n+=D.days[dk].n; }
+  for(const mon in wk) if(!R.week || wk[mon].sum>R.week.sum) R.week={mon, sum:wk[mon].sum, n:wk[mon].n};
+  R.weeks=wk;
+  for(const mk in D.months){ const M=D.months[mk]; if(!(M.sum>0)) continue;
+    if(!R.monthEver || M.sum>R.monthEver.sum) R.monthEver={mk, sum:M.sum, n:M.n};
+    if(mk.startsWith(year+'-') && (!R.monthYear || M.sum>R.monthYear.sum)) R.monthYear={mk, sum:M.sum, n:M.n}; }
+  /* yes-streak: working days in a row (Mon–Fri) with at least one new client. Today does not break it while it is still going. */
+  const ks=Object.keys(D.days).filter(dk=>D.days[dk].n>0).sort();
+  let bestS=0, cur=0;
+  if(ks.length){
+    const has=new Set(ks), today=todayIso(); let run=0;
+    const d=new Date(ks[0]+'T12:00'), end=new Date(today+'T12:00');
+    while(d<=end){ const dk=isoDate(d);
+      if(mnyIsWork(dk)){ if(has.has(dk)){ run++; if(run>bestS) bestS=run; } else if(dk!==today){ run=0; } }
+      d.setDate(d.getDate()+1); }
+    cur=run;
+  }
+  R.streak={cur, best:bestS};
+  return R;
+}
+function mnyShort(v){ v=+v||0; if(v>=1000){ const k=v/1000; return '€'+(k>=10?Math.round(k):Math.round(k*10)/10)+'k'; } return '€'+Math.round(v); }
+function mnyIni(name){ const w=String(name||'').trim().split(/\s+/).filter(Boolean); return ((w[0]||'?')[0]+(w[1]?w[1][0]:'')).toUpperCase(); }
+function mnyDayLbl(dk, opt){ return new Date(dk+'T12:00').toLocaleDateString('en-GB', opt||{weekday:'long', day:'numeric', month:'long'}); }
+function mnyCount(el, to){
+  if(!el) return; const from=+el.dataset.from||0;
+  if(Math.abs(to-from)<1 || window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ el.textContent=fmtMoney(Math.round(to)); return; }
+  const t0=performance.now(), dur=1100;
+  const step=t=>{ const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,4); el.textContent=fmtMoney(Math.round(from+(to-from)*e)); if(p<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function mnyConfetti(){
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const fx=document.createElement('div'); fx.className='mny-fx';
+  const C=['#FFC21A','#FF9F1C','#19C27A','#2F7FE0','#F45B9A','#7C5CFC','#FFE27A'];
+  let h=''; for(let i=0;i<90;i++){ const dur=1.6+Math.random()*1.6;
+    h+=`<i style="left:${Math.random()*100}%;background:${C[i%C.length]};--dx:${Math.round(Math.random()*240-120)}px;--r:${Math.round(Math.random()*900-450)}deg;animation-duration:${dur}s;animation-delay:${(Math.random()*.5).toFixed(2)}s;${Math.random()<.4?'border-radius:50%;width:8px;height:8px;':''}"></i>`; }
+  fx.innerHTML=h; document.body.appendChild(fx); setTimeout(()=>fx.remove(), 4000);
+}
+function renderMoney(){
+  if(curView!=='money' || !state || !Array.isArray(state.clients)) return;
+  const el=$('#mnyBody'); if(!el) return;
+  const now=todayIso(), nowKey=now.slice(0,7);
+  if(!MNY.key) MNY.key=nowKey;
+  const key=MNY.key, [y,m]=key.split('-').map(Number), last=new Date(y,m,0).getDate();
+  const D=mnyData(), R=mnyRecords(D,y,key);
+  const M=D.months[key]||{sum:0,n:0,paid:0,owed:0,ren:0,risk:[],pot:[]};
+  if(!MNY.sel || MNY.sel.slice(0,7)!==key) MNY.sel = key===nowKey ? now : ((R.dayMonth&&R.dayMonth.dk) || key+'-01');
+  /* compare with the month before — up to the same day while the month is still running */
+  const pk=(()=>{ const d=new Date(y,m-2,1); return d.getFullYear()+'-'+pad(d.getMonth()+1); })();
+  const upTo = key===nowKey ? +now.slice(8,10) : 31;
+  let prevSum=0; for(const dk in D.days){ if(dk.startsWith(pk+'-') && +dk.slice(8,10)<=upTo) prevSum+=D.days[dk].sum; }
+  let curSum=0; for(const dk in D.days){ if(dk.startsWith(key+'-') && +dk.slice(8,10)<=upTo) curSum+=D.days[dk].sum; }
+  const diff=curSum-prevSum, pmName=MONTHS[+pk.slice(5)-1];
+  const isRecMonth = R.monthEver && R.monthEver.mk===key && M.sum>0 && Object.values(D.months).filter(x=>x.sum>0).length>1;
+  let yearSum=0, yearN=0; for(const mk in D.months) if(mk.startsWith(y+'-')){ yearSum+=D.months[mk].sum; yearN+=D.months[mk].n; }
+  const riskSum=(M.risk||[]).reduce((a,r)=>a+r.amount,0);
+  const chips=[];
+  if(isRecMonth) chips.push(`<span class="mny-chip rec">🏆 Best month ever</span>`);
+  else if(R.monthYear && R.monthYear.mk===key && M.sum>0) chips.push(`<span class="mny-chip rec">👑 Best month of ${y}</span>`);
+  if(Math.round(diff)===0 && (prevSum>0 || curSum>0)) chips.push(`<span class="mny-chip">= level with ${pmName} ${key===nowKey?'by today':''}</span>`);
+  else if(prevSum>0 || curSum>0) chips.push(diff>=0
+    ? `<span class="mny-chip up">▲ ${fmtMoney(Math.round(diff))} ${key===nowKey?'ahead of '+pmName+' by today':'more than '+pmName}</span>`
+    : `<span class="mny-chip down">▼ ${fmtMoney(Math.round(-diff))} ${key===nowKey?'behind '+pmName+' by today':'less than '+pmName}</span>`);
+  if(M.n) chips.push(`<span class="mny-chip">✓ ${fmtMoney(Math.round(M.paid+M.ren))} paid${M.owed>0.004?` · ${fmtMoney(Math.round(M.owed))} to collect`:''}</span>`);
+  if(R.streak.cur>=2 && key===nowKey) chips.push(`<span class="mny-chip up">🔥 ${R.streak.cur}-day yes streak</span>`);
+  if(riskSum>0.004) chips.push(`<span class="mny-chip risk" data-dblist title="Said yes but you are not sure they will pay — not counted until they do">⚠ ${fmtMoney(Math.round(riskSum))} not counted · ${M.risk.length} not sure</span>`);
+
+  /* records */
+  const jump=(dk,txt)=>dk?` data-mny-jump="${dk}"`:'';
+  const recCard=(ic,l,v,s,dk,gold,now)=>`<button type="button" class="mny-rec${gold?' gold':''}"${jump(dk)}>${now?'<span class="now">NOW</span>':''}<div class="ic">${ic}</div><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></button>`;
+  const dShort=dk=>mnyDayLbl(dk,{weekday:'short', day:'numeric', month:'short'});
+  const wkEnd=mon=>{ const d=new Date(mon+'T12:00'); d.setDate(d.getDate()+6); return isoDate(d); };
+  const recs=[
+    recCard('🏆','Best day ever', R.dayEver?fmtMoney(Math.round(R.dayEver.sum)):'—', R.dayEver?dShort(R.dayEver.dk)+(R.dayEver.dk.slice(0,4)!==String(y)?' '+R.dayEver.dk.slice(0,4):'')+' · '+R.dayEver.n+' yes':'no yes yet', R.dayEver&&R.dayEver.dk, true, R.dayEver&&R.dayEver.dk===now),
+    recCard('👑','Best day '+y, R.dayYear?fmtMoney(Math.round(R.dayYear.sum)):'—', R.dayYear?dShort(R.dayYear.dk)+' · '+R.dayYear.n+' yes':'—', R.dayYear&&R.dayYear.dk, false, R.dayYear&&R.dayYear.dk===now),
+    recCard('⭐','Best day · '+MONTHS[m-1], R.dayMonth?fmtMoney(Math.round(R.dayMonth.sum)):'—', R.dayMonth?dShort(R.dayMonth.dk)+' · '+R.dayMonth.n+' yes':'not yet', R.dayMonth&&R.dayMonth.dk, false, R.dayMonth&&R.dayMonth.dk===now),
+    recCard('🚀','Best week '+y, R.week?fmtMoney(Math.round(R.week.sum)):'—', R.week?fmtDay(R.week.mon)+' – '+fmtDay(wkEnd(R.week.mon))+' · '+R.week.n+' yes':'—', R.week&&R.week.mon, false, R.week&&R.week.mon===isoDate(mondayOf(new Date()))),
+    recCard('📅','Best month '+y, R.monthYear?fmtMoney(Math.round(R.monthYear.sum)):'—', R.monthYear?MONTHS[+R.monthYear.mk.slice(5)-1]+' · '+R.monthYear.n+' clients':'—', R.monthYear&&R.monthYear.mk+'-01', false, R.monthYear&&R.monthYear.mk===nowKey),
+    recCard('🔥','Yes streak', R.streak.cur+' day'+(R.streak.cur===1?'':'s'), 'record '+R.streak.best+' · most yes in a day: '+(R.yesDay?R.yesDay.n:0), R.yesDay&&R.yesDay.dk, false, false)
+  ].join('');
+
+  /* the calendar */
+  let maxDay=0; for(let d=1; d<=last; d++){ const x=D.days[key+'-'+pad(d)]; if(x && x.sum>maxDay) maxDay=x.sum; }
+  const lead=(new Date(y,m-1,1).getDay()+6)%7;
+  const dows=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="mny-dow">${d}</div>`).join('')+'<div class="mny-dow wk">Week</div>';
+  let cells='', i=0, wkSum=0, wkN=0, wkMon=null;
+  const bestWeekMon = R.week && R.week.mon;
+  const flushWeek=()=>{ const top = wkMon && bestWeekMon===wkMon && wkSum>0;
+    cells+=`<div class="mny-wkt${top?' top':''}${wkSum>0?'':' zero'}"><div class="l">${top?'🚀 best week':'Week'}</div><div class="v">${wkSum>0?fmtMoney(Math.round(wkSum)):'—'}</div><div class="s">${wkN?wkN+' yes':''}</div></div>`; wkSum=0; wkN=0; wkMon=null; };
+  for(let b=0;b<lead;b++){ cells+='<div class="mny-day blank"></div>'; i++; }
+  for(let d=1; d<=last; d++){
+    const dk=key+'-'+pad(d), x=D.days[dk], sum=x?x.sum:0, dow=(i%7);
+    if(dow===0) wkMon=isoDate(mondayOf(new Date(dk+'T12:00')));
+    if(!wkMon) wkMon=isoDate(mondayOf(new Date(dk+'T12:00')));
+    let cls='mny-day';
+    if(dow>=5) cls+=' we';
+    if(dk>now) cls+=' fut';
+    if(sum>0){ const r=sum/maxDay; cls+= r>=.85?' h4': r>=.55?' h3': r>=.28?' h2':' h1'; }
+    if(sum>0 && R.dayMonth && R.dayMonth.dk===dk) cls+=' best';
+    if(dk===now) cls+=' today';
+    if(dk===MNY.sel) cls+=' sel';
+    const fl = (R.dayEver && R.dayEver.dk===dk) ? '🏆' : (R.dayYear && R.dayYear.dk===dk) ? '👑' : (R.dayMonth && R.dayMonth.dk===dk && sum>0) ? '⭐' : '';
+    let ppl='';
+    if(x){ const L=x.rows.slice(0,4); ppl=L.map(r=>`<span class="av${r.kind==='ren'?' ren':''}">${esc(mnyIni(r.kind==='ren'?r.r.name:r.c.name))}</span>`).join('') + (x.rows.length>4?`<span class="av more">+${x.rows.length-4}</span>`:''); }
+    cells+=`<button type="button" class="${cls}" data-mny-day="${dk}" style="animation-delay:${Math.min(d*14,420)}ms" title="${esc(mnyDayLbl(dk))}${sum?' · '+fmtMoney2(sum):''}"><span class="dn">${d}</span>${fl?`<span class="fl">${fl}</span>`:''}<span class="ppl">${ppl}</span><span class="am">${sum>0?`<span class="full">${fmtMoney(Math.round(sum))}</span><span class="cmp">${mnyShort(sum)}</span>`:''}</span></button>`;
+    wkSum+=sum; wkN+=x?x.n:0; i++;
+    if(i%7===0) flushWeek();
+  }
+  if(i%7!==0){ while(i%7!==0){ cells+='<div class="mny-day blank"></div>'; i++; } flushWeek(); }
+
+  /* the selected day */
+  const sd=MNY.sel, sx=D.days[sd];
+  const isBestSel = sx && R.dayMonth && R.dayMonth.dk===sd;
+  const prow=r=>{
+    if(r.kind==='ren') return `<button type="button" class="mny-p ren" data-mny-ren="${esc(sd.slice(0,7))}"><span class="pa">${esc(mnyIni(r.r.name))}</span><span><div class="pn">${esc(r.r.name||'—')}</div><div class="ps"><b class="rn">Renewal</b>paid</div></span><span class="pv">${fmtMoney2(r.amount)}</span></button>`;
+    const st=stageById(r.c.stage);
+    const pay = r.kind==='kept' ? '<b class="ok">✓ paid</b>' : r.owed>0.004 ? (r.paid>0?`<b class="ow">${fmtMoney2(r.paid)} in · ${fmtMoney2(r.owed)} to go</b>`:`<b class="ow">to collect</b>`) : '<b class="ok">✓ paid</b>';
+    return `<button type="button" class="mny-p" data-mny-open="${esc(r.c.id)}"><span class="pa">${esc(mnyIni(r.c.name))}</span><span><div class="pn">${esc(r.c.name||'—')}</div><div class="ps">${pay}<span>${esc(st.name)}</span></div></span><span class="pv">${fmtMoney2(r.amount)}</span></button>`;
+  };
+  const isWe=!mnyIsWork(sd);
+  const panel = sx
+    ? `<div class="mny-ph${isBestSel?' best':''}"><div class="d">${esc(mnyDayLbl(sd))}${isBestSel?' · ⭐ best day of the month':''}</div><div class="v">${fmtMoney2(sx.sum)}</div><div class="s">${sx.n?sx.n+' '+(sx.n===1?'person':'people')+' said yes':''}${sx.n&&sx.rows.length>sx.n?' · ':''}${sx.rows.length>sx.n?(sx.rows.length-sx.n)+' renewal'+(sx.rows.length-sx.n===1?'':'s'):''}</div></div><div class="mny-list">${sx.rows.map(prow).join('')}</div>`
+    : `<div class="mny-ph empty"><div class="d">${esc(mnyDayLbl(sd))}</div><div class="v">€0</div><div class="s">${sd>now?'still to come':'no yes this day'}</div></div><div class="mny-none"><b>${sd===now?'📞':sd>now?'🗓':isWe?'🌴':'💤'}</b>${sd===now?'No yes yet today — the next call could be the one.':sd>now?'This day is still ahead. Fill it.':isWe?'Weekend — rest counts too.':'Nobody said yes this day.'}</div>`;
+
+  /* the year, month by month */
+  let ymax=0; for(let k=1;k<=12;k++){ const x=D.months[y+'-'+pad(k)]; if(x && x.sum>ymax) ymax=x.sum; }
+  const bars=Array.from({length:12},(_,k)=>{ const mk=y+'-'+pad(k+1), x=D.months[mk], v=x?x.sum:0, h=ymax?Math.max(3,Math.round(v/ymax*100)):3;
+    const top = R.monthYear && R.monthYear.mk===mk && v>0;
+    return `<button type="button" class="mny-bar${v>0?'':' zero'}${top?' top':''}${mk===key?' cur':''}${mk>nowKey?' fut':''}" data-mny-month="${mk}" title="${MONTHS[k]} ${y} · ${fmtMoney2(v)}${x&&x.n?' · '+x.n+' clients':''}"><span class="bv">${v>0?(top?'👑 ':'')+mnyShort(v):''}</span><span class="bb" style="height:${h}%;animation-delay:${k*40}ms"></span><span class="bl">${MONTHS[k].slice(0,3)}</span></button>`; }).join('');
+
+  const shownKey=key+'|'+(MNY.ren?1:0), fromVal = MNY.shown[shownKey]!=null ? MNY.shown[shownKey] : 0;
+  el.innerHTML=`<div class="mny-wrap">
+    <section class="mny-hero">
+      <div>
+        <div class="mny-nav"><button type="button" data-mny-nav="-1" aria-label="Previous month">‹</button><div class="mny-mon">${MONTHS[m-1]} ${y}</div><button type="button" data-mny-nav="1" aria-label="Next month">›</button>${key!==nowKey?'<button type="button" class="mny-today" data-mny-nav="0">This month</button>':''}</div>
+        <div class="mny-k">Money made · ${MONTHS[m-1]}${MNY.ren?' · new clients + renewals':' · on the day they said yes'}</div>
+        <div class="mny-big"><span id="mnyBig" data-from="${fromVal}">${fmtMoney(Math.round(fromVal))}</span><small>${M.n} client${M.n===1?'':'s'} said yes</small></div>
+        <div class="mny-sub">${chips.join('')}</div>
+      </div>
+      <div class="mny-side">
+        <div class="mny-yr"><div class="l">${y} so far</div><div class="v">${fmtMoney(Math.round(yearSum))}</div><div class="s">${yearN} clients said yes</div></div>
+        <button type="button" class="mny-tog${MNY.ren?' on':''}" id="mnyRenTog" title="Also show renewal payments, on the day they were paid"><i></i>+ Renewals</button>
+      </div>
+    </section>
+    <section class="mny-recs">${recs}</section>
+    <section class="mny-main">
+      <div class="mny-cal">
+        <div class="mny-grid">${dows}${cells}</div>
+        <div class="mny-legend"><span><i style="background:#E6FAF0;border:1px solid #BDF2D6"></i>a little</span><span><i style="background:#7FE3B0"></i>more</span><span><i style="background:#0B9E5C"></i>big day</span><span><i style="background:linear-gradient(135deg,#FFE27A,#FF9F1C)"></i>⭐ best day of the month</span><span>👑 best of ${y} · 🏆 best ever</span></div>
+      </div>
+      <aside class="mny-panel">${panel}</aside>
+    </section>
+    <section class="mny-year">
+      <div class="mny-yh"><h3>${y} · month by month</h3><span>${fmtMoney(Math.round(yearSum))} · tap a month</span></div>
+      <div class="mny-bars">${bars}</div>
+    </section>
+  </div>`;
+  mnyCount($('#mnyBig'), M.sum);
+  MNY.shown[shownKey]=M.sum;
+  if(isRecMonth && !MNY.fxDone[key]){ MNY.fxDone[key]=1; setTimeout(mnyConfetti,350); }
+}
+function mnyGo(key, sel){ MNY.key=key; MNY.sel=sel||null; renderMoney(); }
+function mnyShift(n){
+  if(n===0) return mnyGo(todayIso().slice(0,7));
+  const [y,m]=MNY.key.split('-').map(Number), d=new Date(y,m-1+n,1);
+  mnyGo(d.getFullYear()+'-'+pad(d.getMonth()+1));
+}
+function openMoney(key){ MNY.key=key||todayIso().slice(0,7); MNY.sel=null; switchView('money'); window.scrollTo({top:0, behavior:'smooth'}); }
+document.addEventListener('click',e=>{
+  const root=e.target.closest && e.target.closest('#mnyBody'); if(!root) return;
+  const t=e.target.closest('[data-mny-nav],[data-mny-day],[data-mny-month],[data-mny-open],[data-mny-ren],[data-mny-jump],#mnyRenTog'); if(!t) return;
+  if(t.id==='mnyRenTog'){ MNY.ren=!MNY.ren; try{ localStorage.setItem('mnyRen', MNY.ren?'1':'0'); }catch(err){} renderMoney(); return; }
+  if(t.dataset.mnyNav!=null){ mnyShift(+t.dataset.mnyNav); return; }
+  if(t.dataset.mnyDay){ const dk=t.dataset.mnyDay; MNY.sel=dk; renderMoney();
+    if(window.innerWidth<=1050){ const p=$('#mnyBody .mny-panel'); if(p) p.scrollIntoView({behavior:'smooth', block:'start'}); }
+    try{ const D=mnyData(), R=mnyRecords(D, +dk.slice(0,4), dk.slice(0,7)); if(D.days[dk] && R.dayEver && R.dayEver.dk===dk && !MNY.fxDone['d'+dk]){ MNY.fxDone['d'+dk]=1; mnyConfetti(); } }catch(err){}
+    return; }
+  if(t.dataset.mnyMonth){ mnyGo(t.dataset.mnyMonth); return; }
+  if(t.dataset.mnyJump){ const dk=t.dataset.mnyJump; mnyGo(dk.slice(0,7), dk); return; }
+  if(t.dataset.mnyOpen){ openModal(t.dataset.mnyOpen); return; }
+  if(t.dataset.mnyRen){ try{ openRenewalsMonth(t.dataset.mnyRen); }catch(err){ switchView('renewals'); } return; }
+});
+document.addEventListener('keydown',e=>{
+  if(curView!=='money' || e.altKey || e.metaKey || e.ctrlKey) return;
+  if(document.querySelector('.overlay.open')) return;
+  const a=document.activeElement; if(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+  if(e.key==='ArrowLeft'){ e.preventDefault(); mnyShift(-1); } else if(e.key==='ArrowRight'){ e.preventDefault(); mnyShift(1); }
+});
+
 function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e){}
   setTimeout(()=>{ try{ if(typeof renderAdl==='function') renderAdl(); }catch(e){ console.warn('ad leads',e); } },0);
   if(!state) return;
@@ -14882,7 +15271,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(seedAds20261109()) setTimeout(save,0); }catch(e){ console.warn('ads seed',e); }
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
-  renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); }
+  renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); } try{ renderMoney(); }catch(e){ console.error('money',e); }
 }
 
 /* ---------- export ---------- */
