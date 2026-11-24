@@ -5141,6 +5141,14 @@ body.dark .mny-wkt .v{color:#FFE27A;}
 .mny-bar .bl{font-size:10.5px; font-weight:800; color:var(--muted); padding:2px 7px; border-radius:99px;}
 .mny-bar.fut{opacity:.4;}
 
+.mny-only{padding:34px 28px; text-align:center; display:grid; justify-items:center; gap:6px; border-radius:16px; background:repeating-linear-gradient(135deg,var(--bg),var(--bg) 10px,transparent 10px,transparent 16px);}
+.mny-only .ic{font-size:34px;}
+.mny-only .t{font-size:12px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);}
+.mny-only .v{font-family:'Sora'; font-weight:800; font-size:46px; letter-spacing:-.03em; color:var(--deep);}
+body.dark .mny-only .v{color:#3BDD95;}
+.mny-only .s{font-weight:700; color:var(--ink);}
+.mny-only p{max-width:520px; font-size:13px; line-height:1.55; color:var(--muted); margin-top:8px;}
+.mny-only button{margin-top:10px; padding:10px 16px; border-radius:12px; font-weight:800; font-size:13px; color:#fff; background:linear-gradient(135deg,#0A5A3C,#0EA463); box-shadow:0 6px 18px rgba(14,164,99,.3);}
 .mny-fx{position:fixed; inset:0; pointer-events:none; z-index:300; overflow:hidden;}
 .mny-fx i{position:absolute; top:-12px; width:9px; height:14px; border-radius:2px; animation:mnyFall linear forwards;}
 @keyframes mnyFall{to{transform:translate3d(var(--dx),105vh,0) rotate(var(--r)); opacity:.9;}}
@@ -15034,6 +15042,10 @@ document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ try{ al
    Every euro sits on the day the client said YES (c.wonAt) — the exact same rows and the same month total as the
    «New money» card (goalRows), so the two never disagree. «+ Renewals» adds renewal payments on the day they were paid. */
 var MNY={key:null, sel:null, ren:false, fxDone:{}, shown:{}};
+/* Angelo, 24 Nov 2026: «I didn't have everything in my CRM before September — no exact dates then, just monthly».
+   Months before this one are shown as a MONTH TOTAL only (with the people) — never split into days, and never in the
+   day / week / streak records. Month records and the year bars still count them. */
+var MNY_DAYS_FROM='2026-09';
 try{ MNY.ren = localStorage.getItem('mnyRen')==='1'; }catch(e){}
 function mnyMonthsList(){
   const now=todayIso().slice(0,7); let first=now;
@@ -15046,8 +15058,10 @@ function mnyMonthsList(){
 }
 function mnyData(){
   const days={}, months={};
-  const mo=k=>months[k]||(months[k]={sum:0, n:0, paid:0, owed:0, ren:0, risk:[], pot:[]});
-  const add=(dk,row)=>{ const d=days[dk]||(days[dk]={sum:0, n:0, rows:[]}); d.sum+=row.amount; d.rows.push(row);
+  const mo=k=>months[k]||(months[k]={sum:0, n:0, paid:0, owed:0, ren:0, risk:[], pot:[], rows:[], monthOnly:k<MNY_DAYS_FROM});
+  const add=(dk,row)=>{ const mk=dk.slice(0,7);
+    if(mk<MNY_DAYS_FROM){ const M=mo(mk); M.sum+=row.amount; M.rows.push(row); if(row.kind==='ren') M.ren+=row.amount; else { M.n++; M.paid+=row.paid; M.owed+=row.owed; } return; }
+    const d=days[dk]||(days[dk]={sum:0, n:0, rows:[]}); d.sum+=row.amount; d.rows.push(row);
     const M=mo(dk.slice(0,7)); M.sum+=row.amount;
     if(row.kind==='ren'){ M.ren+=row.amount; } else { d.n++; M.n++; M.paid+=row.paid; M.owed+=row.owed; } };
   mnyMonthsList().forEach(key=>{
@@ -15058,7 +15072,7 @@ function mnyData(){
   });
   if(MNY.ren) renewalHistory().forEach(x=>{ const dk=String(x.h.at||'').slice(0,10), v=+x.h.value||0;
     if(/^\d{4}-\d{2}-\d{2}$/.test(dk) && v>0) add(dk, {kind:'ren', r:x.r, amount:v, paid:v, owed:0, when:dk}); });
-  Object.values(days).forEach(d=>d.rows.sort((a,b)=>b.amount-a.amount));
+  Object.values(days).forEach(d=>d.rows.sort((a,b)=>b.amount-a.amount)); Object.values(months).forEach(M=>M.rows.sort((a,b)=>b.amount-a.amount));
   return {days, months};
 }
 function mnyIsWork(dk){ const w=new Date(dk+'T12:00').getDay(); return w>=1 && w<=5; }
@@ -15111,13 +15125,16 @@ function renderMoney(){
   if(!MNY.key) MNY.key=nowKey;
   const key=MNY.key, [y,m]=key.split('-').map(Number), last=new Date(y,m,0).getDate();
   const D=mnyData(), R=mnyRecords(D,y,key);
-  const M=D.months[key]||{sum:0,n:0,paid:0,owed:0,ren:0,risk:[],pot:[]};
+  const M=D.months[key]||{sum:0,n:0,paid:0,owed:0,ren:0,risk:[],pot:[],rows:[],monthOnly:key<MNY_DAYS_FROM};
+  const mOnly=!!M.monthOnly;
   if(!MNY.sel || MNY.sel.slice(0,7)!==key) MNY.sel = key===nowKey ? now : ((R.dayMonth&&R.dayMonth.dk) || key+'-01');
   /* compare with the month before — up to the same day while the month is still running */
   const pk=(()=>{ const d=new Date(y,m-2,1); return d.getFullYear()+'-'+pad(d.getMonth()+1); })();
   const upTo = key===nowKey ? +now.slice(8,10) : 31;
-  let prevSum=0; for(const dk in D.days){ if(dk.startsWith(pk+'-') && +dk.slice(8,10)<=upTo) prevSum+=D.days[dk].sum; }
-  let curSum=0; for(const dk in D.days){ if(dk.startsWith(key+'-') && +dk.slice(8,10)<=upTo) curSum+=D.days[dk].sum; }
+  let prevSum=0, curSum=0;
+  if(key!==nowKey){ prevSum=(D.months[pk]||{sum:0}).sum; curSum=M.sum; }   /* a finished month: whole month against whole month */
+  else if(pk>=MNY_DAYS_FROM){ for(const dk in D.days){ if(dk.startsWith(pk+'-') && +dk.slice(8,10)<=upTo) prevSum+=D.days[dk].sum; if(dk.startsWith(key+'-') && +dk.slice(8,10)<=upTo) curSum+=D.days[dk].sum; } }
+  /* (running month after a month-total-only month: no «by today» comparison — there are no days to compare with) */
   const diff=curSum-prevSum, pmName=MONTHS[+pk.slice(5)-1];
   const isRecMonth = R.monthEver && R.monthEver.mk===key && M.sum>0 && Object.values(D.months).filter(x=>x.sum>0).length>1;
   let yearSum=0, yearN=0; for(const mk in D.months) if(mk.startsWith(y+'-')){ yearSum+=D.months[mk].sum; yearN+=D.months[mk].n; }
@@ -15141,7 +15158,7 @@ function renderMoney(){
   const recs=[
     recCard('🏆','Best day ever', R.dayEver?fmtMoney(Math.round(R.dayEver.sum)):'—', R.dayEver?dShort(R.dayEver.dk)+(R.dayEver.dk.slice(0,4)!==String(y)?' '+R.dayEver.dk.slice(0,4):'')+' · '+R.dayEver.n+' yes':'no yes yet', R.dayEver&&R.dayEver.dk, true, R.dayEver&&R.dayEver.dk===now),
     recCard('👑','Best day '+y, R.dayYear?fmtMoney(Math.round(R.dayYear.sum)):'—', R.dayYear?dShort(R.dayYear.dk)+' · '+R.dayYear.n+' yes':'—', R.dayYear&&R.dayYear.dk, false, R.dayYear&&R.dayYear.dk===now),
-    recCard('⭐','Best day · '+MONTHS[m-1], R.dayMonth?fmtMoney(Math.round(R.dayMonth.sum)):'—', R.dayMonth?dShort(R.dayMonth.dk)+' · '+R.dayMonth.n+' yes':'not yet', R.dayMonth&&R.dayMonth.dk, false, R.dayMonth&&R.dayMonth.dk===now),
+    recCard('⭐','Best day · '+MONTHS[m-1], R.dayMonth?fmtMoney(Math.round(R.dayMonth.sum)):'—', R.dayMonth?dShort(R.dayMonth.dk)+' · '+R.dayMonth.n+' yes':(mOnly?'only a month total then':'not yet'), R.dayMonth&&R.dayMonth.dk, false, R.dayMonth&&R.dayMonth.dk===now),
     recCard('🚀','Best week '+y, R.week?fmtMoney(Math.round(R.week.sum)):'—', R.week?fmtDay(R.week.mon)+' – '+fmtDay(wkEnd(R.week.mon))+' · '+R.week.n+' yes':'—', R.week&&R.week.mon, false, R.week&&R.week.mon===isoDate(mondayOf(new Date()))),
     recCard('📅','Best month '+y, R.monthYear?fmtMoney(Math.round(R.monthYear.sum)):'—', R.monthYear?MONTHS[+R.monthYear.mk.slice(5)-1]+' · '+R.monthYear.n+' clients':'—', R.monthYear&&R.monthYear.mk+'-01', false, R.monthYear&&R.monthYear.mk===nowKey),
     recCard('🔥','Yes streak', R.streak.cur+' day'+(R.streak.cur===1?'':'s'), 'record '+R.streak.best+' · most yes in a day: '+(R.yesDay?R.yesDay.n:0), R.yesDay&&R.yesDay.dk, false, false)
@@ -15190,11 +15207,21 @@ function renderMoney(){
     ? `<div class="mny-ph${isBestSel?' best':''}"><div class="d">${esc(mnyDayLbl(sd))}${isBestSel?' · ⭐ best day of the month':''}</div><div class="v">${fmtMoney2(sx.sum)}</div><div class="s">${sx.n?sx.n+' '+(sx.n===1?'person':'people')+' said yes':''}${sx.n&&sx.rows.length>sx.n?' · ':''}${sx.rows.length>sx.n?(sx.rows.length-sx.n)+' renewal'+(sx.rows.length-sx.n===1?'':'s'):''}</div></div><div class="mny-list">${sx.rows.map(prow).join('')}</div>`
     : `<div class="mny-ph empty"><div class="d">${esc(mnyDayLbl(sd))}</div><div class="v">€0</div><div class="s">${sd>now?'still to come':'no yes this day'}</div></div><div class="mny-none"><b>${sd===now?'📞':sd>now?'🗓':isWe?'🌴':'💤'}</b>${sd===now?'No yes yet today — the next call could be the one.':sd>now?'This day is still ahead. Fill it.':isWe?'Weekend — rest counts too.':'Nobody said yes this day.'}</div>`;
 
+  let calHtml=null, panelHtml=panel;
+  if(mOnly){
+    calHtml=`<div class="mny-only"><div class="ic">🗂</div><div class="t">${MONTHS[m-1]} ${y} · month total only</div>
+      <div class="v">${fmtMoney(Math.round(M.sum))}</div><div class="s">${M.n} client${M.n===1?'':'s'} said yes${M.ren>0?' · '+fmtMoney(Math.round(M.ren))+' renewals':''}</div>
+      <p>Before ${MONTHS[+MNY_DAYS_FROM.slice(5)-1]} ${MNY_DAYS_FROM.slice(0,4)} the CRM only has the total of each month, not the exact day each client said yes — so this month is not split into days and is left out of the day, week and streak records. Day by day starts in ${MONTHS[+MNY_DAYS_FROM.slice(5)-1]} ${MNY_DAYS_FROM.slice(0,4)}.</p>
+      <button type="button" data-mny-month="${MNY_DAYS_FROM}">See ${MONTHS[+MNY_DAYS_FROM.slice(5)-1]} ${MNY_DAYS_FROM.slice(0,4)} day by day →</button></div>`;
+    panelHtml = M.rows.length
+      ? `<div class="mny-ph"><div class="d">All of ${MONTHS[m-1]} ${y}</div><div class="v">${fmtMoney2(M.sum)}</div><div class="s">${M.n} ${M.n===1?'person':'people'} said yes</div></div><div class="mny-list">${M.rows.map(r=>prow(r).replace(/data-mny-ren="[^"]*"/,'data-mny-ren="'+key+'"')).join('')}</div>`
+      : `<div class="mny-ph empty"><div class="d">All of ${MONTHS[m-1]} ${y}</div><div class="v">€0</div><div class="s">nothing recorded</div></div><div class="mny-none"><b>🗂</b>No clients in this month in the CRM.</div>`;
+  }
   /* the year, month by month */
   let ymax=0; for(let k=1;k<=12;k++){ const x=D.months[y+'-'+pad(k)]; if(x && x.sum>ymax) ymax=x.sum; }
   const bars=Array.from({length:12},(_,k)=>{ const mk=y+'-'+pad(k+1), x=D.months[mk], v=x?x.sum:0, h=ymax?Math.max(3,Math.round(v/ymax*100)):3;
     const top = R.monthYear && R.monthYear.mk===mk && v>0;
-    return `<button type="button" class="mny-bar${v>0?'':' zero'}${top?' top':''}${mk===key?' cur':''}${mk>nowKey?' fut':''}" data-mny-month="${mk}" title="${MONTHS[k]} ${y} · ${fmtMoney2(v)}${x&&x.n?' · '+x.n+' clients':''}"><span class="bv">${v>0?(top?'👑 ':'')+mnyShort(v):''}</span><span class="bb" style="height:${h}%;animation-delay:${k*40}ms"></span><span class="bl">${MONTHS[k].slice(0,3)}</span></button>`; }).join('');
+    return `<button type="button" class="mny-bar${v>0?'':' zero'}${top?' top':''}${mk===key?' cur':''}${mk>nowKey?' fut':''}" data-mny-month="${mk}" title="${MONTHS[k]} ${y} · ${fmtMoney2(v)}${mk<MNY_DAYS_FROM?' · month total only':''}${x&&x.n?' · '+x.n+' clients':''}"><span class="bv">${v>0?(top?'👑 ':'')+mnyShort(v):''}</span><span class="bb" style="height:${h}%;animation-delay:${k*40}ms"></span><span class="bl">${MONTHS[k].slice(0,3)}</span></button>`; }).join('');
 
   const shownKey=key+'|'+(MNY.ren?1:0), fromVal = MNY.shown[shownKey]!=null ? MNY.shown[shownKey] : 0;
   el.innerHTML=`<div class="mny-wrap">
@@ -15212,11 +15239,11 @@ function renderMoney(){
     </section>
     <section class="mny-recs">${recs}</section>
     <section class="mny-main">
-      <div class="mny-cal">
-        <div class="mny-grid">${dows}${cells}</div>
-        <div class="mny-legend"><span><i style="background:#E6FAF0;border:1px solid #BDF2D6"></i>a little</span><span><i style="background:#7FE3B0"></i>more</span><span><i style="background:#0B9E5C"></i>big day</span><span><i style="background:linear-gradient(135deg,#FFE27A,#FF9F1C)"></i>⭐ best day of the month</span><span>👑 best of ${y} · 🏆 best ever</span></div>
+      <div class="mny-cal">${calHtml!==null?calHtml:`
+        <div class="mny-grid">${dows}${cells}</div>`}
+        ${calHtml!==null?'':`<div class="mny-legend"><span><i style="background:#E6FAF0;border:1px solid #BDF2D6"></i>a little</span><span><i style="background:#7FE3B0"></i>more</span><span><i style="background:#0B9E5C"></i>big day</span><span><i style="background:linear-gradient(135deg,#FFE27A,#FF9F1C)"></i>⭐ best day of the month</span><span>👑 best of ${y} · 🏆 best ever</span></div>`}
       </div>
-      <aside class="mny-panel">${panel}</aside>
+      <aside class="mny-panel">${panelHtml}</aside>
     </section>
     <section class="mny-year">
       <div class="mny-yh"><h3>${y} · month by month</h3><span>${fmtMoney(Math.round(yearSum))} · tap a month</span></div>
@@ -15243,7 +15270,7 @@ document.addEventListener('click',e=>{
     if(window.innerWidth<=1050){ const p=$('#mnyBody .mny-panel'); if(p) p.scrollIntoView({behavior:'smooth', block:'start'}); }
     try{ const D=mnyData(), R=mnyRecords(D, +dk.slice(0,4), dk.slice(0,7)); if(D.days[dk] && R.dayEver && R.dayEver.dk===dk && !MNY.fxDone['d'+dk]){ MNY.fxDone['d'+dk]=1; mnyConfetti(); } }catch(err){}
     return; }
-  if(t.dataset.mnyMonth){ mnyGo(t.dataset.mnyMonth); return; }
+  if(t.dataset.mnyMonth){ mnyGo(t.dataset.mnyMonth); const h=$('#mnyBody .mny-hero'); if(h) h.scrollIntoView({behavior:'smooth', block:'start'}); return; }
   if(t.dataset.mnyJump){ const dk=t.dataset.mnyJump; mnyGo(dk.slice(0,7), dk); return; }
   if(t.dataset.mnyOpen){ openModal(t.dataset.mnyOpen); return; }
   if(t.dataset.mnyRen){ try{ openRenewalsMonth(t.dataset.mnyRen); }catch(err){ switchView('renewals'); } return; }
