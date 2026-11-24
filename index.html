@@ -12704,6 +12704,13 @@ function bkSoundSame(a,b){
   const hit=k=>lo.some(L=>L.some(x=>k.includes(x)));
   return sh.every(hit) && sh.some(k=>k[0].length>=4 && hit(k));
 }
+/* 24 Nov 2026 — a booking under a FIRST NAME only («Giorgos», «Γιαννης») must never be matched to a card by name:
+   «Giorgos» is every Γιώργος on the Board. KOUTSOURADIS booked as «Giorgos» (ADV-0023) and was folded into another
+   Giorgos's card, so he never appeared. Such bookings match only by e-mail / phone / the booking itself. */
+const BK_FIRST=new Set(['giorgos','georgios','george','giannis','ioannis','yiannis','john','nikos','nikolaos','nick','kostas','konstantinos','dimitris','dimitrios','vasilis','vasileios','bill','christos','panagiotis','panos','thanasis','athanasios','michalis','manolis','stelios','stylianos','stavros','spyros','spiros','petros','pavlos','antonis','antonios','alexandros','alex','alexis','apostolos','sotiris','theodoros','thodoris','ilias','tasos','makis','sakis','angelos','lefteris','takis','fotis','grigoris','markos','andreas','chris','mike','maria','eleni','katerina','aikaterini','sofia','sophia','anna','georgia','dimitra','vasiliki','vaso','christina','ioanna','despoina','eirini','irini','irene','angeliki','athina','konstantina','nikoleta','niki','panagiota','alexandra','evangelia','chrysa','roula','fotini','marina','olga','anastasia','paraskevi','stella','zoe','efi','matina','theodora','ourania','dora','elena','lena','helen','kiki','popi','vicky','viky','mary','kate','natasa','natalia','smaragda','argyro','sevasti','kalliopi','polina','aliki','elsa','julia','giulia']);
+const BK_FIRST_K=new Set([...BK_FIRST].flatMap(n=>bkSoundKeys(n)));
+const bkIsFirstWord=w=>bkSoundKeys(w).some(k=>BK_FIRST_K.has(k));
+function bkOnlyFirst(name){ const W=bkWords(name); return W.length>0 && W.every(bkIsFirstWord); }
 const bkTel=s=>{ const d=String(s||'').replace(/\D/g,''); return d.length>=9? d.slice(-9) : ''; };
 /* The same person already on the Board? Same email, same phone, or the same
    name — in any word order. The day only has to agree for a booking still to
@@ -12712,19 +12719,20 @@ const bkTel=s=>{ const d=String(s||'').replace(/\D/g,''); return d.length>=9? d.
 function bkMatchClient(b){
   const n=bkName(b.name), e=String(b.email||'').toLowerCase(), tel=bkTel(b.phone);
   const past=!b.day || b.day<todayIso();
+  const firstOnly=bkOnlyFirst(b.name);
   const hit=state.clients.find(c=>{
     if(isTrashed(c) || isJob(c)) return false;
     if(c.fromBooking===b.uid) return true;
     if(e && String(c.email||'').toLowerCase()===e) return true;
     if(tel && bkTel(c.phone)===tel) return true;
-    return n && bkSamePerson(c.name, b.name) && (past || !c.day || c.day===b.day);
+    return n && !firstOnly && bkSamePerson(c.name, b.name) && (past || !c.day || c.day===b.day);
   });
   if(hit) return hit;
   /* 5 Oct 2026 — a card he booked himself (Leads / Quick Log) that is still waiting for its online booking:
      same person even when Zoho has the name in Latin, another day or no phone. Only when exactly ONE card fits. */
   const since=Date.now()-45*864e5;
   const wait=state.clients.filter(c=>!isTrashed(c) && c.stage==='booked' && !c.fromBooking && (c.created||0)>=since && n && bkSoundSame(c.name, b.name));
-  return wait.length===1? wait[0] : null;
+  return (!firstOnly && wait.length===1)? wait[0] : null;
 }
 /* the other way round: he presses Booked in the CRM for someone the calendar already put on the Board */
 function bkTwinForName(name, phone){
@@ -12783,6 +12791,41 @@ function bkUndo(uid_){
   BK_DONE=BK_DONE.filter(x=>x.uid!==uid_);
   save(); renderAll(); toast('Put back — '+row.name+' is waiting again');
 }
+/* 24 Nov 2026 — undo the folds the old rule made: a first-name-only booking from the booking page (from 20 Nov) that sits
+   on a card whose surname has nothing to do with the booking's e-mail is taken off that card and goes on the Board as its own
+   client. Fields the booking copied onto the wrong card (its Meet line, e-mail, phone) are taken off again. Once per account. */
+function bkFixFirst20261124(){
+  ensureMeta(); if(state.meta.fixFirst1124 || Bookings.state!=='ok') return false;
+  const bk=ensureBk(); if(!bk.mv || typeof bk.mv!=='object') bk.mv={};
+  const fixed=[], check=[];
+  BK_LIST.forEach(b=>{
+    if(!b || !b.uid || !b.day || b.day<'2026-11-20' || !bkOnlyFirst(b.name)) return;
+    const bw=bkWords(b.name).sort().join(' ');
+    const loc=bkSoundKeys(String(b.email||'').split('@')[0]).join('|');
+    (state.clients||[]).forEach(c=>{
+      if(!c || !(c.fromBooking===b.uid || (c.bk && c.bk.uid===b.uid))) return;
+      const cw=bkWords(c.name);
+      if(cw.slice().sort().join(' ')===bw) return;                       /* the card is just «Giorgos» itself */
+      const knows=cw.some(w=>w.length>=4 && !bkIsFirstWord(w) && bkSoundKeys(w).some(k=>k.length>=4 && (loc.includes(k) || (k.length>=5 && loc.includes(k.slice(1))))));   /* «gk» in an e-mail folds to «g» */
+      if(knows) return;                                                  /* «Κουτσουράδης» ⊂ gkoutsouradis@ — really him */
+      if(c.fromBooking===b.uid) delete c.fromBooking;
+      if(c.bk && c.bk.uid===b.uid) delete c.bk;
+      if(b.meet && c.notes) c.notes=String(c.notes).split('\n').filter(l=>!l.includes(b.meet)).join('\n');
+      if(b.email && String(c.email||'').toLowerCase()===String(b.email).toLowerCase()) c.email='';
+      if(bkTel(b.phone) && bkTel(c.phone)===bkTel(b.phone)) c.phone='';
+      if(c.day===b.day && (!b.time || c.time===b.time)) check.push(c.name);
+      c.updated=Date.now();
+      delete bk.seen[b.uid]; delete bk.mv[b.uid];
+      fixed.push('«'+b.name+'» '+bkLabel(b)+' (was hidden inside «'+c.name+'»)');
+    });
+  });
+  state.meta.fixFirst1124=Date.now();
+  if(fixed.length){
+    console.warn('[bookings] first-name fix:', fixed, 'check the day/time of:', check);
+    setTimeout(()=>toast('Bookings put back on the Board: '+fixed.join(' · ')+(check.length?' — check the meeting time of '+check.join(', '):'')), 400);
+  }
+  return true;
+}
 const Bookings={
   state:'idle',  /* idle | loading | ok | error | off */
   err:'', lastAt:0, busy:false, timer:null,
@@ -12808,6 +12851,7 @@ const Bookings={
      for one tap so an old no-show is not resurrected by accident. */
   settle(manual){
     if(this.state==='ok'){
+      try{ if(bkFixFirst20261124()) save(); }catch(e){ console.warn('bk first-name fix',e); }
       try{ if(bkSyncAll()) save(); }catch(e){ console.warn('bk details',e); }
       let folded=0;
       bkNew().forEach(b=>{ if(bkMatchClient(b)){ bkPut(b, true); folded++; } });
