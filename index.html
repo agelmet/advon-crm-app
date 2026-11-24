@@ -9947,7 +9947,7 @@ function renderBoardStats(){ const el=$('#boardStats'); if(el) el.innerHTML=mont
 /* the day's number counts only meetings still on — a cancelled one (Lost, shown faded) is left out (20 Oct 2026) */
 const meetLive=items=>items.filter(c=>meetOut(c)!=='lost');
 function meetingsOn(iso){
-  return state.clients.filter(c=>c.day===iso && !isTrashed(c)).sort((a,b)=>(a.time||'99')<(b.time||'99')?-1:1);
+  return state.clients.filter(c=>c.day===iso && !isTrashed(c)).concat(xbItems(iso,iso)).sort((a,b)=>(a.time||'99')<(b.time||'99')?-1:1);
 }
 function meetHtml(c){
   const o=meetOut(c), ad=cFromAd(c), ab=cAbout(c);
@@ -9975,6 +9975,7 @@ const CX_ORDER=['ad','up','log','won','think','noshow','lost'];
 const cxMin=t=>{ const m=/^(\d{1,2}):(\d{2})/.exec(t||''); return m? (+m[1])*60+(+m[2]) : null; };
 const cxHM=n=>pad(Math.floor(n/60))+':'+pad(n%60);
 function cxKind(c){
+  if(c && c.xb) return c.ghost? 'won' : 'up';      /* a booking from someone already a client */
   const o=meetOut(c); if(o) return o;
   const past=!!(c.day && Date.parse(c.day+'T'+(c.time||'23:59'))<Date.now());
   if(past && !c.ghost) return 'log';
@@ -9986,7 +9987,7 @@ function cxTitle(c,k){
     + (c.ghost?' — click to open the person':(k==='log'?' — click to say how it went':' — click to open'));
 }
 function cxActs(c){
-  return c.ghost?'':`<span class="cx-acts"><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}</button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button></span>`;
+  return (c.ghost||c.xb)?'':`<span class="cx-acts"><button type="button" class="m2cb" data-m2="${c.id}" title="Move to Callbacks — off the Calendar, not counted as a meeting" aria-label="Move ${esc(c.name)} to Callbacks">${IC.phone}</button><button type="button" class="rmcb" data-rm="${c.id}" title="Remove this meeting completely — not counted anywhere, not marked Lost" aria-label="Remove the meeting with ${esc(c.name)}">${IC.trash}</button></span>`;
 }
 function cxHowI(c){ try{ const h=cHow(c); return h?`<span class="cx-how" title="${esc(HOW_TXT[h])}">${h==='tel'?'📞':'🎥'}</span>`:''; }catch(e){ return ''; } }
 function cxBits(c,k,narrow){
@@ -10072,7 +10073,7 @@ function renderCalendar(){
   }
   body.querySelectorAll('.m2cb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); m2Open(b.dataset.m2, b); }));
   body.querySelectorAll('.rmcb').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); rmOpen(b.dataset.rm, b); }));
-  body.querySelectorAll('.cx-ev,.cx-mr,.cx-ar').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); const c=state.clients.find(x=>x.id===el.dataset.id); if(!c) return; try{ if(typeof adlOpenFromCal==='function' && adlOpenFromCal(c)) return; }catch(err){} mqOpen(c.id); }));
+  body.querySelectorAll('.cx-ev,.cx-mr,.cx-ar').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); if(String(el.dataset.id||'').indexOf('xb:')===0){ xbPop(el.dataset.id.slice(3), el); return; } const c=state.clients.find(x=>x.id===el.dataset.id); if(!c) return; try{ if(typeof adlOpenFromCal==='function' && adlOpenFromCal(c)) return; }catch(err){} mqOpen(c.id); }));
   body.querySelectorAll('.cx-add').forEach(el=>el.addEventListener('click',e=>{ e.stopPropagation(); openModal(null, el.dataset.day); }));
   /* click an empty spot in the week grid = book at that time */
   body.querySelectorAll('.cx-col').forEach(el=>el.addEventListener('click',e=>{ if(e.target.closest('.cx-ev')) return; const r=el.getBoundingClientRect(); const mm=(+el.dataset.start)+Math.max(0,Math.floor((e.clientY-r.top)/CX_SLOT))*15; openModal(null, el.dataset.day); try{ $('#mTime').value=cxHM(mm); }catch(err){} }));
@@ -12692,7 +12693,7 @@ function renderHome(){
   const greet= hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
   const ws=mondayOf(new Date()), we=new Date(ws); we.setDate(we.getDate()+6);
   const weekEndI=isoDate(we);
-  const weekMeetings=state.clients.filter(c=>c.day && !isTrashed(c) && c.day>=isoDate(ws) && c.day<=weekEndI).sort((a,b)=>(a.day+(a.time||''))<(b.day+(b.time||''))?-1:1);
+  const weekMeetings=state.clients.filter(c=>c.day && !isTrashed(c) && c.day>=isoDate(ws) && c.day<=weekEndI).concat(xbItems(isoDate(ws), weekEndI)).sort((a,b)=>(a.day+(a.time||''))<(b.day+(b.time||''))?-1:1);
   // this-month collect
   const mc=state.clients.filter(c=>c.month===curMonth && notLost(c));
   const mTotal=mc.reduce((a,c)=>a+cval(c),0), mPaid=mc.reduce((a,c)=>a+cpaid(c),0);
@@ -12749,7 +12750,7 @@ function renderHome(){
   // week
   /* every meeting that is booked from today on — grouped by day, the date spelled out */
   const hw=$('#homeWeek');
-  const allMeet=state.clients.filter(c=>c.day && /^\d{4}-\d{2}-\d{2}$/.test(c.day) && !isTrashed(c) && c.day>=todayI)
+  const allMeet=state.clients.filter(c=>c.day && /^\d{4}-\d{2}-\d{2}$/.test(c.day) && !isTrashed(c) && c.day>=todayI).concat(xbItems(todayI))
     .sort((a,b)=>(a.day+(a.time||'99'))<(b.day+(b.time||'99'))?-1:1);
   const hint=$('#homeWeekHint'); if(hint){ hint.dataset.base= allMeet.length? allMeet.length+' booked · '+weekMeetings.length+' this week' : ''; hint.textContent=hint.dataset.base; }
   if(!allMeet.length) hw.innerHTML='<div class="home-empty">No meetings booked from today on. Book one from Quick Log or the Calendar.</div>';
@@ -12996,6 +12997,83 @@ function bkFixFirst20261124(){
   }
   return true;
 }
+/* ===== 24 Nov 2026 — a booking from someone ALREADY on the Board always shows (Angelo: «KOUTSOURADIS and PAGONIS,
+   older clients, booked from advonmedia.com/rantevou and their meetings didn't go in my calendar — I almost missed them»).
+   Why it happened: the CRM recognised them (same e-mail / phone) and folded the booking into their OLD card, but a card
+   carries ONE meeting day — their first meeting, months ago — and only a card still in Booked / Thinking / Lost gets its
+   day moved. A client in Building / Waiting payment / Live booking a new call was therefore on no Calendar, no Home list,
+   no Today window, no morning brief.
+   Now: every booking in the booking calendar that no card already shows at that day + time becomes a meeting of its own,
+   attached to that client («Already a client · <stage>»), on the Calendar, Home → Booked meetings, the Today window and
+   the morning brief. The card itself (stage, money, its first meeting) is never touched. Cache meta.bk.xc is rebuilt after
+   every successful calendar read (so it also shows offline); a brand-new one pops a toast. Its pop-up on the Calendar:
+   Call · Open Google Meet · Open the card · Hide from the Calendar (meta.bk.gone, with Undo). */
+function xbRebuild(){
+  if(Bookings.state!=='ok' || !Array.isArray(BK_LIST) || !state) return {changed:false, fresh:[]};
+  const bk=ensureBk(); const old=(bk.xc && typeof bk.xc==='object')? bk.xc : {}; const gone=bk.gone||{};
+  const next={}, fresh=[];
+  const same=(o,b)=>!!(o && o.day===b.day && String(o.time||'')===String(b.time||''));
+  BK_LIST.forEach(b=>{
+    if(!b || !b.uid || !b.day || gone[b.uid] || String(b.status||'').toUpperCase()==='CANCELLED') return;
+    const c=bkMatchClient(b); if(!c || isTrashed(c)) return;
+    if(same(c,b)) return;                                                   /* the card already shows this meeting */
+    if(same(c.cbMoved,b) || same(c.meetGone,b)) return;                     /* he moved it to Callbacks / removed it */
+    /* the card's own booking, moved by hand afterwards: the card's day is the truth (only when that day is not older
+       than the booking itself — an old first meeting is not «this» meeting) */
+    if(c.fromBooking===b.uid && c.day){ const made=bkIcsTime(b.created); if(made? c.day>=isoDate(new Date(made)) : c.stage==='booked') return; }
+    next[b.uid]={uid:b.uid, cid:c.id, day:b.day, time:b.time||'', how:bkHowOf(b), meet:b.meet||'', ref:b.ref||'', phone:b.phone||'', email:b.email||'', bname:b.name||''};
+    if(!old[b.uid] && bkStillAhead(b.day,b.time)) fresh.push(next[b.uid]);
+  });
+  /* the server sends one month back — older entries stay so past calls keep their day */
+  const from=isoDate(new Date(Date.now()-30*864e5));
+  Object.keys(old).forEach(u=>{ const o=old[u]; if(!next[u] && o && o.day && o.day<from && !gone[u]) next[u]=o; });
+  const changed=JSON.stringify(next)!==JSON.stringify(old);
+  if(changed) bk.xc=next;
+  return {changed, fresh};
+}
+/* the extra meetings as calendar rows (copies for display — id «xb:<booking uid>») */
+function xbItems(from, to){
+  if(!state || !state.meta || !state.meta.bk) return [];
+  const xc=state.meta.bk.xc||{}, gone=state.meta.bk.gone||{}, out=[];
+  Object.keys(xc).forEach(u=>{ const e=xc[u];
+    if(!e || !e.day || gone[u] || (from && e.day<from) || (to && e.day>to)) return;
+    const c=(state.clients||[]).find(k=>k.id===e.cid); if(!c || isTrashed(c)) return;
+    if(c.day===e.day && String(c.time||'')===String(e.time||'')) return;
+    const past=!bkStillAhead(e.day,e.time);
+    out.push({id:'xb:'+u, xb:true, xbUid:u, cid:c.id, name:c.name, day:e.day, time:e.time||'', phone:c.phone||e.phone||'', email:c.email||e.email||'',
+      stage:c.stage, value:0, ad:false, about:'Already a client · '+stageById(c.stage).name, fromBooking:u, bookingSrc:'',
+      bk:{uid:u, how:e.how||'', meet:e.meet||'', day:e.day, time:e.time||''}, ghost:past, _out:past?'won':''});
+  });
+  return out;
+}
+function xbEntry(u){ return (state && state.meta && state.meta.bk && state.meta.bk.xc && state.meta.bk.xc[u]) || null; }
+function xbPop(u, anchor){
+  closeCalPop();
+  const e=xbEntry(u); if(!e) return;
+  const c=state.clients.find(k=>k.id===e.cid), tel=(c&&c.phone)||e.phone||'';
+  const how=e.how==='tel'?'📞 Phone call — you call them':(e.how==='meet'?'🎥 Google Meet video call':'');
+  const d=document.createElement('div'); d.className='calpop';
+  d.innerHTML=`<h5>${esc(c?c.name:e.bname)} · ${esc(bkLabel(e))}</h5>
+    <div style="font-size:12px;line-height:1.45;color:#64748B;margin:-2px 0 9px">Already a client${c?' · '+esc(stageById(c.stage).name):''}${e.ref?' · #'+esc(e.ref):''}${how?'<br>'+how:''}${e.bname&&c&&e.bname!==c.name?'<br>Booked as «'+esc(e.bname)+'»':''}</div>
+    <div class="ops">
+      ${tel?`<button class="b-tel">${IC.phone} Call ${esc(tel)}</button>`:''}
+      ${e.meet?'<button class="b-meet">Open Google Meet</button>':''}
+      ${c?'<button class="b-open">Open the card</button>':''}
+      <button class="b-hide">Hide from the Calendar</button>
+    </div>`;
+  document.body.appendChild(d); calPop=d;
+  const r=anchor.getBoundingClientRect(), w=d.offsetWidth||250, h=d.offsetHeight||190;
+  d.style.left=Math.max(10,Math.min(window.innerWidth-w-10, r.left))+'px';
+  d.style.top=(r.bottom+8+h>window.innerHeight ? Math.max(10,r.top-h-8) : r.bottom+8)+'px';
+  const q=s=>d.querySelector(s);
+  if(q('.b-tel')) q('.b-tel').addEventListener('click',()=>{ closeCalPop(); location.href='tel:'+String(tel).replace(/\s+/g,''); });
+  if(q('.b-meet')) q('.b-meet').addEventListener('click',()=>{ closeCalPop(); window.open(e.meet,'_blank','noopener'); });
+  if(q('.b-open')) q('.b-open').addEventListener('click',()=>{ closeCalPop(); openModal(c.id); });
+  q('.b-hide').addEventListener('click',()=>{ closeCalPop();
+    const bk=ensureBk(); if(!bk.gone || typeof bk.gone!=='object') bk.gone={};
+    const keep=Object.assign({}, e); bk.gone[u]=1; if(bk.xc) delete bk.xc[u]; save(); renderAll();
+    toastUndo('Meeting hidden from the Calendar', ()=>{ const b2=ensureBk(); delete b2.gone[u]; if(!b2.xc) b2.xc={}; b2.xc[u]=keep; save(); renderAll(); }, 8); });
+}
 const Bookings={
   state:'idle',  /* idle | loading | ok | error | off */
   err:'', lastAt:0, busy:false, timer:null,
@@ -13057,6 +13135,9 @@ const Bookings={
         else if(matched) toast('Booking matched to a client already on the Board');
         else if(folded && manual) toast(folded+' booking'+(folded===1?' was':'s were')+' already on the Board');
       }
+      try{ const x=xbRebuild(); if(x.changed) save();
+        if(x.fresh.length) setTimeout(()=>toast('📅 '+x.fresh.map(e=>{ const c=state.clients.find(k=>k.id===e.cid); return (c?c.name:e.bname)+' (already a client) booked '+bkLabel(e); }).join(' · ')+' — on the Calendar'), 700);
+      }catch(e){ console.warn('bk extra meetings',e); }
     }
     if(manual && this.state==='ok') toast('Calendar checked');
     renderAll();
@@ -13389,6 +13470,7 @@ function renderSwatches(){
 }
 $('#mColors').addEventListener('click',e=>{ const s=e.target.closest('.swatch'); if(!s) return; modalColor=s.dataset.c; renderSwatches(); });
 function openModal(id, presetDay){
+  if(typeof id==='string' && id.indexOf('xb:')===0){ const e=xbEntry(id.slice(3)); if(!e) return; id=e.cid; }
   editingId=id;
   const c= id ? state.clients.find(x=>x.id===id) : null;
   $('#modalTitle').textContent= c ? 'Edit client' : 'New booked client';
@@ -14370,7 +14452,7 @@ const Brief={ lastAt:0, lastHash:'', busy:false,
     const building=cl.filter(c=>c.stage==='building').map(row);
     const thinking=cl.filter(c=>isThinking(c)).map(c=>({...row(c), name:c.name+(fuOpen(c)?' (remind '+fmtDay(c.fu.day)+(c.fu.what?': '+c.fu.what:'')+')':''), days:thinkDays(c)})).sort((a,b)=>b.days-a.days);
     const flagged=cl.filter(c=>isUnpaid(c) && isGivenUp(c)).map(row);
-    const meetings=cl.filter(c=>c.day && c.day>=t && c.day<=in7).sort((a,b)=>(a.day+(a.time||''))<(b.day+(b.time||''))?-1:1).map(c=>({name:c.name, day:c.day, time:c.time||'', phone:c.phone||'', stage:stName(c.stage), value:cval(c)}));
+    const meetings=cl.filter(c=>c.day && c.day>=t && c.day<=in7).concat(xbItems(t,in7)).sort((a,b)=>(a.day+(a.time||''))<(b.day+(b.time||''))?-1:1).map(c=>({name:c.name, day:c.day, time:c.time||'', phone:c.phone||'', stage:stName(c.stage), value:cval(c)}));
     const ren=liveRenewals().filter(r=>r.date && r.date<=in14).sort((a,b)=>a.date<b.date?-1:1).map(r=>({name:r.name, date:r.date, value:+r.value||0, overdue:r.date<t}));
     const subsDue=(state.subs||[]).filter(s=>s.renewDay && !(s.paid&&s.paid[curMonth])).map(s=>({name:s.name, value:+s.value||0, day:s.renewDay}));
     const n=cbCounts();
@@ -17092,7 +17174,7 @@ function remCopy(r){ const t=remViber(r); (navigator.clipboard?navigator.clipboa
 function dayItems(){
   const today=todayIso();
   const rem=(Reminders.list||[]).filter(r=>!r.done && r.day<=today).sort((a,b)=>a.day.localeCompare(b.day));
-  const meet=(state&&state.clients||[]).filter(c=>c.day===today && !isTrashed(c) && c.stage!=='lost').sort((a,b)=>String(a.time||'').localeCompare(String(b.time||'')));
+  const meet=(state&&state.clients||[]).filter(c=>c.day===today && !isTrashed(c) && c.stage!=='lost').concat(xbItems(today,today)).sort((a,b)=>String(a.time||'').localeCompare(String(b.time||'')));
   ensureAsap(); const asap=state.asap.filter(t=>!t.done).sort((a,b)=>(b.hot-a.hot)||((a.sort||0)-(b.sort||0)));
   let cbs=[]; try{ cbs=caEntries().filter(caDue).sort((a,b)=>((a.day||'')<today?0:1)-((b.day||'')<today?0:1) || caCmpDay(a,b)); }catch(e){}
   let fus=[], ups=[]; try{ fus=fuList().filter(c=>c.fu.day<=today); ups=upsList().filter(x=>x.u.day<=today); }catch(e){}
