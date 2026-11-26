@@ -5168,6 +5168,44 @@ body.dark .mny-only .v{color:#3BDD95;}
 }
 @media (prefers-reduced-motion:reduce){ .mny-hero::after,.mny-chip.rec{animation:none;} .mny-day,.mny-p,.mny-bar .bb{animation:none; opacity:1;} }
 </style>
+<style id="bn-css">
+/* Important notes tray (Angelo, 26 Nov 2026) — replaces «Making changes — quick fixes» */
+#notesTray{--tc:#E11D48}
+.bn-head .name{display:flex;align-items:center;gap:6px}
+.bn-head .count{background:#FFE4E9;color:#BE123C}
+.bn-hint{font-size:11px;color:var(--muted);margin-left:auto}
+.bn-list{list-style:none;margin:0;padding:6px 10px 4px;max-height:290px;overflow:auto;display:flex;flex-direction:column;gap:5px}
+.bn-row{display:grid;grid-template-columns:16px 24px minmax(0,auto) minmax(0,1fr) auto;align-items:center;gap:8px;padding:7px 8px;border:1px solid var(--line);border-radius:12px;background:#fff;transition:box-shadow .15s,border-color .15s}
+.bn-row.drag{opacity:.45}
+.bn-row.ins-b{box-shadow:inset 0 3px 0 #E11D48}.bn-row.ins-a{box-shadow:inset 0 -3px 0 #E11D48}
+.bn-h{cursor:grab;color:#B4BAC8;font-size:13px;line-height:1;text-align:center;user-select:none}
+.bn-n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:700 11.5px/1 'Sora',sans-serif;background:var(--bg);color:var(--muted);font-variant-numeric:tabular-nums}
+.bn-row.p1 .bn-n{background:#E11D48;color:#fff}.bn-row.p2 .bn-n{background:#FB7185;color:#fff}.bn-row.p3 .bn-n{background:#FECDD3;color:#9F1239}
+.bn-row.p1{border-color:#FDA4AF;background:#FFF5F7}
+.bn-who{border:0;background:var(--c-soft,#EEF2FF);color:var(--c-ink,#3730A3);font-weight:700;font-size:11.5px;line-height:1.2;padding:5px 9px;border-radius:99px;cursor:pointer;white-space:nowrap;max-width:190px;overflow:hidden;text-overflow:ellipsis;font-family:inherit}
+.bn-who small{font-weight:600;opacity:.75;margin-left:4px}
+.bn-who.none{background:var(--bg);color:var(--muted);cursor:default}
+.bn-t{font-size:13px;line-height:1.35;min-width:0;outline:0;border-radius:6px;padding:2px 4px;cursor:text;overflow-wrap:anywhere}
+.bn-t:focus{background:#FFFBEB;box-shadow:0 0 0 2px #FDE68A}
+.bn-acts{display:flex;gap:3px}
+.bn-acts button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:grid;place-items:center;padding:0}
+.bn-acts button:hover{color:var(--ink,#111);border-color:#CBD2DF}
+.bn-acts .bn-ok{color:#0B9E5C;border-color:#BBF0D3}.bn-acts .bn-ok:hover{background:#E9FBF1;color:#047857}
+.bn-acts button:disabled{opacity:.3;cursor:default}
+.bn-add{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) auto;gap:6px;padding:6px 10px 10px}
+.bn-add select,.bn-add input{min-width:0;height:34px;border:1px solid var(--line);border-radius:10px;padding:0 9px;font:inherit;font-size:12.5px;background:#fff;color:inherit}
+.bn-add button{height:34px;border:0;border-radius:10px;padding:0 13px;background:#E11D48;color:#fff;font-weight:700;font-size:12.5px;font-family:inherit;cursor:pointer;white-space:nowrap}
+.bn-tools{display:flex;gap:10px;align-items:center;padding:0 12px 10px;font-size:11.5px;color:var(--muted)}
+.bn-tools button{border:0;background:none;color:var(--muted);font:inherit;cursor:pointer;padding:2px 0;text-decoration:underline;text-underline-offset:2px}
+.bn-done .bn-row{opacity:.65}.bn-done .bn-t{text-decoration:line-through}
+.bn-done .bn-n{background:#E9FBF1;color:#0B9E5C}
+.bn-empty{font-size:11.5px;color:#B4BAC8;padding:10px 6px}
+#notesTray .tray-drop.dragover{box-shadow:inset 0 0 0 2px #E11D48;border-radius:0 0 var(--radius) var(--radius)}
+.c-bn{display:inline-flex;align-items:center;gap:2px;margin-left:6px;font:700 10px/1 'Sora',sans-serif;color:#BE123C;background:#FFE4E9;border-radius:99px;padding:3px 6px;vertical-align:middle}
+@media(max-width:640px){.bn-hint{display:none}.bn-row{grid-template-columns:24px minmax(0,1fr) auto;grid-template-areas:"n w a" "n t t"}.bn-h{display:none}.bn-n{grid-area:n}.bn-who{grid-area:w;justify-self:start;max-width:100%}.bn-t{grid-area:t}.bn-acts{grid-area:a}.bn-add{grid-template-columns:1fr}}
+body.dark .bn-row,body.dark .bn-acts button,body.dark .bn-add select,body.dark .bn-add input{background:#151A24}
+body.dark .bn-row.p1{background:#2A1520}
+</style>
 </head>
 <body class="locked">
 
@@ -5511,7 +5549,7 @@ body.dark .mny-only .v{color:#3BDD95;}
   </div>
   <div class="tray-row">
     <div class="tray" id="bookedTray" style="--tc:var(--green)"></div>
-    <div class="tray" id="changesTray" style="--tc:var(--pink)"></div>
+    <div class="tray" id="notesTray"></div>
   </div>
   <div class="board" id="board"></div>
   <div class="lost-tray think-tray" id="thinkTray"></div>
@@ -8156,7 +8194,7 @@ function nsDropHandlers(el){
 function renderBoard(){
   const mc=state.clients.filter(c=>c.month===curMonth && notLost(c));
   const unsure=mc.filter(nsOnBoard);
-  /* Two horizontal trays: Booked (new) and Making changes (quick fixes) */
+  /* Two horizontal trays: Booked (new) and Important notes (26 Nov 2026; «Making changes» is a normal column again) */
   const tray=(sel,stageId,label,hint)=>{
     const st=stageById(stageId);
     const items=mc.filter(c=>c.stage===stageId && !nsOnBoard(c)).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
@@ -8174,7 +8212,7 @@ function renderBoard(){
     dropHandlers(body,stageId);
   };
   renderBookedTray(mc);
-  tray('#changesTray','changes','Making changes — quick fixes','Empty — drop cards here while you fix them.');
+  try{ renderNotesTray(mc); }catch(e){ console.error('notes',e); }
   /* The working pipeline columns (booked/changes are trays, lost is its own drawer) */
   const board=$('#board'); board.innerHTML='';
   { const ns=document.createElement('div'), tot=unsure.reduce((a,c)=>a+cowed(c),0);
@@ -8194,7 +8232,7 @@ function renderBoard(){
       card.insertBefore(tag, card.firstChild); body.appendChild(card); });
     nsDropHandlers(body);
     board.appendChild(ns); }
-  FLOW.filter(s=>s.id!=='booked'&&s.id!=='changes').forEach(st=>{
+  FLOW.filter(s=>s.id!=='booked').forEach(st=>{
     const items=mc.filter(c=>c.stage===st.id && !nsOnBoard(c)).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
     const sum=items.filter(c=>!notSure(c)).reduce((a,c)=>a+cval(c),0), unS=items.filter(notSure).reduce((a,c)=>a+cowed(c),0);
     const col=document.createElement('div');
@@ -8213,6 +8251,160 @@ function renderBoard(){
   });
   renderThinkTray();
   renderLostTray();
+}
+/* ==================================================================
+   IMPORTANT NOTES (Angelo, 26 Nov 2026) — the tray right of «Booked»
+   replaces «Making changes — quick fixes». One ranked to-do list of
+   short notes, each tied to a client card («Αθανασιάδης — send him
+   what we have done»). The order of state.bnotes IS the priority:
+   #1 at the top. Rank with drag (⠿) or ↑ ↓, tick ✓ when done (Undo).
+   Drop a Board card onto the tray = new note for that client.
+   state.bnotes = [{id, cid|null, name, text, done, doneAt, at, month, updated}]
+   ================================================================== */
+let bnDraft={cid:'',text:''}, bnShowDone=false, bnDirty=false;
+function bnEnsure(){ if(!state) return false; if(!Array.isArray(state.bnotes)) state.bnotes=[]; return true; }
+function bnClient(n){ return n && n.cid ? state.clients.find(c=>c.id===n.cid) : null; }
+function bnOpenFor(cid){ if(!state||!Array.isArray(state.bnotes)) return []; let r=0; const out=[];
+  state.bnotes.forEach(n=>{ if(n.done) return; r++; if(n.cid===cid) out.push({rank:r,text:n.text}); }); return out; }
+function bnCurOpen(){ return (state.bnotes||[]).filter(n=>!n.done); }
+function bnMove(id, toIdxAmongOpen){
+  const open=bnCurOpen(), done=state.bnotes.filter(n=>n.done);
+  const i=open.findIndex(n=>n.id===id); if(i<0) return;
+  const [n]=open.splice(i,1); open.splice(Math.max(0,Math.min(open.length,toIdxAmongOpen)),0,n);
+  state.bnotes=open.concat(done); n.updated=Date.now(); save(); renderBoard();
+}
+function bnAdd(cid, text){
+  bnEnsure(); text=String(text||'').trim(); if(!text) return toast('Write the note first');
+  const c=cid?state.clients.find(x=>x.id===cid):null;
+  const n={id:uid(), cid:c?c.id:null, name:c?c.name:'', text, done:false, at:Date.now(), month:curMonth, updated:Date.now()};
+  const open=bnCurOpen(); state.bnotes=open.concat([n], state.bnotes.filter(x=>x.done));
+  bnDraft={cid:'',text:''}; save(); renderBoard();
+  toast('Note added as #'+(open.length+1)+(c?' · '+c.name:'')+' — drag it up to rank it');
+}
+function bnPickerHtml(mc, sel){
+  const live=state.clients.filter(c=>!isTrashed(c));
+  const now=mc.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'el'));
+  const ids=new Set(now.map(c=>c.id));
+  const other=live.filter(c=>!ids.has(c.id)).sort((a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0)).slice(0,400);
+  const o=c=>`<option value="${esc(c.id)}"${c.id===sel?' selected':''}>${esc(c.name)}${c.stage?' · '+esc(stageById(c.stage)?.name||''):''}</option>`;
+  return `<option value="">Which client?</option>
+    <optgroup label="This month">${now.map(o).join('')}</optgroup>
+    <optgroup label="Other clients (most recent first)">${other.map(o).join('')}</optgroup>
+    <option value="-"${sel==='-'?' selected':''}>— No client (general note)</option>`;
+}
+function bnRowHtml(n, rank, done){
+  const c=bnClient(n), st=c?stageById(c.stage):null;
+  const who=c ? `<button type="button" class="bn-who" data-bn-open="${esc(c.id)}" style="--c-soft:${st?st.cs:'var(--bg)'};--c-ink:${st?st.hex:'inherit'}" title="Open ${esc(c.name)}'s card">${esc(c.name)}${st?`<small>${esc(st.name)}</small>`:''}</button>`
+              : `<span class="bn-who none">${esc(n.name||'General')}</span>`;
+  const p= !done && rank<=3 ? ' p'+rank : '';
+  const doneLbl = done && n.doneAt ? (()=>{ const d=new Date(n.doneAt); return pad(d.getDate())+'/'+pad(d.getMonth()+1); })() : '';
+  return `<li class="bn-row${p}" data-bn="${esc(n.id)}"${done?'':' draggable="true"'}>
+    <span class="bn-h" title="Drag to rank">${done?'':'⠿'}</span>
+    <span class="bn-n" title="${done?'Done '+doneLbl:'Priority #'+rank}">${done?'✓':rank}</span>
+    ${who}
+    <span class="bn-t"${done?'':' contenteditable="true" spellcheck="false"'} title="${done?'Done '+doneLbl:'Tap to edit'}">${esc(n.text)}</span>
+    <span class="bn-acts">${done
+      ? `<button type="button" data-bn-reopen title="Back on the list">↺</button><button type="button" data-bn-del title="Delete">✕</button>`
+      : `<button type="button" data-bn-up title="Higher priority"${rank===1?' disabled':''}>↑</button><button type="button" data-bn-down title="Lower priority">↓</button><button type="button" class="bn-ok" data-bn-done title="Done">✓</button><button type="button" data-bn-del title="Delete">✕</button>`}</span>
+  </li>`;
+}
+function renderNotesTray(mc){
+  const el=$('#notesTray'); if(!el || !bnEnsure()) return;
+  if(el.contains(document.activeElement) && document.activeElement.matches('.bn-t,.bn-add input,.bn-add select')){ bnDirty=true; return; }
+  bnDirty=false;
+  const open=bnCurOpen();
+  const mStart=curMonth+'-01';
+  const done=state.bnotes.filter(n=>n.done).sort((a,b)=>(b.doneAt||0)-(a.doneAt||0));
+  const doneShown=done.filter(n=>!n.doneAt || new Date(n.doneAt).toISOString().slice(0,7)>=curMonth || (Date.now()-n.doneAt)<30*864e5);
+  el.innerHTML=`
+    <div class="tray-head bn-head">
+      <span class="name">📌 Important notes — to do</span>
+      <span class="count">${open.length}</span>
+      <span class="bn-hint">#1 = most important · drag ⠿ or ↑ ↓</span>
+    </div>
+    <div class="tray-drop">
+      <ol class="bn-list">${open.length?open.map((n,i)=>bnRowHtml(n,i+1,false)).join(''):'<li class="bn-empty">Nothing to do — write a note below, or drop a client card here.</li>'}</ol>
+      <form class="bn-add" autocomplete="off">
+        <select name="cid" aria-label="Client">${bnPickerHtml(mc, bnDraft.cid)}</select>
+        <input name="text" value="${esc(bnDraft.text)}" placeholder="e.g. send him what we have done" aria-label="Note">
+        <button type="submit">＋ Add</button>
+      </form>
+      ${done.length?`<div class="bn-tools"><button type="button" data-bn-showdone>${bnShowDone?'Hide':'Show'} done (${doneShown.length})</button></div>`:''}
+      ${bnShowDone&&doneShown.length?`<ol class="bn-list bn-done">${doneShown.map(n=>bnRowHtml(n,0,true)).join('')}</ol>`:''}
+    </div>`;
+  const drop=el.querySelector('.tray-drop'), list=el.querySelector('.bn-list:not(.bn-done)'), form=el.querySelector('.bn-add');
+  form.cid.addEventListener('change',()=>{ bnDraft.cid=form.cid.value; form.text.focus(); });
+  form.text.addEventListener('input',()=>{ bnDraft.text=form.text.value; });
+  form.addEventListener('submit',e=>{ e.preventDefault(); bnDraft.text=form.text.value; const v=form.cid.value;
+    if(!v){ toast('Pick the client first (or «No client»)'); form.cid.focus(); return; }
+    bnAdd(v==='-'?null:v, form.text.value); });
+  const find=id=>state.bnotes.find(n=>n.id===id);
+  el.querySelectorAll('.bn-row').forEach(row=>{
+    const id=row.dataset.bn, n=find(id); if(!n) return;
+    const t=row.querySelector('.bn-t');
+    if(t && t.isContentEditable){
+      t.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); t.blur(); } if(e.key==='Escape'){ t.textContent=n.text; t.blur(); } });
+      t.addEventListener('blur',()=>{ const v=t.textContent.replace(/\s+/g,' ').trim();
+        if(v && v!==n.text){ n.text=v; n.updated=Date.now(); save(); toast('Note saved'); } else if(!v) t.textContent=n.text;
+        if(bnDirty) setTimeout(()=>renderBoard(),0); });
+    }
+    const op=row.querySelector('[data-bn-open]'); if(op) op.addEventListener('click',()=>openModal(op.dataset.bnOpen));
+    const idxOpen=()=>bnCurOpen().findIndex(x=>x.id===id);
+    const up=row.querySelector('[data-bn-up]'); if(up) up.addEventListener('click',()=>bnMove(id, idxOpen()-1));
+    const dn=row.querySelector('[data-bn-down]'); if(dn) dn.addEventListener('click',()=>bnMove(id, idxOpen()+1));
+    const ok=row.querySelector('[data-bn-done]'); if(ok) ok.addEventListener('click',()=>{
+      const i=state.bnotes.indexOf(n); n.done=true; n.doneAt=Date.now(); n.updated=Date.now();
+      state.bnotes.splice(i,1); state.bnotes.push(n); save(); renderBoard();
+      toastUndo('✓ Done: '+n.text, ()=>{ const j=state.bnotes.indexOf(n); if(j>=0) state.bnotes.splice(j,1); state.bnotes.splice(Math.min(i,state.bnotes.length),0,n); n.done=false; delete n.doneAt; n.updated=Date.now(); save(); renderBoard(); }); });
+    const ro=row.querySelector('[data-bn-reopen]'); if(ro) ro.addEventListener('click',()=>{
+      const i=state.bnotes.indexOf(n); state.bnotes.splice(i,1); n.done=false; delete n.doneAt; n.updated=Date.now();
+      state.bnotes.splice(bnCurOpen().length,0,n); save(); renderBoard(); toast('Back on the list as #'+bnCurOpen().length); });
+    const dl=row.querySelector('[data-bn-del]'); if(dl) dl.addEventListener('click',()=>{
+      const i=state.bnotes.indexOf(n); state.bnotes.splice(i,1); save(); renderBoard();
+      toastUndo('Note deleted', ()=>{ state.bnotes.splice(i,0,n); save(); renderBoard(); }); });
+    if(row.draggable){
+      row.addEventListener('dragstart',e=>{ e.dataTransfer.setData('application/x-bn',id); e.dataTransfer.effectAllowed='move'; row.classList.add('drag'); });
+      row.addEventListener('dragend',()=>{ row.classList.remove('drag'); el.querySelectorAll('.ins-a,.ins-b').forEach(x=>x.classList.remove('ins-a','ins-b')); });
+    }
+  });
+  /* drag inside the list = rank; a Board card dropped here = new note for that client */
+  const isBn=e=>Array.from(e.dataTransfer.types||[]).includes('application/x-bn');
+  list.addEventListener('dragover',e=>{ if(!isBn(e)) return; e.preventDefault(); e.stopPropagation();
+    const row=e.target.closest('.bn-row'); el.querySelectorAll('.ins-a,.ins-b').forEach(x=>x.classList.remove('ins-a','ins-b'));
+    if(row){ const r=row.getBoundingClientRect(); row.classList.add(e.clientY<r.top+r.height/2?'ins-b':'ins-a'); } });
+  list.addEventListener('drop',e=>{ if(!isBn(e)) return; e.preventDefault(); e.stopPropagation();
+    const id=e.dataTransfer.getData('application/x-bn'); const row=e.target.closest('.bn-row');
+    const open=bnCurOpen(); const from=open.findIndex(n=>n.id===id); if(from<0) return;
+    let to=open.length-1;
+    if(row && row.dataset.bn!==id){ const r=row.getBoundingClientRect(); let k=open.findIndex(n=>n.id===row.dataset.bn); if(e.clientY>=r.top+r.height/2) k++; to = k>from ? k-1 : k; }
+    else if(row) to=from;
+    if(to!==from) bnMove(id,to); });
+  drop.addEventListener('dragover',e=>{ if(isBn(e)) return; e.preventDefault(); drop.classList.add('dragover'); });
+  drop.addEventListener('dragleave',e=>{ if(!drop.contains(e.relatedTarget)) drop.classList.remove('dragover'); });
+  drop.addEventListener('drop',e=>{ if(isBn(e)) return; e.preventDefault(); drop.classList.remove('dragover');
+    const c=state.clients.find(x=>x.id===e.dataTransfer.getData('text/plain')); if(!c) return;
+    bnDraft.cid=c.id; renderNotesTray(mc); const f=el.querySelector('.bn-add'); if(f){ f.text.focus(); }
+    toast('Write the note for '+c.name+' and press Add'); });
+  const sd=el.querySelector('[data-bn-showdone]'); if(sd) sd.addEventListener('click',()=>{ bnShowDone=!bnShowDone; renderNotesTray(mc); });
+}
+/* one-time: the three Angelo named on 26 Nov 2026 */
+function bnSeed20261126(){
+  if(!state || !Array.isArray(state.clients) || state.clients.length<20) return false;
+  state.meta||={}; if(state.meta.bnSeed) return false; bnEnsure();
+  const nm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  const pick=res=>{ for(const re of res){ const hits=state.clients.filter(c=>c && !isTrashed(c) && re.test(nm(c.name)));
+      if(hits.length){ hits.sort((a,b)=>((b.month===curMonth)-(a.month===curMonth)) || ((b.updated||b.created||0)-(a.updated||a.created||0))); return hits[0]; } } return null; };
+  const L=[
+    {res:[/αθανασιαδ|athanasiad/], name:'Αθανασιάδης', text:'Στείλε του όσα έχουμε κάνει'},
+    {res:[/σιαμο|siamo/, /σαμιο|samio/], name:'Siamos', text:'Τελειοποίησε τις ιστοσελίδες του (Constantza’s House & Doreen’s House)'},
+    {res:[/παγων|pagon|pagwn/], name:'Παγώνης', text:'Στείλε του'}
+  ];
+  const now=Date.now(), got=[];
+  L.forEach((d,i)=>{ const c=pick(d.res);
+    state.bnotes.splice(i,0,{id:uid(), cid:c?c.id:null, name:c?c.name:d.name, text:d.text, done:false, at:now+i, month:curMonth, updated:now}); got.push(c?c.name:d.name+' (no card found)'); });
+  state.meta.bnSeed=1;
+  setTimeout(()=>{ try{ toast('Important notes: '+got.join(' · ')); }catch(e){} },1400);
+  return true;
 }
 let thinkOpen=false;
 /* Thinking tray (Angelo, 14 Oct 2026): every card shows its «remind them» date in red;
@@ -8762,6 +8954,7 @@ function cardEl(c,st){
     ${(!isLost && c.stage!=='paid' && !cDoubt(c) && !notSure(c))?`<button type="button" class="c-unsure" data-doubt="${c.id}" title="Not sure they will pay? Mark it — the money leaves New money until they pay">?</button>`:''}
     ${!isLost?`<button class="c-lost" title="Didn't convert — move to Lost">${IC.ban}</button>`:''}
     ${nextName?`<button class="c-next" title="Move to ${nextName}">${IC.arrowRight}</button>`:''}`;
+  try{ const bo=bnOpenFor(c.id); if(bo.length){ const b=document.createElement('span'); b.className='c-bn'; b.textContent='📌'+(bo.length>1?' '+bo.length:''); b.title='Important notes:\n'+bo.map(n=>'#'+n.rank+' '+n.text).join('\n'); const nm=el.querySelector('.c-name'); if(nm) nm.appendChild(b); } }catch(e){}
   el.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',c.id); el.classList.add('dragging'); });
   el.addEventListener('dragend',()=>el.classList.remove('dragging'));
   el.addEventListener('click',e=>{ if(e.target.closest('.c-next')||e.target.closest('.c-lost')) return; if(e.target.closest('.c-review')){ e.stopPropagation(); rvOpen(c.id); return; } if(e.target.closest('.c-tx')){ e.stopPropagation(); txOpen(c.id); return; } const ch=e.target.closest('[data-chat]'); if(ch){ e.stopPropagation(); switchView('chats'); Chats.open(ch.dataset.chat); return; } openModal(c.id); });
@@ -15380,6 +15573,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(seedAds20261109()) setTimeout(save,0); }catch(e){ console.warn('ads seed',e); }
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
+  try{ if(bnSeed20261126()) setTimeout(save,0); }catch(e){ console.warn('notes seed',e); }
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); } try{ renderMoney(); }catch(e){ console.error('money',e); }
 }
 
