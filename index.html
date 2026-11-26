@@ -6188,7 +6188,7 @@ const STAGES = [
   {id:'lost',     name:'Lost',            c:'var(--muted)',  cs:'var(--bg)',          hex:'#8A94A8'},
 ];
 /* FLOW = the linear working pipeline; 'thinking' and 'lost' sit outside it (own trays) */
-const FLOW = STAGES.filter(s=>s.id!=='lost' && s.id!=='thinking');
+const FLOW = STAGES.filter(s=>s.id!=='lost' && s.id!=='thinking' && s.id!=='changes');   /* «Making changes» removed from the Board (Angelo, 26 Nov 2026) — its cards live in Draft · Review */
 /* ---- post-meeting follow-up: how long has this person been deciding? ---- */
 const THINK_DAYS = 7;                    /* chase after a week */
 function thinkSince(c){
@@ -6224,7 +6224,7 @@ const REM_FLAGS = {
 /* an unpaid client = in the pipeline (any stage before Paid), not lost, not trashed */
 const isUnpaid = c => notLost(c) && c.stage!=='paid' && c.stage!=='booked';   /* Booked = only a meeting so far: its €130 is potential, never «still owed» (8 Oct 2026) */
 const PAYING_STAGES = ['pay','paid'];   /* "reached a paying stage" for conversion stats */
-const OLD_STAGE_MAP = {remind:'needinfo', draft:'review', review1:'review', review2:'changes'};
+const OLD_STAGE_MAP = {remind:'needinfo', draft:'review', review1:'review', review2:'review', changes:'review'};
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DOW = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
@@ -8194,7 +8194,7 @@ function nsDropHandlers(el){
 function renderBoard(){
   const mc=state.clients.filter(c=>c.month===curMonth && notLost(c));
   const unsure=mc.filter(nsOnBoard);
-  /* Two horizontal trays: Booked (new) and Important notes (26 Nov 2026; «Making changes» is a normal column again) */
+  /* Two horizontal trays: Booked (new) and Important notes (26 Nov 2026; «Making changes» removed — those cards are in Draft · Review) */
   const tray=(sel,stageId,label,hint)=>{
     const st=stageById(stageId);
     const items=mc.filter(c=>c.stage===stageId && !nsOnBoard(c)).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
@@ -12113,7 +12113,6 @@ const TODO_CYCLE=['cyan','orange','yellow','violet','pink','blue','coral','green
 const TODO_HOSTS=[
   /* «Pay now» = everyone marked GREEN (about to pay) in Remaining — the row shows what they still owe and «Paid» collects it (23 Sept 2026) */
   {stage:'paynow',   pick:c=>isUnpaid(c) && remFlag(c)==='green' && cowed(c)>0, money:true, next:'paid', nextName:'Paid', btn:IC.check+' Paid'},
-  {stage:'changes',  next:'pay',      nextName:'Waiting payment', btn:IC.check+' Done → Pay'},
   {stage:'building', next:'review',   nextName:'Draft · Review',  btn:IC.check+' Built → Review'},
   {stage:'thinking', next:'needinfo', nextName:'Need info',       btn:IC.check+' Said yes → Need info'},
 ];
@@ -13683,7 +13682,7 @@ function openModal(id, presetDay){
   try{ mDoubtRender(); }catch(e){}
   try{ const jb=$('#mJourney'), jf=$('#mJourneyF'); if(jb){ jb.innerHTML=c&&!isJob(c)?cjHtml(c,'m'):''; jf.hidden=!(c&&!isJob(c)); } }catch(e){ console.warn('journey',e); }
   $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; if($('#mDraft2')) $('#mDraft2').value=c?(c.draft2||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; $('#mAd').checked=!!(c&&cFromAd(c)); $('#mAbout').value=c?cAbout(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
-  const sel=$('#mStage'); sel.innerHTML=STAGES.map(s=>`<option value="${s.id}" ${c&&s.id===c.stage?'selected':''}>${s.name}</option>`).join('');
+  const sel=$('#mStage'); sel.innerHTML=STAGES.filter(s=>s.id!=='changes').map(s=>`<option value="${s.id}" ${c&&s.id===c.stage?'selected':''}>${s.name}</option>`).join('');
   modalColor = c ? (c.color||'') : '';
   $('#mFill').checked = c ? !!c.fill : false;
   renderSwatches();
@@ -15574,6 +15573,7 @@ function renderAll(){ try{ if(typeof mnRender==="function") mnRender(); }catch(e
   try{ if(nsSync()) setTimeout(save,0); }catch(e){ console.warn('noshows',e); }
   try{ if(xsAuto()) setTimeout(save,0); }catch(e){ console.warn('ads&social',e); }
   try{ if(bnSeed20261126()) setTimeout(save,0); }catch(e){ console.warn('notes seed',e); }
+  try{ let mv=0; state.clients.forEach(c=>{ if(c && c.stage==='changes'){ c.stage='review'; mv++; } }); if(mv) setTimeout(save,0); }catch(e){}   /* «Making changes» stage retired (26 Nov 2026) */
   renderHome(); renderStats(); renderBoard(); renderBoardStats(); renderCalendar(); renderCalExtras(); renderYear(); renderQuickLog(); renderPrio(); renderWarm(); renderSched(); renderRenewals(); renderRemaining(); renderTodo(); renderIdeas(); renderMonthly(); renderExpenses(); renderLeads(); renderCashForecast(); try{ renderGoal(); }catch(e){ console.error('mission',e); } try{ renderXs(); }catch(e){ console.error('ads&social',e); } try{ renderMoney(); }catch(e){ console.error('money',e); }
 }
 
@@ -16676,7 +16676,7 @@ const Chats={ list:[], head:null, cur:null, msgs:[], thread:null, thead:null, ca
    Board card → the chat follows. Booked / Waiting payment / Paid / Thinking / Lost never move the chat, and a chat
    never pulls a card out of them. c.chatStage / c.chatBoard remember what both sides were at the last sync. */
 const CH2BOARD={yliko:'needinfo', draft:'building', changes:'review'};
-const BOARD2CH={needinfo:'yliko', review:'changes', changes:'changes'};   /* Building never moves the chat: it becomes «First draft» only when the draft is actually sent (22 Sept 2026) */
+const BOARD2CH={needinfo:'yliko', review:'changes'};   /* Building never moves the chat: it becomes «First draft» only when the draft is actually sent (22 Sept 2026) */
 const BOARD_RANK={booked:0, needinfo:1, building:2, review:3, changes:4};
 const chPendStage={};
 const CH_GL={α:'a',β:'v',γ:'g',δ:'d',ε:'e',ζ:'z',η:'i',θ:'th',ι:'i',κ:'k',λ:'l',μ:'m',ν:'n',ξ:'x',ο:'o',π:'p',ρ:'r',σ:'s',ς:'s',τ:'t',υ:'i',φ:'f',χ:'ch',ψ:'ps',ω:'o'};
