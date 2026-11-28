@@ -8326,6 +8326,27 @@ function txSecondSite(c,link){ try{ const me=cDraftUrl(c)||link||''; const key=(
   return sib?cDraftUrl(sib):''; }catch(e){ return ''; } }
 function txDefaultLink(c){ let u=''; try{ u=cDraftUrl(c)||''; }catch(e){} if(c.stage==='paid'){ try{ const d=rvDomain(c); if(d) return 'https://'+d; }catch(e){} } return u; }
 function txSwapLink(t,c,L){ let u=''; try{ u=cDraftUrl(c)||''; }catch(e){} return (u && L && L!==u) ? String(t).split(u).join(L) : t; }
+/* «Waiting payment» reminder (Angelo, 28 Nov 2026) — one polite text for everyone in the column, no due date in it.
+   The amount is what THIS card still owes (cowed: card value + extras − part payments already typed in), + 24% ΦΠΑ.
+   Part payment already in → «το υπόλοιπο». Extra-work card (c.job) → names the work, no «changes» line.
+   Two websites → plural. No link on the card → the link paragraph is left out. */
+function txPayAmount(c){ let v=0; try{ v=cowed(c); if(!(v>0)) v=cval(c); }catch(e){} return v>0?v:130; }
+function txPayText(c,H,link){
+  const amt=txPayMoney(c), part=(()=>{ try{ return cpaid(c)>0 && cowed(c)>0; }catch(e){ return false; } })();
+  const JGR={seo:'το πακέτο SEO',gads:'τις διαφημίσεις στο Google (Google Ads)',gbp:'το Google Business Profile',articles:'την ενότητα άρθρων',form:'τη φόρμα επικοινωνίας',admin:'το admin panel',changes:'τις αλλαγές',logo:'το λογότυπο',social:'τη διαχείριση των social media',other:'την επιπλέον εργασία'};
+  const job=(()=>{ try{ return isJob(c)?(JGR[c.job]||'την επιπλέον εργασία'):''; }catch(e){ return ''; } })();
+  const two=(()=>{ try{ return !job && txHasTwo(c); }catch(e){ return false; } })();
+  let t=H+'\n\nελπίζω να είστε καλά!\n\n';
+  if(job){
+    t+='Μια μικρή υπενθύμιση για τη μεταφορά'+(part?' του υπολοίπου':'')+' που αφορά '+job+(link?' της ιστοσελίδας σας ('+link+')':'')+': ';
+  } else {
+    if(link) t+=(two?'Τις ιστοσελίδες σας μπορείτε να τις δείτε εδώ:\n':'Την ιστοσελίδα σας μπορείτε να τη δείτε εδώ:\n')+link+(two?(()=>{ const s2=txSecondSite(c,link); return s2?'\n'+s2:''; })():'')+'\n\n';
+    t+='Αν υπάρχουν ακόμη αλλαγές που θα θέλατε, θα χαρούμε να μας τις στείλετε, ώστε να '+(two?'τις':'την')+' ολοκληρώσουμε.\n\n';
+    t+='Παράλληλα, μια μικρή υπενθύμιση για τη μεταφορά'+(part?' του υπολοίπου':'')+', η οποία κανονικά γίνεται με την παράδοση του πρώτου draft: ';
+  }
+  return t+amt+', με κατάθεση στην '+TX_IBAN+'\n\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΣας ευχαριστώ πολύ και είμαστε στη διάθεσή σας για οτιδήποτε!';
+}
+function txPayMoney(c){ return txMoney(txPayAmount(c)); }
 function txText(c,sit,link){
   const hi=txHi(), who=txWho(), H=hi+(who?' σας '+who:'')+',';
   const L=link||'…', owed=(()=>{ try{ return cowed(c)||cval(c)||130; }catch(e){ return 130; } })();
@@ -8353,8 +8374,7 @@ function txText(c,sit,link){
     case 'done':
       return H+'\n\nοι αλλαγές σας έγιναν και μπορείτε να τις δείτε εδώ:\n'+L+'\n(Αν δεν φαίνονται αμέσως, κάντε ανανέωση της σελίδας.)\n\nΕλέγξτε, παρακαλώ, όλη την ιστοσελίδα μία φορά, από την αρχή μέχρι το τέλος, και πείτε μου αν είναι όλα εντάξει τώρα. Αν είναι όλα καλά, στείλτε μου και το domain name που θέλετε (π.χ. www.'+txDomEx(c)+') για να την ανεβάσουμε.\n\nΕυχαριστώ πολύ!';
     case 'ch_rem': { try{ return txSwapLink(ndText(c,'c','changes',null),c,link); }catch(e){ return H; } }
-    case 'pay':
-      return H+'\n\nμια μικρή υπενθύμιση για τη μεταφορά της φιλοξενίας της ιστοσελίδας σας'+(link?' ('+link+')':'')+': '+txMoney(owed)+', με κατάθεση στην '+TX_IBAN+'\n\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΕυχαριστώ πολύ!';
+    case 'pay': return txPayText(c,H,link);
     case 'pay_live':
       return H+'\n\nη ιστοσελίδα σας είναι έτοιμη για να ανέβει online:\n'+L+'\n\nΜόλις γίνει η μεταφορά της φιλοξενίας, αγοράζουμε το domain και τη συνδέουμε αμέσως: '+txMoney(owed)+', με κατάθεση στην '+TX_IBAN+'\n\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας.\n\nΕυχαριστώ πολύ!';
     case 'review': { try{ return rvText(sal, rvClean(link)); }catch(e){ return H; } }
@@ -8951,6 +8971,7 @@ function ndText(o,kind,what,cur){
   }
   if(what==='draft') return hi+'\n\nήθελα μόνο να ρωτήσω αν είχατε την ευκαιρία να δείτε την πρώτη εικόνα της ιστοσελίδας σας'+(link?':\n'+link+'\n\n':'. ')+'Ό,τι αλλαγή θέλετε, μας τη γράφετε όπως σας βολεύει.\n\nΕυχαριστώ πολύ!';
   if(what==='changes') return hi+'\n\nμόνο να ρωτήσω αν είχατε την ευκαιρία να δείτε ξανά την ιστοσελίδα'+(link?' ('+link+')':'')+'. Ό,τι αλλαγές θέλετε, μας τις στέλνετε όποτε σας βολεύει και τις κάνουμε αμέσως.\n\nΕυχαριστώ πολύ!';
+  if(what==='pay' && kind!=='rn'){ try{ return txPayText(o,(new Date().getHours()<12?'Καλημέρα':'Καλησπέρα')+' σας'+(who?' '+who:'')+',',link); }catch(e){} }
   if(what==='pay'){ let v=130; try{ v=cowed(o)||cval(o)||130; }catch(e){} return hi+'\n\nμια μικρή υπενθύμιση για τη μεταφορά της φιλοξενίας: '+money(v)+', με κατάθεση στην '+iban+'\n\nΓια το τιμολόγιο θα χρειαστούμε το ΑΦΜ σας. Μόλις γίνει, αγοράζουμε και το domain.\n\nΕυχαριστώ πολύ!'; }
   if(what==='renewal') return hi+'\n\nσας στέλνω μια υπενθύμιση για την ετήσια ανανέωση της φιλοξενίας και του domain της ιστοσελίδας σας'+(o.date?' (λήγει '+fmtDate(o.date)+')':'')+': '+money(o.value||130)+', με κατάθεση στην '+iban+'\n\nΕυχαριστώ πολύ!';
   return hi+'\n\nήθελα μόνο να ρωτήσω αν είδατε το προηγούμενο μήνυμά μου.\n\nΕυχαριστώ πολύ!';
