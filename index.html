@@ -5206,6 +5206,261 @@ body.dark .mny-only .v{color:#3BDD95;}
 body.dark .bn-row,body.dark .bn-acts button,body.dark .bn-add select,body.dark .bn-add input{background:#151A24}
 body.dark .bn-row.p1{background:#2A1520}
 </style>
+<style id="mob-css">
+/* ==================================================================================================
+   DAILY WINDOW v3 + PHONE v2 (28 Nov 2026 — Angelo: «fix my CRM to be perfectly easy to use from mobile»)
+   Everything for the phone lives in this one block (and the script with id mob-js). Phone = up to 760px wide.
+   ================================================================================================== */
+/* ---------- the daily window: Do ASAP (red) + Important notes (indigo) ---------- */
+.day-modal{max-width:640px;}
+.dz{border-radius:16px; padding:12px; border:1.5px solid var(--line); display:flex; flex-direction:column; gap:6px;}
+.dz + .dz{margin-top:8px;}
+.dz-asap{border-color:#FDA4AF; background:linear-gradient(180deg,#FFF1F3,var(--surface) 170px);}
+.dz-notes{border-color:#C7D2FE; background:linear-gradient(180deg,#EEF2FF,var(--surface) 170px);}
+.dz-h{display:flex; align-items:center; gap:8px; padding:0 2px 2px; min-height:30px;}
+.dz-ttl{font:800 16px/1.2 'Sora',sans-serif; color:var(--ink);}
+.dz-c{font-size:11.5px; font-weight:800; border-radius:99px; padding:2px 9px; line-height:1.5; color:#fff;}
+.dz-asap .dz-c{background:#E11D48;} .dz-notes .dz-c{background:#4F46E5;}
+.dz-link{margin-left:auto; font-size:11.5px; font-weight:700; color:#BE123C; padding:7px 8px; border-radius:8px;}
+.dz-hint{margin-left:auto; font-size:11px; color:var(--muted);}
+.dz-sub{font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding:8px 2px 0;}
+.dz-sub.red{color:#BE123C;}
+.dz-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px;}
+.dz-row{display:flex; align-items:center; gap:10px; padding:9px 9px 9px 11px; border-radius:12px; background:var(--surface); border:1px solid var(--line); font-size:14px; line-height:1.4;}
+.dz-row.hot{background:#FFE9EC; border-color:#FDA4AF;}
+.dz-n{flex:none; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font:700 11.5px/1 'Sora',sans-serif; background:var(--bg); color:var(--muted); font-variant-numeric:tabular-nums;}
+.dz-row.hot .dz-n{background:#E11D48; color:#fff;}
+.dz-n svg{width:13px; height:13px;}
+.dz-tx{flex:1; min-width:0; overflow-wrap:anywhere; font-weight:600; color:var(--ink);}
+.dz-row.hot .dz-tx{color:#9F1239;}
+.dz-ok,.dz-go,.dz-call{flex:none; height:38px; padding:0 12px; border-radius:10px; font-weight:800; font-size:12.5px; display:inline-flex; align-items:center; gap:3px; white-space:nowrap; text-decoration:none;}
+.dz-ok{background:#0B9E5C; color:#fff;}
+.dz-go,.dz-call{background:var(--surface); border:1px solid var(--line); color:var(--ink);}
+.dz-call svg{width:14px; height:14px;}
+.dz-none{font-size:13px; color:var(--muted); font-weight:600; padding:8px 4px;}
+.dz-notes .bn-list{padding:2px 0 0; max-height:none; overflow:visible;}
+.dz-notes .bn-row.p1{border-color:#A5B4FC; background:#F5F6FF;}
+.dz-notes .bn-row.p1 .bn-n{background:#4F46E5;} .dz-notes .bn-row.p2 .bn-n{background:#818CF8;} .dz-notes .bn-row.p3 .bn-n{background:#C7D2FE; color:#3730A3;}
+.dz-notes .bn-row.ins-b{box-shadow:inset 0 3px 0 #4F46E5;} .dz-notes .bn-row.ins-a{box-shadow:inset 0 -3px 0 #4F46E5;}
+body.dark .dz-asap{background:linear-gradient(180deg,#2A1520,var(--surface) 170px); border-color:#7F1D3A;}
+body.dark .dz-notes{background:linear-gradient(180deg,#1B1F3A,var(--surface) 170px); border-color:#3B3F8F;}
+body.dark .dz-row.hot{background:#3A1722; border-color:#7F1D3A;} body.dark .dz-row.hot .dz-tx{color:#FDA4AF;}
+body.dark .dz-notes .bn-row.p1{background:#1F2347; border-color:#3B3F8F;}
+
+/* ---------- Do ASAP rows: the text is a growing box (it was cut off on the phone) ---------- */
+.asap-row .txt-w{flex:1; min-width:0; display:grid;}
+.asap-row .txt-w::after{content:attr(data-v) ' '; grid-area:1/1; visibility:hidden; white-space:pre-wrap; overflow-wrap:anywhere; font-weight:700; font-size:13px; line-height:19px; padding:4px 6px; display:none;}
+.asap-row textarea.txt{grid-area:1/1; width:100%; min-width:0; min-height:0; height:24px; line-height:16px; resize:none; overflow:hidden; white-space:nowrap; display:block; margin:0;}
+.asap-row .ab.mv{display:none;}
+.asap-fb{display:inline-flex; align-items:center; gap:4px; margin-left:auto;}
+
+/* ---------- phone-only pieces: hidden on the computer ---------- */
+.bnav,.bsh,.bnav-title,.strip-sum,.bstg{display:none;}
+
+@media(max-width:760px){
+  html{-webkit-text-size-adjust:100%;}
+  body{overflow-x:clip; padding-bottom:calc(66px + env(safe-area-inset-bottom));}
+  /* typing never zooms the page on iPhone (it zooms any field under 16px) */
+  input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),select,textarea,[contenteditable="true"]{font-size:16px !important;}
+
+  /* ----- header: ONE row — logo · page name · search · sync ----- */
+  .topbar{top:0 !important;}
+  .topbar-inner{padding:8px 12px; gap:10px; row-gap:0; flex-wrap:nowrap; position:relative; min-height:56px;}
+  .tabs{display:none !important;}
+  .brand{gap:10px; min-width:0; flex:1;}
+  .brand img{height:36px; border-radius:10px;} .brand-dot{width:36px; height:36px;}
+  .brand h1,.brand small{display:none;}
+  .bnav-title{display:block; font:800 19px/1.15 'Sora',sans-serif; letter-spacing:-.02em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;}
+  .topbar-right{margin-left:0; padding-left:0; gap:8px; position:static; flex:none;}
+  .topbar-right > :not(.search-wrap):not(.sync-pill){display:none !important;}
+  .search-wrap{position:static; width:40px; flex:none;}
+  .search-wrap input,.search-wrap input:focus{height:40px; border-radius:12px;}
+  .search-wrap:focus-within,.search-wrap:has(.search-results.open){position:absolute; left:12px; right:12px; top:8px; width:auto; z-index:8;}
+  .search-results{width:100%; left:0; right:0; max-height:70dvh; overflow-y:auto;}
+  .sr-item{min-height:48px;}
+  .sync-pill{height:40px; min-width:40px; justify-content:center; padding:0 10px;}
+  body.dark .search-wrap input,body.dark .search-wrap input:focus{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C3CAD9' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E"); background-color:var(--surface);}
+
+  /* ----- bottom bar: the four screens used most + «More» ----- */
+  .bnav{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:2px; position:fixed; left:0; right:0; bottom:0; z-index:95; padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.94); -webkit-backdrop-filter:saturate(1.5) blur(16px); backdrop-filter:saturate(1.5) blur(16px); border-top:1px solid var(--line); box-shadow:0 -6px 24px -14px rgba(16,24,40,.25);}
+  body.dark .bnav{background:rgba(18,24,36,.94);}
+  body.locked .bnav,body.ld-call .bnav{display:none;}
+  .bnav button{position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-height:52px; border-radius:14px; font-size:10.5px; font-weight:700; color:var(--muted); -webkit-tap-highlight-color:transparent;}
+  .bnav button svg{width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .bnav button.on{color:var(--brand); background:var(--blue-soft);}
+  .bnav button:active{transform:scale(.96);}
+  .bnav-b{position:absolute; top:3px; left:calc(50% + 5px); min-width:18px; height:18px; padding:0 5px; border-radius:99px; background:var(--red); color:#fff; font:800 10.5px/18px 'Inter',sans-serif; text-align:center; font-style:normal; box-shadow:0 0 0 2px var(--surface);}
+  .bnav-b[hidden]{display:none;}
+
+  /* ----- «More»: every screen as a big button + the tools ----- */
+  .bsh{position:fixed; inset:0 0 calc(64px + env(safe-area-inset-bottom)) 0; z-index:94;}
+  .bsh.open{display:block;}
+  .bsh-bg{position:absolute; inset:0; background:rgba(10,18,34,.45);}
+  .bsh-panel{position:absolute; left:0; right:0; bottom:0; max-height:88dvh; overflow-y:auto; overscroll-behavior:contain; background:var(--surface); border-radius:22px 22px 0 0; padding:8px 14px calc(16px + env(safe-area-inset-bottom)); box-shadow:0 -20px 60px rgba(16,24,40,.3); animation:bshUp .22s ease;}
+  .bsh-grab{width:40px; height:4px; border-radius:99px; background:var(--line); margin:4px auto 10px;}
+  .bsh-h{font:800 11px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:14px 4px 8px;}
+  .bsh-h:first-of-type{margin-top:4px;}
+  .bsh-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px;}
+  .bsh-grid button{position:relative; min-height:76px; border-radius:16px; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; font-weight:700; font-size:12.5px; line-height:1.15; color:var(--ink); padding:8px 4px; text-align:center;}
+  .bsh-grid button svg{width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; color:var(--muted);}
+  .bsh-grid button.on{background:var(--blue-soft); color:var(--brand); box-shadow:inset 0 0 0 1.5px var(--brand);}
+  .bsh-grid button.on svg{color:var(--brand);}
+  .bsh-grid .bnav-b{top:8px; left:calc(50% + 8px);}
+  .bsh-tools{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;}
+  .bsh-tools > .btn,.bsh-tools > .export-wrap > .btn{display:flex !important; width:100%; min-height:50px; justify-content:flex-start; gap:10px; padding:0 14px; border-radius:14px; background:var(--bg) !important; border:0; font-weight:700; font-size:13.5px; color:var(--ink); box-shadow:none; text-decoration:none;}
+  .bsh-tools > .export-wrap{display:block !important; position:static;}
+  .bsh-tools .btn .lbl-t{display:inline !important;}
+  .bsh-tools #themeBtn::after{content:'Dark / light';} .bsh-tools #logoutBtn::after{content:'Lock the CRM';}
+  .bsh-tools .export-menu{position:fixed; left:10px; right:10px; top:auto; bottom:calc(74px + env(safe-area-inset-bottom)); width:auto; max-width:none; max-height:calc(100dvh - 150px); overflow-y:auto; z-index:3; box-shadow:0 -10px 60px rgba(16,24,40,.45);}
+  .bsh-tools .export-menu button{min-height:46px;}
+
+  /* ----- the money cards fold into one line (tap to open) so the real content is on the first screen ----- */
+  .strip{margin-top:10px; padding-left:12px; padding-right:12px; gap:8px;}
+  .view,.storage-warn,.gm-bar{padding-left:12px; padding-right:12px;}
+  .view{margin-top:12px; margin-bottom:24px;}
+  .month-nav{flex:1 1 180px; min-width:0;} .month-nav .month-label{flex:1; text-align:center; white-space:nowrap;}
+  .strip #dbTopChip{flex:1 1 100%;} .strip #dbTopChip:empty{display:none;}
+  .month-nav button{width:40px; height:40px;}
+  .today-btn{min-height:40px; padding:6px 12px; flex:none;}
+  .strip-sum{display:flex; align-items:center; gap:6px 14px; flex-wrap:wrap; width:100%; min-height:46px; padding:8px 40px 8px 14px; border-radius:14px; background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow); font-size:12.5px; font-weight:600; color:var(--muted); text-align:left; position:relative;}
+  .strip-sum b{font:800 15px/1 'Sora',sans-serif; color:var(--ink); margin-left:4px;}
+  .strip-sum .g b{color:#0B9E5C;} .strip-sum .b b{color:var(--brand);} .strip-sum .r b{color:var(--red);}
+  .strip-sum::after{content:''; position:absolute; right:16px; top:50%; width:8px; height:8px; margin-top:-7px; border-right:2px solid var(--muted); border-bottom:2px solid var(--muted); transform:rotate(45deg); transition:transform .2s;}
+  .strip.m-open .strip-sum::after{transform:rotate(-135deg); margin-top:-2px;}
+  .strip:not(.m-open) .stat-pills{display:none !important;}
+  .db-bchip{min-height:36px;}
+
+  /* ----- Home: what to do comes first ----- */
+  #view-home.active{display:flex; flex-direction:column; gap:12px;}
+  #view-home .home-grid,#view-home .home-pair{display:contents;}
+  #view-home > *,#view-home .home-card,#view-home .home-hero{margin:0;}
+  #view-home .asap-card{order:1;} #view-home .meetings-card{order:2;} #view-home #homeAfterCard{order:3;} #view-home #homeRemCard{order:4;}
+  #view-home #homeHero{order:5;} #view-home #gmCard{order:6;} #view-home #homeChatsCard{order:7;} #view-home .chase-card{order:8;} #view-home .cash-card{order:9;} #view-home .subs-card{order:10;}
+  .home-card-head{flex-wrap:wrap; row-gap:4px;}
+  .asap-card .hc-hint{display:none;}
+  .hc-link{min-height:38px; padding:8px 11px; font-size:12.5px;}
+  /* Do ASAP rows: full text on its own line, big buttons under it */
+  .asap-row{flex-wrap:wrap; align-items:flex-start; gap:2px 6px; padding:9px 8px 5px 10px;}
+  .asap-row .grip{display:none;}
+  .asap-row .n{min-width:22px; text-align:left; padding-top:6px; font-size:13px;}
+  .asap-row .txt-w{flex:1 1 calc(100% - 34px);}
+  .asap-row .txt-w::after{display:block; font-size:16px; line-height:22px; padding:4px 4px; font-weight:600;}
+  .asap-row textarea.txt{height:100%; white-space:pre-wrap; overflow-wrap:anywhere; line-height:22px; padding:4px 4px; font-weight:600;}
+  .asap-row .ab{min-width:42px; height:38px; font-size:16px; display:grid; place-items:center; padding:0;}
+  .asap-row .ab.mv{display:grid; color:var(--muted);}
+  .asap-row .ab:first-of-type{margin-left:auto;}
+  .asap-row.auto{flex-wrap:nowrap; align-items:center; padding:10px;}
+  .asap-row.auto .atxt{line-height:1.45;} .asap-row.auto .atxt a{display:inline-block; padding:4px 0;}
+  .asap-add{gap:6px;} .asap-add input{min-width:0; height:46px;} .asap-add .btn{height:46px; padding:0 16px;}
+
+  /* ----- every window = a sheet that comes up from the bottom, full width, scrolls inside ----- */
+  .overlay{padding:0; place-items:end stretch;}
+  .overlay > .modal{max-width:none !important; width:100%; max-height:calc(100dvh - 24px); border-radius:22px 22px 0 0; overflow-y:auto; overscroll-behavior:contain; animation:bshUp .22s ease; padding-bottom:env(safe-area-inset-bottom);}
+  .overlay > .day-modal,.overlay > .modal.goal-modal{overflow:hidden;}
+  .modal-head{padding:16px 16px 0;} .modal-body{padding:14px 16px 18px;}
+  .modal-foot{flex-wrap:wrap; gap:8px; padding:10px 14px 14px; position:sticky; bottom:0; z-index:2;}
+  .modal-foot .btn{flex:1 1 30%; min-height:46px; padding-left:8px; padding-right:8px; white-space:nowrap;}
+  .modal-foot .btn-brand,.modal-foot #mSave{order:-1; flex:1 1 100%; min-height:50px; font-size:15px;}
+  .modal-close{width:42px; height:42px; font-size:17px; flex:none;}
+  .day-modal{max-height:calc(100dvh - 24px) !important;}
+  .day-body{padding:8px 12px 4px;} .day-foot{padding:10px 14px 14px;} .day-foot .btn{height:46px; padding:0 22px;}
+  .dz{padding:10px 8px 10px;} .dz-hint{display:none;} .dz-ttl{font-size:15.5px;}
+  .dz-row{align-items:flex-start; gap:8px; font-size:14.5px;} .dz-n{margin-top:6px;} .dz-tx{padding:6px 0;}
+  .dz-ok,.dz-go,.dz-call{height:40px; min-width:44px; justify-content:center; padding:0 11px;}
+  .dz-ok span,.dz-call span{display:none;} .dz-ok{font-size:17px;}
+  .bn-acts button{width:38px; height:38px; font-size:15px;}
+  .bn-who{padding:8px 11px; font-size:12.5px;}
+  .bn-row{grid-template-columns:24px minmax(0,1fr); grid-template-areas:"n w" "n t" "n a"; gap:4px 8px; padding:9px 8px 7px;}
+  .bn-n{align-self:start; margin-top:4px;} .bn-acts{justify-self:end; gap:6px;} .bn-t{font-size:15px !important; padding:3px 4px; line-height:1.4;}
+  .bn-add select,.bn-add input,.bn-add button{height:44px;}
+
+
+  /* ----- Home rows that were squeezed ----- */
+  .chase-row{display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"name val" "sub sub"; gap:3px 10px; padding:10px 8px; align-items:start;}
+  .chase-row .cr-name{grid-area:name;} .chase-row .cr-sub{grid-area:sub; white-space:normal;} .chase-row .cr-val{grid-area:val;}
+  .chase-row .cr-tel{padding:6px 11px; font-size:12.5px;} .chase-row .cr-tel svg{width:13px; height:13px;}
+  .fu-act a,.fu-act button{min-height:40px; min-width:40px;}
+
+  /* ----- Board: one column at a time, swipe sideways; the pills on top jump to a stage ----- */
+  .bstg{display:flex; gap:6px; overflow-x:auto; margin:0 -12px 10px; padding:2px 12px 4px; scrollbar-width:none; position:sticky; top:var(--tbh,57px); z-index:20; background:linear-gradient(var(--bg) 82%,transparent);}
+  .bstg::-webkit-scrollbar{display:none;}
+  .bstg button{flex:none; display:inline-flex; align-items:center; gap:6px; min-height:38px; padding:0 12px; border-radius:99px; background:var(--surface); border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink); white-space:nowrap;}
+  .bstg button i{width:9px; height:9px; border-radius:50%; background:var(--c,#ccc); flex:none;}
+  .bstg button b{font:800 11.5px/1 'Sora',sans-serif; color:var(--muted);}
+  .board{scroll-snap-type:x mandatory; scroll-padding-left:0; gap:10px; margin:0 -12px; padding:0 12px 16px; -webkit-overflow-scrolling:touch;}
+  .board .col{min-width:min(84vw,340px); flex:0 0 min(84vw,340px); scroll-snap-align:center;}
+  #notesTray .bn-list{max-height:none;}
+
+  /* ----- Leads: the buttons row wraps (it made the whole tab wider than the screen) ----- */
+  .ld-tools .ld-import{margin-left:0; flex-wrap:wrap; width:100%;}
+  .ld-tools .ld-import > *{flex:1 1 auto; min-height:42px;}
+
+  /* ----- Ads & Social: suggestion rows stack ----- */
+  .xs-sr .who,.xs-sr .why{flex:1 1 100%; min-width:0; width:100%;}
+  .xs-sr .xs-b{min-height:40px;}
+
+  /* ----- small buttons become finger-sized ----- */
+  .rem-dot{width:30px; height:30px; border-width:8px; background-clip:padding-box;}
+  .rem-dot.on{border-color:transparent; box-shadow:0 0 0 2px currentColor inset;}
+  .rem-btn{min-height:40px; padding:8px 12px; font-size:12.5px;} .rem-btn.trash{min-width:40px; justify-content:center;}
+  .rn-done{min-height:40px; padding:8px 14px; font-size:13px;}
+  .rn-date{min-height:38px;}
+  .item-x{opacity:.7; min-width:38px; min-height:38px; font-size:14px;}
+  .nd-add{min-height:34px; padding:5px 11px; font-size:12px;}
+  .site-edit{min-height:34px; padding:5px 8px; font-size:12px;}
+  .cw-del{min-width:38px; min-height:38px;}
+  .m2cb,.rmcb{min-width:36px !important; min-height:36px !important;}
+  .tray-head,.col-head{min-height:44px;}
+
+
+  /* ----- Chats: the list scrolls with the page; an open conversation fills the screen between the header and the bottom bar ----- */
+  #view-chats .ch-wrap{height:auto; min-height:0;}
+  #view-chats .ch-wrap.open{position:fixed; left:0; right:0; top:var(--tbh,57px); bottom:calc(64px + env(safe-area-inset-bottom)); height:auto; z-index:45; border-radius:0; border:0;}
+  .ch-head{padding:8px 10px; gap:8px;}
+  .ch-feed{padding:12px 12px 8px;}
+  .ch-back{width:42px; height:42px;}
+
+  /* ----- Board columns are as tall as their cards (no scroll inside a scroll) ----- */
+  .board .col{max-height:none;}
+  .card .chip.contact{min-width:38px; min-height:34px; display:inline-grid; place-items:center;}
+  .c-lost,.c-next{min-width:36px; min-height:36px;}
+  .c-tx{min-height:34px;}
+
+  /* ----- phone numbers and links are easy to hit ----- */
+  .rem-chip.link{padding:7px 11px; font-size:12.5px;}
+  .ld-lists{margin-left:-12px !important; margin-right:-12px !important; padding-left:12px !important; padding-right:12px !important;}
+  .w-phone,.w-look{display:inline-flex; align-items:center; min-height:34px; padding:0 3px;}
+  .xs-b{min-height:40px;}
+
+
+  /* ----- more finger-sized controls ----- */
+  .month-nav button{flex:none;} .month-nav .month-label,.month-nav > div{min-width:0; overflow:hidden; text-overflow:ellipsis;}
+  .cal-head{gap:8px 10px;} .cal-head .month-nav{flex:1 1 100%; order:2;} .cal-head .today-btn{order:1; margin-left:auto;}
+  .qc-quick button{min-height:36px; padding-left:11px; padding-right:11px;}
+  .qb-seg button{min-height:38px;}
+  .gm-wknav button{min-width:36px; min-height:36px;}
+  .tray-aside button{min-height:36px;}
+  .c-unsure{min-width:34px; min-height:34px;}
+  .c-draft,.c-review{min-height:36px; display:inline-flex; align-items:center;}
+  .cr-tel{min-height:34px;}
+  .stats-go{min-height:36px;}
+  .exp-edit{min-width:38px; min-height:38px; display:inline-grid; place-items:center;}
+  .tgt-set{min-height:36px; padding-left:12px; padding-right:12px;}
+  .gm-title{min-height:36px;}
+
+  /* ----- messages at the bottom stay above the bar ----- */
+  .toast{bottom:calc(78px + env(safe-area-inset-bottom)); width:max-content; max-width:calc(100vw - 24px); white-space:normal; text-align:center; padding:12px 16px;}
+}
+/* tablet / small laptop (761–1160px): the 15 tabs did not fit and pushed the whole page wider than the screen — the row scrolls sideways instead */
+@media(min-width:761px) and (max-width:1160px){
+  .tabs{max-width:100%; overflow-x:auto; flex-wrap:nowrap; justify-content:flex-start; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tabs .tab{flex:0 0 auto;}
+}
+@keyframes bshUp{from{transform:translateY(36px); opacity:0;}}
+@media(prefers-reduced-motion:reduce){ .bsh-panel,.overlay > .modal{animation:none !important;} }
+</style>
 </head>
 <body class="locked">
 
@@ -5360,7 +5615,7 @@ body.dark .bn-row.p1{background:#2A1520}
       <div class="home-card-body" id="homeThink"></div>
     </section>
     <section class="home-card rem-card" id="homeRemCard">
-      <div class="home-card-head"><span class="hc-ico" style="background:var(--orange-soft);color:var(--orange)" data-ic="clock"></span><h3>Client reminders</h3><span class="hc-hint" id="homeRemHint"></span><button class="hc-link" id="remToday" title="Open today's list again">Today</button><button class="hc-link" id="remNew" title="Add a reminder — it goes into your Google Calendar «Advon Media» as a ⏰ event">+ New</button><button class="hc-link" id="remRefresh" title="Read the calendar again now">Check calendar</button></div>
+      <div class="home-card-head"><span class="hc-ico" style="background:var(--orange-soft);color:var(--orange)" data-ic="clock"></span><h3>Client reminders</h3><span class="hc-hint" id="homeRemHint"></span><button class="hc-link" id="remNew" title="Add a reminder — it goes into your Google Calendar «Advon Media» as a ⏰ event">+ New</button><button class="hc-link" id="remRefresh" title="Read the calendar again now">Check calendar</button></div>
       <div class="home-card-body" id="homeRem"></div>
     </section>
     <section class="home-card chats-card" id="homeChatsCard">
@@ -5966,7 +6221,7 @@ body.dark .bn-row.p1{background:#2A1520}
   <div class="modal day-modal" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
     <div class="modal-head"><div><h3 id="dayTitle">Today</h3><small id="daySub"></small></div><button class="modal-close" id="dayClose" title="Close">✕</button></div>
     <div class="day-body" id="dayBody"></div>
-    <div class="day-foot"><small>Shows once a day. Open it again from Home → «Client reminders» → «Today».</small><button class="btn" id="dayOk">Got it</button></div>
+    <div class="day-foot"><small>Shows once a day. Open it again from Home → «Do ASAP» → «Today's list».</small><button class="btn" id="dayOk">Got it</button></div>
   </div>
 </div>
 <div class="overlay" id="mqOverlay">
@@ -8271,7 +8526,7 @@ function bnMove(id, toIdxAmongOpen){
   const open=bnCurOpen(), done=state.bnotes.filter(n=>n.done);
   const i=open.findIndex(n=>n.id===id); if(i<0) return;
   const [n]=open.splice(i,1); open.splice(Math.max(0,Math.min(open.length,toIdxAmongOpen)),0,n);
-  state.bnotes=open.concat(done); n.updated=Date.now(); save(); renderBoard();
+  state.bnotes=open.concat(done); n.updated=Date.now(); save(); bnRefresh();
 }
 function bnAdd(cid, text){
   bnEnsure(); text=String(text||'').trim(); if(!text) return toast('Write the note first');
@@ -8308,6 +8563,51 @@ function bnRowHtml(n, rank, done){
       : `<button type="button" data-bn-up title="Higher priority"${rank===1?' disabled':''}>↑</button><button type="button" data-bn-down title="Lower priority">↓</button><button type="button" class="bn-ok" data-bn-done title="Done">✓</button><button type="button" data-bn-del title="Delete">✕</button>`}</span>
   </li>`;
 }
+/* the rows' buttons, the inline edit and the drag-to-rank — shared by the Board tray and the daily window (28 Nov 2026) */
+function bnRefresh(){ try{ renderBoard(); }catch(e){} try{ const ov=$('#dayOverlay'); if(ov && ov.classList.contains('open')) dayRender(); }catch(e){} }
+function bnWireList(el, list){
+  const find=id=>state.bnotes.find(n=>n.id===id);
+  el.querySelectorAll('.bn-row').forEach(row=>{
+    const id=row.dataset.bn, n=find(id); if(!n) return;
+    const t=row.querySelector('.bn-t');
+    if(t && t.isContentEditable){
+      t.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); t.blur(); } if(e.key==='Escape'){ t.textContent=n.text; t.blur(); } });
+      t.addEventListener('blur',()=>{ const v=t.textContent.replace(/\s+/g,' ').trim();
+        if(v && v!==n.text){ n.text=v; n.updated=Date.now(); save(); toast('Note saved'); } else if(!v) t.textContent=n.text;
+        if(bnDirty) setTimeout(()=>bnRefresh(),0); });
+    }
+    const op=row.querySelector('[data-bn-open]'); if(op) op.addEventListener('click',()=>{ try{ closeDay(); }catch(e){} openModal(op.dataset.bnOpen); });
+    const idxOpen=()=>bnCurOpen().findIndex(x=>x.id===id);
+    const up=row.querySelector('[data-bn-up]'); if(up) up.addEventListener('click',()=>bnMove(id, idxOpen()-1));
+    const dn=row.querySelector('[data-bn-down]'); if(dn) dn.addEventListener('click',()=>bnMove(id, idxOpen()+1));
+    const ok=row.querySelector('[data-bn-done]'); if(ok) ok.addEventListener('click',()=>{
+      const i=state.bnotes.indexOf(n); n.done=true; n.doneAt=Date.now(); n.updated=Date.now();
+      state.bnotes.splice(i,1); state.bnotes.push(n); save(); bnRefresh();
+      toastUndo('✓ Done: '+n.text, ()=>{ const j=state.bnotes.indexOf(n); if(j>=0) state.bnotes.splice(j,1); state.bnotes.splice(Math.min(i,state.bnotes.length),0,n); n.done=false; delete n.doneAt; n.updated=Date.now(); save(); bnRefresh(); }); });
+    const ro=row.querySelector('[data-bn-reopen]'); if(ro) ro.addEventListener('click',()=>{
+      const i=state.bnotes.indexOf(n); state.bnotes.splice(i,1); n.done=false; delete n.doneAt; n.updated=Date.now();
+      state.bnotes.splice(bnCurOpen().length,0,n); save(); bnRefresh(); toast('Back on the list as #'+bnCurOpen().length); });
+    const dl=row.querySelector('[data-bn-del]'); if(dl) dl.addEventListener('click',()=>{
+      const i=state.bnotes.indexOf(n); state.bnotes.splice(i,1); save(); bnRefresh();
+      toastUndo('Note deleted', ()=>{ state.bnotes.splice(i,0,n); save(); bnRefresh(); }); });
+    if(row.draggable){
+      row.addEventListener('dragstart',e=>{ e.dataTransfer.setData('application/x-bn',id); e.dataTransfer.effectAllowed='move'; row.classList.add('drag'); });
+      row.addEventListener('dragend',()=>{ row.classList.remove('drag'); el.querySelectorAll('.ins-a,.ins-b').forEach(x=>x.classList.remove('ins-a','ins-b')); });
+    }
+  });
+  /* drag inside the list = rank */
+  const isBn=e=>Array.from(e.dataTransfer.types||[]).includes('application/x-bn');
+  list.addEventListener('dragover',e=>{ if(!isBn(e)) return; e.preventDefault(); e.stopPropagation();
+    const row=e.target.closest('.bn-row'); el.querySelectorAll('.ins-a,.ins-b').forEach(x=>x.classList.remove('ins-a','ins-b'));
+    if(row){ const r=row.getBoundingClientRect(); row.classList.add(e.clientY<r.top+r.height/2?'ins-b':'ins-a'); } });
+  list.addEventListener('drop',e=>{ if(!isBn(e)) return; e.preventDefault(); e.stopPropagation();
+    const id=e.dataTransfer.getData('application/x-bn'); const row=e.target.closest('.bn-row');
+    const open=bnCurOpen(); const from=open.findIndex(n=>n.id===id); if(from<0) return;
+    let to=open.length-1;
+    if(row && row.dataset.bn!==id){ const r=row.getBoundingClientRect(); let k=open.findIndex(n=>n.id===row.dataset.bn); if(e.clientY>=r.top+r.height/2) k++; to = k>from ? k-1 : k; }
+    else if(row) to=from;
+    if(to!==from) bnMove(id,to); });
+}
 function renderNotesTray(mc){
   const el=$('#notesTray'); if(!el || !bnEnsure()) return;
   if(el.contains(document.activeElement) && document.activeElement.matches('.bn-t,.bn-add input,.bn-add select')){ bnDirty=true; return; }
@@ -8338,47 +8638,8 @@ function renderNotesTray(mc){
   form.addEventListener('submit',e=>{ e.preventDefault(); bnDraft.text=form.text.value; const v=form.cid.value;
     if(!v){ toast('Pick the client first (or «No client»)'); form.cid.focus(); return; }
     bnAdd(v==='-'?null:v, form.text.value); });
-  const find=id=>state.bnotes.find(n=>n.id===id);
-  el.querySelectorAll('.bn-row').forEach(row=>{
-    const id=row.dataset.bn, n=find(id); if(!n) return;
-    const t=row.querySelector('.bn-t');
-    if(t && t.isContentEditable){
-      t.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); t.blur(); } if(e.key==='Escape'){ t.textContent=n.text; t.blur(); } });
-      t.addEventListener('blur',()=>{ const v=t.textContent.replace(/\s+/g,' ').trim();
-        if(v && v!==n.text){ n.text=v; n.updated=Date.now(); save(); toast('Note saved'); } else if(!v) t.textContent=n.text;
-        if(bnDirty) setTimeout(()=>renderBoard(),0); });
-    }
-    const op=row.querySelector('[data-bn-open]'); if(op) op.addEventListener('click',()=>openModal(op.dataset.bnOpen));
-    const idxOpen=()=>bnCurOpen().findIndex(x=>x.id===id);
-    const up=row.querySelector('[data-bn-up]'); if(up) up.addEventListener('click',()=>bnMove(id, idxOpen()-1));
-    const dn=row.querySelector('[data-bn-down]'); if(dn) dn.addEventListener('click',()=>bnMove(id, idxOpen()+1));
-    const ok=row.querySelector('[data-bn-done]'); if(ok) ok.addEventListener('click',()=>{
-      const i=state.bnotes.indexOf(n); n.done=true; n.doneAt=Date.now(); n.updated=Date.now();
-      state.bnotes.splice(i,1); state.bnotes.push(n); save(); renderBoard();
-      toastUndo('✓ Done: '+n.text, ()=>{ const j=state.bnotes.indexOf(n); if(j>=0) state.bnotes.splice(j,1); state.bnotes.splice(Math.min(i,state.bnotes.length),0,n); n.done=false; delete n.doneAt; n.updated=Date.now(); save(); renderBoard(); }); });
-    const ro=row.querySelector('[data-bn-reopen]'); if(ro) ro.addEventListener('click',()=>{
-      const i=state.bnotes.indexOf(n); state.bnotes.splice(i,1); n.done=false; delete n.doneAt; n.updated=Date.now();
-      state.bnotes.splice(bnCurOpen().length,0,n); save(); renderBoard(); toast('Back on the list as #'+bnCurOpen().length); });
-    const dl=row.querySelector('[data-bn-del]'); if(dl) dl.addEventListener('click',()=>{
-      const i=state.bnotes.indexOf(n); state.bnotes.splice(i,1); save(); renderBoard();
-      toastUndo('Note deleted', ()=>{ state.bnotes.splice(i,0,n); save(); renderBoard(); }); });
-    if(row.draggable){
-      row.addEventListener('dragstart',e=>{ e.dataTransfer.setData('application/x-bn',id); e.dataTransfer.effectAllowed='move'; row.classList.add('drag'); });
-      row.addEventListener('dragend',()=>{ row.classList.remove('drag'); el.querySelectorAll('.ins-a,.ins-b').forEach(x=>x.classList.remove('ins-a','ins-b')); });
-    }
-  });
-  /* drag inside the list = rank; a Board card dropped here = new note for that client */
+  bnWireList(el, list);
   const isBn=e=>Array.from(e.dataTransfer.types||[]).includes('application/x-bn');
-  list.addEventListener('dragover',e=>{ if(!isBn(e)) return; e.preventDefault(); e.stopPropagation();
-    const row=e.target.closest('.bn-row'); el.querySelectorAll('.ins-a,.ins-b').forEach(x=>x.classList.remove('ins-a','ins-b'));
-    if(row){ const r=row.getBoundingClientRect(); row.classList.add(e.clientY<r.top+r.height/2?'ins-b':'ins-a'); } });
-  list.addEventListener('drop',e=>{ if(!isBn(e)) return; e.preventDefault(); e.stopPropagation();
-    const id=e.dataTransfer.getData('application/x-bn'); const row=e.target.closest('.bn-row');
-    const open=bnCurOpen(); const from=open.findIndex(n=>n.id===id); if(from<0) return;
-    let to=open.length-1;
-    if(row && row.dataset.bn!==id){ const r=row.getBoundingClientRect(); let k=open.findIndex(n=>n.id===row.dataset.bn); if(e.clientY>=r.top+r.height/2) k++; to = k>from ? k-1 : k; }
-    else if(row) to=from;
-    if(to!==from) bnMove(id,to); });
   drop.addEventListener('dragover',e=>{ if(isBn(e)) return; e.preventDefault(); drop.classList.add('dragover'); });
   drop.addEventListener('dragleave',e=>{ if(!drop.contains(e.relatedTarget)) drop.classList.remove('dragover'); });
   drop.addEventListener('drop',e=>{ if(isBn(e)) return; e.preventDefault(); drop.classList.remove('dragover');
@@ -9576,9 +9837,9 @@ function mqRender(){
       <button type="button" class="mq-link" id="mqCard">Open the card</button>
       ${c.day?'<button type="button" class="mq-link" id="mqToCb" title="Call them back another day instead — off the Calendar, not counted as a meeting">→ Callbacks</button>':''}
       ${c.day?'<button type="button" class="mq-link mq-rm" id="mqRm" title="Remove this meeting completely — not counted anywhere, not marked Lost">🗑 Remove meeting</button>':''}
-      ${('Notification' in window && Notification.permission==='default')?'<button type="button" class="mq-link mq-bell" id="mqBell" title="So the CRM can ping you when a meeting ends, even if this tab is in the background">🔔 Ping me after meetings</button>':''}
+      ${(MQ_AUTO && 'Notification' in window && Notification.permission==='default')?'<button type="button" class="mq-link mq-bell" id="mqBell" title="So the CRM can ping you when a meeting ends, even if this tab is in the background">🔔 Ping me after meetings</button>':''}
     </div>
-    <button type="button" class="btn btn-brand mq-save" id="mqSave" ${o?'':'disabled'}>${o?('Save'+(o==='yes'?' · €'+((+c.value>0)?c.value:MQ_YES_VALUE):'')+(rd?' · remind '+mqDayLbl(rd):'')):'Pick how it went'}${more&&o?` <small>then ${more} more</small>`:''}</button>`;
+    <button type="button" class="btn btn-brand mq-save" id="mqSave" ${o?'':'disabled'}>${o?('Save'+(o==='yes'?' · €'+((+c.value>0)?c.value:MQ_YES_VALUE):'')+(rd?' · remind '+mqDayLbl(rd):'')):'Pick how it went'}${MQ_AUTO&&more&&o?` <small>then ${more} more</small>`:''}</button>`;
   const tcb=$('#mqToCb'); if(tcb) tcb.addEventListener('click',()=>{ const id=c.id; mqClose(); m2Open(id); });
   const trm=$('#mqRm'); if(trm) trm.addEventListener('click',()=>{ const id=c.id; mqClose(); rmOpen(id); });
   mqWire();
@@ -9662,7 +9923,7 @@ function mqSave(){
   if(o!=='no'){ mqOpenMsg(c.id); return; }
   $('#mqOverlay').classList.remove('open'); mq=null;
   /* more meetings waiting? open the next one straight away */
-  const next=mqPending()[0];
+  const next=MQ_AUTO?mqPending()[0]:null;
   if(next) setTimeout(()=>mqOpen(next.id),450); else mqTick(true);
 }
 /* ---------- the ready message after the meeting (8 Oct 2026) ----------
@@ -9859,7 +10120,7 @@ function mqRenderMsg(body, foot){
   $('#mqMsgCopy').addEventListener('click',()=>{ copy(); const b=$('#mqMsgCopy'); b.textContent='Copied ✓'; setTimeout(()=>{ if(b.isConnected) b.textContent='Copy message'; },1600); });
   const v=$('#mqMsgViber'); if(v) v.addEventListener('click',()=>{ copy(); setTimeout(()=>{ location.href='viber://chat?number='+encodeURIComponent(vib); },250); });
   const m=$('#mqMsgMail'); if(m) m.addEventListener('click',()=>{ if(e.out==='yes' && mqChatLink(c) && $('#mqMsg').value.includes(mqChatLink(c))) mqSeedChat(c,e); location.href='mailto:'+encodeURIComponent(c.email)+'?subject='+encodeURIComponent('Η ιστοσελίδα σας — Advon Media')+'&body='+encodeURIComponent($('#mqMsg').value); });
-  $('#mqMsgDone').addEventListener('click',()=>{ $('#mqOverlay').classList.remove('open'); mq=null; const next=mqPending()[0]; if(next) setTimeout(()=>mqOpen(next.id),350); else mqTick(true); });
+  $('#mqMsgDone').addEventListener('click',()=>{ $('#mqOverlay').classList.remove('open'); mq=null; const next=MQ_AUTO?mqPending()[0]:null; if(next) setTimeout(()=>mqOpen(next.id),350); else mqTick(true); });
 }
 /* ---- Paid card → «REVIEW» (Angelo, 14 Oct 2026) ----
    Every card in Paid has a gold REVIEW button. It opens the «domain connected + review» message in Angelo's
@@ -10009,11 +10270,16 @@ function mqPillRender(list){
   p.hidden=false; p.dataset.id=c.id;
 }
 let mqNotified={};
+/* 28 Nov 2026 (Angelo: «pop-ups every 2 seconds on how a meeting went — I don't like that, I log it either way»):
+   the window NEVER opens by itself any more — no pop-up when a meeting ends, no «next one» after a save, no computer ping,
+   no floating pill. It opens only when he taps: Home → «After meetings» (Log it / + Log a meeting), a meeting in the Calendar,
+   the card's «How did it go?», the Ad leads card. MQ_AUTO=true brings the old behaviour back. */
+const MQ_AUTO=false;
 function mqTick(quiet){
   if(!state) return;
   const list=mqPending();
-  mqPillRender(list);
-  if(quiet) return;
+  mqPillRender(MQ_AUTO?list:[]);
+  if(quiet || !MQ_AUTO) return;
   const c=list.find(x=>!mqAsked[x.id+'|'+mqSlot(x)]); if(!c) return;
   const key=c.id+'|'+mqSlot(c);
   if(document.visibilityState==='visible'){
@@ -10078,7 +10344,7 @@ function renderAfterMeet(){
       return `<div class="fu-row ext${over?' over':now?' now':''}"><span class="fu-day">${over?'late · ':''}${esc(mqDayLbl(u.day))}</span><div class="fu-tx" data-open="${c.id}"><b>${esc(c.name)}</b><i class="xt">${esc(u.what.join(' · '))}</i><small>bring it up${u.note?' · «'+esc(u.note)+'»':''}${c.day?' · met '+esc(fmtDay(c.day)):''}</small></div><div class="fu-act">${c.phone?`<a href="tel:${esc(c.phone)}" title="Call ${esc(c.phone)}">${IC.phone}</a>`:''}<button type="button" class="ok" data-updone="${c.id}|${u.id}" title="Done — offered / sold">✓</button></div></div>`; }).join('');
   if(thinking.length) h+=`<div class="fu-h">Thinking — no reminder set · ${thinking.length}</div>`+thinking.map(c=>{ const d=thinkDays(c), over=d>=THINK_DAYS;
       return `<div class="fu-row${over?' over':''}"><span class="fu-day">${d===0?'today':d+'d'}</span><div class="fu-tx" data-open="${c.id}"><b>${esc(c.name)}</b><small>${c.day?'met '+esc(fmtDay(c.day)):''}${lastSaid(c)?' · '+esc(lastSaid(c)):''}</small></div><div class="fu-act">${c.phone?`<a href="tel:${esc(c.phone)}">${IC.phone}</a>`:''}<button type="button" data-fuup="${c.id}">Update</button></div></div>`; }).join('');
-  if(!h) h='<div class="home-empty">Nobody waiting after a meeting. When a call ends, the CRM asks «How did it go?» by itself.</div>';
+  if(!h) h='<div class="home-empty">Nobody waiting after a meeting. To log one, press «+ Log a meeting» above or tap the meeting in the Calendar.</div>';
   el.innerHTML=h;
   el.querySelectorAll('[data-fuup]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); mqOpen(b.dataset.fuup); }));
   el.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); fuDone(b.dataset.fudone); }));
@@ -13486,7 +13752,8 @@ function renderAsap(){
     return `<li class="asap-row${t.hot?' hot':''}${t.done?' done':''}" data-id="${t.id}">
       <span class="grip" title="Drag to reorder">⋮⋮</span>
       <span class="n">${num}</span>
-      <input class="txt" value="${esc(t.text)}" maxlength="240" placeholder="Write anything…" spellcheck="false">
+      <span class="txt-w" data-v="${esc(t.text)}"><textarea class="txt" rows="1" maxlength="240" placeholder="Write anything…" spellcheck="false">${esc(t.text)}</textarea></span>
+      ${t.done?'':`<button class="ab mv" data-act="up" title="Move up" aria-label="Move up">↑</button><button class="ab mv" data-act="down" title="Move down" aria-label="Move down">↓</button>`}
       <button class="ab hot${t.hot?' on':''}" data-act="hot" title="${t.hot?'Remove super-high priority':'Super-high priority'}">🔥</button>
       <button class="ab" data-act="done" title="${t.done?'Reopen':'Done'}">${t.done?'↺':'✓'}</button>
       <button class="ab" data-act="del" title="Delete">✕</button>
@@ -13494,7 +13761,7 @@ function renderAsap(){
   }).join('');
   el.innerHTML=`${autoRows?`<ul class="asap-list auto">${autoRows}</ul>`:''}${items.length?`<ol class="asap-list">${rows}</ol>`:(autoRows?'':'<div class="asap-empty">Nothing here yet — type what needs doing first and press Enter. Press 🔥 on a line to make it red.</div>')}
     <div class="asap-add"><input id="asapNew" placeholder="＋ Add something to do ASAP — then Enter" maxlength="240" autocomplete="off"><button class="btn btn-brand" id="asapAddBtn">Add</button></div>
-    <div class="asap-foot"><span>${open} open${hot?` · <b style="color:var(--red)">${hot} super-high</b>`:''}</span>${items.some(t=>t.done)?'<button class="hc-link" id="asapClear">Clear done</button>':''}</div>`;
+    <div class="asap-foot"><span>${open} open${hot?` · <b style="color:var(--red)">${hot} super-high</b>`:''}</span><span class="asap-fb"><button class="hc-link" id="asapToday" title="Open the daily list: Do ASAP (red first) + Important notes">Today's list</button>${items.some(t=>t.done)?'<button class="hc-link" id="asapClear">Clear done</button>':''}</span></div>`;
   wireAsap(el);
 }
 function wireAsap(el){
@@ -13507,15 +13774,19 @@ function wireAsap(el){
   };
   $('#asapAddBtn').addEventListener('click',add);
   $('#asapNew').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); add(); } });
+  const tdy=$('#asapToday'); if(tdy) tdy.addEventListener('click',()=>openDay());
   const clr=$('#asapClear'); if(clr) clr.addEventListener('click',()=>{ state.asap=state.asap.filter(t=>!t.done); save(); renderAsap(); });
   el.querySelectorAll('.asap-row').forEach(row=>{
     const t=byId(row.dataset.id); if(!t) return;
     const txt=row.querySelector('.txt');
-    txt.addEventListener('change',()=>{ const v=txt.value.trim(); if(!v) state.asap=state.asap.filter(x=>x.id!==t.id); else t.text=v; save(); renderAsap(); });
+    txt.addEventListener('input',()=>{ txt.parentNode.dataset.v=txt.value; });
+    txt.addEventListener('change',()=>{ const v=txt.value.replace(/\s*\n+\s*/g,' ').trim(); if(!v) state.asap=state.asap.filter(x=>x.id!==t.id); else t.text=v; save(); renderAsap(); });
     txt.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); txt.blur(); } });
     row.querySelectorAll('.ab').forEach(b=>b.addEventListener('click',()=>{
       const a=b.dataset.act;
       if(a==='hot') t.hot=!t.hot;
+      else if(a==='up'||a==='down'){ const o=asapSorted().filter(x=>!x.done).map(x=>x.id), i=o.indexOf(t.id), j=i+(a==='up'?-1:1); if(i<0||j<0||j>=o.length) return;
+        [o[i],o[j]]=[o[j],o[i]]; o.forEach((x,k)=>{ const it=byId(x); if(it) it.sort=k; }); }
       else if(a==='done') t.done=!t.done;
       else if(a==='del') state.asap=state.asap.filter(x=>x.id!==t.id);
       save(); renderAsap();
@@ -13687,7 +13958,7 @@ function openModal(id, presetDay){
   $('#mFill').checked = c ? !!c.fill : false;
   renderSwatches();
   renderPays();
-  $('#overlay').classList.add('open'); $('#mName').focus();
+  $('#overlay').classList.add('open'); if(!('ontouchstart' in window)) $('#mName').focus();
 }
 function closeModal(){ $('#overlay').classList.remove('open'); editingId=null; }
 
@@ -16263,7 +16534,7 @@ function migrate20260922(){
   if(!state.meta.chatAutoSince){ state.meta.chatAutoSince=Date.now(); ch=true; }
   return ch;
 }
-function boot(){ document.body.dataset.view=document.querySelector('.tab.active').dataset.view; if(migrate20260922()) save(); $('#qlDate').value=todayIso(); if(migrateCallStats()){ save(); setTimeout(()=>toast('Cold-call statistics cleared — every month and the year start from your next logged call'),900); } renderAll(); Bookings.start(); setTimeout(()=>Chats.start(),3200); setTimeout(()=>Leads.pull(false),1500); setTimeout(()=>Reminders.pull(false),2600); setTimeout(()=>Brief.send(false),4000); }
+function boot(){ document.body.dataset.view=document.querySelector('.tab.active').dataset.view; if(migrate20260922()) save(); $('#qlDate').value=todayIso(); if(migrateCallStats()){ save(); setTimeout(()=>toast('Cold-call statistics cleared — every month and the year start from your next logged call'),900); } renderAll(); Bookings.start(); scheduleDay(9000); setTimeout(()=>Chats.start(),3200); setTimeout(()=>Leads.pull(false),1500); setTimeout(()=>Reminders.pull(false),2600); setTimeout(()=>Brief.send(false),4000); }
 let loggingIn=false;
 async function tryLogin(){
   if(loggingIn) return;
@@ -17365,70 +17636,52 @@ const Reminders={ list:[], today:'', state:'idle', err:'', lastAt:0, busy:false,
    today's meetings, then everything in «Do ASAP» (🔥 first). «Got it» closes it until tomorrow (state.meta.daySeen syncs, so it
    shows once a day on one device, not again on the phone). Opens again from Home → Client reminders → «Today». */
 function remCopy(r){ const t=remViber(r); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Viber text copied — paste it to '+r.client)).catch(()=>prompt('Copy the text:', t)); }
+/* 28 Nov 2026 (Angelo): the daily window shows ONLY (1) what is in Home → «Do ASAP» — the red ones first, the rest below —
+   and (2) right under it, in another colour, the «📌 Important notes — to do» list exactly as on the Board (rank, client,
+   ↑ ↓ ✓ ✕, drag). Meetings, reminders, callbacks and follow-ups stay on Home; they are not in this window any more. */
+function asapAuto(){                                   /* the renewal lines Home puts in «Do ASAP» by itself (a week or less) */
+  const tIso=todayIso(), in7=isoDate(new Date(Date.now()+7*864e5));
+  let rs=[]; try{ rs=liveRenewals().filter(r=>r.date && r.date<=in7).sort((a,b)=>String(a.date).localeCompare(String(b.date))); }catch(e){}
+  return rs.map(r=>{ const late=r.date<tIso, d=Math.round((Date.parse(r.date+'T00:00')-Date.parse(tIso+'T00:00'))/864e5);
+    return {r, late, when: late ? (d===-1?'1 day late':(-d)+' days late') : d===0?'renews today':d===1?'renews tomorrow':'renews in '+d+' days'}; });
+}
 function dayItems(){
-  const today=todayIso();
-  const rem=(Reminders.list||[]).filter(r=>!r.done && r.day<=today).sort((a,b)=>a.day.localeCompare(b.day));
-  const meet=(state&&state.clients||[]).filter(c=>c.day===today && !isTrashed(c) && c.stage!=='lost').concat(xbItems(today,today)).sort((a,b)=>String(a.time||'').localeCompare(String(b.time||'')));
-  ensureAsap(); const asap=state.asap.filter(t=>!t.done).sort((a,b)=>(b.hot-a.hot)||((a.sort||0)-(b.sort||0)));
-  let cbs=[]; try{ cbs=caEntries().filter(caDue).sort((a,b)=>((a.day||'')<today?0:1)-((b.day||'')<today?0:1) || caCmpDay(a,b)); }catch(e){}
-  let fus=[], ups=[]; try{ fus=fuList().filter(c=>c.fu.day<=today); ups=upsList().filter(x=>x.u.day<=today); }catch(e){}
-  return {rem, meet, asap, cbs, fus, ups, n:rem.length+meet.length+asap.length+cbs.length+fus.length+ups.length};
+  ensureAsap(); bnEnsure();
+  const open=asapSorted().filter(t=>!t.done), auto=asapAuto();
+  const notes=bnCurOpen();
+  return {hot:open.filter(t=>t.hot), rest:open.filter(t=>!t.hot), autoHot:auto.filter(a=>a.late), autoRest:auto.filter(a=>!a.late), notes,
+          nAsap:open.length+auto.length, n:open.length+auto.length+notes.length};
+}
+function dayRender(){
+  if(!state) return; const D=dayItems(); const body=$('#dayBody'); if(!body) return;
+  if(body.contains(document.activeElement) && document.activeElement.matches('.bn-t')) return;      /* never redraw under the note he is typing */
+  const d=new Date(); $('#dayTitle').textContent=(d.getHours()<12?'Good morning':d.getHours()<18?'Good afternoon':'Good evening')+' — do these first';
+  const nRed=D.hot.length+D.autoHot.length;
+  $('#daySub').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})+' · '+(D.n?(D.nAsap+' in Do ASAP'+(nRed?' ('+nRed+' red)':'')+' · '+D.notes.length+' important note'+(D.notes.length===1?'':'s')):'nothing waiting');
+  let k=0;
+  const row=t=>`<li class="dz-row${t.hot?' hot':''}" data-a="${esc(t.id)}"><span class="dz-n">${++k}</span><span class="dz-tx">${esc(t.text)}</span><button type="button" class="dz-ok" data-adone="${esc(t.id)}" title="Done">✓<span> Done</span></button></li>`;
+  const arow=a=>{ const r=a.r, ph=String(r.phone||'').replace(/[^\d+]/g,'');
+    return `<li class="dz-row auto${a.late?' hot':''}"><span class="dz-n">${IC.repeat}</span><span class="dz-tx">Call <b>${esc(r.name)}</b> — ${a.when} · ${fmtMoney2(r.value||0)}</span>${ph?`<a class="dz-call" href="tel:${esc(ph)}" title="Call ${esc(r.phone)}">${IC.phone}<span> Call</span></a>`:''}<button type="button" class="dz-go" data-dzgo="renewals">Open</button></li>`; };
+  const red=D.hot.map(row).join('')+D.autoHot.map(arow).join('');
+  const rest=D.rest.map(row).join('')+D.autoRest.map(arow).join('');
+  let h=`<section class="dz dz-asap"><div class="dz-h"><span class="dz-ttl">🚩 Do ASAP</span><span class="dz-c">${D.nAsap}</span><button type="button" class="dz-link" data-dzgo="home">Edit on Home ›</button></div>`
+    +(D.nAsap? (red?`<div class="dz-sub red">🔥 First — the red ones · ${nRed}</div><ol class="dz-list">${red}</ol>`:'')
+              +(rest?`<div class="dz-sub">${red?'Then':'To do'} · ${D.rest.length+D.autoRest.length}</div><ol class="dz-list">${rest}</ol>`:'')
+            : '<div class="dz-none">Nothing in Do ASAP. 👌</div>')
+    +`</section>`;
+  h+=`<section class="dz dz-notes"><div class="dz-h"><span class="dz-ttl">📌 Important notes — to do</span><span class="dz-c">${D.notes.length}</span><span class="dz-hint">#1 = most important · drag ⠿ or ↑ ↓</span></div>`
+    +`<ol class="bn-list">${D.notes.length?D.notes.map((n,i)=>bnRowHtml(n,i+1,false)).join(''):'<li class="bn-empty">No important notes. Add them on the Board → «📌 Important notes».</li>'}</ol></section>`;
+  body.innerHTML=h;
+  body.querySelectorAll('[data-adone]').forEach(b=>b.addEventListener('click',()=>{ const t=state.asap.find(x=>x.id===b.dataset.adone); if(!t) return; t.done=true; save(); try{ renderAsap(); }catch(e){} dayRender();
+    toastUndo('Done: '+t.text.slice(0,40), ()=>{ t.done=false; save(); try{ renderAsap(); }catch(e){} if($('#dayOverlay').classList.contains('open')) dayRender(); }); }));
+  body.querySelectorAll('[data-dzgo]').forEach(b=>b.addEventListener('click',()=>{ const v=b.dataset.dzgo; closeDay(); switchView(v); if(v==='home') setTimeout(()=>{ const c=document.querySelector('.asap-card'); if(c) c.scrollIntoView({block:'start',behavior:'smooth'}); },120); }));
+  const list=body.querySelector('.dz-notes .bn-list'); if(list) bnWireList(body.querySelector('.dz-notes'), list);
 }
 function openDay(){
-  if(!state) return; const {rem, meet, asap, cbs, fus, ups, n}=dayItems(); const today=todayIso();
-  /* 17 Oct 2026 (Angelo): today's important tasks + reminders FIRST, in their own panel; everything else below, clearly apart */
-  const isT=day=>!day||day>=today, isOld=day=>!!day&&day<today;
-  const asapToday=t=>t.hot || (t.from==='calendar' && t.created && new Date(t.created).toDateString()===new Date().toDateString());
-  const T={ asap:asap.filter(asapToday), rem:rem.filter(r=>isT(r.day)), meet, cbs:cbs.filter(e=>isT(e.day)), fus:fus.filter(c=>isT(c.fu.day)), ups:ups.filter(x=>isT(x.u.day)) };
-  const R={ rem:rem.filter(r=>isOld(r.day)), fus:fus.filter(c=>isOld(c.fu.day)), ups:ups.filter(x=>isOld(x.u.day)), cbs:cbs.filter(e=>isOld(e.day)), asap:asap.filter(t=>!asapToday(t)) };
-  const nT=Object.values(T).reduce((s,a)=>s+a.length,0), nR=Object.values(R).reduce((s,a)=>s+a.length,0);
-  const d=new Date(); $('#dayTitle').textContent=(d.getHours()<12?'Good morning':d.getHours()<18?'Good afternoon':'Good evening')+' — here is today';
-  $('#daySub').textContent=d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})+' · '+(n?(nT?nT+' for today':'nothing dated today')+(nR?' · '+nR+' more waiting':''):'nothing waiting');
-  const tel=p=>`<button onclick="location.href='tel:${esc(String(p).replace(/\s+/g,''))}'">Call</button>`;
-  const sec=(cls,t,k)=>`<div class="day-h ${cls}">${t} · ${k}</div>`;
-  const remRow=r=>`<div class="day-row${r.day<today?' over':''}" data-r="${esc(r.uid)}"><div class="tx"><b>${esc(r.client)}</b>${r.what?' — '+esc(r.what):''}${r.day<today?`<small>still open since ${esc(remDayLabel(r.day))}</small>`:''}</div><button data-rcopy="${esc(r.uid)}">Copy Viber text</button><button class="go" data-rdone="${esc(r.uid)}">✓ Done</button></div>`;
-  const fuRow=c=>`<div class="day-row${c.fu.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(c.fu.what)}${c.fu.day<today?`<small>was due ${esc(mqDayLbl(c.fu.day))}</small>`:''}</div>${c.phone?tel(c.phone):''}<button data-fuup="${c.id}">Update</button><button class="go" data-fudone="${c.id}">✓ Done</button></div>`;
-  const upRow=({c,u})=>`<div class="day-row${u.day<today?' over':''}"><div class="tx"><b>${esc(c.name)}</b> — ${esc(u.what.join(', '))}${u.note?`<small>«${esc(u.note)}»</small>`:''}${u.day<today?`<small>was due ${esc(mqDayLbl(u.day))}</small>`:''}</div>${c.phone?tel(c.phone):''}<button class="go" data-updone="${c.id}|${u.id}">✓ Done</button></div>`;
-  const meetRow=c=>`<div class="day-row"><span class="tm">${esc(c.time||'—')}</span><div class="tx"><b>${esc(c.name)}</b>${c.phone?`<small>${esc(c.phone)}</small>`:''}</div>${c.phone?tel(c.phone):''}<button data-open="${esc(c.id)}">Open</button></div>`;
-  const cbRow=e=>`<div class="day-row${e.day&&e.day<today?' over':''}"><span class="tm">${esc(e.day&&e.day<today?fmtDay(e.day):(e.time||'today'))}</span><div class="tx"><b>${esc(e.name)}</b> · ${CA_HOW[e.how][0]}${e.hot?' · <span style="color:var(--green);font-weight:800">almost booked</span>':''}${e.note&&e.note!==e.name?`<small>${esc(e.note)}</small>`:''}</div>${e.phone?(e.how==='sms'?`<button data-cbsms="${esc(e.key)}">SMS</button>`:`<button onclick="location.href='tel:${esc(caTel(e.phone))}'">Call</button>`):''}<button class="go" data-cbk="${esc(e.key)}">Open</button><button class="del" data-cbdel="${esc(e.key)}" title="Delete this call-back" aria-label="Delete">${IC.trash}</button></div>`;
-  const asapRow=t=>`<div class="day-row${t.hot?' hot':''}" data-a="${esc(t.id)}"><div class="tx">${t.hot?'🔥 ':'📌 '}${esc(t.text)}</div><button class="go" data-adone="${esc(t.id)}">✓ Done</button></div>`;
-  let h='';
-  if(n){
-    /* 1 · TODAY — the important tasks and the reminders of the day */
-    let t='';
-    if(T.asap.length) t+=sec('asap','🔥 Important today',T.asap.length)+T.asap.map(asapRow).join('');
-    if(T.rem.length) t+=sec('rem','⏰ Remind today',T.rem.length)+T.rem.map(remRow).join('');
-    if(T.meet.length) t+=sec('meet','📅 Meetings today',T.meet.length)+T.meet.map(meetRow).join('');
-    if(T.cbs.length) t+=sec('meet','📞 Callbacks today',T.cbs.length)+T.cbs.map(cbRow).join('');
-    if(T.fus.length) t+=sec('rem','🤝 Follow up after the meeting',T.fus.length)+T.fus.map(fuRow).join('');
-    if(T.ups.length) t+=sec('rem','➕ Extras to bring up',T.ups.length)+T.ups.map(upRow).join('');
-    if(!nT) t+='<div class="day-none">Nothing dated for today — below is what is still open.</div>';
-    h+=`<section class="day-today"><div class="day-ph"><span class="ttl">Today</span><span class="n">${nT}</span><span class="dt">${esc(d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'}))}</span></div>${t}</section>`;
-    /* 2 · everything else — still open from earlier days + the rest of Do ASAP */
-    if(nR){
-      let m='';
-      const old=R.rem.length+R.fus.length+R.ups.length+R.cbs.length;
-      if(R.rem.length) m+=sec('rem','⏰ Reminders still open',R.rem.length)+R.rem.map(remRow).join('');
-      if(R.fus.length) m+=sec('rem','🤝 Follow-ups still open',R.fus.length)+R.fus.map(fuRow).join('');
-      if(R.ups.length) m+=sec('rem','➕ Extras still open',R.ups.length)+R.ups.map(upRow).join('');
-      if(R.cbs.length) m+=sec('meet','📞 Missed callbacks',R.cbs.length)+R.cbs.map(cbRow).join('');
-      if(R.asap.length) m+=sec('asap','🚩 Do ASAP',R.asap.length)+R.asap.map(asapRow).join('');
-      h+=`<details class="day-more" open><summary><span>Also on your list</span><span class="n">${nR}</span>${old?`<span class="od">${old} from earlier days</span>`:''}<span class="chev" aria-hidden="true"></span></summary><div class="day-more-b">${m}</div></details>`;
-    }
-  } else h='<div class="home-empty">Nothing to remind, no meetings, nothing in Do ASAP. Enjoy the day.</div>';
-  try{ if(gmWorkday()){ const g=gmDayBlock(); h=h.includes('class="day-today"')? h.replace('</section>', g+'</section>') : g+h; } }catch(e){}
-  const body=$('#dayBody'); body.innerHTML=h;
-  body.querySelectorAll('[data-rcopy]').forEach(b=>b.addEventListener('click',()=>{ const r=Reminders.list.find(x=>x.uid===b.dataset.rcopy); if(r) remCopy(r); }));
-  body.querySelectorAll('[data-rdone]').forEach(b=>b.addEventListener('click',()=>{ Reminders.done(b.dataset.rdone,false); b.closest('.day-row').classList.add('done'); b.remove(); }));
-  body.querySelectorAll('[data-adone]').forEach(b=>b.addEventListener('click',()=>{ const t=state.asap.find(x=>x.id===b.dataset.adone); if(!t) return; t.done=true; save(); try{ renderAsap(); }catch(e){} b.closest('.day-row').classList.add('done'); b.remove(); toastUndo('Done: '+t.text.slice(0,40), ()=>{ t.done=false; save(); try{ renderAsap(); }catch(e){} openDay(); }); }));
-  body.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); openModal(b.dataset.open); }));
-  body.querySelectorAll('[data-fuup]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); mqOpen(b.dataset.fuup); }));
-  body.querySelectorAll('[data-updone]').forEach(b=>b.addEventListener('click',()=>{ const [cid,id]=b.dataset.updone.split('|'); upDone(cid,id); b.closest('.day-row').classList.add('done'); b.remove(); }));
-  body.querySelectorAll('[data-fudone]').forEach(b=>b.addEventListener('click',()=>{ fuDone(b.dataset.fudone); b.closest('.day-row').classList.add('done'); b.remove(); }));
-  body.querySelectorAll('[data-cbsms]').forEach(b=>b.addEventListener('click',()=>{ const e=caFind(b.dataset.cbsms); if(e) location.href=caSmsHref(e.phone, caText(e,'sms')); }));
-  body.querySelectorAll('[data-cbdel]').forEach(b=>b.addEventListener('click',()=>{ const e=caFind(b.dataset.cbdel); if(!e) return; caRemove(e); try{ renderLeads(); }catch(x){} const r=b.closest('.day-row'); r.classList.add('done'); r.querySelectorAll('button').forEach(x=>x.remove()); }));
-  body.querySelectorAll('[data-cbk]').forEach(b=>b.addEventListener('click',()=>{ closeDay(); switchView('callbacks'); setTimeout(()=>caModal(b.dataset.cbk),80); }));
-  $('#dayOverlay').classList.add('open'); setTimeout(()=>{ const ok=$('#dayOk'); if(ok) ok.focus(); },60);
+  if(!state) return;
+  document.querySelectorAll('.overlay.open').forEach(o=>{ if(o.id!=='dayOverlay' && o.id!=='loginScreen') o.classList.remove('open'); });
+  dayRender();
+  $('#dayOverlay').classList.add('open'); setTimeout(()=>{ const ok=$('#dayOk'); if(ok) ok.focus({preventScroll:true}); },60);
 }
 function closeDay(){ const ov=$('#dayOverlay'); if(!ov||!ov.classList.contains('open')) return; ov.classList.remove('open'); ensureMeta(); if(state.meta.daySeen!==todayIso()){ state.meta.daySeen=todayIso(); save(); } }
 /* once a day, the first time the CRM opens (or comes back to the front) on a new day — after the calendar was read */
@@ -17438,7 +17691,7 @@ function maybeDay(){
   if(state.meta.daySeen===todayIso()) return;
   if($('#dayOverlay').classList.contains('open')) return;
   if(document.querySelector('.overlay.open')) return;                     /* never on top of another window */
-  if(!dayItems().n && !gmWorkday()){ state.meta.daySeen=todayIso(); save(); return; }     /* nothing to show → no pop-up today */
+  if(!dayItems().n){ state.meta.daySeen=todayIso(); save(); return; }     /* nothing in Do ASAP and no important notes → no pop-up today */
   openDay();
 }
 function scheduleDay(ms){ clearTimeout(dayTimer); dayTimer=setTimeout(maybeDay, ms); }
@@ -17448,7 +17701,7 @@ function scheduleDay(ms){ clearTimeout(dayTimer); dayTimer=setTimeout(maybeDay, 
   ov.addEventListener('click',e=>{ if(e.target===ov) closeDay(); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape' && ov.classList.contains('open')) closeDay(); });
   document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') scheduleDay(2500); });
-  const tb=$('#remToday'); if(tb) tb.addEventListener('click',openDay);
+
 })();
 /* «📌 …» events in the Google Calendar «Advon Media» → «Do ASAP», once each (remembered in state.meta.asapIn, which syncs).
    Claude adds them from any chat («ASAP: call Nikos»), Angelo from the Calendar app; 🔥 in the title = super-high priority. */
@@ -17459,7 +17712,7 @@ function asapImport(list){
     const top=Math.min(0,...state.asap.map(t=>t.sort||0))-1;
     state.asap.push({id:uid(), text:String(a.text).trim().slice(0,240), hot:!!a.hot, done:false, created:Date.now(), sort:top, from:'calendar'}); added.push(a.text); });
   const cut=Date.now()-120*864e5; Object.keys(seen).forEach(k=>{ if(seen[k]<cut) delete seen[k]; });
-  if(added.length){ save(); try{ renderAsap(); }catch(e){} toast((added.length===1?'Added to Do ASAP: «'+added[0].slice(0,50)+'»':added.length+' things added to Do ASAP')+' — from your calendar', true); }
+  if(added.length){ save(); try{ renderAsap(); }catch(e){} try{ if($('#dayOverlay').classList.contains('open')) dayRender(); }catch(e){} toast((added.length===1?'Added to Do ASAP: «'+added[0].slice(0,50)+'»':added.length+' things added to Do ASAP')+' — from your calendar', true); }
 }
 const remDayLabel=day=>{ const [y,m,d]=day.split('-').map(Number); const dt=new Date(y,m-1,d); const t=new Date(); const dd=Math.round((dt-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5); const s=dt.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'}); return dd===0?'Today':dd===1?'Tomorrow':dd===-1?'Yesterday':s; };
 function remViber(r){ return r.viber||('Καλημέρα σας'+(/[Α-Ωα-ω]/.test(r.client)?' κ. '+r.client:'')+'! Ελπίζω να είστε καλά.\n\nΜια μικρή υπενθύμιση για την ιστοσελίδα σας — για να προχωρήσουμε θα χρειαστούμε: '+(r.what||'ό,τι είχαμε πει').replace(/[.\s]+$/,'')+'.\n\nΜπορείτε να μου τα στείλετε εδώ στο Viber ή στο advonmd@gmail.com (αρχεία πάνω από 4 MB μέσω wetransfer.com). Μόλις τα έχω, συνεχίζω αμέσως.\n\nΕυχαριστώ πολύ!'); }
@@ -19001,6 +19254,119 @@ function adlCountUp(box){
     requestAnimationFrame(step); setTimeout(()=>{ if(el.isConnected) el.textContent=f(to); },D+300);
   });
 }
+</script>
+<script id="mob-js">
+/* ==================================================================================================
+   PHONE v2 (28 Nov 2026) — bottom bar + «More» sheet + page name in the header + folded money cards.
+   Nothing here changes data. The original tab buttons stay in the page (hidden on the phone) and every
+   bottom-bar / sheet button simply presses the original one, so every tab keeps working exactly as before.
+   BN_MAIN = the four screens on the bottom bar (change the list to swap them).
+   ================================================================================================== */
+(function phoneShell(){
+  const $q=s=>document.querySelector(s);
+  const tabsNav=$q('.tabs'); if(!tabsNav) return;
+  const BN_MAIN=['home','adl','board','calendar'];
+  const LBL={home:'Home',chats:'Chats',quicklog:'Quick Log',leads:'Leads',adl:'Ad leads',board:'Board',calendar:'Calendar',callbacks:'Callbacks',monthly:'Monthly',renewals:'Renewals',remaining:'Remaining',year:'Year',money:'Money',meta:'Meta',xs:'Ads & Social'};
+  const P={
+    home:'<path d="M3.5 11 12 3.5l8.5 7.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5h4v5"/>',
+    chats:'<path d="M4 5.5h16v10.5H9.5L5 20v-4H4z"/>',
+    quicklog:'<path d="M12 20h8.5"/><path d="M16.2 3.8a2.1 2.1 0 0 1 3 3L7.5 18.5l-4 1 1-4z"/>',
+    leads:'<circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5a6.2 6.2 0 0 1 12.4 0"/><path d="M15.5 4.9a3.4 3.4 0 0 1 0 6.3M17.6 14.4a6.2 6.2 0 0 1 3.6 5.1"/>',
+    adl:'<path d="M12 3c.8 3.4 5 5.4 5 10a5 5 0 0 1-10 0c0-2 .9-3.4 2-4.4 0 1.9 1 2.9 2 2.9.5-2.9-1-5 1-8.5z"/>',
+    board:'<rect x="3" y="4" width="5" height="16" rx="1.6"/><rect x="9.5" y="4" width="5" height="11" rx="1.6"/><rect x="16" y="4" width="5" height="7" rx="1.6"/>',
+    calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    callbacks:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
+    monthly:'<path d="m17 2 4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+    renewals:'<path d="M20 11A8 8 0 0 0 5.1 8M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.9 3M20 20v-4h-4"/>',
+    remaining:'<path d="M5 3h14M5 21h14M6.5 3c0 5 5.5 5.5 5.5 9s-5.5 4-5.5 9M17.5 3c0 5-5.5 5.5-5.5 9s5.5 4 5.5 9"/>',
+    year:'<path d="M3 20h18M6 20v-9M12 20V4M18 20v-6"/>',
+    money:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.6a4.4 4.4 0 1 0 0 6.8M7 11h6M7 13.5h5"/>',
+    meta:'<rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><path d="M17.4 6.6h.01"/>',
+    xs:'<path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M17 9a4 4 0 0 1 0 6"/>',
+    more:'<path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3.4"/>'
+  };
+  const ico=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${P[k]||P.more}</svg>`;
+  const tabs=[...tabsNav.querySelectorAll('.tab[data-view]')];
+  const lbl=v=>LBL[v]||v;
+
+  /* page name in the header */
+  const title=document.createElement('span'); title.className='bnav-title'; title.id='bnavTitle'; $q('.brand').appendChild(title);
+
+  /* bottom bar */
+  const nav=document.createElement('nav'); nav.className='bnav'; nav.id='bnav'; nav.setAttribute('aria-label','Main screens');
+  nav.innerHTML=BN_MAIN.filter(v=>tabs.some(t=>t.dataset.view===v)).map(v=>`<button type="button" data-bv="${v}">${ico(v)}<span>${lbl(v)}</span><i class="bnav-b" hidden></i></button>`).join('')
+    +`<button type="button" data-bmore aria-haspopup="true">${ico('more')}<span>More</span><i class="bnav-b" hidden></i></button>`;
+  document.body.appendChild(nav);
+
+  /* «More» sheet */
+  const sh=document.createElement('div'); sh.className='bsh'; sh.id='bsh';
+  sh.innerHTML=`<div class="bsh-bg" data-bclose></div><div class="bsh-panel" role="dialog" aria-label="All screens"><div class="bsh-grab" data-bclose></div>
+    <div class="bsh-h">All screens</div><div class="bsh-grid">${tabs.map(t=>`<button type="button" data-bv="${t.dataset.view}">${ico(t.dataset.view)}<span>${lbl(t.dataset.view)}</span><i class="bnav-b" hidden></i></button>`).join('')}</div>
+    <div class="bsh-h">Tools</div><div class="bsh-tools" id="bshTools"></div></div>`;
+  document.body.appendChild(sh);
+  const openSheet=()=>{ sh.classList.add('open'); }, closeSheet=()=>{ sh.classList.remove('open'); document.querySelectorAll('#bshTools .export-menu.open').forEach(m=>m.classList.remove('open')); };
+
+  const go=v=>{ const t=tabs.find(x=>x.dataset.view===v); if(!t) return; closeSheet(); t.click(); window.scrollTo(0,0); };
+  nav.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; if(b.hasAttribute('data-bmore')){ sh.classList.contains('open')?closeSheet():openSheet(); return; } go(b.dataset.bv); });
+  sh.addEventListener('click',e=>{ if(e.target.closest('[data-bclose]')){ closeSheet(); return; } const b=e.target.closest('.bsh-grid button'); if(b){ go(b.dataset.bv); return; }
+    if(e.target.closest('#logoutBtn,#ideasBtn,#dashBtn')) closeSheet(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+
+  /* keep the bar, the sheet and the page name in step with the real tabs (active tab + red numbers) */
+  const badge=t=>{ const n=t.querySelector('.tab-n'); if(!n || n.hidden) return ''; const v=(n.textContent||'').trim(); return v && v!=='0' ? v : ''; };
+  let raf=0;
+  function sync(){ raf=0;
+    const act=(tabs.find(t=>t.classList.contains('active'))||tabs[0]).dataset.view;
+    title.textContent=lbl(act);
+    let more=0;
+    tabs.forEach(t=>{ const v=t.dataset.view, b=badge(t);
+      document.querySelectorAll(`.bnav [data-bv="${v}"], .bsh-grid [data-bv="${v}"]`).forEach(el=>{ el.classList.toggle('on',v===act); const i=el.querySelector('.bnav-b'); if(i){ i.hidden=!b; i.textContent=b; } });
+      if(b && !BN_MAIN.includes(v)) more+=(+b||1); });
+    const mb=nav.querySelector('[data-bmore]'); mb.classList.toggle('on',!BN_MAIN.includes(act)); const mi=mb.querySelector('.bnav-b'); mi.hidden=!more; mi.textContent=more>99?'99+':more;
+  }
+  const ask=()=>{ if(!raf) raf=requestAnimationFrame(sync); };
+  new MutationObserver(ask).observe(tabsNav,{subtree:true,attributes:true,childList:true,characterData:true,attributeFilter:['class','hidden']});
+  sync();
+
+  /* the tools (dark mode, lock, export, apps, ideas, dashboard) live in «More» on the phone and in the header on the computer */
+  const mq=window.matchMedia('(max-width:760px)');
+  const TOOLS=['#themeBtn','#logoutBtn','.export-wrap:not(.apps-wrap)','.export-wrap.apps-wrap','#ideasBtn','#dashBtn'];
+  function place(){ const box=mq.matches?$q('#bshTools'):$q('.topbar-right'); if(!box) return;
+    TOOLS.forEach(s=>{ const el=$q(s); if(el && el.parentNode!==box) box.appendChild(el); }); if(!mq.matches) closeSheet(); }
+  (mq.addEventListener?mq.addEventListener('change',place):mq.addListener(place)); place();
+
+  /* the money cards: one line on the phone, tap to open (remembered on this phone) */
+  const strip=$q('#strip'), pills=strip&&strip.querySelector('.stat-pills');
+  if(strip && pills){
+    const sum=document.createElement('button'); sum.type='button'; sum.className='strip-sum'; sum.id='stripSum'; sum.setAttribute('aria-expanded','false');
+    strip.insertBefore(sum,pills);
+    try{ if(localStorage.getItem('advon_m_strip')==='1') strip.classList.add('m-open'); }catch(e){}
+    const txt=s=>{ const el=$q(s); if(!el) return ''; const c=el.cloneNode(true); c.querySelectorAll('small,span,i').forEach(x=>x.remove()); return (c.textContent||'').trim(); };
+    const paint=()=>{ const bank=txt('#statEarned'), nw=txt('#statTargetPill .mx-big'); const owed=((($q('#statNewPill')||{}).textContent||'').match(/[€\d.,\s-]+/)||[''])[0].trim();
+      const open=strip.classList.contains('m-open'); sum.setAttribute('aria-expanded',open?'true':'false');
+      sum.innerHTML=`<span class="g">In the bank<b>${bank||'—'}</b></span><span class="b">New<b>${nw||'—'}</b></span>${owed?`<span class="r">To collect<b>${owed}</b></span>`:''}`; };
+    let pr=0; const askP=()=>{ if(!pr) pr=requestAnimationFrame(()=>{ pr=0; paint(); }); };
+    new MutationObserver(askP).observe(pills,{subtree:true,childList:true,characterData:true});
+    sum.addEventListener('click',()=>{ const o=strip.classList.toggle('m-open'); try{ localStorage.setItem('advon_m_strip',o?'1':'0'); }catch(e){} paint(); });
+    paint();
+  }
+  /* the header's real height, for anything that sits right under it (open chat, stage pills) */
+  const tbFit=()=>{ const tb=$q('.topbar'); if(tb) document.documentElement.style.setProperty('--tbh',Math.round(tb.getBoundingClientRect().height)+'px'); };
+  window.addEventListener('resize',tbFit); setTimeout(tbFit,60); setTimeout(tbFit,1600);
+
+  /* Board on the phone: a row of stage pills that jump to that column */
+  const board=$q('#board');
+  if(board){
+    const bar=document.createElement('div'); bar.className='bstg'; bar.id='bStages'; bar.setAttribute('aria-label','Jump to a stage'); board.parentNode.insertBefore(bar,board);
+    const cols=()=>[...board.querySelectorAll(':scope > .col')];
+    const draw=()=>{ bar.innerHTML=cols().map((c,i)=>{ const n=(c.querySelector('.col-head .name')||{}).textContent||'', k=(c.querySelector('.col-head .count')||{}).textContent||'';
+        return `<button type="button" data-bcol="${i}" style="--c:${(c.style.getPropertyValue('--c')||'#94A3B8').replace(/"/g,'')}"><i></i>${n.replace(/[<>&]/g,'')}<b>${k.replace(/[<>&]/g,'')}</b></button>`; }).join(''); };
+    let br=0; new MutationObserver(()=>{ if(!br) br=requestAnimationFrame(()=>{ br=0; draw(); }); }).observe(board,{childList:true});
+    bar.addEventListener('click',e=>{ const b=e.target.closest('[data-bcol]'); if(!b) return; const c=cols()[+b.dataset.bcol]; if(!c) return;
+      board.scrollTo({left:c.offsetLeft-board.offsetLeft-12, behavior:'smooth'}); const top=bar.getBoundingClientRect().top; if(top>80) window.scrollBy({top:top-64, behavior:'smooth'}); });
+    draw();
+  }
+})();
 </script>
 </body>
 </html>
