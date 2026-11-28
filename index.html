@@ -2564,6 +2564,18 @@ body.dark .tab.tab-meta:not(.active){color:#ff7ab8;}
 body.dark .c-doubt{background:rgba(214,48,49,.14);color:#FF9B93}
 body.dark .c-doubt.due{background:rgba(255,138,0,.14);color:#FFB65C}
 body.dark .card.unsure .chip.money{background:repeating-linear-gradient(135deg,rgba(214,48,49,.28) 0 4px,rgba(214,48,49,.1) 4px 8px);color:#FF9B93}
+/* pin to the top of a stage (28 Nov 2026) */
+.card .c-pin{position:absolute;top:7px;right:88px;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;color:var(--muted);opacity:0;transition:opacity .12s,color .12s,background .12s;border:0;background:none;cursor:pointer;padding:0}
+.card:hover .c-pin{opacity:1}
+.card .c-pin:hover{background:var(--bg);color:var(--ink)}
+.card .c-pin.on{display:none}
+@media (hover:none){ .card .c-pin{opacity:.45} }
+.card.is-pinned{box-shadow:0 0 0 1.5px #F59E0B66}
+.c-pinned{display:inline-grid;place-items:center;width:20px;height:20px;margin-right:5px;border-radius:6px;background:#FEF3C7;color:#B45309;vertical-align:-4px;cursor:pointer;transform:rotate(-20deg)}
+.c-pinned svg{width:12px;height:12px}
+.m-pin{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:13px}
+.m-pin.on{background:#FFFBEB;border-color:#FCD34D}
+@media (max-width:760px){ .card .c-pin{min-width:34px;min-height:34px} }
 .card .c-unsure{position:absolute;top:7px;right:61px;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:13px;font-weight:800;opacity:0;transition:opacity .12s;border:0;background:none;cursor:pointer;font-family:inherit;padding:0}
 .card:hover .c-unsure{opacity:1}
 .card .c-unsure:hover{background:#FFF1F1;color:#B42318}
@@ -5195,6 +5207,19 @@ body.dark .mny-only .v{color:#3BDD95;}
 .bn-add{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) auto;gap:6px;padding:6px 10px 10px}
 .bn-add select,.bn-add input{min-width:0;height:34px;border:1px solid var(--line);border-radius:10px;padding:0 9px;font:inherit;font-size:12.5px;background:#fff;color:inherit}
 .bn-add button{height:34px;border:0;border-radius:10px;padding:0 13px;background:#E11D48;color:#fff;font-weight:700;font-size:12.5px;font-family:inherit;cursor:pointer;white-space:nowrap}
+/* notes: optional, searchable client (28 Nov 2026) */
+.bn-add .bn-cl{position:relative;min-width:0;display:flex;align-items:center}
+.bn-add .bn-cl input{width:100%}
+.bn-cl.picked{height:34px;box-sizing:border-box;gap:6px;border:1px solid var(--line);border-radius:10px;padding:3px 4px 3px 8px;background:var(--surface,#fff);min-height:36px}
+.bn-chip{flex:1;min-width:0;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bn-chip small{font-weight:500;color:var(--muted);margin-left:6px}
+.bn-add .bn-clr{height:28px;padding:0;color:var(--muted);border:0;background:var(--bg);border-radius:8px;width:28px;height:28px;cursor:pointer;color:var(--muted);flex:none}
+.bn-add .bn-clr:hover{color:var(--ink)}
+.bn-sug{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:60;list-style:none;margin:0;padding:4px;background:var(--surface,#fff);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.14);max-height:300px;overflow:auto;min-width:240px}
+.bn-sug li{padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.bn-sug li small{font-size:11px;font-weight:600;white-space:nowrap}
+.bn-sug li.on,.bn-sug li[data-i]:hover{background:var(--bg)}
+.bn-sug li.none{color:var(--muted);cursor:default}
 .bn-tools{display:flex;gap:10px;align-items:center;padding:0 12px 10px;font-size:11.5px;color:var(--muted)}
 .bn-tools button{border:0;background:none;color:var(--muted);font:inherit;cursor:pointer;padding:2px 0;text-decoration:underline;text-underline-offset:2px}
 .bn-done .bn-row{opacity:.65}.bn-done .bn-t{text-decoration:line-through}
@@ -5374,6 +5399,7 @@ body.dark .dz-notes .bn-row.p1{background:#1F2347; border-color:#3B3F8F;}
   .bn-row{grid-template-columns:24px minmax(0,1fr); grid-template-areas:"n w" "n t" "n a"; gap:4px 8px; padding:9px 8px 7px;}
   .bn-n{align-self:start; margin-top:4px;} .bn-acts{justify-self:end; gap:6px;} .bn-t{font-size:15px !important; padding:3px 4px; line-height:1.4;}
   .bn-add select,.bn-add input,.bn-add button{height:44px;}
+  .bn-cl.picked{height:44px;} .bn-add .bn-cl input{font-size:16px;}
 
 
   /* ----- Home rows that were squeezed ----- */
@@ -6129,6 +6155,7 @@ body.dark .dz-notes .bn-row.p1{background:#1F2347; border-color:#3B3F8F;}
         <div class="field"><label>Stage</label><select id="mStage"></select></div>
       </div>
       <div class="field cj-field" id="mJourneyF" hidden><label>Where from · the meeting · how it went</label><div id="mJourney"></div></div>
+      <div class="field" id="mPinF" hidden><label>Pin <span style="font-weight:400;text-transform:none;letter-spacing:0;">(first card in its stage)</span></label><div id="mPin"></div></div>
       <div class="field" id="mDoubtF" hidden><label>Will they pay? <span style="font-weight:400;text-transform:none;letter-spacing:0;">(not sure = left out of New money until they pay)</span></label><div id="mDoubt"></div></div>
       <div class="field">
         <label>Extra services sold <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional — added on top of the value)</span></label>
@@ -7772,6 +7799,28 @@ function dbListOpen(){
     <p class="db-hint">Tap a name to change it. When someone pays, press Paid / Renewed as usual — the money counts again by itself.</p>`;
   $('#dbOverlay').classList.add('open');
 }
+/* ---------- PIN a card to the top of its stage (Angelo, 28 Nov 2026) ----------
+   c.pin = {st:<stage id>, at:<ms>}. A pinned card is the first one in its column / tray, newest pin on top.
+   The pin belongs to that stage: move the card to another stage and it is no longer pinned there. */
+function cPinned(c){ return !!(c && c.pin && c.pin.st===c.stage); }
+function pinCmp(a,b){ const pa=cPinned(a), pb=cPinned(b); if(pa!==pb) return pa?-1:1; return pa ? (b.pin.at||0)-(a.pin.at||0) : 0; }
+function pinToggle(id){
+  const c=state.clients.find(x=>x.id===id); if(!c) return;
+  const was=cPinned(c), st=stageById(c.stage);
+  if(was) delete c.pin; else c.pin={st:c.stage, at:Date.now()};
+  c.updated=Date.now(); save(); renderAll(); try{ mPinRender(); }catch(e){}
+  toastUndo(was ? c.name+' unpinned' : '📍 '+c.name+' pinned to the top of '+(st?st.name:'its stage'),
+    ()=>{ if(was) c.pin={st:c.stage, at:Date.now()}; else delete c.pin; c.updated=Date.now(); save(); renderAll(); try{ mPinRender(); }catch(e){} });
+}
+function mPinRender(){
+  const f=$('#mPinF'), el=$('#mPin'); if(!f||!el) return;
+  const c=editingId ? state.clients.find(x=>x.id===editingId) : null;
+  if(!c || c.trashed){ f.hidden=true; return; }
+  f.hidden=false; const st=stageById(c.stage), on=cPinned(c);
+  el.innerHTML=`<div class="m-pin${on?' on':''}"><span>${on?'📍 <b>Pinned</b> — first in '+esc(st?st.name:''):'Not pinned'}</span><button type="button" class="btn btn-ghost" data-pin="${esc(c.id)}">${on?'Unpin':'📍 Pin to the top of '+esc(st?st.name:'its stage')}</button></div>`;
+}
+document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('[data-pin]'); if(!b) return; e.stopPropagation(); e.preventDefault(); pinToggle(b.dataset.pin); },true);
+['mousedown','pointerdown','dragstart'].forEach(ev=>document.addEventListener(ev,e=>{ if(e.target.closest&&e.target.closest('[data-pin]')) e.stopPropagation(); },true));
 function mDoubtRender(){
   const f=$('#mDoubtF'), el=$('#mDoubt'); if(!f||!el) return;
   const c=editingId ? state.clients.find(x=>x.id===editingId) : null;
@@ -8246,7 +8295,7 @@ function renderBookedTray(mc){
   const ahead=bkAheadMap();
   const up=state.clients.filter(c=>bkIsUpcoming(c,ahead)).map(c=>{
     const b=ahead[c.id]; return {c, day:(b&&b.day)||c.day, time:(b&&b.time)||c.time};
-  }).sort((a,b)=>bkStartMs(a.day,a.time)-bkStartMs(b.day,b.time));
+  }).sort((a,b)=>pinCmp(a,b)||(bkStartMs(a.day,a.time)-bkStartMs(b.day,b.time)));
   const upIds=new Set(up.map(x=>x.c.id));
   const rest=mc.filter(c=>c.stage==='booked' && !upIds.has(c.id));
   const done=rest.filter(c=>c.day && bkStartMs(c.day,c.time) && !bkStillAhead(c.day,c.time));
@@ -8472,7 +8521,7 @@ function renderBoard(){
   /* Two horizontal trays: Booked (new) and Important notes (26 Nov 2026; «Making changes» removed — those cards are in Draft · Review) */
   const tray=(sel,stageId,label,hint)=>{
     const st=stageById(stageId);
-    const items=mc.filter(c=>c.stage===stageId && !nsOnBoard(c)).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
+    const items=mc.filter(c=>c.stage===stageId && !nsOnBoard(c)).sort((a,b)=>pinCmp(a,b)||((a.day||'9')<(b.day||'9')?-1:1));
     const sum=items.filter(c=>!notSure(c)).reduce((a,c)=>a+cval(c),0), unS=items.filter(notSure).reduce((a,c)=>a+cowed(c),0);
     const el=$(sel);
     el.innerHTML=`
@@ -8500,7 +8549,7 @@ function renderBoard(){
       <div class="col-sum">${tot?`<small class="un" title="Not sure they will pay — not counted">${fmtMoney(tot)} ? not counted</small>`:'—'}</div>
       <div class="col-body" data-stage="unsure">${unsure.length?'':'<div class="empty-col">Drop a card here if you\'re not sure they\'ll pay</div>'}</div>`;
     const body=ns.querySelector('.col-body');
-    unsure.sort((a,b)=>(dbDue(b)-dbDue(a))||(NS_WORK.indexOf(a.stage)-NS_WORK.indexOf(b.stage))||(cowed(b)-cowed(a))).forEach(c=>{
+    unsure.sort((a,b)=>pinCmp(a,b)||(dbDue(b)-dbDue(a))||(NS_WORK.indexOf(a.stage)-NS_WORK.indexOf(b.stage))||(cowed(b)-cowed(a))).forEach(c=>{
       const st=stageById(c.stage), card=cardEl(c,st);
       const tag=document.createElement('div'); tag.className='ns-stage'; tag.style.setProperty('--sc',st.hex);
       tag.innerHTML=`<i></i>${esc(st.name)}`; tag.title='Its stage on the Board — drag it into a column when you are sure they will pay';
@@ -8508,7 +8557,7 @@ function renderBoard(){
     nsDropHandlers(body);
     board.appendChild(ns); }
   FLOW.filter(s=>s.id!=='booked').forEach(st=>{
-    const items=mc.filter(c=>c.stage===st.id && !nsOnBoard(c)).sort((a,b)=>(a.day||'9')<(b.day||'9')?-1:1);
+    const items=mc.filter(c=>c.stage===st.id && !nsOnBoard(c)).sort((a,b)=>pinCmp(a,b)||((a.day||'9')<(b.day||'9')?-1:1));
     const sum=items.filter(c=>!notSure(c)).reduce((a,c)=>a+cval(c),0), unS=items.filter(notSure).reduce((a,c)=>a+cowed(c),0);
     const col=document.createElement('div');
     col.className='col'; col.style.setProperty('--c',st.c); col.style.setProperty('--cs',st.cs);
@@ -8566,6 +8615,38 @@ function bnPickerHtml(mc, sel){
     <optgroup label="This month">${now.map(o).join('')}</optgroup>
     <optgroup label="Other clients (most recent first)">${other.map(o).join('')}</optgroup>
     <option value="-"${sel==='-'?' selected':''}>— No client (general note)</option>`;
+}
+/* client for a note is OPTIONAL, with a search box (Angelo, 28 Nov 2026): leave it empty = general note.
+   Type part of a name / phone (accents & Latin/Greek don't matter) → pick from the list; ✕ clears it. */
+function bnNorm(x){ return String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+function bnLat(x){ try{ return bnNorm(chTranslit(String(x||''))); }catch(e){ return bnNorm(x); } }
+function bnClientField(){
+  const c=bnDraft.cid&&bnDraft.cid!=='-' ? state.clients.find(x=>x.id===bnDraft.cid) : null;
+  if(c){ const st=stageById(c.stage); return `<div class="bn-cl picked"><span class="bn-chip" title="This note is for ${esc(c.name)}">${esc(c.name)}${st?`<small>${esc(st.name)}</small>`:''}</span><button type="button" class="bn-clr" data-bn-clr title="No client (general note)">✕</button></div>`; }
+  return `<div class="bn-cl"><input name="q" type="search" placeholder="Client (optional) — search…" aria-label="Client (optional)" autocomplete="off" spellcheck="false"><ul class="bn-sug" hidden></ul></div>`;
+}
+function bnWireClientField(form, mc){
+  const box=form.querySelector('.bn-cl'); if(!box) return;
+  const clr=box.querySelector('[data-bn-clr]');
+  if(clr){ clr.addEventListener('click',()=>{ try{ document.activeElement.blur(); }catch(e){} bnDraft.cid=''; renderNotesTray(mc); const f=$('#notesTray .bn-add'); if(f&&f.q) f.q.focus(); }); return; }
+  const q=box.querySelector('input'), ul=box.querySelector('.bn-sug'); let hits=[], k=0;
+  const ids=new Set(mc.map(c=>c.id));
+  const pool=()=>state.clients.filter(c=>!isTrashed(c));
+  const find=t=>{ const n=bnNorm(t).trim(), L=bnLat(t).trim(), d=String(t).replace(/\D/g,'');
+    let r=pool();
+    if(n){ r=r.filter(c=>{ const nm=bnNorm(c.name), lt=bnLat(c.name); return nm.includes(n)||lt.includes(L)||lt.includes(n)||(d.length>=4 && String(c.phone||'').replace(/\D/g,'').includes(d)); }); }
+    return r.sort((a,b)=>(ids.has(b.id)-ids.has(a.id)) || ((b.updated||b.created||0)-(a.updated||a.created||0))).slice(0,8); };
+  const draw=()=>{ hits=find(q.value); k=0;
+    if(!hits.length){ ul.innerHTML='<li class="none">No client found — the note will be general</li>'; ul.hidden=false; return; }
+    ul.innerHTML=hits.map((c,i)=>{ const st=stageById(c.stage); return `<li data-i="${i}" class="${i===k?'on':''}">${esc(c.name)}${st?`<small style="color:${st.hex}">${esc(st.name)}</small>`:''}</li>`; }).join(''); ul.hidden=false; };
+  const pick=i=>{ const c=hits[i]; if(!c) return; bnDraft.cid=c.id; bnDraft.text=form.text.value; try{ q.blur(); }catch(e){} renderNotesTray(mc); const f=$('#notesTray .bn-add'); if(f&&f.text) f.text.focus(); };
+  q.addEventListener('focus',draw); q.addEventListener('input',draw);
+  q.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); if(ul.hidden) draw(); k=Math.max(0,Math.min(hits.length-1,k+(e.key==='ArrowDown'?1:-1))); ul.querySelectorAll('li[data-i]').forEach(li=>li.classList.toggle('on',+li.dataset.i===k)); }
+    else if(e.key==='Enter'){ if(!ul.hidden && hits.length && q.value.trim()){ e.preventDefault(); pick(k); } }
+    else if(e.key==='Escape'){ ul.hidden=true; } });
+  ul.addEventListener('mousedown',e=>{ const li=e.target.closest('li[data-i]'); if(!li) return; e.preventDefault(); pick(+li.dataset.i); });
+  q.addEventListener('blur',()=>setTimeout(()=>{ ul.hidden=true; },120));
 }
 function bnRowHtml(n, rank, done){
   const c=bnClient(n), st=c?stageById(c.stage):null;
@@ -8645,7 +8726,7 @@ function renderNotesTray(mc){
     <div class="tray-drop">
       <ol class="bn-list">${open.length?open.map((n,i)=>bnRowHtml(n,i+1,false)).join(''):'<li class="bn-empty">Nothing to do — write a note below, or drop a client card here.</li>'}</ol>
       <form class="bn-add" autocomplete="off">
-        <select name="cid" aria-label="Client">${bnPickerHtml(mc, bnDraft.cid)}</select>
+        ${bnClientField()}
         <input name="text" value="${esc(bnDraft.text)}" placeholder="e.g. send him what we have done" aria-label="Note">
         <button type="submit">＋ Add</button>
       </form>
@@ -8653,11 +8734,13 @@ function renderNotesTray(mc){
       ${bnShowDone&&doneShown.length?`<ol class="bn-list bn-done">${doneShown.map(n=>bnRowHtml(n,0,true)).join('')}</ol>`:''}
     </div>`;
   const drop=el.querySelector('.tray-drop'), list=el.querySelector('.bn-list:not(.bn-done)'), form=el.querySelector('.bn-add');
-  form.cid.addEventListener('change',()=>{ bnDraft.cid=form.cid.value; form.text.focus(); });
+  bnWireClientField(form, mc);
   form.text.addEventListener('input',()=>{ bnDraft.text=form.text.value; });
-  form.addEventListener('submit',e=>{ e.preventDefault(); bnDraft.text=form.text.value; const v=form.cid.value;
-    if(!v){ toast('Pick the client first (or «No client»)'); form.cid.focus(); return; }
-    bnAdd(v==='-'?null:v, form.text.value); });
+  form.addEventListener('submit',e=>{ e.preventDefault(); bnDraft.text=form.text.value; const t=form.text.value;
+    if(!String(t).trim()){ toast('Write the note first'); form.text.focus(); return; }
+    try{ document.activeElement.blur(); }catch(err){}
+    bnAdd(bnDraft.cid&&bnDraft.cid!=='-'?bnDraft.cid:null, t);
+    const f=$('#notesTray .bn-add'); if(f&&f.text) f.text.focus(); });
   bnWireList(el, list);
   const isBn=e=>Array.from(e.dataTransfer.types||[]).includes('application/x-bn');
   drop.addEventListener('dragover',e=>{ if(isBn(e)) return; e.preventDefault(); drop.classList.add('dragover'); });
@@ -8790,7 +8873,7 @@ function renderThinkTray(){
   const t=todayIso();
   const all=state.clients.filter(c=>c.stage==='thinking' && !isTrashed(c));
   /* active = this month's Thinking + any Later whose check-back day has come; quiet = Later, not yet */
-  const items=all.filter(c=> c.later ? laterDue(c) : c.month===curMonth).sort(thinkSort);
+  const items=all.filter(c=> c.later ? laterDue(c) : c.month===curMonth).sort((a,b)=>pinCmp(a,b)||thinkSort(a,b));
   const quiet=all.filter(c=> c.later && !laterDue(c)).sort((a,b)=>thinkRemDay(a).localeCompare(thinkRemDay(b)));
   const el=$('#thinkTray'); if(!el) return;
   const noDate=items.filter(c=>!thinkRemDay(c)).length;
@@ -8869,7 +8952,7 @@ let lostOpen=false;
 function renderLostTray(){
   const st=stageById('lost');
   const lost=state.clients.filter(c=>c.month===curMonth && c.stage==='lost')
-    .sort((a,b)=>(b.lostAt||0)-(a.lostAt||0));
+    .sort((a,b)=>pinCmp(a,b)||((b.lostAt||0)-(a.lostAt||0)));
   const el=$('#lostTray'); if(!el) return;
   el.classList.toggle('open', lostOpen);
   el.innerHTML=`
@@ -9192,6 +9275,7 @@ function cjCardLine(c){
   return bits.length?`<div class="cj-line">${bits.join('')}</div>`:'';
 }
 
+const PIN_SVG='<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M9 3h6l-1 6 4 4v2h-5.2L12 21l-.8-6H6v-2l4-4z" fill="currentColor"/></svg>';
 function cardEl(c,st){
   const el=document.createElement('div');
   el.className='card'; el.draggable=true;
@@ -9209,8 +9293,9 @@ function cardEl(c,st){
   if(isJob(c)) el.classList.add('is-job');
   if(cFromAd(c)) el.classList.add('from-ad');
   if(notSure(c)) el.classList.add('unsure'); else if(cDoubt(c)) el.classList.add('doubt-soft');
+  if(cPinned(c)) el.classList.add('is-pinned');
   el.innerHTML=`
-    <div class="c-name">${prio?`<span class="c-prio ${prio}" title="Priority: ${prio}"><i></i>${prio}</span>`:''}${esc(c.name)}${addedTxt?`<span class="c-added" title="Added ${addedTxt}">${addedTxt}</span>`:''}</div>
+    <div class="c-name">${cPinned(c)?`<span class="c-pinned" data-pin="${c.id}" title="Pinned first in ${esc(st.name)} — tap to unpin">${PIN_SVG}</span>`:''}${prio?`<span class="c-prio ${prio}" title="Priority: ${prio}"><i></i>${prio}</span>`:''}${esc(c.name)}${addedTxt?`<span class="c-added" title="Added ${addedTxt}">${addedTxt}</span>`:''}</div>
     ${(()=>{ const ad=cFromAd(c), ab=cAbout(c); if(!ad&&!ab) return ''; return `<div class="c-ad">${ad?'<span class="ad-pill" title="This client came from the Meta ads">META AD</span>':''}${ab?`<span class="ad-about" title="What the website is about">${esc(ab)}</span>`:''}</div>`; })()}
     <div class="c-meta">
       ${isJob(c)?`<span class="chip job" title="Extra work — counts as money, not as a new client or a renewal">★ ${esc(jobLbl(c))}</span>`:''}
@@ -9233,13 +9318,14 @@ function cardEl(c,st){
       const u2=c.draft2?(/^https?:\/\//i.test(c.draft2)?String(c.draft2).trim():'https://'+String(c.draft2).trim()):''; const d2=!u2?'':(()=>{ const dr=/drafts\.advonmedia\.com|github\.io/.test(u2); return `<a class="c-draft${dr?'':' live'}" href="${esc(u2)}" target="_blank" rel="noopener" draggable="false" onclick="event.stopPropagation()" title="${esc(u2)}">${dr?'▶ Draft 2':'▶ Website 2'}<span>${esc(u2.replace(/^https?:\/\//,'').replace(/^drafts\.advonmedia\.com\//,'').replace(/\/$/,''))}</span></a>`; })(); return `<div class="c-acts">${d}${d2}${rv}${tx}</div>`; })()}
     
     ${isLost&&c.lostReason?`<div class="c-reason" title="Reason">${IC.ban} ${esc(c.lostReason)}</div>`:''}
+    <button type="button" class="c-pin${cPinned(c)?' on':''}" data-pin="${c.id}" draggable="false" style="right:${7+27*((nextName?1:0)+(!isLost?1:0)+((!isLost && c.stage!=='paid' && !cDoubt(c) && !notSure(c))?1:0))}px" title="${cPinned(c)?'Pinned first in '+esc(st.name)+' — tap to unpin':'Pin to the top of '+esc(st.name)}">${PIN_SVG}</button>
     ${(!isLost && c.stage!=='paid' && !cDoubt(c) && !notSure(c))?`<button type="button" class="c-unsure" data-doubt="${c.id}" title="Not sure they will pay? Mark it — the money leaves New money until they pay">?</button>`:''}
     ${!isLost?`<button class="c-lost" title="Didn't convert — move to Lost">${IC.ban}</button>`:''}
     ${nextName?`<button class="c-next" title="Move to ${nextName}">${IC.arrowRight}</button>`:''}`;
   try{ const bo=bnOpenFor(c.id); if(bo.length){ const b=document.createElement('span'); b.className='c-bn'; b.textContent='📌'+(bo.length>1?' '+bo.length:''); b.title='Important notes:\n'+bo.map(n=>'#'+n.rank+' '+n.text).join('\n'); const nm=el.querySelector('.c-name'); if(nm) nm.appendChild(b); } }catch(e){}
   el.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',c.id); el.classList.add('dragging'); });
   el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-  el.addEventListener('click',e=>{ if(e.target.closest('.c-next')||e.target.closest('.c-lost')) return; if(e.target.closest('.c-review')){ e.stopPropagation(); rvOpen(c.id); return; } if(e.target.closest('.c-tx')){ e.stopPropagation(); txOpen(c.id); return; } const ch=e.target.closest('[data-chat]'); if(ch){ e.stopPropagation(); switchView('chats'); Chats.open(ch.dataset.chat); return; } openModal(c.id); });
+  el.addEventListener('click',e=>{ if(e.target.closest('.c-next')||e.target.closest('.c-lost')||e.target.closest('.c-pin')) return; if(e.target.closest('.c-review')){ e.stopPropagation(); rvOpen(c.id); return; } if(e.target.closest('.c-tx')){ e.stopPropagation(); txOpen(c.id); return; } const ch=e.target.closest('[data-chat]'); if(ch){ e.stopPropagation(); switchView('chats'); Chats.open(ch.dataset.chat); return; } openModal(c.id); });
   const nx=el.querySelector('.c-next');
   if(nx) nx.addEventListener('click',()=>{ c.stage=FLOW[idx+1].id; c.updated=Date.now(); save(); renderAll(); toast(c.name+' → '+FLOW[idx+1].name); });
   const lx=el.querySelector('.c-lost');
@@ -13972,6 +14058,7 @@ function openModal(id, presetDay){
   $('#mMonth').value=c?c.month:(presetDay?presetDay.slice(0,7):curMonth);
   $('#mNotes').value=c?(c.notes||''):'';
   try{ mDoubtRender(); }catch(e){}
+  try{ mPinRender(); }catch(e){}
   try{ const jb=$('#mJourney'), jf=$('#mJourneyF'); if(jb){ jb.innerHTML=c&&!isJob(c)?cjHtml(c,'m'):''; jf.hidden=!(c&&!isJob(c)); } }catch(e){ console.warn('journey',e); }
   $('#mPhone').value=c?(c.phone||''):''; $('#mViber').value=c?(c.viber||''):''; $('#mEmail').value=c?(c.email||''):''; $('#mDraft').value=c?(c.draft||''):''; if($('#mDraft2')) $('#mDraft2').value=c?(c.draft2||''):''; (()=>{ const el=$('#mDraftAuto'); if(!el) return; const u=c?cDraftUrl(c):''; el.innerHTML=u?(c.draft?'Opens: ':'Found automatically: ')+siteChipHtml(u)+(c.draft?'':' <i>— paste another link above to change it</i>'):''; })(); $('#mCnote').value=c?cContactNote(c):''; $('#mAd').checked=!!(c&&cFromAd(c)); $('#mAbout').value=c?cAbout(c):''; window._mCnoteTh=(()=>{ try{ const th=c&&chThreadFor(c); return th&&th.cnote?String(th.cnote).trim():''; }catch(e){ return ''; } })();
   const sel=$('#mStage'); sel.innerHTML=STAGES.filter(s=>s.id!=='changes').map(s=>`<option value="${s.id}" ${c&&s.id===c.stage?'selected':''}>${s.name}</option>`).join('');
